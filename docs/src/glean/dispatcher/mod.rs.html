@@ -933,12 +933,12 @@
         <span class="ident">dispatcher</span>.<span class="ident">guard</span>().<span class="ident">shutdown</span>().<span class="ident">unwrap</span>();
         {
             <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">Arc</span>::<span class="ident">clone</span>(<span class="kw-2">&amp;</span><span class="ident">result</span>);
-            <span class="ident">dispatcher</span>
-                .<span class="ident">guard</span>()
-                .<span class="ident">launch</span>(<span class="kw">move</span> <span class="op">||</span> {
-                    <span class="ident">result</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">push</span>(<span class="number">0</span>);
-                })
-                .<span class="ident">unwrap</span>();
+            <span class="comment">// This might fail because the shutdown is quick enough,</span>
+            <span class="comment">// or it might succeed and still send the task.</span>
+            <span class="comment">// In any case that task should not be executed.</span>
+            <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">dispatcher</span>.<span class="ident">guard</span>().<span class="ident">launch</span>(<span class="kw">move</span> <span class="op">||</span> {
+                <span class="ident">result</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">push</span>(<span class="number">0</span>);
+            });
         }
 
         <span class="ident">dispatcher</span>.<span class="ident">join</span>().<span class="ident">unwrap</span>();
