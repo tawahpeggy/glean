@@ -784,7 +784,7 @@ When re-enabling, core Glean metrics will be recomputed at that time.</p>
 <p>The following is a set of questions to ask about the data being collected to help better determine which metric type to use.</p>
 <h3><a class="header" href="#is-it-a-single-measurement" id="is-it-a-single-measurement">Is it a single measurement?</a></h3>
 <p>If the value is true or false, use a <a href="user/metrics/boolean.html">boolean metric</a>.</p>
-<p>If the value is a string, use a <a href="user/metrics/string.html">string metric</a>. For example, to record the name of the default search engine. </p>
+<p>If the value is a string, use a <a href="user/metrics/string.html">string metric</a>. For example, to record the name of the default search engine.</p>
 <blockquote>
 <p><strong>Beware:</strong> string metrics are exceedingly general, and you are probably best served by selecting the most specific metric for the job, since you'll get better error checking and richer analysis tools for free. For example, avoid storing a number in a string metric --- you probably want a <a href="user/metrics/counter.html">counter metric</a> instead.</p>
 </blockquote>
@@ -799,7 +799,7 @@ When re-enabling, core Glean metrics will be recomputed at that time.</p>
 <p>If you need to record an absolute time, use a <a href="user/metrics/datetime.html">datetime metric</a>. Datetimes are recorded in the user's local time, according to their device's real time clock, along with a timezone offset from UTC. Datetime metrics allow specifying the resolution they are collected at, and to stay <a href="https://www.mozilla.org/en-US/about/policy/lean-data/stay-lean/">lean</a>, they should only be collected at the minimum resolution required to answer your question.</p>
 <p>If you need to record how long something takes you have a few options.</p>
 <p>If you need to measure the total time spent doing a particular task, look to the <a href="user/metrics/timespan.html">timespan metric</a>. Timespan metrics allow specifying the resolution they are collected at, and to stay <a href="https://www.mozilla.org/en-US/about/policy/lean-data/stay-lean/">lean</a>, they should only be collected at the minimum resolution required to answer your question.
-Note that this metric should only be used to measure time on a single thread. If multiple overlapping timespans are measured for the same metric, an invalid state error is recorded. </p>
+Note that this metric should only be used to measure time on a single thread. If multiple overlapping timespans are measured for the same metric, an invalid state error is recorded.</p>
 <p>If you need to measure the relative occurrences of many timings, use a <a href="user/metrics/timing_distribution.html">timing distribution</a>. It builds a histogram of timing measurements, and is safe to record multiple concurrent timespans on different threads.</p>
 <p>If you need to know the time between multiple distinct actions that aren't a simple &quot;begin&quot; and &quot;end&quot; pair, consider using an <a href="user/metrics/event.html">event</a>.</p>
 <h3><a class="header" href="#do-you-need-to-know-the-order-of-events-relative-to-other-events" id="do-you-need-to-know-the-order-of-events-relative-to-other-events">Do you need to know the order of events relative to other events?</a></h3>
@@ -808,13 +808,16 @@ Note that this metric should only be used to measure time on a single thread. If
 <p><strong>Important:</strong> events are the most expensive metric type to record, transmit, store and analyze, so they should be used sparingly, and only when none of the other metric types are sufficient for answering your question.</p>
 </blockquote>
 <h2><a class="header" href="#for-how-long-do-you-need-to-collect-this-data" id="for-how-long-do-you-need-to-collect-this-data">For how long do you need to collect this data?</a></h2>
-<p>Think carefully about how long the metric will be needed, and set the <code>expires</code> parameter to disable the metric at the earliest possible time. 
+<p>Think carefully about how long the metric will be needed, and set the <code>expires</code> parameter to disable the metric at the earliest possible time.
 This is an important component of Mozilla's <a href="https://www.mozilla.org/en-US/about/policy/lean-data/stay-lean/">lean data practices</a>.</p>
 <p>When the metric passes its expiration date (determined at build time), it will automatically stop collecting data.</p>
 <p>When a metric's expiration is within in 14 days, emails will be sent from <code>telemetry-alerts@mozilla.com</code> to the <code>notification_emails</code> addresses associated with the metric.
 At that time, the metric should be removed, which involves removing it from the <code>metrics.yaml</code> file and removing uses of it in the source code.
 Removing a metric does not affect the availability of data already collected by the pipeline.</p>
 <p>If the metric is still needed after its expiration date, it should go back for <a href="https://wiki.mozilla.org/Firefox/Data_Collection">another round of data review</a> to have its expiration date extended.</p>
+<blockquote>
+<p><strong>Important:</strong> Ensure that telemetry alerts are received and are reviewed in a timely manner. Expired metrics don't record any data, extending or removing a metric should be done in time. Consider adding both a group email address and an individual who is responsible for this metric to the <code>notification_emails</code> list.</p>
+</blockquote>
 <h2><a class="header" href="#when-should-the-glean-sdk-automatically-clear-the-measurement" id="when-should-the-glean-sdk-automatically-clear-the-measurement">When should the Glean SDK automatically clear the measurement?</a></h2>
 <p>The <code>lifetime</code> parameter of a metric defines when its value will be cleared. There are three lifetime options available:</p>
 <ul>
@@ -824,8 +827,8 @@ Removing a metric does not affect the availability of data already collected by 
 </ul>
 <p>While lifetimes are important to understand for all metric types, they are particularly important for the metric types that record single values and don't aggregate on the client (<code>boolean</code>, <code>string</code>, <code>labeled_string</code>, <code>string_list</code>, <code>datetime</code> and <code>uuid</code>), since these metrics will send the &quot;last known&quot; value and missing the earlier values could be a form of unintended data loss.</p>
 <h3><a class="header" href="#a-lifetime-example" id="a-lifetime-example">A lifetime example</a></h3>
-<p>Let's work through an example to see how these lifetimes play out in practice. Let's suppose we have a user preference, &quot;turbo mode&quot;, which defaults to <code>false</code>, but the user can turn it to <code>true</code> at any time.  We want to know when this flag is <code>true</code> so we can measure its affect on other metrics in the same ping.  In the following diagram, we look at a time period that sends 4 pings across two separate runs of the application. We assume here, that like the Glean SDK's built-in <a href="user/pings/metrics.html">metrics ping</a>, the developer writing the metric isn't in control of when the ping is submitted. </p>
-<p>In this diagram, the ping measurement windows are represented as rectangles, but the moment the ping is &quot;submitted&quot; is represented by its right edge. The user changes the &quot;turbo mode&quot; setting from <code>false</code> to <code>true</code> in the first run, and then toggles it again twice in the second run. </p>
+<p>Let's work through an example to see how these lifetimes play out in practice. Let's suppose we have a user preference, &quot;turbo mode&quot;, which defaults to <code>false</code>, but the user can turn it to <code>true</code> at any time.  We want to know when this flag is <code>true</code> so we can measure its affect on other metrics in the same ping.  In the following diagram, we look at a time period that sends 4 pings across two separate runs of the application. We assume here, that like the Glean SDK's built-in <a href="user/pings/metrics.html">metrics ping</a>, the developer writing the metric isn't in control of when the ping is submitted.</p>
+<p>In this diagram, the ping measurement windows are represented as rectangles, but the moment the ping is &quot;submitted&quot; is represented by its right edge. The user changes the &quot;turbo mode&quot; setting from <code>false</code> to <code>true</code> in the first run, and then toggles it again twice in the second run.</p>
 <p><img src="user/metric-lifetime-timeline.svg" alt="Metric lifetime timeline" /></p>
 <ul>
 <li>
@@ -971,10 +974,12 @@ For example, the metric defined in the <code>metrics.yaml</code> as:</p>
 <p>The description field may contain <a href="https://www.markdownguide.org/basic-syntax/">markdown syntax</a>.</p>
 </li>
 <li>
-<p><code>notification_emails</code>: <strong>Required.</strong> A list of email addresses to notify for important events with the metric or when people with context or ownership for the metric need to be contacted.</p>
+<p><code>notification_emails</code>: <strong>Required.</strong> A list of email addresses to notify for important events with the metric or when people with context or ownership for the metric need to be contacted.
+For example when a metric's expiration is within in 14 days, emails will be sent from <code>telemetry-alerts@mozilla.com</code> to the <code>notification_emails</code> addresses associated with the metric.
+Consider adding both a group email address and an individual who is responsible for this metric.</p>
 </li>
 <li>
-<p><code>bugs</code>: <strong>Required.</strong> A list of bugs (e.g. Bugzilla or GitHub) that are relevant to this metric. For example, bugs that track its original implementation or later changes to it. </p>
+<p><code>bugs</code>: <strong>Required.</strong> A list of bugs (e.g. Bugzilla or GitHub) that are relevant to this metric. For example, bugs that track its original implementation or later changes to it.</p>
 <p>Each entry should be the full URL to the bug in an issue tracker. The use of numbers alone is deprecated and will be an error in the future.</p>
 </li>
 <li>
@@ -8008,7 +8013,15 @@ Each ping has its own schedule to gather all its locally saved metrics and creat
 <h1><a class="header" href="#v3312-2020-11-04" id="v3312-2020-11-04">v33.1.2 (2020-11-04)</a></h1>
 <p><a href="https://github.com/mozilla/glean/compare/v33.1.1...v33.1.2">Full changelog</a></p>
 <ul>
-<li>No changes.  v33.1.1 was tagged incorrectly.</li>
+<li>
+<p>No changes.  v33.1.1 was tagged incorrectly.</p>
+</li>
+<li>
+<p>Python</p>
+<ul>
+<li>Python Linux wheels no longer work on Linux distributions released before 2010.  (They now use the manylinux2010 ABI, rather than the manylinux1 ABI.)</li>
+</ul>
+</li>
 </ul>
 <h1><a class="header" href="#v3311-2020-11-04" id="v3311-2020-11-04">v33.1.1 (2020-11-04)</a></h1>
 <p><a href="https://github.com/mozilla/glean/compare/v33.1.0...v33.1.1">Full changelog</a></p>

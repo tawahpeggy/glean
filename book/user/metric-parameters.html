@@ -184,10 +184,12 @@
 <p>The description field may contain <a href="https://www.markdownguide.org/basic-syntax/">markdown syntax</a>.</p>
 </li>
 <li>
-<p><code>notification_emails</code>: <strong>Required.</strong> A list of email addresses to notify for important events with the metric or when people with context or ownership for the metric need to be contacted.</p>
+<p><code>notification_emails</code>: <strong>Required.</strong> A list of email addresses to notify for important events with the metric or when people with context or ownership for the metric need to be contacted.
+For example when a metric's expiration is within in 14 days, emails will be sent from <code>telemetry-alerts@mozilla.com</code> to the <code>notification_emails</code> addresses associated with the metric.
+Consider adding both a group email address and an individual who is responsible for this metric.</p>
 </li>
 <li>
-<p><code>bugs</code>: <strong>Required.</strong> A list of bugs (e.g. Bugzilla or GitHub) that are relevant to this metric. For example, bugs that track its original implementation or later changes to it. </p>
+<p><code>bugs</code>: <strong>Required.</strong> A list of bugs (e.g. Bugzilla or GitHub) that are relevant to this metric. For example, bugs that track its original implementation or later changes to it.</p>
 <p>Each entry should be the full URL to the bug in an issue tracker. The use of numbers alone is deprecated and will be an error in the future.</p>
 </li>
 <li>
