@@ -1,4 +1,3 @@
 (function() {var implementors = {};
-implementors["glean"] = [{"text":"impl PartialEq&lt;DispatchError&gt; for DispatchError","synthetic":false,"types":[]}];
 implementors["glean_core"] = [{"text":"impl PartialEq&lt;Lifetime&gt; for Lifetime","synthetic":false,"types":[]},{"text":"impl PartialEq&lt;ErrorType&gt; for ErrorType","synthetic":false,"types":[]},{"text":"impl PartialEq&lt;RecordedEvent&gt; for RecordedEvent","synthetic":false,"types":[]},{"text":"impl PartialEq&lt;TimeUnit&gt; for TimeUnit","synthetic":false,"types":[]},{"text":"impl PartialEq&lt;Metric&gt; for Metric","synthetic":false,"types":[]},{"text":"impl PartialEq&lt;PingRequest&gt; for PingRequest","synthetic":false,"types":[]},{"text":"impl PartialEq&lt;PingUploadTask&gt; for PingUploadTask","synthetic":false,"types":[]}];
 if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

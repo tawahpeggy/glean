@@ -1,3 +1,3 @@
 (function() {var implementors = {};
-implementors["glean_core"] = [{"text":"impl Display for Error","synthetic":false,"types":[]}];
+implementors["glean"] = [];
 if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

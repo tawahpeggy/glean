@@ -516,6 +516,9 @@
 <span id="515">515</span>
 <span id="516">516</span>
 <span id="517">517</span>
+<span id="518">518</span>
+<span id="519">519</span>
+<span id="520">520</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -634,7 +637,10 @@
         <span class="self">self</span>.<span class="ident">send</span>(<span class="ident">task</span>)
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">shutdown</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">DispatchError</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">shutdown</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">DispatchError</span><span class="op">&gt;</span> {
+        <span class="comment">// Need to flush in order for the thread to actually process anything,</span>
+        <span class="comment">// including the shutdown command.</span>
+        <span class="self">self</span>.<span class="ident">flush_init</span>().<span class="ident">ok</span>();
         <span class="self">self</span>.<span class="ident">send</span>(<span class="ident">Command</span>::<span class="ident">Shutdown</span>)
     }
 

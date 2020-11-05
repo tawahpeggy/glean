@@ -125,13 +125,19 @@
 <span id="124">124</span>
 <span id="125">125</span>
 <span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
+<span id="130">130</span>
+<span id="131">131</span>
+<span id="132">132</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
 <span class="comment">// file, You can obtain one at https://mozilla.org/MPL/2.0/.</span>
 
-<span class="kw">use</span> <span class="ident">once_cell</span>::<span class="ident">sync</span>::{<span class="ident">Lazy</span>, <span class="ident">OnceCell</span>};
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">sync</span>::<span class="ident">RwLock</span>;
+<span class="kw">use</span> <span class="ident">once_cell</span>::<span class="ident">sync</span>::<span class="ident">Lazy</span>;
+<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">mem</span>, <span class="ident">sync</span>::<span class="ident">RwLock</span>};
 
 <span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">DispatchError</span>, <span class="ident">DispatchGuard</span>, <span class="ident">Dispatcher</span>};
 
@@ -139,13 +145,17 @@
 <span class="kw">static</span> <span class="ident">GLOBAL_DISPATCHER</span>: <span class="ident">Lazy</span><span class="op">&lt;</span><span class="ident">RwLock</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Dispatcher</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span> <span class="op">=</span>
     <span class="ident">Lazy</span>::<span class="ident">new</span>(<span class="op">||</span> <span class="ident">RwLock</span>::<span class="ident">new</span>(<span class="prelude-val">Some</span>(<span class="ident">Dispatcher</span>::<span class="ident">new</span>(<span class="ident">GLOBAL_DISPATCHER_LIMIT</span>))));
 
-<span class="kw">fn</span> <span class="ident">guard</span>() <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">DispatchGuard</span> {
-    <span class="kw">static</span> <span class="ident">GLOBAL_GUARD</span>: <span class="ident">OnceCell</span><span class="op">&lt;</span><span class="ident">DispatchGuard</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">OnceCell</span>::<span class="ident">new</span>();
-
-    <span class="ident">GLOBAL_GUARD</span>.<span class="ident">get_or_init</span>(<span class="op">||</span> {
-        <span class="kw">let</span> <span class="ident">lock</span> <span class="op">=</span> <span class="ident">GLOBAL_DISPATCHER</span>.<span class="ident">read</span>().<span class="ident">unwrap</span>();
-        <span class="ident">lock</span>.<span class="ident">as_ref</span>().<span class="ident">unwrap</span>().<span class="ident">guard</span>()
-    })
+<span class="doccomment">/// Get a dispatcher for the global queue.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// A dispatcher is cheap to create, so we create one on every access instead of caching it.</span>
+<span class="doccomment">/// This avoids troubles for tests where the global dispatcher _can_ change.</span>
+<span class="kw">fn</span> <span class="ident">guard</span>() <span class="op">-&gt;</span> <span class="ident">DispatchGuard</span> {
+    <span class="ident">GLOBAL_DISPATCHER</span>
+        .<span class="ident">read</span>()
+        .<span class="ident">unwrap</span>()
+        .<span class="ident">as_ref</span>()
+        .<span class="ident">map</span>(<span class="op">|</span><span class="ident">dispatcher</span><span class="op">|</span> <span class="ident">dispatcher</span>.<span class="ident">guard</span>())
+        .<span class="ident">unwrap</span>()
 }
 
 <span class="doccomment">/// Launches a new task on the global dispatch queue.</span>
@@ -172,16 +182,7 @@
 
 <span class="doccomment">/// Block until all tasks prior to this call are processed.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">block_on_queue</span>() {
-    <span class="kw">let</span> <span class="ident">guard</span> <span class="op">=</span> {
-        <span class="ident">GLOBAL_DISPATCHER</span>
-            .<span class="ident">write</span>()
-            .<span class="ident">unwrap</span>()
-            .<span class="ident">as_ref</span>()
-            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">dispatcher</span><span class="op">|</span> <span class="ident">dispatcher</span>.<span class="ident">guard</span>())
-            .<span class="ident">unwrap</span>()
-    };
-
-    <span class="ident">guard</span>.<span class="ident">block_on_queue</span>();
+    <span class="ident">guard</span>().<span class="ident">block_on_queue</span>();
 }
 
 <span class="doccomment">/// Starts processing queued tasks in the global dispatch queue.</span>
@@ -189,15 +190,7 @@
 <span class="doccomment">/// This function blocks until queued tasks prior to this call are finished.</span>
 <span class="doccomment">/// Once the initial queue is empty the dispatcher will wait for new tasks to be launched.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">flush_init</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">DispatchError</span><span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">guard</span> <span class="op">=</span> {
-        <span class="ident">GLOBAL_DISPATCHER</span>
-            .<span class="ident">write</span>()
-            .<span class="ident">unwrap</span>()
-            .<span class="ident">as_ref</span>()
-            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">dispatcher</span><span class="op">|</span> <span class="ident">dispatcher</span>.<span class="ident">guard</span>())
-            .<span class="ident">unwrap</span>()
-    };
-    <span class="ident">guard</span>.<span class="ident">flush_init</span>()
+    <span class="ident">guard</span>().<span class="ident">flush_init</span>()
 }
 
 <span class="doccomment">/// Shuts down the dispatch queue.</span>
@@ -207,6 +200,25 @@
 <span class="doccomment">/// It will not block on the worker thread.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">try_shutdown</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">DispatchError</span><span class="op">&gt;</span> {
     <span class="ident">guard</span>().<span class="ident">shutdown</span>()
+}
+
+<span class="doccomment">/// TEST ONLY FUNCTION.</span>
+<span class="doccomment">/// Resets the Glean state and triggers init again.</span>
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">reset_dispatcher</span>() {
+    <span class="comment">// We don&#39;t care about shutdown errors, since they will</span>
+    <span class="comment">// definitely happen if this</span>
+    <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">try_shutdown</span>();
+
+    <span class="comment">// Now that the dispatcher is shut down, replace it.</span>
+    <span class="comment">// For that we</span>
+    <span class="comment">// 1. Create a new</span>
+    <span class="comment">// 2. Replace the global one</span>
+    <span class="comment">// 3. Wait for the old one to fully finish</span>
+    <span class="comment">// 4. Only then return (and thus release the lock)</span>
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">lock</span> <span class="op">=</span> <span class="ident">GLOBAL_DISPATCHER</span>.<span class="ident">write</span>().<span class="ident">unwrap</span>();
+    <span class="kw">let</span> <span class="ident">new_dispatcher</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">Dispatcher</span>::<span class="ident">new</span>(<span class="ident">GLOBAL_DISPATCHER_LIMIT</span>));
+    <span class="kw">let</span> <span class="ident">old_dispatcher</span> <span class="op">=</span> <span class="ident">mem</span>::<span class="ident">replace</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">*</span><span class="ident">lock</span>, <span class="ident">new_dispatcher</span>);
+    <span class="ident">old_dispatcher</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">d</span><span class="op">|</span> <span class="ident">d</span>.<span class="ident">join</span>());
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>

@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["UploadResult","The result of an attempted ping upload."]],"struct":[["HttpUploader","A simple mechanism to upload pings over HTTPS."],["PingRequest","Represents a request to upload a ping."]],"trait":[["PingUploader","A description of a component used to upload pings."]]});

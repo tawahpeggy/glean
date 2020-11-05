@@ -43,15 +43,30 @@
 <span id="42">42</span>
 <span id="43">43</span>
 <span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
+<span id="62">62</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
 <span class="comment">// file, You can obtain one at https://mozilla.org/MPL/2.0/.</span>
 
-<span class="doccomment">/// Stores information about a ping.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// This is required so that given metric data queued on disk we can send</span>
-<span class="doccomment">/// pings with the correct settings, e.g. whether it has a client_id.</span>
+<span class="doccomment">/// A Glean ping.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PingType</span> {
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">name</span>: <span class="ident">String</span>,
@@ -80,10 +95,31 @@
             <span class="ident">send_if_empty</span>,
             <span class="ident">reason_codes</span>,
         );
-        <span class="self">Self</span> { <span class="ident">name</span>, <span class="ident">ping_type</span> }
+
+        <span class="kw">let</span> <span class="ident">me</span> <span class="op">=</span> <span class="self">Self</span> { <span class="ident">name</span>, <span class="ident">ping_type</span> };
+        <span class="kw">crate</span>::<span class="ident">register_ping_type</span>(<span class="kw-2">&amp;</span><span class="ident">me</span>);
+        <span class="ident">me</span>
     }
 
-    <span class="doccomment">/// Submits the ping.</span>
+    <span class="doccomment">/// Collect and submit the ping for eventual upload.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This will collect all stored data to be included in the ping.</span>
+    <span class="doccomment">/// Data with lifetime `ping` will then be reset.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// If the ping is configured with `send_if_empty = false`</span>
+    <span class="doccomment">/// and the ping currently contains no content,</span>
+    <span class="doccomment">/// it will not be queued for upload.</span>
+    <span class="doccomment">/// If the ping is configured with `send_if_empty = true`</span>
+    <span class="doccomment">/// it will be queued for upload even if otherwise empty.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Pings always contain the `ping_info` and `client_info` sections.</span>
+    <span class="doccomment">/// See [ping sections](https://mozilla.github.io/glean/book/user/pings/index.html#ping-sections)</span>
+    <span class="doccomment">/// for details.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Arguments</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// * `reason` - The reason the ping is being submitted.</span>
+    <span class="doccomment">///              Must be one of the configured `reason_codes`.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">submit</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">reason</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>) {
         <span class="kw">crate</span>::<span class="ident">submit_ping</span>(<span class="self">self</span>, <span class="ident">reason</span>)
     }
