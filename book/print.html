@@ -768,7 +768,11 @@ When re-enabling, core Glean metrics will be recomputed at that time.</p>
 <li><a href="user/adding-new-metrics.html#what-if-none-of-these-metric-types-is-the-right-fit">What if none of these metric types is the right fit?</a></li>
 <li><a href="user/adding-new-metrics.html#how-do-i-make-sure-my-metric-is-working">How do I make sure my metric is working?</a></li>
 <li><a href="user/adding-new-metrics.html#adding-the-metric-to-the-metricsyaml-file">Adding the metric to the <code>metrics.yaml</code> file</a></li>
-<li><a href="user/adding-new-metrics.html#using-the-metric-from-your-code">Using the metric from your code</a></li>
+<li><a href="user/adding-new-metrics.html#using-the-metric-from-your-code">Using the metric from your code</a>
+<ul>
+<li><a href="user/adding-new-metrics.html#capitalization">Capitalization</a></li>
+</ul>
+</li>
 </ul>
 <h2><a class="header" href="#process-overview" id="process-overview">Process overview</a></h2>
 <p>When adding a new metric, the process is:</p>
@@ -921,6 +925,13 @@ toolbar:
 <p>The <code>metrics.yaml</code> file is used to generate code in the target language (e.g. Kotlin, Swift, ...) that becomes the public API to access your application's metrics.</p>
 <h2><a class="header" href="#using-the-metric-from-your-code" id="using-the-metric-from-your-code">Using the metric from your code</a></h2>
 <p>The <a href="user/metrics/index.html">reference documentation for each metric type</a> goes into detail about using each metric type from your code.</p>
+<p>Note that all Glean metrics are write-only. Outside of unit tests, it is impossible to retrieve a value from the Glean SDK's database.
+While this may seem limiting, this is required to:</p>
+<ul>
+<li>enforce the semantics of certain metric types (e.g. that Counters can only be incremented).</li>
+<li>ensure the lifetime of the metric (when it is cleared or reset) is correctly handled.</li>
+</ul>
+<h3><a class="header" href="#capitalization" id="capitalization">Capitalization</a></h3>
 <p>One thing to note is that we try to adhere to the coding conventions of each language wherever possible, to the metric name in the <code>metrics.yaml</code> (which is in <code>snake_case</code>) may be changed to some other case convention, such as <code>camelCase</code>, when used from code.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -1039,7 +1050,8 @@ Generally, when a metric is no longer needed, it should simply be removed. This 
 <p>In order to support unit testing inside of client applications using the Glean SDK, a set of testing API functions have been included.
 The intent is to make the Glean SDK easier to test 'out of the box' in any client application it may be used in.
 These functions expose a way to inspect and validate recorded metric values within the client application but are restricted to test code only through visibility annotations
-(<code>@VisibleForTesting(otherwise = VisibleForTesting.NONE)</code> for Kotlin, <code>internal</code> methods for Swift).</p>
+(<code>@VisibleForTesting(otherwise = VisibleForTesting.NONE)</code> for Kotlin, <code>internal</code> methods for Swift).
+(Outside of a testing context, Glean APIs are otherwise write-only so that it can enforce semantics and constraints about data).</p>
 <h2><a class="header" href="#general-test-api-method-semantics" id="general-test-api-method-semantics">General test API method semantics</a></h2>
 <div class="tabs">
 <div class="tabbar"></div>

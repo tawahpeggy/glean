@@ -174,7 +174,8 @@
 <p>In order to support unit testing inside of client applications using the Glean SDK, a set of testing API functions have been included.
 The intent is to make the Glean SDK easier to test 'out of the box' in any client application it may be used in.
 These functions expose a way to inspect and validate recorded metric values within the client application but are restricted to test code only through visibility annotations
-(<code>@VisibleForTesting(otherwise = VisibleForTesting.NONE)</code> for Kotlin, <code>internal</code> methods for Swift).</p>
+(<code>@VisibleForTesting(otherwise = VisibleForTesting.NONE)</code> for Kotlin, <code>internal</code> methods for Swift).
+(Outside of a testing context, Glean APIs are otherwise write-only so that it can enforce semantics and constraints about data).</p>
 <h2><a class="header" href="#general-test-api-method-semantics" id="general-test-api-method-semantics">General test API method semantics</a></h2>
 <div class="tabs">
 <div class="tabbar"></div>
