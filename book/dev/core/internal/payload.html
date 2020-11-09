@@ -172,8 +172,12 @@
                     <main>
                         <h1><a class="header" href="#payload-format" id="payload-format">Payload format</a></h1>
 <p>The main sections of a Glean ping are described in <a href="../../../user/pings/index.html#ping-sections">Ping Sections</a>.
-This <strong>Payload format</strong> chapter describes details of the ping payload that are relevant for decoding Glean pings in the pipeline.
-This is less relevant for end users of the Glean SDK.</p>
+This <strong>Payload format</strong> chapter describes details of the ping payload that are relevant for decoding Glean pings in the pipeline.</p>
+<blockquote>
+<p>NOTE: The payload format is an implementation detail of the Glean SDK and subject to change at any time. 
+External users should not rely on this information. 
+It is provided as a reference for contributing to Glean only.</p>
+</blockquote>
 <h2><a class="header" href="#json-schema" id="json-schema">JSON Schema</a></h2>
 <p>Glean's ping payloads have a formal JSON schema defined in the <a href="https://github.com/mozilla-services/mozilla-pipeline-schemas/">mozilla-pipeline-schemas</a> project.
 It is written as a set of <a href="https://github.com/mozilla-services/mozilla-pipeline-schemas/tree/HEAD/templates/include/glean">templates</a> that are expanded by the mozilla-pipeline-schemas build infrastructure into a <a href="https://github.com/mozilla-services/mozilla-pipeline-schemas/blob/HEAD/schemas/glean/baseline/baseline.1.schema.json">fully expanded schema</a>.</p>

@@ -1679,10 +1679,10 @@ Assert.Equal(
 <p><a href="user/metrics/event.html">Events</a>: Records events e.g. individual occurrences of user actions, say every time a view was open and from where.</p>
 </li>
 <li>
-<p><a href="user/metrics/custom_distribution.html">Custom Distribution</a>: Used to record the distribution of a value that needs fine-grained control of how the histogram buckets are computed.  <strong>Custom distributions are only available for values that come from Gecko.</strong></p>
+<p><a href="user/metrics/quantity.html">Quantity</a>: Used to record a single non-negative integer value. For example, the width of the display in pixels.</p>
 </li>
 <li>
-<p><a href="user/metrics/quantity.html">Quantity</a>: Used to record a single non-negative integer value. For example, the width of the display in pixels.  <strong>Quantities are only available for values that come from Gecko.</strong></p>
+<p><a href="user/metrics/custom_distribution.html">Custom Distribution</a>: Used to record the distribution of a value that needs fine-grained control of how the histogram buckets are computed.  <strong>Custom distributions are only available for values that come from Gecko.</strong></p>
 </li>
 </ul>
 <h2><a class="header" href="#labeled-metrics" id="labeled-metrics">Labeled metrics</a></h2>
@@ -7533,6 +7533,11 @@ Copy out the data and convert into language-appropriate types (e.g. convert <cod
 </ol>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/ffi/when-to-use-what-in-the-ffi.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#internal-documentation" id="internal-documentation">Internal documentation</a></h1>
 <p>This chapter describes aspects of Glean that are internal implementation details.</p>
+<blockquote>
+<p>NOTE: As implementation details, this information is subject to change at any time.
+External users should not rely on this information. 
+It is provided as a reference for contributing to Glean only.</p>
+</blockquote>
 <p>This includes:</p>
 <ul>
 <li><a href="dev/core/internal/reserved-ping-names.html">Reserved ping names</a></li>
@@ -7579,8 +7584,12 @@ There are a couple of exceptions to this:</p>
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/core/internal/clearing.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#payload-format" id="payload-format">Payload format</a></h1>
 <p>The main sections of a Glean ping are described in <a href="dev/core/internal/../../../user/pings/index.html#ping-sections">Ping Sections</a>.
-This <strong>Payload format</strong> chapter describes details of the ping payload that are relevant for decoding Glean pings in the pipeline.
-This is less relevant for end users of the Glean SDK.</p>
+This <strong>Payload format</strong> chapter describes details of the ping payload that are relevant for decoding Glean pings in the pipeline.</p>
+<blockquote>
+<p>NOTE: The payload format is an implementation detail of the Glean SDK and subject to change at any time. 
+External users should not rely on this information. 
+It is provided as a reference for contributing to Glean only.</p>
+</blockquote>
 <h2><a class="header" href="#json-schema" id="json-schema">JSON Schema</a></h2>
 <p>Glean's ping payloads have a formal JSON schema defined in the <a href="https://github.com/mozilla-services/mozilla-pipeline-schemas/">mozilla-pipeline-schemas</a> project.
 It is written as a set of <a href="https://github.com/mozilla-services/mozilla-pipeline-schemas/tree/HEAD/templates/include/glean">templates</a> that are expanded by the mozilla-pipeline-schemas build infrastructure into a <a href="https://github.com/mozilla-services/mozilla-pipeline-schemas/blob/HEAD/schemas/glean/baseline/baseline.1.schema.json">fully expanded schema</a>.</p>
