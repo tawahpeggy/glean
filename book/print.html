@@ -1260,7 +1260,7 @@ assert 1 == metrics.url.visit.test_get_value()
 <ul>
 <li><code>logPings</code>: May be set by the <code>GLEAN_LOG_PINGS</code> environment variable. The accepted values are <code>true</code> or <code>false</code>. Any other value will be ignored.</li>
 <li><code>debugViewTag</code>: May be set by the <code>GLEAN_DEBUG_VIEW_TAG</code> environment variable. Any valid HTTP header value is expected here (e.g. any value that matches the regex <code>[a-zA-Z0-9-]{1,20}</code>). Invalid values will be ignored.</li>
-<li><code>sourceTags</code>: May be set by the <code>GLEAN_SOURCE_TAGS</code> environment variable. A comma-separated list of valid HTTP header values is expected here (e.g. any value that matches the regex <code>[a-zA-Z0-9-]{1,20}</code>). Invalid values will be ignored.</li>
+<li><code>sourceTags</code>: May be set by the <code>GLEAN_SOURCE_TAGS</code> environment variable. A comma-separated list of valid HTTP header values is expected here (e.g. any value that matches the regex <code>[a-zA-Z0-9-]{1,20}</code>). Invalid values will be ignored. The special value of <code>automation</code> is meant for tagging pings generated on automation: such pings will be specially handled on the pipeline (i.e. discarded from <a href="https://docs.telemetry.mozilla.org/cookbooks/bigquery/querying.html#table-layout-and-naming">non-live views</a>).</li>
 </ul>
 <p>These variables must be set at runtime, not at compile time. They will be checked upon Glean initialization.</p>
 <p>Enabling debugging features using environment variables is available for all supported platforms.</p>
