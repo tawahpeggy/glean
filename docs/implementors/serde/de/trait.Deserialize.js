@@ -1,3 +1,4 @@
 (function() {var implementors = {};
+implementors["glean"] = [{"text":"impl&lt;'de&gt; Deserialize&lt;'de&gt; for RecordedExperimentData","synthetic":false,"types":[]}];
 implementors["glean_core"] = [{"text":"impl&lt;'de&gt; Deserialize&lt;'de&gt; for RecordedEvent","synthetic":false,"types":[]},{"text":"impl&lt;'de&gt; Deserialize&lt;'de&gt; for HistogramType","synthetic":false,"types":[]},{"text":"impl&lt;'de&gt; Deserialize&lt;'de&gt; for MemoryUnit","synthetic":false,"types":[]},{"text":"impl&lt;'de&gt; Deserialize&lt;'de&gt; for TimeUnit","synthetic":false,"types":[]},{"text":"impl&lt;'de&gt; Deserialize&lt;'de&gt; for Metric","synthetic":false,"types":[]}];
 if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
