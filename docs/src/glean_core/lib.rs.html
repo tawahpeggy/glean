@@ -1124,10 +1124,10 @@
         <span class="kw">let</span> <span class="ident">data_store</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">Database</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">cfg</span>.<span class="ident">data_path</span>, <span class="ident">cfg</span>.<span class="ident">delay_ping_lifetime_io</span>)<span class="question-mark">?</span>);
         <span class="kw">let</span> <span class="ident">event_data_store</span> <span class="op">=</span> <span class="ident">EventDatabase</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">cfg</span>.<span class="ident">data_path</span>)<span class="question-mark">?</span>;
 
-        <span class="comment">// Create an upload manager with rate limiting of 10 pings every 60 seconds.</span>
+        <span class="comment">// Create an upload manager with rate limiting of 15 pings every 60 seconds.</span>
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">upload_manager</span> <span class="op">=</span> <span class="ident">PingUploadManager</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">cfg</span>.<span class="ident">data_path</span>, <span class="kw-2">&amp;</span><span class="ident">cfg</span>.<span class="ident">language_binding_name</span>);
         <span class="ident">upload_manager</span>.<span class="ident">set_rate_limiter</span>(
-            <span class="comment">/* seconds per interval */</span> <span class="number">60</span>, <span class="comment">/* max tasks per interval */</span> <span class="number">15</span>,
+            <span class="comment">/* seconds per interval */</span> <span class="number">60</span>, <span class="comment">/* max pings per interval */</span> <span class="number">15</span>,
         );
 
         <span class="comment">// We only scan the pending ping sdirectories when calling this from a subprocess,</span>
