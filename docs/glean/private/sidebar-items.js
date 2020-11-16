@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["BooleanMetric","This implements the developer facing API for recording boolean metrics."],["PingType","A Glean ping."],["RecordedExperimentData","Deserialized experiment data."]]});
+initSidebarItems({"struct":[["BooleanMetric","This implements the developer facing API for recording boolean metrics."],["CounterMetric","This implements the developer facing API for recording counter metrics."],["PingType","A Glean ping."],["RecordedExperimentData","Deserialized experiment data."]]});
