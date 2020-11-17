@@ -393,7 +393,7 @@ def upload(
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class PingUploadWorker:
-    _throttle_backoff_time = 60_000
+    _throttle_backoff_time_s = 60
 
     @classmethod
     def process(cls):
@@ -420,7 +420,7 @@ def upload(
                 Glean._data_dir,
                 Glean._application_id,
                 Glean._configuration,
-                cls._throttle_backoff_time,
+                cls._throttle_backoff_time_s,
             ),
         )
 

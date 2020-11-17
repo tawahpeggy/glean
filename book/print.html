@@ -8064,32 +8064,39 @@ Each ping has its own schedule to gather all its locally saved metrics and creat
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/appendix/glossary.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#unreleased-changes" id="unreleased-changes">Unreleased changes</a></h1>
 <p><a href="https://github.com/mozilla/glean/compare/v33.3.0...main">Full changelog</a></p>
 <ul>
+<li>General
+<ul>
+<li>When Rkv's safe mode is enabled (<code>features = [&quot;rkv-safe-mode&quot;]</code> on the <code>glean-core</code> crate) LMDB data is migrated at first start (<a href="https://github.com/mozilla/glean/pull/1322">#1322</a>).</li>
+</ul>
+</li>
 <li>Rust
 <ul>
 <li>Introduce the Counter metric type in the RLB.</li>
 <li>Introduce the String metric type in the RLB.</li>
 </ul>
 </li>
+<li>Python
+<ul>
+<li>BUGFIX: Fix too-long sleep time in uploader due to unit mismatch (<a href="https://github.com/mozilla/glean/pull/1325">#1325</a>).</li>
+</ul>
+</li>
+<li>Swift
+<ul>
+<li>BUGFIX: Fix too-long sleep time in uploader due to unit mismatch (<a href="https://github.com/mozilla/glean/pull/1325">#1325</a>).</li>
+</ul>
+</li>
 </ul>
 <h1><a class="header" href="#v3330-2020-11-12" id="v3330-2020-11-12">v33.3.0 (2020-11-12)</a></h1>
 <p><a href="https://github.com/mozilla/glean/compare/v33.2.0...v33.3.0">Full changelog</a></p>
 <ul>
-<li>
-<p>General</p>
+<li>General
 <ul>
 <li>Do not require default-features on rkv and downgrade bincode (<a href="https://github.com/mozilla/glean/pull/1317">#1317</a>)</li>
 </ul>
 </li>
-<li>
-<p>Rust</p>
+<li>Rust
 <ul>
 <li>Implement the experiments API (<a href="https://github.com/mozilla/glean/pull/1314">#1314</a>)</li>
-</ul>
-</li>
-<li>
-<p>General</p>
-<ul>
-<li>When Rkv's safe mode is enabled (<code>features = [&quot;rkv-safe-mode&quot;]</code> on the <code>glean-core</code> crate) LMDB data is migrated at first start (<a href="https://github.com/mozilla/glean/pull/1322">#1322</a>).</li>
 </ul>
 </li>
 </ul>
