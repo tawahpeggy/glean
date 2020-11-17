@@ -183,14 +183,22 @@
 <h1><a class="header" href="#v3330-2020-11-12" id="v3330-2020-11-12">v33.3.0 (2020-11-12)</a></h1>
 <p><a href="https://github.com/mozilla/glean/compare/v33.2.0...v33.3.0">Full changelog</a></p>
 <ul>
-<li>General
+<li>
+<p>General</p>
 <ul>
 <li>Do not require default-features on rkv and downgrade bincode (<a href="https://github.com/mozilla/glean/pull/1317">#1317</a>)</li>
 </ul>
 </li>
-<li>Rust
+<li>
+<p>Rust</p>
 <ul>
 <li>Implement the experiments API (<a href="https://github.com/mozilla/glean/pull/1314">#1314</a>)</li>
+</ul>
+</li>
+<li>
+<p>General</p>
+<ul>
+<li>When Rkv's safe mode is enabled (<code>features = [&quot;rkv-safe-mode&quot;]</code> on the <code>glean-core</code> crate) LMDB data is migrated at first start (<a href="https://github.com/mozilla/glean/pull/1322">#1322</a>).</li>
 </ul>
 </li>
 </ul>
