@@ -18,6 +18,8 @@
 <span id="15">15</span>
 <span id="16">16</span>
 <span id="17">17</span>
+<span id="18">18</span>
+<span id="19">19</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -30,7 +32,9 @@
 <span class="kw">mod</span> <span class="ident">ping</span>;
 <span class="kw">mod</span> <span class="ident">recorded_experiment_data</span>;
 <span class="kw">mod</span> <span class="ident">string</span>;
+<span class="kw">mod</span> <span class="ident">uuid</span>;
 
+<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">uuid</span>::<span class="ident">UuidMetric</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">boolean</span>::<span class="ident">BooleanMetric</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">counter</span>::<span class="ident">CounterMetric</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">ping</span>::<span class="ident">PingType</span>;

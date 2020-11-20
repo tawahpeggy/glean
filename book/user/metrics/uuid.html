@@ -263,6 +263,32 @@ Assert.True(User.clientId.TestHasValue());
 Assert.Equal(uuid, User.clientId.TestGetValue());
 </code></pre>
 </div>
+<div data-lang="Rust" class="tab">
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean_metrics;
+use uuid::Uuid;
+
+user::client_id.generate_and_set(); // Generate a new UUID and record it
+user::client_id.set(Uuid::new_v4()); // Set a UUID explicitly
+<span class="boring">}
+</span></code></pre></pre>
+<p>There are test APIs available too:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean_metrics;
+
+let u = Uuid::new_v4();
+user::client_id.set(u);
+// Was anything recorded?
+assert!(user::client_id.test_get_value(None).is_some());
+// Does it have the expected value?
+assert_eq!(u, user::client_id.test_get_value(None).unwrap());
+<span class="boring">}
+</span></code></pre></pre>
+</div>
 </div>
 </div>
 <h2><a class="header" href="#limits" id="limits">Limits</a></h2>
