@@ -1,4 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `glean-core/src/metrics/jwe.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>jwe.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../glean_core/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `glean-core/src/metrics/jwe.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>jwe.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../glean_core/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
                 <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
@@ -499,17 +501,17 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// The regex crate isn&#39;t used here because it adds to the binary size,</span>
 <span class="doccomment">/// and the Glean SDK doesn&#39;t use regular expressions anywhere else.</span>
-<span class="kw">fn</span> <span class="ident">validate_base64url_encoding</span>(<span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+<span class="kw">fn</span> <span class="ident">validate_base64url_encoding</span>(<span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">iter</span> <span class="op">=</span> <span class="ident">value</span>.<span class="ident">chars</span>();
 
     <span class="kw">loop</span> {
         <span class="kw">match</span> <span class="ident">iter</span>.<span class="ident">next</span>() {
             <span class="comment">// We are done, so the whole expression is valid.</span>
-            <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="kw">return</span> <span class="bool-val">true</span>,
+            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="bool-val">true</span>,
             <span class="comment">// Valid characters.</span>
-            <span class="prelude-val">Some</span>(<span class="string">&#39;_&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;-&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;a&#39;</span>..<span class="op">=</span><span class="string">&#39;z&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;A&#39;</span>..<span class="op">=</span><span class="string">&#39;Z&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;0&#39;</span>..<span class="op">=</span><span class="string">&#39;9&#39;</span>) <span class="op">=&gt;</span> (),
+            <span class="prelude-val">Some</span>(<span class="string">&#39;_&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;-&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;a&#39;</span>..<span class="op">=</span><span class="string">&#39;z&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;A&#39;</span>..<span class="op">=</span><span class="string">&#39;Z&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;0&#39;</span>..<span class="op">=</span><span class="string">&#39;9&#39;</span>) <span class="op">=</span><span class="op">&gt;</span> (),
             <span class="comment">// An invalid character.</span>
-            <span class="prelude-val">Some</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="kw">return</span> <span class="bool-val">false</span>,
+            <span class="prelude-val">Some</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="bool-val">false</span>,
         }
     }
 }
@@ -541,13 +543,13 @@
 <span class="comment">// also declared in the related trait in `../traits/`.</span>
 <span class="kw">impl</span> <span class="ident">Jwe</span> {
     <span class="doccomment">/// Create a new JWE struct.</span>
-    <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;&gt;</span>(
+    <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>(
         <span class="ident">header</span>: <span class="ident">S</span>,
         <span class="ident">key</span>: <span class="ident">S</span>,
         <span class="ident">init_vector</span>: <span class="ident">S</span>,
         <span class="ident">cipher_text</span>: <span class="ident">S</span>,
         <span class="ident">auth_tag</span>: <span class="ident">S</span>,
-    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, (<span class="ident">ErrorType</span>, <span class="ident">String</span>)<span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, (<span class="ident">ErrorType</span>, <span class="ident">String</span>)<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">header</span> <span class="op">=</span> <span class="ident">header</span>.<span class="ident">into</span>();
         <span class="ident">header</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">validate_non_empty</span>(<span class="string">&quot;header&quot;</span>, <span class="ident">header</span>)<span class="question-mark">?</span>;
         <span class="ident">header</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">validate_max_size</span>(<span class="string">&quot;header&quot;</span>, <span class="ident">header</span>)<span class="question-mark">?</span>;
@@ -582,7 +584,7 @@
     <span class="kw">fn</span> <span class="ident">validate_base64url_encoding</span>(
         <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">value</span>: <span class="ident">String</span>,
-    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span>, (<span class="ident">ErrorType</span>, <span class="ident">String</span>)<span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span>, (<span class="ident">ErrorType</span>, <span class="ident">String</span>)<span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="op">!</span><span class="ident">validate_base64url_encoding</span>(<span class="kw-2">&amp;</span><span class="ident">value</span>) {
             <span class="kw">return</span> <span class="prelude-val">Err</span>((
                 <span class="ident">ErrorType</span>::<span class="ident">InvalidValue</span>,
@@ -593,7 +595,7 @@
         <span class="prelude-val">Ok</span>(<span class="ident">value</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">validate_non_empty</span>(<span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">value</span>: <span class="ident">String</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span>, (<span class="ident">ErrorType</span>, <span class="ident">String</span>)<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">validate_non_empty</span>(<span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">value</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span>, (<span class="ident">ErrorType</span>, <span class="ident">String</span>)<span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="ident">value</span>.<span class="ident">is_empty</span>() {
             <span class="kw">return</span> <span class="prelude-val">Err</span>((
                 <span class="ident">ErrorType</span>::<span class="ident">InvalidValue</span>,
@@ -604,7 +606,7 @@
         <span class="prelude-val">Ok</span>(<span class="ident">value</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">validate_max_size</span>(<span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">value</span>: <span class="ident">String</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span>, (<span class="ident">ErrorType</span>, <span class="ident">String</span>)<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">validate_max_size</span>(<span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">value</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span>, (<span class="ident">ErrorType</span>, <span class="ident">String</span>)<span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="ident">value</span>.<span class="ident">len</span>() <span class="op">&gt;</span> <span class="ident">DEFAULT_MAX_CHARS_PER_VARIABLE_SIZE_ELEMENT</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>((
                 <span class="ident">ErrorType</span>::<span class="ident">InvalidOverflow</span>,
@@ -622,12 +624,12 @@
         <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">value</span>: <span class="ident">String</span>,
         <span class="ident">size_in_bits</span>: <span class="ident">usize</span>,
-    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span>, (<span class="ident">ErrorType</span>, <span class="ident">String</span>)<span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span>, (<span class="ident">ErrorType</span>, <span class="ident">String</span>)<span class="op">&gt;</span> {
         <span class="comment">// Each Base64 digit represents exactly 6 bits of data.</span>
         <span class="comment">// By dividing the size_in_bits by 6 and ceiling the result,</span>
         <span class="comment">// we get the amount of characters the value should have.</span>
         <span class="kw">let</span> <span class="ident">num_chars</span> <span class="op">=</span> (<span class="ident">size_in_bits</span> <span class="kw">as</span> <span class="ident">f32</span> <span class="op">/</span> <span class="number">6f32</span>).<span class="ident">ceil</span>() <span class="kw">as</span> <span class="ident">usize</span>;
-        <span class="kw">if</span> <span class="op">!</span><span class="ident">value</span>.<span class="ident">is_empty</span>() <span class="op">&amp;&amp;</span> <span class="ident">value</span>.<span class="ident">len</span>() <span class="op">!=</span> <span class="ident">num_chars</span> {
+        <span class="kw">if</span> <span class="op">!</span><span class="ident">value</span>.<span class="ident">is_empty</span>() <span class="op">&amp;&amp;</span> <span class="ident">value</span>.<span class="ident">len</span>() <span class="op">!</span><span class="op">=</span> <span class="ident">num_chars</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>((
                 <span class="ident">ErrorType</span>::<span class="ident">InvalidOverflow</span>,
                 <span class="macro">format</span><span class="macro">!</span>(
@@ -646,10 +648,10 @@
 <span class="kw">impl</span> <span class="ident">FromStr</span> <span class="kw">for</span> <span class="ident">Jwe</span> {
     <span class="kw">type</span> <span class="prelude-val">Err</span> <span class="op">=</span> (<span class="ident">ErrorType</span>, <span class="ident">String</span>);
 
-    <span class="kw">fn</span> <span class="ident">from_str</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="self">Self</span>::<span class="prelude-val">Err</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">from_str</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="self">Self</span>::<span class="prelude-val">Err</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">elements</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">s</span>.<span class="ident">split</span>(<span class="string">&#39;.&#39;</span>).<span class="ident">collect</span>();
 
-        <span class="kw">if</span> <span class="ident">elements</span>.<span class="ident">len</span>() <span class="op">!=</span> <span class="number">5</span> {
+        <span class="kw">if</span> <span class="ident">elements</span>.<span class="ident">len</span>() <span class="op">!</span><span class="op">=</span> <span class="number">5</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>((
                 <span class="ident">ErrorType</span>::<span class="ident">InvalidValue</span>,
                 <span class="string">&quot;JWE value is not formatted as expected.&quot;</span>.<span class="ident">into</span>(),
@@ -671,7 +673,7 @@
 
 <span class="doccomment">/// Trait implementation to print the Jwe struct as the proper JWE [`compact representation`](https://tools.ietf.org/html/rfc7516#appendix-A.2.7).</span>
 <span class="kw">impl</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="kw">for</span> <span class="ident">Jwe</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="macro">write</span><span class="macro">!</span>(
             <span class="ident">f</span>,
             <span class="string">&quot;{}.{}.{}.{}.{}&quot;</span>,
@@ -692,18 +694,18 @@
 }
 
 <span class="kw">impl</span> <span class="ident">MetricType</span> <span class="kw">for</span> <span class="ident">JweMetric</span> {
-    <span class="kw">fn</span> <span class="ident">meta</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">CommonMetricData</span> {
+    <span class="kw">fn</span> <span class="ident">meta</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">CommonMetricData</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">meta</span>
     }
 
-    <span class="kw">fn</span> <span class="ident">meta_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">CommonMetricData</span> {
+    <span class="kw">fn</span> <span class="ident">meta_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">CommonMetricData</span> {
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">meta</span>
     }
 }
 
 <span class="kw">impl</span> <span class="ident">JweMetric</span> {
     <span class="doccomment">/// Creates a new JWE metric.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">meta</span>: <span class="ident">CommonMetricData</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">meta</span>: <span class="ident">CommonMetricData</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span> { <span class="ident">meta</span> }
     }
 
@@ -713,17 +715,17 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// * `glean` - the Glean instance this metric belongs to.</span>
     <span class="doccomment">/// * `value` - the [`compact representation`](https://tools.ietf.org/html/rfc7516#appendix-A.2.7) of a JWE value.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_with_compact_representation</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">glean</span>: <span class="kw-2">&amp;</span><span class="ident">Glean</span>, <span class="ident">value</span>: <span class="ident">S</span>) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_with_compact_representation</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">glean</span>: <span class="kw-2">&amp;</span><span class="ident">Glean</span>, <span class="ident">value</span>: <span class="ident">S</span>) {
         <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">should_record</span>(<span class="ident">glean</span>) {
             <span class="kw">return</span>;
         }
 
         <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">value</span>.<span class="ident">into</span>();
         <span class="kw">match</span> <span class="ident">Jwe</span>::<span class="ident">from_str</span>(<span class="kw-2">&amp;</span><span class="ident">value</span>) {
-            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="ident">glean</span>
+            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">glean</span>
                 .<span class="ident">storage</span>()
                 .<span class="ident">record</span>(<span class="ident">glean</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">meta</span>, <span class="kw-2">&amp;</span><span class="ident">Metric</span>::<span class="ident">Jwe</span>(<span class="ident">value</span>)),
-            <span class="prelude-val">Err</span>((<span class="ident">error_type</span>, <span class="ident">msg</span>)) <span class="op">=&gt;</span> <span class="ident">record_error</span>(<span class="ident">glean</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">meta</span>, <span class="ident">error_type</span>, <span class="ident">msg</span>, <span class="prelude-val">None</span>),
+            <span class="prelude-val">Err</span>((<span class="ident">error_type</span>, <span class="ident">msg</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">record_error</span>(<span class="ident">glean</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">meta</span>, <span class="ident">error_type</span>, <span class="ident">msg</span>, <span class="prelude-val">None</span>),
         };
     }
 
@@ -737,7 +739,7 @@
     <span class="doccomment">/// * `init_vector` - the JWE Initialization Vector element.</span>
     <span class="doccomment">/// * `cipher_text` - the JWE Ciphertext element.</span>
     <span class="doccomment">/// * `auth_tag` - the JWE Authentication Tag element.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;&gt;</span>(
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">glean</span>: <span class="kw-2">&amp;</span><span class="ident">Glean</span>,
         <span class="ident">header</span>: <span class="ident">S</span>,
@@ -751,10 +753,10 @@
         }
 
         <span class="kw">match</span> <span class="ident">Jwe</span>::<span class="ident">new</span>(<span class="ident">header</span>, <span class="ident">key</span>, <span class="ident">init_vector</span>, <span class="ident">cipher_text</span>, <span class="ident">auth_tag</span>) {
-            <span class="prelude-val">Ok</span>(<span class="ident">jwe</span>) <span class="op">=&gt;</span> <span class="ident">glean</span>
+            <span class="prelude-val">Ok</span>(<span class="ident">jwe</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">glean</span>
                 .<span class="ident">storage</span>()
                 .<span class="ident">record</span>(<span class="ident">glean</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">meta</span>, <span class="kw-2">&amp;</span><span class="ident">Metric</span>::<span class="ident">Jwe</span>(<span class="ident">jwe</span>.<span class="ident">to_string</span>())),
-            <span class="prelude-val">Err</span>((<span class="ident">error_type</span>, <span class="ident">msg</span>)) <span class="op">=&gt;</span> <span class="ident">record_error</span>(<span class="ident">glean</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">meta</span>, <span class="ident">error_type</span>, <span class="ident">msg</span>, <span class="prelude-val">None</span>),
+            <span class="prelude-val">Err</span>((<span class="ident">error_type</span>, <span class="ident">msg</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">record_error</span>(<span class="ident">glean</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">meta</span>, <span class="ident">error_type</span>, <span class="ident">msg</span>, <span class="prelude-val">None</span>),
         };
     }
 
@@ -763,14 +765,14 @@
     <span class="doccomment">/// Gets the currently stored value as a string.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This doesn&#39;t clear the stored value.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_get_value</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">glean</span>: <span class="kw-2">&amp;</span><span class="ident">Glean</span>, <span class="ident">storage_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_get_value</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">glean</span>: <span class="kw-2">&amp;</span><span class="ident">Glean</span>, <span class="ident">storage_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="ident">StorageManager</span>.<span class="ident">snapshot_metric</span>(
             <span class="ident">glean</span>.<span class="ident">storage</span>(),
             <span class="ident">storage_name</span>,
             <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">meta</span>.<span class="ident">identifier</span>(<span class="ident">glean</span>),
         ) {
-            <span class="prelude-val">Some</span>(<span class="ident">Metric</span>::<span class="ident">Jwe</span>(<span class="ident">b</span>)) <span class="op">=&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">b</span>),
-            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="prelude-val">None</span>,
+            <span class="prelude-val">Some</span>(<span class="ident">Metric</span>::<span class="ident">Jwe</span>(<span class="ident">b</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">b</span>),
+            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
         }
     }
 
@@ -783,7 +785,7 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">glean</span>: <span class="kw-2">&amp;</span><span class="ident">Glean</span>,
         <span class="ident">storage_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-    ) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">test_get_value</span>(<span class="ident">glean</span>, <span class="ident">storage_name</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">snapshot</span><span class="op">|</span> {
             <span class="ident">serde_json</span>::<span class="ident">to_string</span>(
                 <span class="kw-2">&amp;</span><span class="ident">Jwe</span>::<span class="ident">from_str</span>(<span class="kw-2">&amp;</span><span class="ident">snapshot</span>).<span class="ident">expect</span>(<span class="string">&quot;Stored JWE metric should be valid JWE value.&quot;</span>),
@@ -821,8 +823,8 @@
     <span class="kw">fn</span> <span class="ident">jwe_validates_header_value_correctly</span>() {
         <span class="comment">// When header is empty, correct error is returned</span>
         <span class="kw">match</span> <span class="ident">Jwe</span>::<span class="ident">new</span>(<span class="string">&quot;&quot;</span>, <span class="ident">KEY</span>, <span class="ident">INIT_VECTOR</span>, <span class="ident">CIPHER_TEXT</span>, <span class="ident">AUTH_TAG</span>) {
-            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Should not have built JWE successfully.&quot;</span>),
-            <span class="prelude-val">Err</span>((<span class="ident">error_type</span>, <span class="kw">_</span>)) <span class="op">=&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">error_type</span>, <span class="ident">ErrorType</span>::<span class="ident">InvalidValue</span>),
+            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Should not have built JWE successfully.&quot;</span>),
+            <span class="prelude-val">Err</span>((<span class="ident">error_type</span>, <span class="kw">_</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">error_type</span>, <span class="ident">ErrorType</span>::<span class="ident">InvalidValue</span>),
         }
 
         <span class="comment">// When header is bigger than max size, correct error is returned</span>
@@ -834,15 +836,15 @@
             <span class="ident">CIPHER_TEXT</span>.<span class="ident">into</span>(),
             <span class="ident">AUTH_TAG</span>.<span class="ident">into</span>(),
         ) {
-            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Should not have built JWE successfully.&quot;</span>),
-            <span class="prelude-val">Err</span>((<span class="ident">error_type</span>, <span class="kw">_</span>)) <span class="op">=&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">error_type</span>, <span class="ident">ErrorType</span>::<span class="ident">InvalidOverflow</span>),
+            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Should not have built JWE successfully.&quot;</span>),
+            <span class="prelude-val">Err</span>((<span class="ident">error_type</span>, <span class="kw">_</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">error_type</span>, <span class="ident">ErrorType</span>::<span class="ident">InvalidOverflow</span>),
         }
 
         <span class="comment">// When header is not valid BASE64URL, correct error is returned</span>
         <span class="kw">let</span> <span class="ident">not64</span> <span class="op">=</span> <span class="string">&quot;inv@alid value!&quot;</span>;
         <span class="kw">match</span> <span class="ident">Jwe</span>::<span class="ident">new</span>(<span class="ident">not64</span>, <span class="ident">KEY</span>, <span class="ident">INIT_VECTOR</span>, <span class="ident">CIPHER_TEXT</span>, <span class="ident">AUTH_TAG</span>) {
-            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Should not have built JWE successfully.&quot;</span>),
-            <span class="prelude-val">Err</span>((<span class="ident">error_type</span>, <span class="kw">_</span>)) <span class="op">=&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">error_type</span>, <span class="ident">ErrorType</span>::<span class="ident">InvalidValue</span>),
+            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Should not have built JWE successfully.&quot;</span>),
+            <span class="prelude-val">Err</span>((<span class="ident">error_type</span>, <span class="kw">_</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">error_type</span>, <span class="ident">ErrorType</span>::<span class="ident">InvalidValue</span>),
         }
     }
 
@@ -854,15 +856,15 @@
         <span class="comment">// When key is bigger than max size, correct error is returned</span>
         <span class="kw">let</span> <span class="ident">too_long</span> <span class="op">=</span> (<span class="number">0</span>..<span class="number">1025</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="string">&quot;X&quot;</span>).<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>();
         <span class="kw">match</span> <span class="ident">Jwe</span>::<span class="ident">new</span>(<span class="ident">HEADER</span>, <span class="kw-2">&amp;</span><span class="ident">too_long</span>, <span class="ident">INIT_VECTOR</span>, <span class="ident">CIPHER_TEXT</span>, <span class="ident">AUTH_TAG</span>) {
-            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Should not have built JWE successfully.&quot;</span>),
-            <span class="prelude-val">Err</span>((<span class="ident">error_type</span>, <span class="kw">_</span>)) <span class="op">=&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">error_type</span>, <span class="ident">ErrorType</span>::<span class="ident">InvalidOverflow</span>),
+            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Should not have built JWE successfully.&quot;</span>),
+            <span class="prelude-val">Err</span>((<span class="ident">error_type</span>, <span class="kw">_</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">error_type</span>, <span class="ident">ErrorType</span>::<span class="ident">InvalidOverflow</span>),
         }
 
         <span class="comment">// When key is not valid BASE64URL, correct error is returned</span>
         <span class="kw">let</span> <span class="ident">not64</span> <span class="op">=</span> <span class="string">&quot;inv@alid value!&quot;</span>;
         <span class="kw">match</span> <span class="ident">Jwe</span>::<span class="ident">new</span>(<span class="ident">HEADER</span>, <span class="ident">not64</span>, <span class="ident">INIT_VECTOR</span>, <span class="ident">CIPHER_TEXT</span>, <span class="ident">AUTH_TAG</span>) {
-            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Should not have built JWE successfully.&quot;</span>),
-            <span class="prelude-val">Err</span>((<span class="ident">error_type</span>, <span class="kw">_</span>)) <span class="op">=&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">error_type</span>, <span class="ident">ErrorType</span>::<span class="ident">InvalidValue</span>),
+            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Should not have built JWE successfully.&quot;</span>),
+            <span class="prelude-val">Err</span>((<span class="ident">error_type</span>, <span class="kw">_</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">error_type</span>, <span class="ident">ErrorType</span>::<span class="ident">InvalidValue</span>),
         }
     }
 
@@ -873,15 +875,15 @@
 
         <span class="comment">// When init_vector is not the correct size, correct error is returned</span>
         <span class="kw">match</span> <span class="ident">Jwe</span>::<span class="ident">new</span>(<span class="ident">HEADER</span>, <span class="ident">KEY</span>, <span class="string">&quot;foo&quot;</span>, <span class="ident">CIPHER_TEXT</span>, <span class="ident">AUTH_TAG</span>) {
-            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Should not have built JWE successfully.&quot;</span>),
-            <span class="prelude-val">Err</span>((<span class="ident">error_type</span>, <span class="kw">_</span>)) <span class="op">=&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">error_type</span>, <span class="ident">ErrorType</span>::<span class="ident">InvalidOverflow</span>),
+            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Should not have built JWE successfully.&quot;</span>),
+            <span class="prelude-val">Err</span>((<span class="ident">error_type</span>, <span class="kw">_</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">error_type</span>, <span class="ident">ErrorType</span>::<span class="ident">InvalidOverflow</span>),
         }
 
         <span class="comment">// When init_vector is not valid BASE64URL, correct error is returned</span>
         <span class="kw">let</span> <span class="ident">not64</span> <span class="op">=</span> <span class="string">&quot;inv@alid value!!&quot;</span>;
         <span class="kw">match</span> <span class="ident">Jwe</span>::<span class="ident">new</span>(<span class="ident">HEADER</span>, <span class="ident">KEY</span>, <span class="ident">not64</span>, <span class="ident">CIPHER_TEXT</span>, <span class="ident">AUTH_TAG</span>) {
-            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Should not have built JWE successfully.&quot;</span>),
-            <span class="prelude-val">Err</span>((<span class="ident">error_type</span>, <span class="kw">_</span>)) <span class="op">=&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">error_type</span>, <span class="ident">ErrorType</span>::<span class="ident">InvalidValue</span>),
+            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Should not have built JWE successfully.&quot;</span>),
+            <span class="prelude-val">Err</span>((<span class="ident">error_type</span>, <span class="kw">_</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">error_type</span>, <span class="ident">ErrorType</span>::<span class="ident">InvalidValue</span>),
         }
     }
 
@@ -889,22 +891,22 @@
     <span class="kw">fn</span> <span class="ident">jwe_validates_cipher_text_value_correctly</span>() {
         <span class="comment">// When cipher_text is empty, correct error is returned</span>
         <span class="kw">match</span> <span class="ident">Jwe</span>::<span class="ident">new</span>(<span class="ident">HEADER</span>, <span class="ident">KEY</span>, <span class="ident">INIT_VECTOR</span>, <span class="string">&quot;&quot;</span>, <span class="ident">AUTH_TAG</span>) {
-            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Should not have built JWE successfully.&quot;</span>),
-            <span class="prelude-val">Err</span>((<span class="ident">error_type</span>, <span class="kw">_</span>)) <span class="op">=&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">error_type</span>, <span class="ident">ErrorType</span>::<span class="ident">InvalidValue</span>),
+            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Should not have built JWE successfully.&quot;</span>),
+            <span class="prelude-val">Err</span>((<span class="ident">error_type</span>, <span class="kw">_</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">error_type</span>, <span class="ident">ErrorType</span>::<span class="ident">InvalidValue</span>),
         }
 
         <span class="comment">// When cipher_text is bigger than max size, correct error is returned</span>
         <span class="kw">let</span> <span class="ident">too_long</span> <span class="op">=</span> (<span class="number">0</span>..<span class="number">1025</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="string">&quot;X&quot;</span>).<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>();
         <span class="kw">match</span> <span class="ident">Jwe</span>::<span class="ident">new</span>(<span class="ident">HEADER</span>, <span class="ident">KEY</span>, <span class="ident">INIT_VECTOR</span>, <span class="kw-2">&amp;</span><span class="ident">too_long</span>, <span class="ident">AUTH_TAG</span>) {
-            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Should not have built JWE successfully.&quot;</span>),
-            <span class="prelude-val">Err</span>((<span class="ident">error_type</span>, <span class="kw">_</span>)) <span class="op">=&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">error_type</span>, <span class="ident">ErrorType</span>::<span class="ident">InvalidOverflow</span>),
+            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Should not have built JWE successfully.&quot;</span>),
+            <span class="prelude-val">Err</span>((<span class="ident">error_type</span>, <span class="kw">_</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">error_type</span>, <span class="ident">ErrorType</span>::<span class="ident">InvalidOverflow</span>),
         }
 
         <span class="comment">// When cipher_text is not valid BASE64URL, correct error is returned</span>
         <span class="kw">let</span> <span class="ident">not64</span> <span class="op">=</span> <span class="string">&quot;inv@alid value!&quot;</span>;
         <span class="kw">match</span> <span class="ident">Jwe</span>::<span class="ident">new</span>(<span class="ident">HEADER</span>, <span class="ident">KEY</span>, <span class="ident">INIT_VECTOR</span>, <span class="ident">not64</span>, <span class="ident">AUTH_TAG</span>) {
-            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Should not have built JWE successfully.&quot;</span>),
-            <span class="prelude-val">Err</span>((<span class="ident">error_type</span>, <span class="kw">_</span>)) <span class="op">=&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">error_type</span>, <span class="ident">ErrorType</span>::<span class="ident">InvalidValue</span>),
+            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Should not have built JWE successfully.&quot;</span>),
+            <span class="prelude-val">Err</span>((<span class="ident">error_type</span>, <span class="kw">_</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">error_type</span>, <span class="ident">ErrorType</span>::<span class="ident">InvalidValue</span>),
         }
     }
 
@@ -915,15 +917,15 @@
 
         <span class="comment">// When auth_tag is not the correct size, correct error is returned</span>
         <span class="kw">match</span> <span class="ident">Jwe</span>::<span class="ident">new</span>(<span class="ident">HEADER</span>, <span class="ident">KEY</span>, <span class="ident">INIT_VECTOR</span>, <span class="ident">CIPHER_TEXT</span>, <span class="string">&quot;foo&quot;</span>) {
-            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Should not have built JWE successfully.&quot;</span>),
-            <span class="prelude-val">Err</span>((<span class="ident">error_type</span>, <span class="kw">_</span>)) <span class="op">=&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">error_type</span>, <span class="ident">ErrorType</span>::<span class="ident">InvalidOverflow</span>),
+            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Should not have built JWE successfully.&quot;</span>),
+            <span class="prelude-val">Err</span>((<span class="ident">error_type</span>, <span class="kw">_</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">error_type</span>, <span class="ident">ErrorType</span>::<span class="ident">InvalidOverflow</span>),
         }
 
         <span class="comment">// When auth_tag is not valid BASE64URL, correct error is returned</span>
         <span class="kw">let</span> <span class="ident">not64</span> <span class="op">=</span> <span class="string">&quot;inv@alid value!!!!!!!!&quot;</span>;
         <span class="kw">match</span> <span class="ident">Jwe</span>::<span class="ident">new</span>(<span class="ident">HEADER</span>, <span class="ident">KEY</span>, <span class="ident">INIT_VECTOR</span>, <span class="ident">CIPHER_TEXT</span>, <span class="ident">not64</span>) {
-            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Should not have built JWE successfully.&quot;</span>),
-            <span class="prelude-val">Err</span>((<span class="ident">error_type</span>, <span class="kw">_</span>)) <span class="op">=&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">error_type</span>, <span class="ident">ErrorType</span>::<span class="ident">InvalidValue</span>),
+            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Should not have built JWE successfully.&quot;</span>),
+            <span class="prelude-val">Err</span>((<span class="ident">error_type</span>, <span class="kw">_</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">error_type</span>, <span class="ident">ErrorType</span>::<span class="ident">InvalidValue</span>),
         }
     }
 

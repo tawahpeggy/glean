@@ -1,4 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `glean-core/src/metrics/labeled.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>labeled.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../glean_core/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `glean-core/src/metrics/labeled.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>labeled.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../glean_core/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
                 <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
@@ -293,14 +295,14 @@
 <span class="doccomment">/// * `1.not_fine`</span>
 <span class="doccomment">/// * `this.$isnotfine`</span>
 <span class="doccomment">/// * `-.not_fine`</span>
-<span class="kw">fn</span> <span class="ident">matches_label_regex</span>(<span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+<span class="kw">fn</span> <span class="ident">matches_label_regex</span>(<span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">iter</span> <span class="op">=</span> <span class="ident">value</span>.<span class="ident">chars</span>();
 
     <span class="kw">loop</span> {
         <span class="comment">// Match the first letter in the word.</span>
         <span class="kw">match</span> <span class="ident">iter</span>.<span class="ident">next</span>() {
-            <span class="prelude-val">Some</span>(<span class="string">&#39;_&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;a&#39;</span>..<span class="op">=</span><span class="string">&#39;z&#39;</span>) <span class="op">=&gt;</span> (),
-            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="kw">return</span> <span class="bool-val">false</span>,
+            <span class="prelude-val">Some</span>(<span class="string">&#39;_&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;a&#39;</span>..<span class="op">=</span><span class="string">&#39;z&#39;</span>) <span class="op">=</span><span class="op">&gt;</span> (),
+            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="bool-val">false</span>,
         };
 
         <span class="comment">// Match subsequent letters in the word.</span>
@@ -308,18 +310,18 @@
         <span class="kw">loop</span> {
             <span class="kw">match</span> <span class="ident">iter</span>.<span class="ident">next</span>() {
                 <span class="comment">// We are done, so the whole expression is valid.</span>
-                <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="kw">return</span> <span class="bool-val">true</span>,
+                <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="bool-val">true</span>,
                 <span class="comment">// Valid characters.</span>
-                <span class="prelude-val">Some</span>(<span class="string">&#39;_&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;-&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;a&#39;</span>..<span class="op">=</span><span class="string">&#39;z&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;0&#39;</span>..<span class="op">=</span><span class="string">&#39;9&#39;</span>) <span class="op">=&gt;</span> (),
+                <span class="prelude-val">Some</span>(<span class="string">&#39;_&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;-&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;a&#39;</span>..<span class="op">=</span><span class="string">&#39;z&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;0&#39;</span>..<span class="op">=</span><span class="string">&#39;9&#39;</span>) <span class="op">=</span><span class="op">&gt;</span> (),
                 <span class="comment">// We ended a word, so iterate over the outer loop again.</span>
-                <span class="prelude-val">Some</span>(<span class="string">&#39;.&#39;</span>) <span class="op">=&gt;</span> <span class="kw">break</span>,
+                <span class="prelude-val">Some</span>(<span class="string">&#39;.&#39;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">break</span>,
                 <span class="comment">// An invalid character</span>
-                <span class="kw">_</span> <span class="op">=&gt;</span> <span class="kw">return</span> <span class="bool-val">false</span>,
+                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="bool-val">false</span>,
             }
-            <span class="ident">count</span> <span class="op">+=</span> <span class="number">1</span>;
+            <span class="ident">count</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
             <span class="comment">// We allow 30 characters per word, but the first one is handled</span>
             <span class="comment">// above outside of this loop, so we have a maximum of 29 here.</span>
-            <span class="kw">if</span> <span class="ident">count</span> <span class="op">==</span> <span class="number">29</span> {
+            <span class="kw">if</span> <span class="ident">count</span> <span class="op">=</span><span class="op">=</span> <span class="number">29</span> {
                 <span class="kw">return</span> <span class="bool-val">false</span>;
             }
         }
@@ -331,7 +333,7 @@
 <span class="doccomment">/// Labeled metrics allow to record multiple sub-metrics of the same type under different string labels.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">LabeledMetric</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="ident">labels</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;&gt;</span>,
+    <span class="ident">labels</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="doccomment">/// Type of the underlying metric</span>
     <span class="doccomment">/// We hold on to an instance of it, which is cloned to create new modified instances.</span>
     <span class="ident">submetric</span>: <span class="ident">T</span>,
@@ -344,14 +346,14 @@
     <span class="doccomment">/// Creates a new labeled metric from the given metric instance and optional list of labels.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// See [`get`](#method.get) for information on how static or dynamic labels are handled.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">submetric</span>: <span class="ident">T</span>, <span class="ident">labels</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;&gt;</span>) <span class="op">-&gt;</span> <span class="ident">LabeledMetric</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">submetric</span>: <span class="ident">T</span>, <span class="ident">labels</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">LabeledMetric</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
         <span class="ident">LabeledMetric</span> { <span class="ident">labels</span>, <span class="ident">submetric</span> }
     }
 
     <span class="doccomment">/// Creates a new metric with a specific label.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This is used for static labels where we can just set the name to be `name/label`.</span>
-    <span class="kw">fn</span> <span class="ident">new_metric_with_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="ident">String</span>) <span class="op">-&gt;</span> <span class="ident">T</span> {
+    <span class="kw">fn</span> <span class="ident">new_metric_with_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">t</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">submetric</span>.<span class="ident">clone</span>();
         <span class="ident">t</span>.<span class="ident">meta_mut</span>().<span class="ident">name</span> <span class="op">=</span> <span class="ident">name</span>;
         <span class="ident">t</span>
@@ -361,7 +363,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// This is used for dynamic labels where we have to actually validate and correct the</span>
     <span class="doccomment">/// label later when we have a Glean object.</span>
-    <span class="kw">fn</span> <span class="ident">new_metric_with_dynamic_label</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">label</span>: <span class="ident">String</span>) <span class="op">-&gt;</span> <span class="ident">T</span> {
+    <span class="kw">fn</span> <span class="ident">new_metric_with_dynamic_label</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">label</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">t</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">submetric</span>.<span class="ident">clone</span>();
         <span class="ident">t</span>.<span class="ident">meta_mut</span>().<span class="ident">dynamic_label</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">label</span>);
         <span class="ident">t</span>
@@ -381,10 +383,10 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// The requested label if it is in the list of allowed labels.</span>
     <span class="doccomment">/// Otherwise `OTHER_LABEL` is returned.</span>
-    <span class="kw">fn</span> <span class="ident">static_label</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">label</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span> {
+    <span class="kw">fn</span> <span class="ident">static_label</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">label</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span> {
         <span class="macro">debug_assert</span><span class="macro">!</span>(<span class="self">self</span>.<span class="ident">labels</span>.<span class="ident">is_some</span>());
         <span class="kw">let</span> <span class="ident">labels</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">labels</span>.<span class="ident">as_ref</span>().<span class="ident">unwrap</span>();
-        <span class="kw">if</span> <span class="ident">labels</span>.<span class="ident">iter</span>().<span class="ident">any</span>(<span class="op">|</span><span class="ident">l</span><span class="op">|</span> <span class="ident">l</span> <span class="op">==</span> <span class="ident">label</span>) {
+        <span class="kw">if</span> <span class="ident">labels</span>.<span class="ident">iter</span>().<span class="ident">any</span>(<span class="op">|</span><span class="ident">l</span><span class="op">|</span> <span class="ident">l</span> <span class="op">=</span><span class="op">=</span> <span class="ident">label</span>) {
             <span class="ident">label</span>
         } <span class="kw">else</span> {
             <span class="ident">OTHER_LABEL</span>
@@ -402,7 +404,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// Labels must be `snake_case` and less than 30 characters.</span>
     <span class="doccomment">/// If an invalid label is used, the metric will be recorded in the special `OTHER_LABEL` label.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">label</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">T</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">label</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span> {
         <span class="comment">// We have 2 scenarios to consider:</span>
         <span class="comment">// * Static labels. No database access needed. We just look at what is in memory.</span>
         <span class="comment">// * Dynamic labels. We look up in the database all previously stored</span>
@@ -410,14 +412,14 @@
         <span class="comment">//   when the specific metric is actually recorded, when we are guaranteed to have</span>
         <span class="comment">//   an initialized Glean object.</span>
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">labels</span> {
-            <span class="prelude-val">Some</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> {
+            <span class="prelude-val">Some</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw">let</span> <span class="ident">label</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">static_label</span>(<span class="ident">label</span>);
                 <span class="self">self</span>.<span class="ident">new_metric_with_name</span>(<span class="ident">combine_base_identifier_and_label</span>(
                     <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">submetric</span>.<span class="ident">meta</span>().<span class="ident">name</span>,
                     <span class="kw-2">&amp;</span><span class="ident">label</span>,
                 ))
             }
-            <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">new_metric_with_dynamic_label</span>(<span class="ident">label</span>.<span class="ident">to_string</span>()),
+            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">new_metric_with_dynamic_label</span>(<span class="ident">label</span>.<span class="ident">to_string</span>()),
         }
     }
 
@@ -425,18 +427,18 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// The template submetric is the actual metric that is cloned and modified</span>
     <span class="doccomment">/// to record for a specific label.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_submetric</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">T</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_submetric</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">T</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">submetric</span>
     }
 }
 
 <span class="doccomment">/// Combines a metric&#39;s base identifier and label</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">combine_base_identifier_and_label</span>(<span class="ident">base_identifer</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">label</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">String</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">combine_base_identifier_and_label</span>(<span class="ident">base_identifer</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">label</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
     <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}/{}&quot;</span>, <span class="ident">base_identifer</span>, <span class="ident">label</span>)
 }
 
 <span class="doccomment">/// Strips the label off of a complete identifier</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">strip_label</span>(<span class="ident">identifier</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">strip_label</span>(<span class="ident">identifier</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span> {
     <span class="comment">// safe unwrap, first field of a split always valid</span>
     <span class="ident">identifier</span>.<span class="ident">splitn</span>(<span class="number">2</span>, <span class="string">&#39;/&#39;</span>).<span class="ident">next</span>().<span class="ident">unwrap</span>()
 }
@@ -459,7 +461,7 @@
     <span class="ident">meta</span>: <span class="kw-2">&amp;</span><span class="ident">CommonMetricData</span>,
     <span class="ident">base_identifier</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
     <span class="ident">label</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-) <span class="op">-&gt;</span> <span class="ident">String</span> {
+) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
     <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">combine_base_identifier_and_label</span>(<span class="ident">base_identifier</span>, <span class="ident">label</span>);
     <span class="kw">for</span> <span class="ident">store</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">meta</span>.<span class="ident">send_in_pings</span> {
         <span class="kw">if</span> <span class="ident">glean</span>.<span class="ident">storage</span>().<span class="ident">has_metric</span>(<span class="ident">meta</span>.<span class="ident">lifetime</span>, <span class="ident">store</span>, <span class="kw-2">&amp;</span><span class="ident">key</span>) {
@@ -470,7 +472,7 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">label_count</span> <span class="op">=</span> <span class="number">0</span>;
     <span class="kw">let</span> <span class="ident">prefix</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">key</span>[..<span class="op">=</span><span class="ident">base_identifier</span>.<span class="ident">len</span>()];
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">snapshotter</span> <span class="op">=</span> <span class="op">|</span><span class="kw">_</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">Metric</span><span class="op">|</span> {
-        <span class="ident">label_count</span> <span class="op">+=</span> <span class="number">1</span>;
+        <span class="ident">label_count</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
     };
 
     <span class="kw">let</span> <span class="ident">lifetime</span> <span class="op">=</span> <span class="ident">meta</span>.<span class="ident">lifetime</span>;
@@ -480,7 +482,7 @@
             .<span class="ident">iter_store_from</span>(<span class="ident">lifetime</span>, <span class="ident">store</span>, <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">prefix</span>), <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">snapshotter</span>);
     }
 
-    <span class="kw">let</span> <span class="ident">error</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">label_count</span> <span class="op">&gt;=</span> <span class="ident">MAX_LABELS</span> {
+    <span class="kw">let</span> <span class="ident">error</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">label_count</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">MAX_LABELS</span> {
         <span class="bool-val">true</span>
     } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">label</span>.<span class="ident">len</span>() <span class="op">&gt;</span> <span class="ident">MAX_LABEL_LENGTH</span> {
         <span class="kw">let</span> <span class="ident">msg</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(

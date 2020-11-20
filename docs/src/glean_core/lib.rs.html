@@ -1,4 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `glean-core/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../glean_core/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `glean-core/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../glean_core/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
                 <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
@@ -983,7 +985,7 @@
 <span class="kw">const</span> <span class="ident">GLEAN_SCHEMA_VERSION</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">1</span>;
 <span class="kw">const</span> <span class="ident">DEFAULT_MAX_EVENTS</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">500</span>;
 <span class="kw">static</span> <span class="ident">KNOWN_CLIENT_ID</span>: <span class="ident">Lazy</span><span class="op">&lt;</span><span class="ident">Uuid</span><span class="op">&gt;</span> <span class="op">=</span>
-    <span class="ident">Lazy</span>::<span class="ident">new</span>(<span class="op">||</span> <span class="ident">Uuid</span>::<span class="ident">parse_str</span>(<span class="string">&quot;c0ffeec0-ffee-c0ff-eec0-ffeec0ffeec0&quot;</span>).<span class="ident">unwrap</span>());
+    <span class="ident">Lazy</span>::<span class="ident">new</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">Uuid</span>::<span class="ident">parse_str</span>(<span class="string">&quot;c0ffeec0-ffee-c0ff-eec0-ffeec0ffeec0&quot;</span>).<span class="ident">unwrap</span>());
 <span class="comment">// An internal ping name, not to be touched by anything else</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const</span> <span class="ident">INTERNAL_STORAGE</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;glean_internal_info&quot;</span>;
 
@@ -998,15 +1000,15 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// It should be initialized with `glean_core::initialize` at the start of the application using</span>
 <span class="doccomment">/// Glean.</span>
-<span class="kw">static</span> <span class="ident">GLEAN</span>: <span class="ident">OnceCell</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">Glean</span><span class="op">&gt;&gt;</span> <span class="op">=</span> <span class="ident">OnceCell</span>::<span class="ident">new</span>();
+<span class="kw">static</span> <span class="ident">GLEAN</span>: <span class="ident">OnceCell</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">Glean</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">OnceCell</span>::<span class="ident">new</span>();
 
 <span class="doccomment">/// Gets a reference to the global Glean object.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">global_glean</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">Glean</span><span class="op">&gt;&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">global_glean</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">Glean</span><span class="op">&gt;</span><span class="op">&gt;</span> {
     <span class="ident">GLEAN</span>.<span class="ident">get</span>()
 }
 
 <span class="doccomment">/// Sets or replaces the global Glean object.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">setup_glean</span>(<span class="ident">glean</span>: <span class="ident">Glean</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">setup_glean</span>(<span class="ident">glean</span>: <span class="ident">Glean</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="comment">// The `OnceCell` type wrapping our Glean is thread-safe and can only be set once.</span>
     <span class="comment">// Therefore even if our check for it being empty succeeds, setting it could fail if a</span>
     <span class="comment">// concurrent thread is quicker in setting it.</span>
@@ -1111,7 +1113,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// Importantly, this will not send any pings at startup, since that</span>
     <span class="doccomment">/// sort of management should only happen in the main process.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_for_subprocess</span>(<span class="ident">cfg</span>: <span class="kw-2">&amp;</span><span class="ident">Configuration</span>, <span class="ident">scan_directories</span>: <span class="ident">bool</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_for_subprocess</span>(<span class="ident">cfg</span>: <span class="kw-2">&amp;</span><span class="ident">Configuration</span>, <span class="ident">scan_directories</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="ident">log</span>::<span class="macro">info</span><span class="macro">!</span>(<span class="string">&quot;Creating new Glean v{}&quot;</span>, <span class="ident">GLEAN_VERSION</span>);
 
         <span class="kw">let</span> <span class="ident">application_id</span> <span class="op">=</span> <span class="ident">sanitize_application_id</span>(<span class="kw-2">&amp;</span><span class="ident">cfg</span>.<span class="ident">application_id</span>);
@@ -1158,7 +1160,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// This will create the necessary directories and files in `data_path`.</span>
     <span class="doccomment">/// This will also initialize the core metrics.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">cfg</span>: <span class="ident">Configuration</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">cfg</span>: <span class="ident">Configuration</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">glean</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">new_for_subprocess</span>(<span class="kw-2">&amp;</span><span class="ident">cfg</span>, <span class="bool-val">false</span>)<span class="question-mark">?</span>;
 
         <span class="comment">// The upload enabled flag may have changed since the last run, for</span>
@@ -1180,9 +1182,9 @@
                 .<span class="ident">client_id</span>
                 .<span class="ident">get_value</span>(<span class="kw-2">&amp;</span><span class="ident">glean</span>, <span class="string">&quot;glean_client_info&quot;</span>)
             {
-                <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="ident">glean</span>.<span class="ident">clear_metrics</span>(),
-                <span class="prelude-val">Some</span>(<span class="ident">uuid</span>) <span class="op">=&gt;</span> {
-                    <span class="kw">if</span> <span class="ident">uuid</span> <span class="op">!=</span> <span class="kw-2">*</span><span class="ident">KNOWN_CLIENT_ID</span> {
+                <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">glean</span>.<span class="ident">clear_metrics</span>(),
+                <span class="prelude-val">Some</span>(<span class="ident">uuid</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="kw">if</span> <span class="ident">uuid</span> <span class="op">!</span><span class="op">=</span> <span class="kw-2">*</span><span class="ident">KNOWN_CLIENT_ID</span> {
                         <span class="comment">// Temporarily enable uploading so we can submit a</span>
                         <span class="comment">// deletion request ping.</span>
                         <span class="ident">glean</span>.<span class="ident">upload_enabled</span> <span class="op">=</span> <span class="bool-val">true</span>;
@@ -1207,7 +1209,7 @@
         <span class="ident">data_path</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">application_id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">upload_enabled</span>: <span class="ident">bool</span>,
-    ) <span class="op">-&gt;</span> <span class="self">Self</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">cfg</span> <span class="op">=</span> <span class="ident">Configuration</span> {
             <span class="ident">data_path</span>: <span class="ident">data_path</span>.<span class="ident">into</span>(),
             <span class="ident">application_id</span>: <span class="ident">application_id</span>.<span class="ident">into</span>(),
@@ -1239,8 +1241,8 @@
             .<span class="ident">client_id</span>
             .<span class="ident">get_value</span>(<span class="self">self</span>, <span class="string">&quot;glean_client_info&quot;</span>)
         {
-            <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="bool-val">true</span>,
-            <span class="prelude-val">Some</span>(<span class="ident">uuid</span>) <span class="op">=&gt;</span> <span class="ident">uuid</span> <span class="op">==</span> <span class="kw-2">*</span><span class="ident">KNOWN_CLIENT_ID</span>,
+            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">true</span>,
+            <span class="prelude-val">Some</span>(<span class="ident">uuid</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">uuid</span> <span class="op">=</span><span class="op">=</span> <span class="kw-2">*</span><span class="ident">KNOWN_CLIENT_ID</span>,
         };
         <span class="kw">if</span> <span class="ident">need_new_client_id</span> {
             <span class="self">self</span>.<span class="ident">core_metrics</span>.<span class="ident">client_id</span>.<span class="ident">generate_and_set</span>(<span class="self">self</span>);
@@ -1285,7 +1287,7 @@
     <span class="doccomment">/// # Returns</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Whether at least one ping was generated.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">on_ready_to_submit_pings</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">on_ready_to_submit_pings</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">event_data_store</span>.<span class="ident">flush_pending_events_on_startup</span>(<span class="kw-2">&amp;</span><span class="self">self</span>)
     }
 
@@ -1308,10 +1310,10 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// Whether the flag was different from the current value,</span>
     <span class="doccomment">/// and actual work was done to clear or reinstate metrics.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_upload_enabled</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">flag</span>: <span class="ident">bool</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_upload_enabled</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">flag</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="ident">log</span>::<span class="macro">info</span><span class="macro">!</span>(<span class="string">&quot;Upload enabled: {:?}&quot;</span>, <span class="ident">flag</span>);
 
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">upload_enabled</span> <span class="op">!=</span> <span class="ident">flag</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">upload_enabled</span> <span class="op">!</span><span class="op">=</span> <span class="ident">flag</span> {
             <span class="kw">if</span> <span class="ident">flag</span> {
                 <span class="self">self</span>.<span class="ident">on_upload_enabled</span>();
             } <span class="kw">else</span> {
@@ -1326,7 +1328,7 @@
     <span class="doccomment">/// Determines whether upload is enabled.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// When upload is disabled, no data will be recorded.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_upload_enabled</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_upload_enabled</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">upload_enabled</span>
     }
 
@@ -1420,27 +1422,27 @@
     }
 
     <span class="doccomment">/// Gets the application ID as specified on instantiation.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_application_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_application_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">application_id</span>
     }
 
     <span class="doccomment">/// Gets the data path of this instance.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_data_path</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Path</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_data_path</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Path</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">data_path</span>
     }
 
     <span class="doccomment">/// Gets a handle to the database.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">storage</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Database</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">storage</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Database</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">data_store</span>.<span class="ident">as_ref</span>().<span class="ident">expect</span>(<span class="string">&quot;No database found&quot;</span>)
     }
 
     <span class="doccomment">/// Gets a handle to the event database.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">event_storage</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">EventDatabase</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">event_storage</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">EventDatabase</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">event_data_store</span>
     }
 
     <span class="doccomment">/// Gets the maximum number of events to store before sending a ping.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_max_events</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">usize</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_max_events</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span> {
         <span class="self">self</span>.<span class="ident">max_events</span>
     }
 
@@ -1455,7 +1457,7 @@
     <span class="doccomment">/// # Returns</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// A [`PingUploadTask`](upload/enum.PingUploadTask.html) representing the next task.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_upload_task</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">PingUploadTask</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_upload_task</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PingUploadTask</span> {
         <span class="self">self</span>.<span class="ident">upload_manager</span>.<span class="ident">get_upload_task</span>(<span class="self">self</span>, <span class="self">self</span>.<span class="ident">log_pings</span>())
     }
 
@@ -1480,13 +1482,13 @@
     <span class="doccomment">/// # Returns</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// The snapshot in a string encoded as JSON. If the snapshot is empty, returns an empty string.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">snapshot</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">store_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">clear_store</span>: <span class="ident">bool</span>) <span class="op">-&gt;</span> <span class="ident">String</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">snapshot</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">store_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">clear_store</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
         <span class="ident">StorageManager</span>
             .<span class="ident">snapshot</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">storage</span>(), <span class="ident">store_name</span>, <span class="ident">clear_store</span>)
-            .<span class="ident">unwrap_or_else</span>(<span class="op">||</span> <span class="ident">String</span>::<span class="ident">from</span>(<span class="string">&quot;&quot;</span>))
+            .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">String</span>::<span class="ident">from</span>(<span class="string">&quot;&quot;</span>))
     }
 
-    <span class="kw">fn</span> <span class="ident">make_path</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">ping_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">doc_id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">String</span> {
+    <span class="kw">fn</span> <span class="ident">make_path</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">ping_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">doc_id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
         <span class="macro">format</span><span class="macro">!</span>(
             <span class="string">&quot;/submit/{}/{}/{}/{}&quot;</span>,
             <span class="self">self</span>.<span class="ident">get_application_id</span>(),
@@ -1516,7 +1518,7 @@
     <span class="doccomment">/// # Errors</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// If collecting or writing the ping to disk failed.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">submit_ping</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">ping</span>: <span class="kw-2">&amp;</span><span class="ident">PingType</span>, <span class="ident">reason</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">submit_ping</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">ping</span>: <span class="kw-2">&amp;</span><span class="ident">PingType</span>, <span class="ident">reason</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">is_upload_enabled</span>() {
             <span class="ident">log</span>::<span class="macro">info</span><span class="macro">!</span>(<span class="string">&quot;Glean disabled: not submitting any pings.&quot;</span>);
             <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="bool-val">false</span>);
@@ -1526,14 +1528,14 @@
         <span class="kw">let</span> <span class="ident">doc_id</span> <span class="op">=</span> <span class="ident">Uuid</span>::<span class="ident">new_v4</span>().<span class="ident">to_string</span>();
         <span class="kw">let</span> <span class="ident">url_path</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">make_path</span>(<span class="kw-2">&amp;</span><span class="ident">ping</span>.<span class="ident">name</span>, <span class="kw-2">&amp;</span><span class="ident">doc_id</span>);
         <span class="kw">match</span> <span class="ident">ping_maker</span>.<span class="ident">collect</span>(<span class="self">self</span>, <span class="kw-2">&amp;</span><span class="ident">ping</span>, <span class="ident">reason</span>) {
-            <span class="prelude-val">None</span> <span class="op">=&gt;</span> {
+            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="ident">log</span>::<span class="macro">info</span><span class="macro">!</span>(
                     <span class="string">&quot;No content for ping &#39;{}&#39;, therefore no ping queued.&quot;</span>,
                     <span class="ident">ping</span>.<span class="ident">name</span>
                 );
                 <span class="prelude-val">Ok</span>(<span class="bool-val">false</span>)
             }
-            <span class="prelude-val">Some</span>(<span class="ident">content</span>) <span class="op">=&gt;</span> {
+            <span class="prelude-val">Some</span>(<span class="ident">content</span>) <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="ident">ping_maker</span>.<span class="ident">store_ping</span>(
                     <span class="self">self</span>,
                     <span class="kw-2">&amp;</span><span class="ident">doc_id</span>,
@@ -1577,13 +1579,13 @@
     <span class="doccomment">/// # Errors</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// If collecting or writing the ping to disk failed.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">submit_ping_by_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">ping_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">reason</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">submit_ping_by_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">ping_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">reason</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">get_ping_by_name</span>(<span class="ident">ping_name</span>) {
-            <span class="prelude-val">None</span> <span class="op">=&gt;</span> {
+            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="ident">log</span>::<span class="macro">error</span><span class="macro">!</span>(<span class="string">&quot;Attempted to submit unknown ping &#39;{}&#39;&quot;</span>, <span class="ident">ping_name</span>);
                 <span class="prelude-val">Ok</span>(<span class="bool-val">false</span>)
             }
-            <span class="prelude-val">Some</span>(<span class="ident">ping</span>) <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">submit_ping</span>(<span class="ident">ping</span>, <span class="ident">reason</span>),
+            <span class="prelude-val">Some</span>(<span class="ident">ping</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">submit_ping</span>(<span class="ident">ping</span>, <span class="ident">reason</span>),
         }
     }
 
@@ -1594,7 +1596,7 @@
     <span class="doccomment">/// The [`PingType`] of a ping if the given name was registered before, `None` otherwise.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// [`PingType`]: metrics/struct.PingType.html</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_ping_by_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">ping_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">PingType</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_ping_by_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">ping_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">PingType</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">ping_registry</span>.<span class="ident">get</span>(<span class="ident">ping_name</span>)
     }
 
@@ -1608,7 +1610,7 @@
     }
 
     <span class="doccomment">/// Get create time of the Glean object.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">start_time</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">DateTime</span><span class="op">&lt;</span><span class="ident">FixedOffset</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">start_time</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DateTime</span><span class="op">&lt;</span><span class="ident">FixedOffset</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">start_time</span>
     }
 
@@ -1626,7 +1628,7 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">experiment_id</span>: <span class="ident">String</span>,
         <span class="ident">branch</span>: <span class="ident">String</span>,
-        <span class="ident">extra</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">String</span><span class="op">&gt;&gt;</span>,
+        <span class="ident">extra</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     ) {
         <span class="kw">let</span> <span class="ident">metric</span> <span class="op">=</span> <span class="ident">metrics</span>::<span class="ident">ExperimentMetric</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">experiment_id</span>);
         <span class="ident">metric</span>.<span class="ident">set_active</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">branch</span>, <span class="ident">extra</span>);
@@ -1647,7 +1649,7 @@
     <span class="doccomment">/// at a previous time.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// If there is no data to persist, this function does nothing.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">persist_ping_lifetime_data</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">persist_ping_lifetime_data</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">data</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">data_store</span>.<span class="ident">as_ref</span>() {
             <span class="kw">return</span> <span class="ident">data</span>.<span class="ident">persist_ping_lifetime_data</span>();
         }
@@ -1674,7 +1676,7 @@
     }
 
     <span class="doccomment">/// Whether or not this is the first run on this profile.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_first_run</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_first_run</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">is_first_run</span>
     }
 
@@ -1688,7 +1690,7 @@
     <span class="doccomment">/// # Arguments</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// * `value` - A valid HTTP header value. Must match the regex: &quot;[a-zA-Z0-9-]{1,20}&quot;.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_debug_view_tag</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_debug_view_tag</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">debug</span>.<span class="ident">debug_view_tag</span>.<span class="ident">set</span>(<span class="ident">value</span>.<span class="ident">into</span>())
     }
 
@@ -1696,7 +1698,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// The debug_view_tag may be set from an environment variable (GLEAN_DEBUG_VIEW_TAG)</span>
     <span class="doccomment">/// or through the `set_debug_view_tag` function.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">debug_view_tag</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">debug_view_tag</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">String</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">debug</span>.<span class="ident">debug_view_tag</span>.<span class="ident">get</span>()
     }
 
@@ -1709,7 +1711,7 @@
     <span class="doccomment">/// # Arguments</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// * `value` - A vector of at most 5 valid HTTP header values. Individual tags must match the regex: &quot;[a-zA-Z0-9-]{1,20}&quot;.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_source_tags</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_source_tags</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">debug</span>.<span class="ident">source_tags</span>.<span class="ident">set</span>(<span class="ident">value</span>)
     }
 
@@ -1717,7 +1719,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// The source_tags may be set from an environment variable (GLEAN_SOURCE_TAGS)</span>
     <span class="doccomment">/// or through the `set_source_tags` function.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">source_tags</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;&gt;</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">source_tags</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">debug</span>.<span class="ident">source_tags</span>.<span class="ident">get</span>()
     }
 
@@ -1731,7 +1733,7 @@
     <span class="doccomment">/// # Arguments</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// * `value` - The value of the log pings option</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_log_pings</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="ident">bool</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_log_pings</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">debug</span>.<span class="ident">log_pings</span>.<span class="ident">set</span>(<span class="ident">value</span>)
     }
 
@@ -1739,11 +1741,11 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// The log_pings option may be set from an environment variable (GLEAN_LOG_PINGS)</span>
     <span class="doccomment">/// or through the `set_log_pings` function.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">log_pings</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">log_pings</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">debug</span>.<span class="ident">log_pings</span>.<span class="ident">get</span>().<span class="ident">copied</span>().<span class="ident">unwrap_or</span>(<span class="bool-val">false</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">get_dirty_bit_metric</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">metrics</span>::<span class="ident">BooleanMetric</span> {
+    <span class="kw">fn</span> <span class="ident">get_dirty_bit_metric</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">metrics</span>::<span class="ident">BooleanMetric</span> {
         <span class="ident">metrics</span>::<span class="ident">BooleanMetric</span>::<span class="ident">new</span>(<span class="ident">CommonMetricData</span> {
             <span class="ident">name</span>: <span class="string">&quot;dirtybit&quot;</span>.<span class="ident">into</span>(),
             <span class="comment">// We don&#39;t need a category, the name is already unique</span>
@@ -1776,15 +1778,15 @@
     <span class="doccomment">/// ** This is not meant to be used directly.**</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Checks the stored value of the &quot;dirty flag&quot;.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_dirty_flag_set</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_dirty_flag_set</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="kw">let</span> <span class="ident">dirty_bit_metric</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_dirty_bit_metric</span>();
         <span class="kw">match</span> <span class="ident">StorageManager</span>.<span class="ident">snapshot_metric</span>(
             <span class="self">self</span>.<span class="ident">storage</span>(),
             <span class="ident">INTERNAL_STORAGE</span>,
             <span class="kw-2">&amp;</span><span class="ident">dirty_bit_metric</span>.<span class="ident">meta</span>().<span class="ident">identifier</span>(<span class="self">self</span>),
         ) {
-            <span class="prelude-val">Some</span>(<span class="ident">Metric</span>::<span class="ident">Boolean</span>(<span class="ident">b</span>)) <span class="op">=&gt;</span> <span class="ident">b</span>,
-            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="bool-val">false</span>,
+            <span class="prelude-val">Some</span>(<span class="ident">Metric</span>::<span class="ident">Boolean</span>(<span class="ident">b</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">b</span>,
+            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">false</span>,
         }
     }
 
@@ -1799,7 +1801,7 @@
     <span class="doccomment">/// # Returns</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Whether the experiment is active.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_is_experiment_active</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">experiment_id</span>: <span class="ident">String</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_is_experiment_active</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">experiment_id</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">test_get_experiment_data_as_json</span>(<span class="ident">experiment_id</span>)
             .<span class="ident">is_some</span>()
     }
@@ -1817,7 +1819,7 @@
     <span class="doccomment">/// A JSON string with the following format:</span>
     <span class="doccomment">/// { &#39;branch&#39;: &#39;the-branch-name&#39;, &#39;extra&#39;: {&#39;key&#39;: &#39;value&#39;, ...}}</span>
     <span class="doccomment">/// if the requested experiment is active, `None` otherwise.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_get_experiment_data_as_json</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">experiment_id</span>: <span class="ident">String</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_get_experiment_data_as_json</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">experiment_id</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">metric</span> <span class="op">=</span> <span class="ident">metrics</span>::<span class="ident">ExperimentMetric</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">experiment_id</span>);
         <span class="ident">metric</span>.<span class="ident">test_get_value_as_json_string</span>(<span class="kw-2">&amp;</span><span class="self">self</span>)
     }

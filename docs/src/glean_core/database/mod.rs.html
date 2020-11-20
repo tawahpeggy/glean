@@ -1,4 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `glean-core/src/database/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../glean_core/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `glean-core/src/database/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../glean_core/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
                 <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
 <span id="2">   2</span>
 <span id="3">   3</span>
@@ -1596,9 +1598,9 @@
     <span class="doccomment">/// cbindgen:ignore</span>
     <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">SingleStore</span> <span class="op">=</span> <span class="ident">rkv</span>::<span class="ident">SingleStore</span><span class="op">&lt;</span><span class="ident">rkv</span>::<span class="ident">backend</span>::<span class="ident">LmdbDatabase</span><span class="op">&gt;</span>;
     <span class="doccomment">/// cbindgen:ignore</span>
-    <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Writer</span><span class="op">&lt;</span><span class="lifetime">&#39;t</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">rkv</span>::<span class="ident">Writer</span><span class="op">&lt;</span><span class="ident">rkv</span>::<span class="ident">backend</span>::<span class="ident">LmdbRwTransaction</span><span class="op">&lt;</span><span class="lifetime">&#39;t</span><span class="op">&gt;&gt;</span>;
+    <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Writer</span><span class="op">&lt;</span><span class="lifetime">&#39;t</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">rkv</span>::<span class="ident">Writer</span><span class="op">&lt;</span><span class="ident">rkv</span>::<span class="ident">backend</span>::<span class="ident">LmdbRwTransaction</span><span class="op">&lt;</span><span class="lifetime">&#39;t</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">rkv_new</span>(<span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Rkv</span>, <span class="ident">rkv</span>::<span class="ident">StoreError</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">rkv_new</span>(<span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Rkv</span>, <span class="ident">rkv</span>::<span class="ident">StoreError</span><span class="op">&gt;</span> {
         <span class="ident">Rkv</span>::<span class="ident">new</span>::<span class="op">&lt;</span><span class="ident">rkv</span>::<span class="ident">backend</span>::<span class="ident">Lmdb</span><span class="op">&gt;</span>(<span class="ident">path</span>)
     }
 
@@ -1619,19 +1621,19 @@
     <span class="doccomment">/// cbindgen:ignore</span>
     <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">SingleStore</span> <span class="op">=</span> <span class="ident">rkv</span>::<span class="ident">SingleStore</span><span class="op">&lt;</span><span class="ident">rkv</span>::<span class="ident">backend</span>::<span class="ident">SafeModeDatabase</span><span class="op">&gt;</span>;
     <span class="doccomment">/// cbindgen:ignore</span>
-    <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Writer</span><span class="op">&lt;</span><span class="lifetime">&#39;t</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">rkv</span>::<span class="ident">Writer</span><span class="op">&lt;</span><span class="ident">rkv</span>::<span class="ident">backend</span>::<span class="ident">SafeModeRwTransaction</span><span class="op">&lt;</span><span class="lifetime">&#39;t</span><span class="op">&gt;&gt;</span>;
+    <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Writer</span><span class="op">&lt;</span><span class="lifetime">&#39;t</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">rkv</span>::<span class="ident">Writer</span><span class="op">&lt;</span><span class="ident">rkv</span>::<span class="ident">backend</span>::<span class="ident">SafeModeRwTransaction</span><span class="op">&lt;</span><span class="lifetime">&#39;t</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">rkv_new</span>(<span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Rkv</span>, <span class="ident">rkv</span>::<span class="ident">StoreError</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">rkv_new</span>(<span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Rkv</span>, <span class="ident">rkv</span>::<span class="ident">StoreError</span><span class="op">&gt;</span> {
         <span class="ident">Rkv</span>::<span class="ident">new</span>::<span class="op">&lt;</span><span class="ident">rkv</span>::<span class="ident">backend</span>::<span class="ident">SafeMode</span><span class="op">&gt;</span>(<span class="ident">path</span>)
     }
 
     <span class="kw">fn</span> <span class="ident">delete_and_log</span>(<span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>, <span class="ident">msg</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span> <span class="ident">fs</span>::<span class="ident">remove_file</span>(<span class="ident">path</span>) {
             <span class="kw">match</span> <span class="ident">err</span>.<span class="ident">kind</span>() {
-                <span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">ErrorKind</span>::<span class="ident">NotFound</span> <span class="op">=&gt;</span> {
+                <span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">ErrorKind</span>::<span class="ident">NotFound</span> <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="comment">// Silently drop this error, the file was already non-existing.</span>
                 }
-                <span class="kw">_</span> <span class="op">=&gt;</span> <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">msg</span>),
+                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">msg</span>),
             }
         }
     }
@@ -1671,35 +1673,35 @@
             <span class="kw">match</span> <span class="ident">Migrator</span>::<span class="ident">open_and_migrate_lmdb_to_safe_mode</span>(<span class="ident">path</span>, <span class="op">|</span><span class="ident">builder</span><span class="op">|</span> <span class="ident">builder</span>, <span class="ident">dst_env</span>) {
                 <span class="comment">// Source environment is corrupted.</span>
                 <span class="comment">// We start fresh with the new database.</span>
-                <span class="prelude-val">Err</span>(<span class="ident">MigrateError</span>::<span class="ident">StoreError</span>(<span class="ident">StoreError</span>::<span class="ident">FileInvalid</span>)) <span class="op">=&gt;</span> <span class="bool-val">true</span>,
+                <span class="prelude-val">Err</span>(<span class="ident">MigrateError</span>::<span class="ident">StoreError</span>(<span class="ident">StoreError</span>::<span class="ident">FileInvalid</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">true</span>,
                 <span class="comment">// Path not accessible.</span>
                 <span class="comment">// Somehow our directory vanished between us creating it and reading from it.</span>
                 <span class="comment">// Nothing we can do really.</span>
-                <span class="prelude-val">Err</span>(<span class="ident">MigrateError</span>::<span class="ident">StoreError</span>(<span class="ident">StoreError</span>::<span class="ident">IoError</span>(<span class="kw">_</span>))) <span class="op">=&gt;</span> <span class="bool-val">true</span>,
+                <span class="prelude-val">Err</span>(<span class="ident">MigrateError</span>::<span class="ident">StoreError</span>(<span class="ident">StoreError</span>::<span class="ident">IoError</span>(<span class="kw">_</span>))) <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">true</span>,
                 <span class="comment">// Path accessible but incompatible for configuration.</span>
                 <span class="comment">// This should not happen, we never used storages that safe-mode doesn&#39;t understand.</span>
                 <span class="comment">// If it does happen, let&#39;s start fresh and use the safe-mode from now on.</span>
-                <span class="prelude-val">Err</span>(<span class="ident">MigrateError</span>::<span class="ident">StoreError</span>(<span class="ident">StoreError</span>::<span class="ident">UnsuitableEnvironmentPath</span>(<span class="kw">_</span>))) <span class="op">=&gt;</span> <span class="bool-val">true</span>,
+                <span class="prelude-val">Err</span>(<span class="ident">MigrateError</span>::<span class="ident">StoreError</span>(<span class="ident">StoreError</span>::<span class="ident">UnsuitableEnvironmentPath</span>(<span class="kw">_</span>))) <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">true</span>,
                 <span class="comment">// Nothing to migrate.</span>
                 <span class="comment">// Source database was empty. We just start fresh anyway.</span>
-                <span class="prelude-val">Err</span>(<span class="ident">MigrateError</span>::<span class="ident">SourceEmpty</span>) <span class="op">=&gt;</span> <span class="bool-val">true</span>,
+                <span class="prelude-val">Err</span>(<span class="ident">MigrateError</span>::<span class="ident">SourceEmpty</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">true</span>,
                 <span class="comment">// Migrating would overwrite.</span>
                 <span class="comment">// Either a previous migration failed and we still started writing data,</span>
                 <span class="comment">// or someone placed back an old data file.</span>
                 <span class="comment">// In any case we better stay on the new data and delete the old one.</span>
-                <span class="prelude-val">Err</span>(<span class="ident">MigrateError</span>::<span class="ident">DestinationNotEmpty</span>) <span class="op">=&gt;</span> {
+                <span class="prelude-val">Err</span>(<span class="ident">MigrateError</span>::<span class="ident">DestinationNotEmpty</span>) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(<span class="string">&quot;Failed to migrate old data. Destination was not empty&quot;</span>);
                     <span class="bool-val">true</span>
                 }
                 <span class="comment">// An internal lock was poisoned.</span>
                 <span class="comment">// This would only happen if multiple things run concurrently and one crashes.</span>
-                <span class="prelude-val">Err</span>(<span class="ident">MigrateError</span>::<span class="ident">ManagerPoisonError</span>) <span class="op">=&gt;</span> <span class="bool-val">false</span>,
+                <span class="prelude-val">Err</span>(<span class="ident">MigrateError</span>::<span class="ident">ManagerPoisonError</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">false</span>,
                 <span class="comment">// Other store errors are never returned from the migrator.</span>
                 <span class="comment">// We need to handle them to please rustc.</span>
-                <span class="prelude-val">Err</span>(<span class="ident">MigrateError</span>::<span class="ident">StoreError</span>(<span class="kw">_</span>)) <span class="op">=&gt;</span> <span class="bool-val">false</span>,
+                <span class="prelude-val">Err</span>(<span class="ident">MigrateError</span>::<span class="ident">StoreError</span>(<span class="kw">_</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">false</span>,
                 <span class="comment">// Other errors can&#39;t happen, so this leaves us with the Ok case.</span>
                 <span class="comment">// This already deleted the LMDB files.</span>
-                <span class="prelude-val">Ok</span>(()) <span class="op">=&gt;</span> <span class="bool-val">false</span>,
+                <span class="prelude-val">Ok</span>(()) <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">false</span>,
             };
 
         <span class="kw">if</span> <span class="ident">should_delete</span> {
@@ -1733,14 +1735,14 @@
     <span class="doccomment">/// If the `delay_ping_lifetime_io` Glean config option is `true`,</span>
     <span class="doccomment">/// we will save metrics with &#39;ping&#39; lifetime data in a map temporarily</span>
     <span class="doccomment">/// so as to persist them to disk using rkv in bulk on demand.</span>
-    <span class="ident">ping_lifetime_data</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">RwLock</span><span class="op">&lt;</span><span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">Metric</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">ping_lifetime_data</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">RwLock</span><span class="op">&lt;</span><span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">Metric</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 
     <span class="comment">// Initial file size when opening the database.</span>
     <span class="ident">file_size</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">NonZeroU64</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="kw">for</span> <span class="ident">Database</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">fmt</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-&gt;</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">fmt</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="ident">fmt</span>.<span class="ident">debug_struct</span>(<span class="string">&quot;Database&quot;</span>)
             .<span class="ident">field</span>(<span class="string">&quot;rkv&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">rkv</span>)
             .<span class="ident">field</span>(<span class="string">&quot;user_store&quot;</span>, <span class="kw-2">&amp;</span><span class="string">&quot;SingleStore&quot;</span>)
@@ -1761,7 +1763,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// Returns the non-zero combined size of all files in a directory,</span>
 <span class="doccomment">/// or `None` on error or if the size is `0`.</span>
-<span class="kw">fn</span> <span class="ident">database_size</span>(<span class="ident">dir</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">NonZeroU64</span><span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">database_size</span>(<span class="ident">dir</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">NonZeroU64</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">total_size</span> <span class="op">=</span> <span class="number">0</span>;
     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">entries</span>) <span class="op">=</span> <span class="ident">fs</span>::<span class="ident">read_dir</span>(<span class="ident">dir</span>) {
         <span class="kw">for</span> <span class="ident">entry</span> <span class="kw">in</span> <span class="ident">entries</span> {
@@ -1770,7 +1772,7 @@
                     <span class="kw">if</span> <span class="ident">file_type</span>.<span class="ident">is_file</span>() {
                         <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">entry</span>.<span class="ident">path</span>();
                         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">metadata</span>) <span class="op">=</span> <span class="ident">fs</span>::<span class="ident">metadata</span>(<span class="ident">path</span>) {
-                            <span class="ident">total_size</span> <span class="op">+=</span> <span class="ident">metadata</span>.<span class="ident">len</span>();
+                            <span class="ident">total_size</span> <span class="op">+</span><span class="op">=</span> <span class="ident">metadata</span>.<span class="ident">len</span>();
                         } <span class="kw">else</span> {
                             <span class="kw">continue</span>;
                         }
@@ -1791,7 +1793,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// It also loads any Lifetime::Ping data that might be</span>
     <span class="doccomment">/// persisted, in case `delay_ping_lifetime_io` is set.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">data_path</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">delay_ping_lifetime_io</span>: <span class="ident">bool</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">data_path</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">delay_ping_lifetime_io</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">Path</span>::<span class="ident">new</span>(<span class="ident">data_path</span>).<span class="ident">join</span>(<span class="string">&quot;db&quot;</span>);
         <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;Database path: {:?}&quot;</span>, <span class="ident">path</span>.<span class="ident">display</span>());
         <span class="kw">let</span> <span class="ident">file_size</span> <span class="op">=</span> <span class="ident">database_size</span>(<span class="kw-2">&amp;</span><span class="ident">path</span>);
@@ -1822,20 +1824,20 @@
     }
 
     <span class="doccomment">/// Get the initial database file size.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">file_size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">NonZeroU64</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">file_size</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">NonZeroU64</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">file_size</span>
     }
 
-    <span class="kw">fn</span> <span class="ident">get_store</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">lifetime</span>: <span class="ident">Lifetime</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">SingleStore</span> {
+    <span class="kw">fn</span> <span class="ident">get_store</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">lifetime</span>: <span class="ident">Lifetime</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">SingleStore</span> {
         <span class="kw">match</span> <span class="ident">lifetime</span> {
-            <span class="ident">Lifetime</span>::<span class="ident">User</span> <span class="op">=&gt;</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">user_store</span>,
-            <span class="ident">Lifetime</span>::<span class="ident">Ping</span> <span class="op">=&gt;</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">ping_store</span>,
-            <span class="ident">Lifetime</span>::<span class="ident">Application</span> <span class="op">=&gt;</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">application_store</span>,
+            <span class="ident">Lifetime</span>::<span class="ident">User</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">user_store</span>,
+            <span class="ident">Lifetime</span>::<span class="ident">Ping</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">ping_store</span>,
+            <span class="ident">Lifetime</span>::<span class="ident">Application</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">application_store</span>,
         }
     }
 
     <span class="doccomment">/// Creates the storage directories and inits rkv.</span>
-    <span class="kw">fn</span> <span class="ident">open_rkv</span>(<span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Rkv</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">open_rkv</span>(<span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Rkv</span><span class="op">&gt;</span> {
         <span class="ident">fs</span>::<span class="ident">create_dir_all</span>(<span class="kw-2">&amp;</span><span class="ident">path</span>)<span class="question-mark">?</span>;
 
         <span class="kw">let</span> <span class="ident">rkv</span> <span class="op">=</span> <span class="ident">rkv_new</span>(<span class="kw-2">&amp;</span><span class="ident">path</span>)<span class="question-mark">?</span>;
@@ -1857,10 +1859,10 @@
     <span class="doccomment">/// # Returns</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// A string representing the location in the database.</span>
-    <span class="kw">fn</span> <span class="ident">get_storage_key</span>(<span class="ident">storage_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">metric_key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">String</span> {
+    <span class="kw">fn</span> <span class="ident">get_storage_key</span>(<span class="ident">storage_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">metric_key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
         <span class="kw">match</span> <span class="ident">metric_key</span> {
-            <span class="prelude-val">Some</span>(<span class="ident">k</span>) <span class="op">=&gt;</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}#{}&quot;</span>, <span class="ident">storage_name</span>, <span class="ident">k</span>),
-            <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}#&quot;</span>, <span class="ident">storage_name</span>),
+            <span class="prelude-val">Some</span>(<span class="ident">k</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}#{}&quot;</span>, <span class="ident">storage_name</span>, <span class="ident">k</span>),
+            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}#&quot;</span>, <span class="ident">storage_name</span>),
         }
     }
 
@@ -1880,12 +1882,12 @@
 
             <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>((<span class="ident">metric_id</span>, <span class="ident">value</span>))) <span class="op">=</span> <span class="ident">iter</span>.<span class="ident">next</span>() {
                 <span class="kw">let</span> <span class="ident">metric_id</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">str</span>::<span class="ident">from_utf8</span>(<span class="ident">metric_id</span>) {
-                    <span class="prelude-val">Ok</span>(<span class="ident">metric_id</span>) <span class="op">=&gt;</span> <span class="ident">metric_id</span>.<span class="ident">to_string</span>(),
-                    <span class="kw">_</span> <span class="op">=&gt;</span> <span class="kw">continue</span>,
+                    <span class="prelude-val">Ok</span>(<span class="ident">metric_id</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">metric_id</span>.<span class="ident">to_string</span>(),
+                    <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">continue</span>,
                 };
                 <span class="kw">let</span> <span class="ident">metric</span>: <span class="ident">Metric</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">value</span> {
-                    <span class="ident">rkv</span>::<span class="ident">Value</span>::<span class="ident">Blob</span>(<span class="ident">blob</span>) <span class="op">=&gt;</span> <span class="macro">unwrap_or</span><span class="macro">!</span>(<span class="ident">bincode</span>::<span class="ident">deserialize</span>(<span class="ident">blob</span>), <span class="kw">continue</span>),
-                    <span class="kw">_</span> <span class="op">=&gt;</span> <span class="kw">continue</span>,
+                    <span class="ident">rkv</span>::<span class="ident">Value</span>::<span class="ident">Blob</span>(<span class="ident">blob</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unwrap_or</span><span class="macro">!</span>(<span class="ident">bincode</span>::<span class="ident">deserialize</span>(<span class="ident">blob</span>), <span class="kw">continue</span>),
+                    <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">continue</span>,
                 };
 
                 <span class="ident">data</span>.<span class="ident">insert</span>(<span class="ident">metric_id</span>, <span class="ident">metric</span>);
@@ -1929,7 +1931,7 @@
 
         <span class="comment">// Lifetime::Ping data is not immediately persisted to disk if</span>
         <span class="comment">// Glean has `delay_ping_lifetime_io` set to true</span>
-        <span class="kw">if</span> <span class="ident">lifetime</span> <span class="op">==</span> <span class="ident">Lifetime</span>::<span class="ident">Ping</span> {
+        <span class="kw">if</span> <span class="ident">lifetime</span> <span class="op">=</span><span class="op">=</span> <span class="ident">Lifetime</span>::<span class="ident">Ping</span> {
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">ping_lifetime_data</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">ping_lifetime_data</span> {
                 <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">ping_lifetime_data</span>
                     .<span class="ident">read</span>()
@@ -1957,8 +1959,8 @@
 
             <span class="kw">let</span> <span class="ident">metric_id</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">metric_id</span>[<span class="ident">len</span>..];
             <span class="kw">let</span> <span class="ident">metric</span>: <span class="ident">Metric</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">value</span> {
-                <span class="ident">rkv</span>::<span class="ident">Value</span>::<span class="ident">Blob</span>(<span class="ident">blob</span>) <span class="op">=&gt;</span> <span class="macro">unwrap_or</span><span class="macro">!</span>(<span class="ident">bincode</span>::<span class="ident">deserialize</span>(<span class="ident">blob</span>), <span class="kw">continue</span>),
-                <span class="kw">_</span> <span class="op">=&gt;</span> <span class="kw">continue</span>,
+                <span class="ident">rkv</span>::<span class="ident">Value</span>::<span class="ident">Blob</span>(<span class="ident">blob</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unwrap_or</span><span class="macro">!</span>(<span class="ident">bincode</span>::<span class="ident">deserialize</span>(<span class="ident">blob</span>), <span class="kw">continue</span>),
+                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">continue</span>,
             };
             <span class="ident">transaction_fn</span>(<span class="ident">metric_id</span>, <span class="kw-2">&amp;</span><span class="ident">metric</span>);
         }
@@ -1982,12 +1984,12 @@
         <span class="ident">lifetime</span>: <span class="ident">Lifetime</span>,
         <span class="ident">storage_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">metric_identifier</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-    ) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">get_storage_key</span>(<span class="ident">storage_name</span>, <span class="prelude-val">Some</span>(<span class="ident">metric_identifier</span>));
 
         <span class="comment">// Lifetime::Ping data is not persisted to disk if</span>
         <span class="comment">// Glean has `delay_ping_lifetime_io` set to true</span>
-        <span class="kw">if</span> <span class="ident">lifetime</span> <span class="op">==</span> <span class="ident">Lifetime</span>::<span class="ident">Ping</span> {
+        <span class="kw">if</span> <span class="ident">lifetime</span> <span class="op">=</span><span class="op">=</span> <span class="ident">Lifetime</span>::<span class="ident">Ping</span> {
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">ping_lifetime_data</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">ping_lifetime_data</span> {
                 <span class="kw">return</span> <span class="ident">ping_lifetime_data</span>
                     .<span class="ident">read</span>()
@@ -2010,9 +2012,9 @@
     <span class="doccomment">/// # Panics</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// * This function will **not** panic on database errors.</span>
-    <span class="kw">fn</span> <span class="ident">write_with_store</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">store_name</span>: <span class="ident">Lifetime</span>, <span class="kw-2">mut</span> <span class="ident">transaction_fn</span>: <span class="ident">F</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>
+    <span class="kw">fn</span> <span class="ident">write_with_store</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">store_name</span>: <span class="ident">Lifetime</span>, <span class="kw-2">mut</span> <span class="ident">transaction_fn</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>
     <span class="kw">where</span>
-        <span class="ident">F</span>: <span class="ident">FnMut</span>(<span class="ident">Writer</span>, <span class="kw-2">&amp;</span><span class="ident">SingleStore</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>,
+        <span class="ident">F</span>: <span class="ident">FnMut</span>(<span class="ident">Writer</span>, <span class="kw-2">&amp;</span><span class="ident">SingleStore</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>,
     {
         <span class="kw">let</span> <span class="ident">writer</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">rkv</span>.<span class="ident">write</span>().<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">store</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_store</span>(<span class="ident">store_name</span>);
@@ -2052,12 +2054,12 @@
         <span class="ident">storage_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">metric</span>: <span class="kw-2">&amp;</span><span class="ident">Metric</span>,
-    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">final_key</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">get_storage_key</span>(<span class="ident">storage_name</span>, <span class="prelude-val">Some</span>(<span class="ident">key</span>));
 
         <span class="comment">// Lifetime::Ping data is not immediately persisted to disk if</span>
         <span class="comment">// Glean has `delay_ping_lifetime_io` set to true</span>
-        <span class="kw">if</span> <span class="ident">lifetime</span> <span class="op">==</span> <span class="ident">Lifetime</span>::<span class="ident">Ping</span> {
+        <span class="kw">if</span> <span class="ident">lifetime</span> <span class="op">=</span><span class="op">=</span> <span class="ident">Lifetime</span>::<span class="ident">Ping</span> {
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">ping_lifetime_data</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">ping_lifetime_data</span> {
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">ping_lifetime_data</span>
                     .<span class="ident">write</span>()
@@ -2081,7 +2083,7 @@
     <span class="doccomment">/// after applying a transformation function.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">record_with</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">glean</span>: <span class="kw-2">&amp;</span><span class="ident">Glean</span>, <span class="ident">data</span>: <span class="kw-2">&amp;</span><span class="ident">CommonMetricData</span>, <span class="kw-2">mut</span> <span class="ident">transform</span>: <span class="ident">F</span>)
     <span class="kw">where</span>
-        <span class="ident">F</span>: <span class="ident">FnMut</span>(<span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Metric</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">Metric</span>,
+        <span class="ident">F</span>: <span class="ident">FnMut</span>(<span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Metric</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Metric</span>,
     {
         <span class="comment">// If upload is disabled we don&#39;t want to record.</span>
         <span class="kw">if</span> <span class="op">!</span><span class="ident">glean</span>.<span class="ident">is_upload_enabled</span>() {
@@ -2116,25 +2118,25 @@
         <span class="ident">storage_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="kw-2">mut</span> <span class="ident">transform</span>: <span class="ident">F</span>,
-    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>
     <span class="kw">where</span>
-        <span class="ident">F</span>: <span class="ident">FnMut</span>(<span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Metric</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">Metric</span>,
+        <span class="ident">F</span>: <span class="ident">FnMut</span>(<span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Metric</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Metric</span>,
     {
         <span class="kw">let</span> <span class="ident">final_key</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">get_storage_key</span>(<span class="ident">storage_name</span>, <span class="prelude-val">Some</span>(<span class="ident">key</span>));
 
         <span class="comment">// Lifetime::Ping data is not persisted to disk if</span>
         <span class="comment">// Glean has `delay_ping_lifetime_io` set to true</span>
-        <span class="kw">if</span> <span class="ident">lifetime</span> <span class="op">==</span> <span class="ident">Lifetime</span>::<span class="ident">Ping</span> {
+        <span class="kw">if</span> <span class="ident">lifetime</span> <span class="op">=</span><span class="op">=</span> <span class="ident">Lifetime</span>::<span class="ident">Ping</span> {
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">ping_lifetime_data</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">ping_lifetime_data</span> {
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">ping_lifetime_data</span>
                     .<span class="ident">write</span>()
                     .<span class="ident">expect</span>(<span class="string">&quot;Can&#39;t access ping lifetime data as writable&quot;</span>);
                 <span class="kw">let</span> <span class="ident">entry</span> <span class="op">=</span> <span class="ident">data</span>.<span class="ident">entry</span>(<span class="ident">final_key</span>);
                 <span class="kw">match</span> <span class="ident">entry</span> {
-                    <span class="ident">Entry</span>::<span class="ident">Vacant</span>(<span class="ident">entry</span>) <span class="op">=&gt;</span> {
+                    <span class="ident">Entry</span>::<span class="ident">Vacant</span>(<span class="ident">entry</span>) <span class="op">=</span><span class="op">&gt;</span> {
                         <span class="ident">entry</span>.<span class="ident">insert</span>(<span class="ident">transform</span>(<span class="prelude-val">None</span>));
                     }
-                    <span class="ident">Entry</span>::<span class="ident">Occupied</span>(<span class="kw-2">mut</span> <span class="ident">entry</span>) <span class="op">=&gt;</span> {
+                    <span class="ident">Entry</span>::<span class="ident">Occupied</span>(<span class="kw-2">mut</span> <span class="ident">entry</span>) <span class="op">=</span><span class="op">&gt;</span> {
                         <span class="kw">let</span> <span class="ident">old_value</span> <span class="op">=</span> <span class="ident">entry</span>.<span class="ident">get</span>().<span class="ident">clone</span>();
                         <span class="ident">entry</span>.<span class="ident">insert</span>(<span class="ident">transform</span>(<span class="prelude-val">Some</span>(<span class="ident">old_value</span>)));
                     }
@@ -2149,11 +2151,11 @@
             <span class="kw">let</span> <span class="ident">old_value</span> <span class="op">=</span> <span class="ident">store</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">writer</span>, <span class="kw-2">&amp;</span><span class="ident">final_key</span>)<span class="question-mark">?</span>;
 
             <span class="kw">match</span> <span class="ident">old_value</span> {
-                <span class="prelude-val">Some</span>(<span class="ident">rkv</span>::<span class="ident">Value</span>::<span class="ident">Blob</span>(<span class="ident">blob</span>)) <span class="op">=&gt;</span> {
+                <span class="prelude-val">Some</span>(<span class="ident">rkv</span>::<span class="ident">Value</span>::<span class="ident">Blob</span>(<span class="ident">blob</span>)) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="kw">let</span> <span class="ident">old_value</span> <span class="op">=</span> <span class="ident">bincode</span>::<span class="ident">deserialize</span>(<span class="ident">blob</span>).<span class="ident">ok</span>();
                     <span class="ident">transform</span>(<span class="ident">old_value</span>)
                 }
-                <span class="kw">_</span> <span class="op">=&gt;</span> <span class="ident">transform</span>(<span class="prelude-val">None</span>),
+                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">transform</span>(<span class="prelude-val">None</span>),
             }
         };
 
@@ -2178,7 +2180,7 @@
     <span class="doccomment">/// # Panics</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This function will **not** panic on database errors.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">clear_ping_lifetime_storage</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">storage_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">clear_ping_lifetime_storage</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">storage_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="comment">// Lifetime::Ping data will be saved to `ping_lifetime_data`</span>
         <span class="comment">// in case `delay_ping_lifetime_io` is set to true</span>
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">ping_lifetime_data</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">ping_lifetime_data</span> {
@@ -2238,12 +2240,12 @@
         <span class="ident">lifetime</span>: <span class="ident">Lifetime</span>,
         <span class="ident">storage_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">metric_id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">final_key</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">get_storage_key</span>(<span class="ident">storage_name</span>, <span class="prelude-val">Some</span>(<span class="ident">metric_id</span>));
 
         <span class="comment">// Lifetime::Ping data is not persisted to disk if</span>
         <span class="comment">// Glean has `delay_ping_lifetime_io` set to true</span>
-        <span class="kw">if</span> <span class="ident">lifetime</span> <span class="op">==</span> <span class="ident">Lifetime</span>::<span class="ident">Ping</span> {
+        <span class="kw">if</span> <span class="ident">lifetime</span> <span class="op">=</span><span class="op">=</span> <span class="ident">Lifetime</span>::<span class="ident">Ping</span> {
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">ping_lifetime_data</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">ping_lifetime_data</span> {
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">ping_lifetime_data</span>
                     .<span class="ident">write</span>()
@@ -2311,7 +2313,7 @@
     <span class="doccomment">/// # Panics</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// * This function will **not** panic on database errors.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">persist_ping_lifetime_data</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">persist_ping_lifetime_data</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">ping_lifetime_data</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">ping_lifetime_data</span> {
             <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">ping_lifetime_data</span>
                 .<span class="ident">read</span>()
@@ -2381,12 +2383,12 @@
         <span class="comment">// Verify that the data is correctly recorded.</span>
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">found_metrics</span> <span class="op">=</span> <span class="number">0</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">snapshotter</span> <span class="op">=</span> <span class="op">|</span><span class="ident">metric_id</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">metric</span>: <span class="kw-2">&amp;</span><span class="ident">Metric</span><span class="op">|</span> {
-            <span class="ident">found_metrics</span> <span class="op">+=</span> <span class="number">1</span>;
+            <span class="ident">found_metrics</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
             <span class="kw">let</span> <span class="ident">metric_id</span> <span class="op">=</span> <span class="ident">String</span>::<span class="ident">from_utf8_lossy</span>(<span class="ident">metric_id</span>).<span class="ident">into_owned</span>();
             <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">test_metric_id</span>, <span class="ident">metric_id</span>);
             <span class="kw">match</span> <span class="ident">metric</span> {
-                <span class="ident">Metric</span>::<span class="ident">String</span>(<span class="ident">s</span>) <span class="op">=&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">test_value</span>, <span class="ident">s</span>),
-                <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Unexpected data found&quot;</span>),
+                <span class="ident">Metric</span>::<span class="ident">String</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">test_value</span>, <span class="ident">s</span>),
+                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Unexpected data found&quot;</span>),
             }
         };
 
@@ -2416,12 +2418,12 @@
         <span class="comment">// Verify that the data is correctly recorded.</span>
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">found_metrics</span> <span class="op">=</span> <span class="number">0</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">snapshotter</span> <span class="op">=</span> <span class="op">|</span><span class="ident">metric_id</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">metric</span>: <span class="kw-2">&amp;</span><span class="ident">Metric</span><span class="op">|</span> {
-            <span class="ident">found_metrics</span> <span class="op">+=</span> <span class="number">1</span>;
+            <span class="ident">found_metrics</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
             <span class="kw">let</span> <span class="ident">metric_id</span> <span class="op">=</span> <span class="ident">String</span>::<span class="ident">from_utf8_lossy</span>(<span class="ident">metric_id</span>).<span class="ident">into_owned</span>();
             <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">test_metric_id</span>, <span class="ident">metric_id</span>);
             <span class="kw">match</span> <span class="ident">metric</span> {
-                <span class="ident">Metric</span>::<span class="ident">String</span>(<span class="ident">s</span>) <span class="op">=&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">test_value</span>, <span class="ident">s</span>),
-                <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Unexpected data found&quot;</span>),
+                <span class="ident">Metric</span>::<span class="ident">String</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">test_value</span>, <span class="ident">s</span>),
+                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Unexpected data found&quot;</span>),
             }
         };
 
@@ -2454,12 +2456,12 @@
         <span class="comment">// Verify that the data is correctly recorded.</span>
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">found_metrics</span> <span class="op">=</span> <span class="number">0</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">snapshotter</span> <span class="op">=</span> <span class="op">|</span><span class="ident">metric_id</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">metric</span>: <span class="kw-2">&amp;</span><span class="ident">Metric</span><span class="op">|</span> {
-            <span class="ident">found_metrics</span> <span class="op">+=</span> <span class="number">1</span>;
+            <span class="ident">found_metrics</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
             <span class="kw">let</span> <span class="ident">metric_id</span> <span class="op">=</span> <span class="ident">String</span>::<span class="ident">from_utf8_lossy</span>(<span class="ident">metric_id</span>).<span class="ident">into_owned</span>();
             <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">test_metric_id</span>, <span class="ident">metric_id</span>);
             <span class="kw">match</span> <span class="ident">metric</span> {
-                <span class="ident">Metric</span>::<span class="ident">String</span>(<span class="ident">s</span>) <span class="op">=&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">test_value</span>, <span class="ident">s</span>),
-                <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Unexpected data found&quot;</span>),
+                <span class="ident">Metric</span>::<span class="ident">String</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">test_value</span>, <span class="ident">s</span>),
+                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Unexpected data found&quot;</span>),
             }
         };
 
@@ -2504,8 +2506,8 @@
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">snapshotter</span> <span class="op">=</span> <span class="op">|</span><span class="ident">metric_id</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">metric</span>: <span class="kw-2">&amp;</span><span class="ident">Metric</span><span class="op">|</span> {
                 <span class="kw">let</span> <span class="ident">metric_id</span> <span class="op">=</span> <span class="ident">String</span>::<span class="ident">from_utf8_lossy</span>(<span class="ident">metric_id</span>).<span class="ident">into_owned</span>();
                 <span class="kw">match</span> <span class="ident">metric</span> {
-                    <span class="ident">Metric</span>::<span class="ident">String</span>(<span class="ident">s</span>) <span class="op">=&gt;</span> <span class="ident">snapshot</span>.<span class="ident">insert</span>(<span class="ident">metric_id</span>, <span class="ident">s</span>.<span class="ident">to_string</span>()),
-                    <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Unexpected data found&quot;</span>),
+                    <span class="ident">Metric</span>::<span class="ident">String</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">snapshot</span>.<span class="ident">insert</span>(<span class="ident">metric_id</span>, <span class="ident">s</span>.<span class="ident">to_string</span>()),
+                    <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Unexpected data found&quot;</span>),
                 };
             };
 
@@ -2528,8 +2530,8 @@
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">snapshotter</span> <span class="op">=</span> <span class="op">|</span><span class="ident">metric_id</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">metric</span>: <span class="kw-2">&amp;</span><span class="ident">Metric</span><span class="op">|</span> {
                 <span class="kw">let</span> <span class="ident">metric_id</span> <span class="op">=</span> <span class="ident">String</span>::<span class="ident">from_utf8_lossy</span>(<span class="ident">metric_id</span>).<span class="ident">into_owned</span>();
                 <span class="kw">match</span> <span class="ident">metric</span> {
-                    <span class="ident">Metric</span>::<span class="ident">String</span>(<span class="ident">s</span>) <span class="op">=&gt;</span> <span class="ident">snapshot</span>.<span class="ident">insert</span>(<span class="ident">metric_id</span>, <span class="ident">s</span>.<span class="ident">to_string</span>()),
-                    <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Unexpected data found&quot;</span>),
+                    <span class="ident">Metric</span>::<span class="ident">String</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">snapshot</span>.<span class="ident">insert</span>(<span class="ident">metric_id</span>, <span class="ident">s</span>.<span class="ident">to_string</span>()),
+                    <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Unexpected data found&quot;</span>),
                 };
             };
 
@@ -2582,12 +2584,12 @@
         <span class="kw">for</span> <span class="ident">lifetime</span> <span class="kw">in</span> <span class="ident">lifetimes</span>.<span class="ident">iter</span>() {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">found_metrics</span> <span class="op">=</span> <span class="number">0</span>;
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">snapshotter</span> <span class="op">=</span> <span class="op">|</span><span class="ident">metric_id</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">metric</span>: <span class="kw-2">&amp;</span><span class="ident">Metric</span><span class="op">|</span> {
-                <span class="ident">found_metrics</span> <span class="op">+=</span> <span class="number">1</span>;
+                <span class="ident">found_metrics</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
                 <span class="kw">let</span> <span class="ident">metric_id</span> <span class="op">=</span> <span class="ident">String</span>::<span class="ident">from_utf8_lossy</span>(<span class="ident">metric_id</span>).<span class="ident">into_owned</span>();
                 <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}_retain&quot;</span>, <span class="ident">metric_id_pattern</span>), <span class="ident">metric_id</span>);
                 <span class="kw">match</span> <span class="ident">metric</span> {
-                    <span class="ident">Metric</span>::<span class="ident">String</span>(<span class="ident">s</span>) <span class="op">=&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="string">&quot;retain&quot;</span>, <span class="ident">s</span>),
-                    <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Unexpected data found&quot;</span>),
+                    <span class="ident">Metric</span>::<span class="ident">String</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="string">&quot;retain&quot;</span>, <span class="ident">s</span>),
+                    <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Unexpected data found&quot;</span>),
                 }
             };
 
@@ -2657,8 +2659,8 @@
                 .<span class="ident">is_none</span>());
 
             <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">db</span>.<span class="ident">ping_lifetime_data</span> {
-                <span class="prelude-val">Some</span>(<span class="ident">ping_lifetime_data</span>) <span class="op">=&gt;</span> <span class="ident">ping_lifetime_data</span>,
-                <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Expected `ping_lifetime_data` to exist here!&quot;</span>),
+                <span class="prelude-val">Some</span>(<span class="ident">ping_lifetime_data</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ping_lifetime_data</span>,
+                <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Expected `ping_lifetime_data` to exist here!&quot;</span>),
             };
             <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">data</span>.<span class="ident">read</span>().<span class="ident">unwrap</span>();
             <span class="comment">// Verify that test_value1 is also in memory.</span>
@@ -2696,8 +2698,8 @@
                 .<span class="ident">is_some</span>());
 
             <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">db</span>.<span class="ident">ping_lifetime_data</span> {
-                <span class="prelude-val">Some</span>(<span class="ident">ping_lifetime_data</span>) <span class="op">=&gt;</span> <span class="ident">ping_lifetime_data</span>,
-                <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Expected `ping_lifetime_data` to exist here!&quot;</span>),
+                <span class="prelude-val">Some</span>(<span class="ident">ping_lifetime_data</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ping_lifetime_data</span>,
+                <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Expected `ping_lifetime_data` to exist here!&quot;</span>),
             };
             <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">data</span>.<span class="ident">read</span>().<span class="ident">unwrap</span>();
             <span class="comment">// Verify that test_value1 is also in memory.</span>
@@ -2735,8 +2737,8 @@
 
             <span class="comment">// Verify that test_value is in memory.</span>
             <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">db</span>.<span class="ident">ping_lifetime_data</span> {
-                <span class="prelude-val">Some</span>(<span class="ident">ping_lifetime_data</span>) <span class="op">=&gt;</span> <span class="ident">ping_lifetime_data</span>,
-                <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Expected `ping_lifetime_data` to exist here!&quot;</span>),
+                <span class="prelude-val">Some</span>(<span class="ident">ping_lifetime_data</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ping_lifetime_data</span>,
+                <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Expected `ping_lifetime_data` to exist here!&quot;</span>),
             };
             <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">data</span>.<span class="ident">read</span>().<span class="ident">unwrap</span>();
             <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">data</span>
@@ -2765,8 +2767,8 @@
 
             <span class="comment">// Verify that test_value is in memory.</span>
             <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">db</span>.<span class="ident">ping_lifetime_data</span> {
-                <span class="prelude-val">Some</span>(<span class="ident">ping_lifetime_data</span>) <span class="op">=&gt;</span> <span class="ident">ping_lifetime_data</span>,
-                <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Expected `ping_lifetime_data` to exist here!&quot;</span>),
+                <span class="prelude-val">Some</span>(<span class="ident">ping_lifetime_data</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ping_lifetime_data</span>,
+                <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Expected `ping_lifetime_data` to exist here!&quot;</span>),
             };
             <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">data</span>.<span class="ident">read</span>().<span class="ident">unwrap</span>();
             <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">data</span>
@@ -2811,8 +2813,8 @@
                     <span class="ident">test_metric_id</span>
                 );
                 <span class="kw">match</span> <span class="ident">metric</span> {
-                    <span class="ident">Metric</span>::<span class="ident">String</span>(<span class="ident">v</span>) <span class="op">=&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="string">&quot;record&quot;</span>, <span class="kw-2">*</span><span class="ident">v</span>),
-                    <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Unexpected data found&quot;</span>),
+                    <span class="ident">Metric</span>::<span class="ident">String</span>(<span class="ident">v</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="string">&quot;record&quot;</span>, <span class="kw-2">*</span><span class="ident">v</span>),
+                    <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Unexpected data found&quot;</span>),
                 }
             },
         );
@@ -2830,8 +2832,8 @@
                     <span class="ident">test_metric_id</span>
                 );
                 <span class="kw">match</span> <span class="ident">metric</span> {
-                    <span class="ident">Metric</span>::<span class="ident">String</span>(<span class="ident">v</span>) <span class="op">=&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="string">&quot;record_with&quot;</span>, <span class="kw-2">*</span><span class="ident">v</span>),
-                    <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Unexpected data found&quot;</span>),
+                    <span class="ident">Metric</span>::<span class="ident">String</span>(<span class="ident">v</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="string">&quot;record_with&quot;</span>, <span class="kw-2">*</span><span class="ident">v</span>),
+                    <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Unexpected data found&quot;</span>),
                 }
             },
         );
@@ -2852,8 +2854,8 @@
                     <span class="ident">test_metric_id</span>
                 );
                 <span class="kw">match</span> <span class="ident">metric</span> {
-                    <span class="ident">Metric</span>::<span class="ident">String</span>(<span class="ident">v</span>) <span class="op">=&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="string">&quot;record_with&quot;</span>, <span class="kw-2">*</span><span class="ident">v</span>),
-                    <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Unexpected data found&quot;</span>),
+                    <span class="ident">Metric</span>::<span class="ident">String</span>(<span class="ident">v</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="string">&quot;record_with&quot;</span>, <span class="kw-2">*</span><span class="ident">v</span>),
+                    <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Unexpected data found&quot;</span>),
                 }
             },
         );
@@ -2870,8 +2872,8 @@
                     <span class="ident">test_metric_id</span>
                 );
                 <span class="kw">match</span> <span class="ident">metric</span> {
-                    <span class="ident">Metric</span>::<span class="ident">String</span>(<span class="ident">v</span>) <span class="op">=&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="string">&quot;record_with&quot;</span>, <span class="kw-2">*</span><span class="ident">v</span>),
-                    <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Unexpected data found&quot;</span>),
+                    <span class="ident">Metric</span>::<span class="ident">String</span>(<span class="ident">v</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="string">&quot;record_with&quot;</span>, <span class="kw-2">*</span><span class="ident">v</span>),
+                    <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Unexpected data found&quot;</span>),
                 }
             },
         );

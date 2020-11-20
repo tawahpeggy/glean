@@ -1,4 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `glean-core/src/util.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>util.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../glean_core/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `glean-core/src/util.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>util.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../glean_core/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
                 <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
@@ -286,16 +288,16 @@
 
 <span class="doccomment">/// Generates a pipeline-friendly string</span>
 <span class="doccomment">/// that replaces non alphanumeric characters with dashes.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sanitize_application_id</span>(<span class="ident">application_id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">String</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sanitize_application_id</span>(<span class="ident">application_id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">last_dash</span> <span class="op">=</span> <span class="bool-val">false</span>;
     <span class="ident">application_id</span>
         .<span class="ident">chars</span>()
         .<span class="ident">filter_map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="kw">match</span> <span class="ident">x</span> {
-            <span class="string">&#39;A&#39;</span>..<span class="op">=</span><span class="string">&#39;Z&#39;</span> <span class="op">|</span> <span class="string">&#39;a&#39;</span>..<span class="op">=</span><span class="string">&#39;z&#39;</span> <span class="op">|</span> <span class="string">&#39;0&#39;</span>..<span class="op">=</span><span class="string">&#39;9&#39;</span> <span class="op">=&gt;</span> {
+            <span class="string">&#39;A&#39;</span>..<span class="op">=</span><span class="string">&#39;Z&#39;</span> <span class="op">|</span> <span class="string">&#39;a&#39;</span>..<span class="op">=</span><span class="string">&#39;z&#39;</span> <span class="op">|</span> <span class="string">&#39;0&#39;</span>..<span class="op">=</span><span class="string">&#39;9&#39;</span> <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="ident">last_dash</span> <span class="op">=</span> <span class="bool-val">false</span>;
                 <span class="prelude-val">Some</span>(<span class="ident">x</span>.<span class="ident">to_ascii_lowercase</span>())
             }
-            <span class="kw">_</span> <span class="op">=&gt;</span> {
+            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">last_dash</span> { <span class="prelude-val">None</span> } <span class="kw">else</span> { <span class="prelude-val">Some</span>(<span class="string">&#39;-&#39;</span>) };
                 <span class="ident">last_dash</span> <span class="op">=</span> <span class="bool-val">true</span>;
                 <span class="ident">result</span>
@@ -315,14 +317,14 @@
 <span class="doccomment">/// # Returns</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// A string representing the provided date/time truncated to the requested time unit.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_iso_time_string</span>(<span class="ident">datetime</span>: <span class="ident">DateTime</span><span class="op">&lt;</span><span class="ident">FixedOffset</span><span class="op">&gt;</span>, <span class="ident">truncate_to</span>: <span class="ident">TimeUnit</span>) <span class="op">-&gt;</span> <span class="ident">String</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_iso_time_string</span>(<span class="ident">datetime</span>: <span class="ident">DateTime</span><span class="op">&lt;</span><span class="ident">FixedOffset</span><span class="op">&gt;</span>, <span class="ident">truncate_to</span>: <span class="ident">TimeUnit</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
     <span class="ident">datetime</span>.<span class="ident">format</span>(<span class="ident">truncate_to</span>.<span class="ident">format_pattern</span>()).<span class="ident">to_string</span>()
 }
 
 <span class="doccomment">/// Get the current date &amp; time with a fixed-offset timezone.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// This converts from the `Local` timezone into its fixed-offset equivalent.</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">local_now_with_offset</span>() <span class="op">-&gt;</span> <span class="ident">DateTime</span><span class="op">&lt;</span><span class="ident">FixedOffset</span><span class="op">&gt;</span> {
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">local_now_with_offset</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DateTime</span><span class="op">&lt;</span><span class="ident">FixedOffset</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">now</span>: <span class="ident">DateTime</span><span class="op">&lt;</span><span class="ident">Local</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Local</span>::<span class="ident">now</span>();
     <span class="ident">now</span>.<span class="ident">with_timezone</span>(<span class="ident">now</span>.<span class="ident">offset</span>())
 }
@@ -339,7 +341,7 @@
 <span class="doccomment">/// # Returns</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// A string, with at most `length` bytes.</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">truncate_string_at_boundary</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;&gt;</span>(<span class="ident">value</span>: <span class="ident">S</span>, <span class="ident">length</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="ident">String</span> {
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">truncate_string_at_boundary</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">value</span>: <span class="ident">S</span>, <span class="ident">length</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
     <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">value</span>.<span class="ident">into</span>();
     <span class="kw">if</span> <span class="ident">s</span>.<span class="ident">len</span>() <span class="op">&gt;</span> <span class="ident">length</span> {
         <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> (<span class="number">0</span>..<span class="op">=</span><span class="ident">length</span>).<span class="ident">rev</span>() {
@@ -370,12 +372,12 @@
 <span class="doccomment">/// # Returns</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// A string, with at most `length` bytes.</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">truncate_string_at_boundary_with_error</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;&gt;</span>(
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">truncate_string_at_boundary_with_error</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>(
     <span class="ident">glean</span>: <span class="kw-2">&amp;</span><span class="ident">Glean</span>,
     <span class="ident">meta</span>: <span class="kw-2">&amp;</span><span class="ident">CommonMetricData</span>,
     <span class="ident">value</span>: <span class="ident">S</span>,
     <span class="ident">length</span>: <span class="ident">usize</span>,
-) <span class="op">-&gt;</span> <span class="ident">String</span> {
+) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
     <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">value</span>.<span class="ident">into</span>();
     <span class="kw">if</span> <span class="ident">s</span>.<span class="ident">len</span>() <span class="op">&gt;</span> <span class="ident">length</span> {
         <span class="kw">let</span> <span class="ident">msg</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Value length {} exceeds maximum of {}&quot;</span>, <span class="ident">s</span>.<span class="ident">len</span>(), <span class="ident">length</span>);
@@ -408,7 +410,7 @@
         <span class="comment">// Gets and sets the floating point control word.</span>
         <span class="comment">// See documentation here:</span>
         <span class="comment">// https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/controlfp-s</span>
-        <span class="kw">fn</span> <span class="ident">_controlfp_s</span>(<span class="ident">current</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">size_t</span>, <span class="ident">new</span>: <span class="ident">size_t</span>, <span class="ident">mask</span>: <span class="ident">size_t</span>) <span class="op">-&gt;</span> <span class="ident">size_t</span>;
+        <span class="kw">fn</span> <span class="ident">_controlfp_s</span>(<span class="ident">current</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">size_t</span>, <span class="ident">new</span>: <span class="ident">size_t</span>, <span class="ident">mask</span>: <span class="ident">size_t</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">size_t</span>;
     }
 
     <span class="comment">// Rounding control mask</span>
@@ -425,7 +427,7 @@
     }
 
     <span class="kw">impl</span> <span class="ident">FloatingPointContext</span> {
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-&gt;</span> <span class="self">Self</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">current</span>: <span class="ident">size_t</span> <span class="op">=</span> <span class="number">0</span>;
             <span class="kw">let</span> <span class="ident">_err</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">_controlfp_s</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">current</span>, <span class="ident">PC_64</span> <span class="op">|</span> <span class="ident">RC_CHOP</span>, <span class="ident">MCW_PC</span> <span class="op">|</span> <span class="ident">MCW_RC</span>) };
 
@@ -448,7 +450,7 @@
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">FloatingPointContext</span> {}
 
     <span class="kw">impl</span> <span class="ident">FloatingPointContext</span> {
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-&gt;</span> <span class="self">Self</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
             <span class="ident">FloatingPointContext</span> {}
         }
     }
@@ -520,7 +522,7 @@
         <span class="comment">// We can&#39;t compare across differing timezones, so we just compare the UTC timestamps.</span>
         <span class="comment">// The second timestamp should be just a few nanoseconds later.</span>
         <span class="macro">assert</span><span class="macro">!</span>(
-            <span class="ident">fixed_now</span>.<span class="ident">naive_utc</span>() <span class="op">&gt;=</span> <span class="ident">now</span>.<span class="ident">naive_utc</span>(),
+            <span class="ident">fixed_now</span>.<span class="ident">naive_utc</span>() <span class="op">&gt;</span><span class="op">=</span> <span class="ident">now</span>.<span class="ident">naive_utc</span>(),
             <span class="string">&quot;Time mismatch. Local now: {:?}, Fixed now: {:?}&quot;</span>,
             <span class="ident">now</span>,
             <span class="ident">fixed_now</span>
