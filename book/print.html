@@ -3961,7 +3961,7 @@ assert_eq!(u, user::client_id.test_get_value(None).unwrap());
 </ul>
 <h2><a class="header" href="#recorded-errors-11" id="recorded-errors-11">Recorded errors</a></h2>
 <ul>
-<li>None.</li>
+<li><code>invalid_value</code>: if the value is set to a string that is not a UUID (only applies for dynamically-typed languages, such as Python).</li>
 </ul>
 <h2><a class="header" href="#reference-12" id="reference-12">Reference</a></h2>
 <ul>
@@ -8195,6 +8195,11 @@ Each ping has its own schedule to gather all its locally saved metrics and creat
 <ul>
 <li>Introduce the UUID metric type in the RLB.</li>
 <li>Introduce the Labeled metric type in the RLB <a href="https://github.com/mozilla/glean/pull/1327">#1327</a>.</li>
+</ul>
+</li>
+<li>Python
+<ul>
+<li>BUGFIX: Setting a UUID metric to a value that is not in the expected UUID format will now record an error with the Glean error reporting system.</li>
 </ul>
 </li>
 </ul>
