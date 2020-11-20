@@ -268,6 +268,40 @@ Assert.Equal(false, Accessibility.features[&quot;high_contrast&quot;].TestGetVal
 Assert.Equal(0, Accessibility.features.TestGetNumRecordedErrors(ErrorType.InvalidLabel));
 </code></pre>
 </div>
+<div data-lang="Rust" class="tab">
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean_metrics;
+
+accessibility::features.get(&quot;screen_reader&quot;).set(is_screen_reader_enabled());
+accessibility::features.get(&quot;high_contrast&quot;).set(is_high_contrast_enabled());
+<span class="boring">}
+</span></code></pre></pre>
+<p>There are test APIs available too:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean::ErrorType;
+
+use glean_metrics;
+
+// Was anything recorded?
+assert!(accessibility::features.get(&quot;screen_reader&quot;).test_get_value(None).is_some());
+assert!(accessibility::features.get(&quot;high_contrast&quot;).test_get_value(None).is_some());
+// Do the booleans have the expected values?
+assert!(accessibility::features.get(&quot;screen_reader&quot;).test_get_value(None).unwrap());
+assert!(!accessibility::features.get(&quot;high_contrast&quot;).test_get_value(None).unwrap());
+// Did we record any invalid labels?
+assert_eq!(
+  1,
+  accessibility::features.test_get_num_recorded_errors(
+    ErrorType::InvalidLabel
+  )
+);
+<span class="boring">}
+</span></code></pre></pre>
+</div>
 </div>
 </div>
 <h2><a class="header" href="#limits" id="limits">Limits</a></h2>

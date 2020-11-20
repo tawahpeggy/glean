@@ -265,6 +265,39 @@ Assert.Equal(3, Stability.crashCount[&quot;native_code_crash&quot;].TestGetValue
 Assert.Equal(0, Stability.crashCount.TestGetNumRecordedErrors(ErrorType.InvalidLabel));
 </code></pre>
 </div>
+<div data-lang="Rust" class="tab">
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean_metrics;
+
+stability::crash_count.get(&quot;uncaught_exception&quot;).add(1); // Adds 1 to the &quot;uncaught_exception&quot; counter.
+stability::crash_count.get(&quot;native_code_crash&quot;).add(3); // Adds 3 to the &quot;native_code_crash&quot; counter.
+<span class="boring">}
+</span></code></pre></pre>
+<p>There are test APIs available too:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean::ErrorType;
+
+use glean_metrics;
+// Was anything recorded?
+assert!(stability::crash_count.get(&quot;uncaught_exception&quot;).test_get_value().is_some());
+assert!(stability::crash_count.get(&quot;native_code_crash&quot;).test_get_value().is_some());
+// Do the counters have the expected values?
+assert_eq!(1, stability::crash_count.get(&quot;uncaught_exception&quot;).test_get_value().unwrap());
+assert_eq!(3, stability::crash_count.get(&quot;native_code_crash&quot;).test_get_value().unwrap());
+// Were there any invalid labels?
+assert_eq!(
+  0,
+  stability::crash_count.test_get_num_recorded_errors(
+    ErrorType::InvalidLabel
+  )
+);
+<span class="boring">}
+</span></code></pre></pre>
+</div>
 </div>
 </div>
 <h2><a class="header" href="#limits" id="limits">Limits</a></h2>

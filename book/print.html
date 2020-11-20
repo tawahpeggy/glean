@@ -1945,6 +1945,40 @@ Assert.Equal(false, Accessibility.features[&quot;high_contrast&quot;].TestGetVal
 Assert.Equal(0, Accessibility.features.TestGetNumRecordedErrors(ErrorType.InvalidLabel));
 </code></pre>
 </div>
+<div data-lang="Rust" class="tab">
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean_metrics;
+
+accessibility::features.get(&quot;screen_reader&quot;).set(is_screen_reader_enabled());
+accessibility::features.get(&quot;high_contrast&quot;).set(is_high_contrast_enabled());
+<span class="boring">}
+</span></code></pre></pre>
+<p>There are test APIs available too:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean::ErrorType;
+
+use glean_metrics;
+
+// Was anything recorded?
+assert!(accessibility::features.get(&quot;screen_reader&quot;).test_get_value(None).is_some());
+assert!(accessibility::features.get(&quot;high_contrast&quot;).test_get_value(None).is_some());
+// Do the booleans have the expected values?
+assert!(accessibility::features.get(&quot;screen_reader&quot;).test_get_value(None).unwrap());
+assert!(!accessibility::features.get(&quot;high_contrast&quot;).test_get_value(None).unwrap());
+// Did we record any invalid labels?
+assert_eq!(
+  1,
+  accessibility::features.test_get_num_recorded_errors(
+    ErrorType::InvalidLabel
+  )
+);
+<span class="boring">}
+</span></code></pre></pre>
+</div>
 </div>
 </div>
 <h2><a class="header" href="#limits-2" id="limits-2">Limits</a></h2>
@@ -2242,6 +2276,39 @@ Assert.Equal(3, Stability.crashCount[&quot;native_code_crash&quot;].TestGetValue
 // Were there any invalid labels?
 Assert.Equal(0, Stability.crashCount.TestGetNumRecordedErrors(ErrorType.InvalidLabel));
 </code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean_metrics;
+
+stability::crash_count.get(&quot;uncaught_exception&quot;).add(1); // Adds 1 to the &quot;uncaught_exception&quot; counter.
+stability::crash_count.get(&quot;native_code_crash&quot;).add(3); // Adds 3 to the &quot;native_code_crash&quot; counter.
+<span class="boring">}
+</span></code></pre></pre>
+<p>There are test APIs available too:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean::ErrorType;
+
+use glean_metrics;
+// Was anything recorded?
+assert!(stability::crash_count.get(&quot;uncaught_exception&quot;).test_get_value().is_some());
+assert!(stability::crash_count.get(&quot;native_code_crash&quot;).test_get_value().is_some());
+// Do the counters have the expected values?
+assert_eq!(1, stability::crash_count.get(&quot;uncaught_exception&quot;).test_get_value().unwrap());
+assert_eq!(3, stability::crash_count.get(&quot;native_code_crash&quot;).test_get_value().unwrap());
+// Were there any invalid labels?
+assert_eq!(
+  0,
+  stability::crash_count.test_get_num_recorded_errors(
+    ErrorType::InvalidLabel
+  )
+);
+<span class="boring">}
+</span></code></pre></pre>
 </div>
 </div>
 </div>
@@ -2741,6 +2808,36 @@ Assert.True(Login.errorsByStage[&quot;server_auth&quot;].TestHasValue());
 // Were there any invalid labels?
 Assert.Equal(0, Login.errorsByStage.TestGetNumRecordedErrors(ErrorType.InvalidLabel));
 </code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean_metrics;
+
+login::errors_by_stage.get(&quot;server_auth&quot;).set(&quot;Invalid password&quot;);
+<span class="boring">}
+</span></code></pre></pre>
+<p>There are test APIs available too:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean::ErrorType;
+
+use glean_metrics;
+
+// Was anything recorded?
+assert!(login::errors_by_stage.get(&quot;server_auth&quot;).test_get_value().is_sone());
+
+// Were there any invalid labels?
+assert_eq!(
+  0,
+  login::errors_by_stage.test_get_num_recorded_errors(
+    ErrorType::InvalidLabel
+  )
+);
+<span class="boring">}
+</span></code></pre></pre>
 </div>
 </div>
 </div>
@@ -8094,6 +8191,7 @@ Each ping has its own schedule to gather all its locally saved metrics and creat
 <li>Rust
 <ul>
 <li>Introduce the UUID metric type in the RLB.</li>
+<li>Introduce the Labeled metric type in the RLB <a href="https://github.com/mozilla/glean/pull/1327">#1327</a>.</li>
 </ul>
 </li>
 </ul>

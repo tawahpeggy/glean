@@ -247,6 +247,36 @@ Assert.True(Login.errorsByStage[&quot;server_auth&quot;].TestHasValue());
 Assert.Equal(0, Login.errorsByStage.TestGetNumRecordedErrors(ErrorType.InvalidLabel));
 </code></pre>
 </div>
+<div data-lang="Rust" class="tab">
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean_metrics;
+
+login::errors_by_stage.get(&quot;server_auth&quot;).set(&quot;Invalid password&quot;);
+<span class="boring">}
+</span></code></pre></pre>
+<p>There are test APIs available too:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean::ErrorType;
+
+use glean_metrics;
+
+// Was anything recorded?
+assert!(login::errors_by_stage.get(&quot;server_auth&quot;).test_get_value().is_sone());
+
+// Were there any invalid labels?
+assert_eq!(
+  0,
+  login::errors_by_stage.test_get_num_recorded_errors(
+    ErrorType::InvalidLabel
+  )
+);
+<span class="boring">}
+</span></code></pre></pre>
+</div>
 </div>
 </div>
 <h2><a class="header" href="#limits" id="limits">Limits</a></h2>
