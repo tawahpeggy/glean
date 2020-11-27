@@ -536,6 +536,16 @@
 <span id="533">533</span>
 <span id="534">534</span>
 <span id="535">535</span>
+<span id="536">536</span>
+<span id="537">537</span>
+<span id="538">538</span>
+<span id="539">539</span>
+<span id="540">540</span>
+<span id="541">541</span>
+<span id="542">542</span>
+<span id="543">543</span>
+<span id="544">544</span>
+<span id="545">545</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -829,6 +839,16 @@
     <span class="comment">// Mark the initialization as called: this needs to happen outside of the</span>
     <span class="comment">// dispatched block!</span>
     <span class="ident">INITIALIZE_CALLED</span>.<span class="ident">store</span>(<span class="bool-val">true</span>, <span class="ident">Ordering</span>::<span class="ident">SeqCst</span>);
+}
+
+<span class="doccomment">/// Shuts down Glean.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// This currently only attempts to shut down the</span>
+<span class="doccomment">/// internal dispatcher.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">shutdown</span>() {
+    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="ident">dispatcher</span>::<span class="ident">try_shutdown</span>() {
+        <span class="ident">log</span>::<span class="macro">error</span><span class="macro">!</span>(<span class="string">&quot;Can&#39;t shutdown dispatcher thread: {:?}&quot;</span>, <span class="ident">e</span>);
+    }
 }
 
 <span class="doccomment">/// Checks if `glean::initialize` was ever called.</span>
