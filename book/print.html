@@ -4512,6 +4512,28 @@ Assert.Equal(
 );
 </code></pre>
 </div>
+<div data-lang="Rust" class="tab">
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean_metrics;
+
+display::width.set(width);
+<span class="boring">}
+</span></code></pre></pre>
+<p>There are test APIs available too:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean_metrics;
+
+// Was anything recorded?
+assert!(display::width.test_get_value(None).is_some());
+// Does it have the expected value?
+assert_eq!(width, display::width.test_get_value(None).unwrap());
+<span class="boring">}
+</span></code></pre></pre>
+</div>
 </div>
 </div>
 <h2><a class="header" href="#limits-16" id="limits-16">Limits</a></h2>
@@ -4529,6 +4551,9 @@ Assert.Equal(
 <h2><a class="header" href="#reference-16" id="reference-16">Reference</a></h2>
 <ul>
 <li><a href="user/metrics/../../../javadoc/glean/mozilla.telemetry.glean.private/-quantity-metric-type/index.html">Kotlin API docs</a></li>
+<li><a href="user/metrics/../../../swift/Classes/QuantityMetricType.html">Swift API docs</a></li>
+<li><a href="user/metrics/../../../python/glean/metrics/quantity.html">Python API docs</a></li>
+<li><a href="user/metrics/../../../docs/glean/private/quantity/struct.QuantityMetric.html">Rust API docs</a></li>
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/metrics/quantity.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#glean-pings" id="glean-pings">Glean Pings</a></h1>
 <p>Every Glean ping is in JSON format and contains one or more of the <a href="user/pings/index.html#ping-sections">common sections</a> with shared information data.</p>
@@ -8195,6 +8220,7 @@ Each ping has its own schedule to gather all its locally saved metrics and creat
 <ul>
 <li>Introduce the UUID metric type in the RLB.</li>
 <li>Introduce the Labeled metric type in the RLB <a href="https://github.com/mozilla/glean/pull/1327">#1327</a>.</li>
+<li>Introduce the Quantity metric type in the RLB.</li>
 <li>Introduce the <code>shutdown</code> API.</li>
 <li>Add Glean debugging APIs. </li>
 </ul>
