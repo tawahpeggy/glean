@@ -1526,6 +1526,7 @@
 <span id="1523">1523</span>
 <span id="1524">1524</span>
 <span id="1525">1525</span>
+<span id="1526">1526</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -1652,11 +1653,12 @@
     <span class="doccomment">/// * Pending pings queue is empty, no more pings to request;</span>
     <span class="doccomment">/// * Requester has gotten more than MAX_WAIT_ATTEMPTS (3, by default) `PingUploadTask::Wait` responses in a row;</span>
     <span class="doccomment">/// * Requester has reported more than MAX_RECOVERABLE_FAILURES_PER_UPLOADING_WINDOW</span>
-    <span class="doccomment">///   recoverable upload failures on the same uploading window[1]</span>
+    <span class="doccomment">///   recoverable upload failures on the same uploading window (see below)</span>
     <span class="doccomment">///   and should stop requesting at this moment.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// [1]: An &quot;uploading window&quot; starts when a requester gets a new `PingUploadTask::Upload(PingRequest)`</span>
-    <span class="doccomment">///      response and finishes when they finally get a `PingUploadTask::Done` or `PingUploadTask::Wait` response.</span>
+    <span class="doccomment">/// An &quot;uploading window&quot; starts when a requester gets a new</span>
+    <span class="doccomment">/// `PingUploadTask::Upload(PingRequest)` response and finishes when they</span>
+    <span class="doccomment">/// finally get a `PingUploadTask::Done` or `PingUploadTask::Wait` response.</span>
     <span class="ident">Done</span>,
 }
 

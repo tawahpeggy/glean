@@ -550,9 +550,10 @@
 
     <span class="doccomment">/// Starts tracking time for the provided metric.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// This records an error if it’s already tracking time (i.e. start was already</span>
-    <span class="doccomment">/// called with no corresponding [stop]): in that case the original</span>
-    <span class="doccomment">/// start time will be preserved.</span>
+    <span class="doccomment">/// This records an error if it’s already tracking time (i.e.</span>
+    <span class="doccomment">/// [`set_start`](TimingDistributionMetric::set_start) was already called with no</span>
+    <span class="doccomment">/// corresponding [`set_stop_and_accumulate`](TimingDistributionMetric::set_stop_and_accumulate)): in</span>
+    <span class="doccomment">/// that case the original start time will be preserved.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Arguments</span>
     <span class="doccomment">///</span>
@@ -642,11 +643,10 @@
     <span class="doccomment">/// will take care of filtering and reporting errors for any provided negative</span>
     <span class="doccomment">/// sample.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// Please note that this assumes that the provided samples are already in the</span>
-    <span class="doccomment">/// &quot;unit&quot; declared by the instance of the implementing metric type (e.g. if the</span>
-    <span class="doccomment">/// implementing class is a [TimingDistributionMetricType] and the instance this</span>
-    <span class="doccomment">/// method was called on is using [TimeUnit.Second], then `samples` are assumed</span>
-    <span class="doccomment">/// to be in that unit).</span>
+    <span class="doccomment">/// Please note that this assumes that the provided samples are already in</span>
+    <span class="doccomment">/// the &quot;unit&quot; declared by the instance of the metric type (e.g. if the</span>
+    <span class="doccomment">/// instance this method was called on is using [TimeUnit::Second], then</span>
+    <span class="doccomment">/// `samples` are assumed to be in that unit).</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Arguments</span>
     <span class="doccomment">///</span>

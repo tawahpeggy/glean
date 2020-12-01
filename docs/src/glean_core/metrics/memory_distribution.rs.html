@@ -212,7 +212,6 @@
 <span id="209">209</span>
 <span id="210">210</span>
 <span id="211">211</span>
-<span id="212">212</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -323,11 +322,10 @@
     <span class="doccomment">/// will take care of filtering and reporting errors for any provided negative</span>
     <span class="doccomment">/// sample.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// Please note that this assumes that the provided samples are already in the</span>
-    <span class="doccomment">/// &quot;unit&quot; declared by the instance of the implementing metric type (e.g. if the</span>
-    <span class="doccomment">/// implementing class is a [MemoryDistributionMetricType] and the instance this</span>
-    <span class="doccomment">/// method was called on is using [MemoryUnit.Kilobyte], then `samples` are assumed</span>
-    <span class="doccomment">/// to be in that unit).</span>
+    <span class="doccomment">/// Please note that this assumes that the provided samples are already in</span>
+    <span class="doccomment">/// the &quot;unit&quot; declared by the instance of the metric type (e.g. if the the</span>
+    <span class="doccomment">/// instance this method was called on is using [MemoryUnit::Kilobyte], then</span>
+    <span class="doccomment">/// `samples` are assumed to be in that unit).</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Arguments</span>
     <span class="doccomment">///</span>

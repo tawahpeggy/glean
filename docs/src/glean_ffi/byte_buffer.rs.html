@@ -143,16 +143,6 @@
 <span id="140">140</span>
 <span id="141">141</span>
 <span id="142">142</span>
-<span id="143">143</span>
-<span id="144">144</span>
-<span id="145">145</span>
-<span id="146">146</span>
-<span id="147">147</span>
-<span id="148">148</span>
-<span id="149">149</span>
-<span id="150">150</span>
-<span id="151">151</span>
-<span id="152">152</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -183,9 +173,6 @@
 <span class="doccomment">/// is because in the future, we may allow it&#39;s use for passing data into Rust code.</span>
 <span class="doccomment">/// ByteBuffer assuming ownership of the data would make this a problem.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// Note that calling `destroy` manually is not typically needed or recommended,</span>
-<span class="doccomment">/// and instead you should use [`define_bytebuffer_destructor!`].</span>
-<span class="doccomment">///</span>
 <span class="doccomment">/// ## Layout/fields</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// This struct&#39;s field are not `pub` (mostly so that we can soundly implement `Send`, but also so</span>
@@ -212,10 +199,6 @@
 <span class="doccomment">/// The bytes array is allocated on the heap and must be freed on it as well. Critically, if there</span>
 <span class="doccomment">/// are multiple rust packages using being used in the same application, it *must be freed on the</span>
 <span class="doccomment">/// same heap that allocated it*, or you will corrupt both heaps.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Typically, this object is managed on the other side of the FFI (on the &quot;FFI consumer&quot;), which</span>
-<span class="doccomment">/// means you must expose a function to release the resources of `data` which can be done easily</span>
-<span class="doccomment">/// using the [`define_bytebuffer_destructor!`] macro provided by this crate.</span>
 <span class="attribute">#[<span class="ident">repr</span>(<span class="ident">C</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ByteBuffer</span> {
     <span class="ident">len</span>: <span class="ident">i32</span>,
@@ -278,9 +261,6 @@
     }
 
     <span class="doccomment">/// Reclaim memory stored in this ByteBuffer.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// You typically should not call this manually, and instead expose a</span>
-    <span class="doccomment">/// function that does so via [`define_bytebuffer_destructor!`].</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ## Caveats</span>
     <span class="doccomment">///</span>

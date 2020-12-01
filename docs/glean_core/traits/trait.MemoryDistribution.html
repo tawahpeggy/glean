@@ -23,11 +23,11 @@ and an <code>ErrorType::InvalidValue</code> error is recorded.</p>
 64 bit signed integers if no <code>u64</code> comparable type is available. This
 will take care of filtering and reporting errors for any provided negative
 sample.</p>
-<p>Please note that this assumes that the provided samples are already in the
-&quot;unit&quot; declared by the instance of the implementing metric type (e.g. if the
-implementing class is a [MemoryDistributionMetricType] and the instance this
-method was called on is using [MemoryUnit.Kilobyte], then <code>samples</code> are assumed
-to be in that unit).</p>
+<p>Please note that this assumes that the provided samples are already in
+the &quot;unit&quot; declared by the instance of the implementing metric type
+(e.g. if the implementing class is a <a href="../../glean_core/traits/trait.MemoryDistribution.html" title="MemoryDistribution">MemoryDistribution</a> and the
+instance this method was called on is using kilobyte, then <code>samples</code> are
+assumed to be in that unit).</p>
 <h1 id="arguments-1" class="section-header"><a href="#arguments-1">Arguments</a></h1>
 <ul>
 <li><code>samples</code> - The vector holding the samples to be recorded by the metric.</li>
