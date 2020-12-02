@@ -173,6 +173,12 @@
                         <h1><a class="header" href="#unreleased-changes" id="unreleased-changes">Unreleased changes</a></h1>
 <p><a href="https://github.com/mozilla/glean/compare/v33.5.0...main">Full changelog</a></p>
 <ul>
+<li>Rust
+<ul>
+<li>BUGFIX: Negative timespans for the timespan metric now correctly record an <code>InvalidValue</code> error (<a href="https://github.com/mozilla/glean/pull/1347">#1347</a>).</li>
+<li>Introduce the Timespan metric type in the RLB <a href="https://github.com/mozilla/glean/pull/1347">#1347</a>.</li>
+</ul>
+</li>
 <li>Python
 <ul>
 <li>BUGFIX: Network slowness or errors will no longer block the main dispatcher thread, leaving work undone on shutdown (<a href="https://github.com/mozilla/glean/pull/1350">#1350</a>).</li>

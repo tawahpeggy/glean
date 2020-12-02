@@ -357,6 +357,41 @@ Assert.True(Auth.loginTime.TestGetValue() &gt; 0);
 Assert.Equals(1, Auth.loginTime.TestGetNumRecordedErrors(ErrorType.InvalidValue));
 </code></pre>
 </div>
+<div data-lang="Rust" class="tab">
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn show_login() {
+    metrics::auth::login_time.start();
+    // ...
+}
+
+fn login() {
+    metrics::auth::login_time.stop();
+    // ...
+}
+
+fn login_cancel() {
+    metrics::auth::login_time.cancel();
+    // ...
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>The time reported in the telemetry ping will be timespan recorded during the lifetime of the ping.</p>
+<p>There are test APIs available too:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use metrics::auth::login_time;
+
+// Was anything recorded?
+assert!(login_time.test_get_value().is_some());
+assert!(login_time.test_get_value().unwrap() &gt; 0);
+// Was the timing recorded incorrectly?
+assert_eq!(1, login_time.test_get_num_recorded_errors(ErrorType::InvalidValue));
+<span class="boring">}
+</span></code></pre></pre>
+</div>
 </div>
 </div>
 <h2><a class="header" href="#raw-api" id="raw-api">Raw API</a></h2>
@@ -392,6 +427,9 @@ HistorySync.setRawNanos(duration)
 <div data-lang="C#" class="tab">
 <p>TODO. To be implemented in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1648442">bug 1648442</a>.</p>
 </div>
+<div data-lang="Rust" class="tab">
+<p>The raw API is not supported in Rust. See <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1680225">bug 1680225</a>.</p>
+</div>
 </div>
 </div>
 <h2><a class="header" href="#limits" id="limits">Limits</a></h2>
@@ -409,6 +447,9 @@ The time measurement does not include time spent in sleep.</p>
 </li>
 <li>
 <p>On Python 3.7 and later, <a href="https://docs.python.org/3/library/time.html#time.monotonic_ns"><code>time.monotonic_ns()</code></a> is used.  On earlier versions of Python, <a href="https://docs.python.org/3/library/time.html#time.monotonic"><code>time.monotonics()</code></a> is used, which is not guaranteed to have nanosecond resolution.</p>
+</li>
+<li>
+<p>On other platforms it uses <a href="https://docs.rs/time/0.1.40/time/fn.precise_time_ns.html"><code>time::precise_time_ns</code></a>, which uses a high-resolution performance counter in nanoseconds provided by the underlying platform.</p>
 </li>
 </ul>
 </li>
