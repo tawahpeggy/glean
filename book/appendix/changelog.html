@@ -175,7 +175,8 @@
 <ul>
 <li>Python
 <ul>
-<li>BUGFIX: Network slowness or errors will no longer block the main dispatcher thread, leaving work undone on shutdown.</li>
+<li>BUGFIX: Network slowness or errors will no longer block the main dispatcher thread, leaving work undone on shutdown (<a href="https://github.com/mozilla/glean/pull/1350">#1350</a>).</li>
+<li>BUGFIX: Lower sleep time on upload waits to avoid being stuck when the main process ends (<a href="https://github.com/mozilla/glean/pull/1349">#1349</a>).</li>
 </ul>
 </li>
 </ul>
@@ -188,7 +189,7 @@
 <li>Introduce the Labeled metric type in the RLB <a href="https://github.com/mozilla/glean/pull/1327">#1327</a>.</li>
 <li>Introduce the Quantity metric type in the RLB.</li>
 <li>Introduce the <code>shutdown</code> API.</li>
-<li>Add Glean debugging APIs. </li>
+<li>Add Glean debugging APIs.</li>
 </ul>
 </li>
 <li>Python
