@@ -8218,6 +8218,13 @@ Each ping has its own schedule to gather all its locally saved metrics and creat
 <p><a href="appendix/twig.html">This Week in Glean</a> is a series of blog posts that the Glean Team at Mozilla is using to try to communicate better about our work.</p>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/appendix/glossary.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#unreleased-changes" id="unreleased-changes">Unreleased changes</a></h1>
 <p><a href="https://github.com/mozilla/glean/compare/v33.5.0...main">Full changelog</a></p>
+<ul>
+<li>Python
+<ul>
+<li>BUGFIX: Network slowness or errors will no longer block the main dispatcher thread, leaving work undone on shutdown.</li>
+</ul>
+</li>
+</ul>
 <h1><a class="header" href="#v3350-2020-12-01" id="v3350-2020-12-01">v33.5.0 (2020-12-01)</a></h1>
 <p><a href="https://github.com/mozilla/glean/compare/v33.4.0...v33.5.0">Full changelog</a></p>
 <ul>
