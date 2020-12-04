@@ -1573,6 +1573,10 @@
 <span id="1570">1570</span>
 <span id="1571">1571</span>
 <span id="1572">1572</span>
+<span id="1573">1573</span>
+<span id="1574">1574</span>
+<span id="1575">1575</span>
+<span id="1576">1576</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -1696,6 +1700,10 @@
                 <span class="comment">// An internal lock was poisoned.</span>
                 <span class="comment">// This would only happen if multiple things run concurrently and one crashes.</span>
                 <span class="prelude-val">Err</span>(<span class="ident">MigrateError</span>::<span class="ident">ManagerPoisonError</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">false</span>,
+                <span class="comment">// Couldn&#39;t close source environment and delete files on disk (e.g. other stores still open).</span>
+                <span class="comment">// This could only happen if multiple instances are running,</span>
+                <span class="comment">// we leave files in place.</span>
+                <span class="prelude-val">Err</span>(<span class="ident">MigrateError</span>::<span class="ident">CloseError</span>(<span class="kw">_</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">false</span>,
                 <span class="comment">// Other store errors are never returned from the migrator.</span>
                 <span class="comment">// We need to handle them to please rustc.</span>
                 <span class="prelude-val">Err</span>(<span class="ident">MigrateError</span>::<span class="ident">StoreError</span>(<span class="kw">_</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">false</span>,
