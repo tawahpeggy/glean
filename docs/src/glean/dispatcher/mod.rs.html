@@ -521,6 +521,11 @@
 <span id="518">518</span>
 <span id="519">519</span>
 <span id="520">520</span>
+<span id="521">521</span>
+<span id="522">522</span>
+<span id="523">523</span>
+<span id="524">524</span>
+<span id="525">525</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -723,52 +728,57 @@
 
         <span class="kw">let</span> <span class="ident">queue_preinit</span> <span class="op">=</span> <span class="ident">Arc</span>::<span class="ident">new</span>(<span class="ident">AtomicBool</span>::<span class="ident">new</span>(<span class="bool-val">true</span>));
 
-        <span class="kw">let</span> <span class="ident">worker</span> <span class="op">=</span> <span class="ident">thread</span>::<span class="ident">spawn</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
-            <span class="kw">if</span> <span class="ident">block_receiver</span>.<span class="ident">recv</span>().<span class="ident">is_err</span>() {
-                <span class="comment">// The other side was disconnected.</span>
-                <span class="comment">// There&#39;s nothing the worker thread can do.</span>
-                <span class="ident">log</span>::<span class="macro">error</span><span class="macro">!</span>(<span class="string">&quot;The task producer was disconnected. Worker thread will exit.&quot;</span>);
-                <span class="kw">return</span>;
-            }
+        <span class="kw">let</span> <span class="ident">worker</span> <span class="op">=</span> <span class="ident">thread</span>::<span class="ident">Builder</span>::<span class="ident">new</span>()
+            .<span class="ident">name</span>(<span class="string">&quot;glean.dispatcher&quot;</span>.<span class="ident">into</span>())
+            .<span class="ident">spawn</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
+                <span class="kw">if</span> <span class="ident">block_receiver</span>.<span class="ident">recv</span>().<span class="ident">is_err</span>() {
+                    <span class="comment">// The other side was disconnected.</span>
+                    <span class="comment">// There&#39;s nothing the worker thread can do.</span>
+                    <span class="ident">log</span>::<span class="macro">error</span><span class="macro">!</span>(<span class="string">&quot;The task producer was disconnected. Worker thread will exit.&quot;</span>);
+                    <span class="kw">return</span>;
+                }
 
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">receiver</span> <span class="op">=</span> <span class="ident">preinit_receiver</span>;
-            <span class="kw">loop</span> {
-                <span class="kw">use</span> <span class="ident">Command</span>::<span class="kw-2">*</span>;
+                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">receiver</span> <span class="op">=</span> <span class="ident">preinit_receiver</span>;
+                <span class="kw">loop</span> {
+                    <span class="kw">use</span> <span class="ident">Command</span>::<span class="kw-2">*</span>;
 
-                <span class="kw">match</span> <span class="ident">receiver</span>.<span class="ident">recv</span>() {
-                    <span class="prelude-val">Ok</span>(<span class="ident">Shutdown</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                        <span class="kw">break</span>;
-                    }
+                    <span class="kw">match</span> <span class="ident">receiver</span>.<span class="ident">recv</span>() {
+                        <span class="prelude-val">Ok</span>(<span class="ident">Shutdown</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                            <span class="kw">break</span>;
+                        }
 
-                    <span class="prelude-val">Ok</span>(<span class="ident">Task</span>(<span class="ident">f</span>)) <span class="op">=</span><span class="op">&gt;</span> {
-                        (<span class="ident">f</span>)();
-                    }
+                        <span class="prelude-val">Ok</span>(<span class="ident">Task</span>(<span class="ident">f</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+                            (<span class="ident">f</span>)();
+                        }
 
-                    <span class="prelude-val">Ok</span>(<span class="ident">Swap</span>(<span class="ident">swap_done</span>)) <span class="op">=</span><span class="op">&gt;</span> {
-                        <span class="comment">// A swap should only occur exactly once.</span>
-                        <span class="comment">// This is upheld by `flush_init`, which errors out if the preinit buffer</span>
-                        <span class="comment">// was already flushed.</span>
+                        <span class="prelude-val">Ok</span>(<span class="ident">Swap</span>(<span class="ident">swap_done</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+                            <span class="comment">// A swap should only occur exactly once.</span>
+                            <span class="comment">// This is upheld by `flush_init`, which errors out if the preinit buffer</span>
+                            <span class="comment">// was already flushed.</span>
 
-                        <span class="comment">// We swap the channels we listen on for new tasks.</span>
-                        <span class="comment">// The next iteration will continue with the unbounded queue.</span>
-                        <span class="ident">mem</span>::<span class="ident">swap</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">receiver</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">unbounded_receiver</span>);
+                            <span class="comment">// We swap the channels we listen on for new tasks.</span>
+                            <span class="comment">// The next iteration will continue with the unbounded queue.</span>
+                            <span class="ident">mem</span>::<span class="ident">swap</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">receiver</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">unbounded_receiver</span>);
 
-                        <span class="comment">// The swap command MUST be the last one received on the preinit buffer,</span>
-                        <span class="comment">// so by the time we run this we know all preinit tasks were processed.</span>
-                        <span class="comment">// We can notify the other side.</span>
-                        <span class="ident">swap_done</span>
-                            .<span class="ident">send</span>(())
-                            .<span class="ident">expect</span>(<span class="string">&quot;The caller of `flush_init` has gone missing&quot;</span>);
-                    }
+                            <span class="comment">// The swap command MUST be the last one received on the preinit buffer,</span>
+                            <span class="comment">// so by the time we run this we know all preinit tasks were processed.</span>
+                            <span class="comment">// We can notify the other side.</span>
+                            <span class="ident">swap_done</span>
+                                .<span class="ident">send</span>(())
+                                .<span class="ident">expect</span>(<span class="string">&quot;The caller of `flush_init` has gone missing&quot;</span>);
+                        }
 
-                    <span class="comment">// Other side was disconnected.</span>
-                    <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                        <span class="ident">log</span>::<span class="macro">error</span><span class="macro">!</span>(<span class="string">&quot;The task producer was disconnected. Worker thread will exit.&quot;</span>);
-                        <span class="kw">return</span>;
+                        <span class="comment">// Other side was disconnected.</span>
+                        <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                            <span class="ident">log</span>::<span class="macro">error</span><span class="macro">!</span>(
+                                <span class="string">&quot;The task producer was disconnected. Worker thread will exit.&quot;</span>
+                            );
+                            <span class="kw">return</span>;
+                        }
                     }
                 }
-            }
-        });
+            })
+            .<span class="ident">expect</span>(<span class="string">&quot;Failed to spawn Glean&#39;s dispatcher thread&quot;</span>);
 
         <span class="kw">let</span> <span class="ident">guard</span> <span class="op">=</span> <span class="ident">DispatchGuard</span> {
             <span class="ident">queue_preinit</span>,
