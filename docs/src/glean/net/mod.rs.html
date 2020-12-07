@@ -116,6 +116,8 @@
 <span id="113">113</span>
 <span id="114">114</span>
 <span id="115">115</span>
+<span id="116">116</span>
+<span id="117">117</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -159,10 +161,12 @@
 
 <span class="doccomment">/// The logic for uploading pings: this leaves the actual upload mechanism as</span>
 <span class="doccomment">/// a detail of the user-provided object implementing `PingUploader`.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">UploadManager</span> {
     <span class="ident">inner</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Inner</span><span class="op">&gt;</span>,
 }
 
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="kw">struct</span> <span class="ident">Inner</span> {
     <span class="ident">server_endpoint</span>: <span class="ident">String</span>,
     <span class="ident">uploader</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">dyn</span> <span class="ident">PingUploader</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span>,
