@@ -171,13 +171,21 @@
 <span id="168">168</span>
 <span id="169">169</span>
 <span id="170">170</span>
+<span id="171">171</span>
+<span id="172">172</span>
+<span id="173">173</span>
+<span id="174">174</span>
+<span id="175">175</span>
+<span id="176">176</span>
+<span id="177">177</span>
+<span id="178">178</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
 <span class="comment">// file, You can obtain one at https://mozilla.org/MPL/2.0/.</span>
 
 <span class="kw">use</span> <span class="ident">once_cell</span>::<span class="ident">sync</span>::<span class="ident">Lazy</span>;
-<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">mem</span>, <span class="ident">sync</span>::<span class="ident">RwLock</span>};
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">sync</span>::<span class="ident">RwLock</span>;
 
 <span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">DispatchError</span>, <span class="ident">DispatchGuard</span>, <span class="ident">Dispatcher</span>};
 
@@ -237,9 +245,19 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// This will initiate a shutdown of the worker thread</span>
 <span class="doccomment">/// and no new tasks will be processed after this.</span>
-<span class="doccomment">/// It will not block on the worker thread.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">try_shutdown</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">DispatchError</span><span class="op">&gt;</span> {
-    <span class="ident">guard</span>().<span class="ident">shutdown</span>()
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">shutdown</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">DispatchError</span><span class="op">&gt;</span> {
+    <span class="ident">guard</span>().<span class="ident">shutdown</span>()<span class="question-mark">?</span>;
+
+    <span class="comment">// After we issue the shutdown command, make sure to wait for the</span>
+    <span class="comment">// worker thread to join.</span>
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">lock</span> <span class="op">=</span> <span class="ident">GLOBAL_DISPATCHER</span>.<span class="ident">write</span>().<span class="ident">unwrap</span>();
+    <span class="kw">let</span> <span class="ident">dispatcher</span> <span class="op">=</span> <span class="ident">lock</span>.<span class="ident">as_mut</span>().<span class="ident">expect</span>(<span class="string">&quot;Global dispatcher has gone missing&quot;</span>);
+
+    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">worker</span>) <span class="op">=</span> <span class="ident">dispatcher</span>.<span class="ident">worker</span>.<span class="ident">take</span>() {
+        <span class="kw">return</span> <span class="ident">worker</span>.<span class="ident">join</span>().<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">DispatchError</span>::<span class="ident">WorkerPanic</span>);
+    }
+
+    <span class="prelude-val">Ok</span>(())
 }
 
 <span class="doccomment">/// TEST ONLY FUNCTION.</span>
@@ -247,18 +265,16 @@
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">reset_dispatcher</span>() {
     <span class="comment">// We don&#39;t care about shutdown errors, since they will</span>
     <span class="comment">// definitely happen if this</span>
-    <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">try_shutdown</span>();
+    <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">shutdown</span>();
 
     <span class="comment">// Now that the dispatcher is shut down, replace it.</span>
     <span class="comment">// For that we</span>
     <span class="comment">// 1. Create a new</span>
     <span class="comment">// 2. Replace the global one</span>
-    <span class="comment">// 3. Wait for the old one to fully finish</span>
-    <span class="comment">// 4. Only then return (and thus release the lock)</span>
+    <span class="comment">// 3. Only then return (and thus release the lock)</span>
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">lock</span> <span class="op">=</span> <span class="ident">GLOBAL_DISPATCHER</span>.<span class="ident">write</span>().<span class="ident">unwrap</span>();
     <span class="kw">let</span> <span class="ident">new_dispatcher</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">Dispatcher</span>::<span class="ident">new</span>(<span class="ident">GLOBAL_DISPATCHER_LIMIT</span>));
-    <span class="kw">let</span> <span class="ident">old_dispatcher</span> <span class="op">=</span> <span class="ident">mem</span>::<span class="ident">replace</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">*</span><span class="ident">lock</span>, <span class="ident">new_dispatcher</span>);
-    <span class="ident">old_dispatcher</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">d</span><span class="op">|</span> <span class="ident">d</span>.<span class="ident">join</span>());
+    <span class="kw-2">*</span><span class="ident">lock</span> <span class="op">=</span> <span class="ident">new_dispatcher</span>;
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>

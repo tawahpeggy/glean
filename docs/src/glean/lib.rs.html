@@ -990,7 +990,7 @@
 <span class="doccomment">/// This currently only attempts to shut down the</span>
 <span class="doccomment">/// internal dispatcher.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">shutdown</span>() {
-    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="ident">dispatcher</span>::<span class="ident">try_shutdown</span>() {
+    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="ident">dispatcher</span>::<span class="ident">shutdown</span>() {
         <span class="ident">log</span>::<span class="macro">error</span><span class="macro">!</span>(<span class="string">&quot;Can&#39;t shutdown dispatcher thread: {:?}&quot;</span>, <span class="ident">e</span>);
     }
 }
