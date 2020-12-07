@@ -212,7 +212,7 @@ assertEquals(2, snapshot.size)
 val first = snapshot.single()
 assertEquals(&quot;login_opened&quot;, first.name)
 // Check that no errors were recorded
-assertEquals(0, Views.loginOpened.testGetNumRecordedErrors(ErrorType.InvalidValue))
+assertEquals(0, Views.loginOpened.testGetNumRecordedErrors(ErrorType.InvalidOverflow))
 </code></pre>
 </div>
 <div data-lang="Swift" class="tab">
@@ -231,7 +231,7 @@ XCTAssertEqual(2, snapshot.size)
 val first = snapshot[0]
 XCTAssertEqual(&quot;login_opened&quot;, first.name)
 // Check that no errors were recorded
-XCTAssertEqual(0, Views.loginOpened.testGetNumRecordedErrors(.invalidValue))
+XCTAssertEqual(0, Views.loginOpened.testGetNumRecordedErrors(.invalidOverflow))
 </code></pre>
 </div>
 <div data-lang="Python" class="tab">
@@ -256,7 +256,7 @@ first = snapshot[0]
 assert &quot;login_opened&quot; == first.name
 # Check that no errors were recorded
 assert 0 == metrics.views.login_opened.test_get_num_recorded_errors(
-    ErrorType.INVALID_VALUE
+    ErrorType.INVALID_OVERFLOW
 )
 </code></pre>
 </div>
@@ -280,8 +280,39 @@ Assert.Equal(2, snapshot.Length);
 var first = snapshot.First();
 Assert.Equal(&quot;login_opened&quot;, first.Name);
 // Check that no errors were recorded
-Assert.Equal(0, Views.loginOpened.TestGetNumRecordedErrors(ErrorType.InvalidValue));
+Assert.Equal(0, Views.loginOpened.TestGetNumRecordedErrors(ErrorType.InvalidOverflow));
 </code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<p>Note that an <code>enum</code> has been generated for handling the <code>extra_keys</code>: it has the same name as the event metric, with <code>Keys</code> added.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use metrics::views;
+
+let mut extra = HashMap::new();
+extra.insert(views::LoginOpenedKeys::SourceOfLogin, &quot;toolbar&quot;.into());
+views::login_opened.record(extra);
+<span class="boring">}
+</span></code></pre></pre>
+<p>There are test APIs available too, for example:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use metrics::views;
+
+// Was any event recorded?
+assert!(views::login_opened.test_get_value(None).is_some());
+// Get a List of the recorded events.
+var snapshot = views::login_opened.test_get_value(None).unwrap();
+// Check that two events were recorded.
+assert_eq!(2, snapshot.len());
+let first = &amp;snapshot[0];
+assert_eq!(&quot;login_opened&quot;, first.name);
+// Check that no errors were recorded
+assert_eq!(0, views::login_opened.test_get_num_recorded_errors(ErrorType::InvalidOverflow, None));
+<span class="boring">}
+</span></code></pre></pre>
 </div>
 </div>
 </div>
@@ -310,8 +341,10 @@ Assert.Equal(0, Views.loginOpened.TestGetNumRecordedErrors(ErrorType.InvalidValu
 </ul>
 <h2><a class="header" href="#reference" id="reference">Reference</a></h2>
 <ul>
-<li><a href="../../../javadoc/glean/mozilla.telemetry.glean.private/-event-metric-type/index.html">Kotlin API docs</a>.</li>
+<li><a href="../../../javadoc/glean/mozilla.telemetry.glean.private/-event-metric-type/index.html">Kotlin API docs</a></li>
 <li><a href="../../../swift/Classes/EventMetricType.html">Swift API docs</a></li>
+<li><a href="../../../python/glean/metrics/event.html">Python API docs</a></li>
+<li><a href="../../../docs/glean/private/event/struct.EventMetric.html">Rust API docs</a></li>
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/metrics/event.md">Edit this file on GitHub.</a></footer>
                     </main>

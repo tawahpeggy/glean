@@ -1,3 +1,3 @@
 (function() {var implementors = {};
-implementors["glean_core"] = [{"text":"impl Copy for Lifetime","synthetic":false,"types":[]},{"text":"impl Copy for HistogramType","synthetic":false,"types":[]},{"text":"impl Copy for MemoryUnit","synthetic":false,"types":[]},{"text":"impl Copy for TimeUnit","synthetic":false,"types":[]}];
+implementors["glean_core"] = [{"text":"impl Copy for Lifetime","synthetic":false,"types":[]},{"text":"impl Copy for HistogramType","synthetic":false,"types":[]},{"text":"impl Copy for MemoryUnit","synthetic":false,"types":[]},{"text":"impl Copy for TimeUnit","synthetic":false,"types":[]},{"text":"impl Copy for NoExtraKeys","synthetic":false,"types":[]}];
 if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
