@@ -2217,7 +2217,7 @@
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">res</span> <span class="op">=</span> <span class="prelude-val">Ok</span>(());
             <span class="kw">for</span> <span class="ident">to_delete</span> <span class="kw">in</span> <span class="ident">metrics</span> {
                 <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="ident">store</span>.<span class="ident">delete</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">writer</span>, <span class="ident">to_delete</span>) {
-                    <span class="ident">log</span>::<span class="macro">error</span><span class="macro">!</span>(<span class="string">&quot;Can&#39;t delete from store: {:?}&quot;</span>, <span class="ident">e</span>);
+                    <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(<span class="string">&quot;Can&#39;t delete from store: {:?}&quot;</span>, <span class="ident">e</span>);
                     <span class="ident">res</span> <span class="op">=</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>);
                 }
             }
@@ -2292,7 +2292,7 @@
             <span class="prelude-val">Ok</span>(())
         });
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="ident">res</span> {
-            <span class="ident">log</span>::<span class="macro">error</span><span class="macro">!</span>(<span class="string">&quot;Could not clear store for lifetime {:?}: {:?}&quot;</span>, <span class="ident">lifetime</span>, <span class="ident">e</span>);
+            <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(<span class="string">&quot;Could not clear store for lifetime {:?}: {:?}&quot;</span>, <span class="ident">lifetime</span>, <span class="ident">e</span>);
         }
     }
 

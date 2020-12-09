@@ -645,7 +645,7 @@
                     .<span class="ident">with_min_level</span>(<span class="ident">log</span>::<span class="ident">Level</span>::<span class="ident">Debug</span>)
                     .<span class="ident">with_tag</span>(<span class="string">&quot;libglean_ffi&quot;</span>),
             );
-            <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;Android logging should be hooked up!&quot;</span>)
+            <span class="ident">log</span>::<span class="macro">trace</span><span class="macro">!</span>(<span class="string">&quot;Android logging should be hooked up!&quot;</span>)
         });
     }
 
@@ -662,11 +662,11 @@
         <span class="kw">let</span> <span class="ident">logger</span> <span class="op">=</span> <span class="ident">oslog</span>::<span class="ident">OsLogger</span>::<span class="ident">new</span>(<span class="string">&quot;org.mozilla.glean&quot;</span>, <span class="string">&quot;glean_core&quot;</span>).<span class="ident">level_filter</span>(<span class="ident">level</span>);
 
         <span class="kw">match</span> <span class="ident">logger</span>.<span class="ident">init</span>() {
-            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;os_log should be hooked up!&quot;</span>),
+            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">log</span>::<span class="macro">trace</span><span class="macro">!</span>(<span class="string">&quot;os_log should be hooked up!&quot;</span>),
             <span class="comment">// Please note that this is only expected to fail during unit tests,</span>
             <span class="comment">// where the logger might have already been initialized by a previous</span>
             <span class="comment">// test. So it&#39;s fine to print with the &quot;logger&quot;.</span>
-            <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;os_log was already initialized&quot;</span>),
+            <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(<span class="string">&quot;os_log was already initialized&quot;</span>),
         };
     }
 
@@ -676,11 +676,11 @@
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">not</span>(<span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;android&quot;</span>), <span class="ident">not</span>(<span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;ios&quot;</span>)))]</span>
     {
         <span class="kw">match</span> <span class="ident">env_logger</span>::<span class="ident">try_init</span>() {
-            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;stdout logging should be hooked up!&quot;</span>),
+            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">log</span>::<span class="macro">trace</span><span class="macro">!</span>(<span class="string">&quot;stdout logging should be hooked up!&quot;</span>),
             <span class="comment">// Please note that this is only expected to fail during unit tests,</span>
             <span class="comment">// where the logger might have already been initialized by a previous</span>
             <span class="comment">// test. So it&#39;s fine to print with the &quot;logger&quot;.</span>
-            <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;stdout was already initialized&quot;</span>),
+            <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(<span class="string">&quot;stdout logging was already initialized&quot;</span>),
         };
     }
 }

@@ -1027,7 +1027,7 @@
     <span class="comment">// initialized.</span>
     <span class="kw">if</span> <span class="ident">GLEAN</span>.<span class="ident">get</span>().<span class="ident">is_none</span>() {
         <span class="kw">if</span> <span class="ident">GLEAN</span>.<span class="ident">set</span>(<span class="ident">Mutex</span>::<span class="ident">new</span>(<span class="ident">glean</span>)).<span class="ident">is_err</span>() {
-            <span class="ident">log</span>::<span class="macro">error</span><span class="macro">!</span>(
+            <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(
                 <span class="string">&quot;Global Glean object is initialized already. This probably happened concurrently.&quot;</span>
             )
         }
@@ -1386,7 +1386,7 @@
         <span class="comment">// Clear any pending pings.</span>
         <span class="kw">let</span> <span class="ident">ping_maker</span> <span class="op">=</span> <span class="ident">PingMaker</span>::<span class="ident">new</span>();
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span> <span class="ident">ping_maker</span>.<span class="ident">clear_pending_pings</span>(<span class="self">self</span>.<span class="ident">get_data_path</span>()) {
-            <span class="ident">log</span>::<span class="macro">error</span><span class="macro">!</span>(<span class="string">&quot;Error clearing pending pings: {}&quot;</span>, <span class="ident">err</span>);
+            <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(<span class="string">&quot;Error clearing pending pings: {}&quot;</span>, <span class="ident">err</span>);
         }
 
         <span class="comment">// Delete all stored metrics.</span>
@@ -1396,7 +1396,7 @@
             <span class="ident">data</span>.<span class="ident">clear_all</span>()
         }
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">event_data_store</span>.<span class="ident">clear_all</span>() {
-            <span class="ident">log</span>::<span class="macro">error</span><span class="macro">!</span>(<span class="string">&quot;Error clearing pending events: {}&quot;</span>, <span class="ident">err</span>);
+            <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(<span class="string">&quot;Error clearing pending events: {}&quot;</span>, <span class="ident">err</span>);
         }
 
         <span class="comment">// This does not clear the experiments store (which isn&#39;t managed by the</span>
@@ -1676,7 +1676,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// Clears all the metrics that have [`Lifetime::Application`].</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">clear_application_lifetime_metrics</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
-        <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;Clearing Lifetime::Application metrics&quot;</span>);
+        <span class="ident">log</span>::<span class="macro">trace</span><span class="macro">!</span>(<span class="string">&quot;Clearing Lifetime::Application metrics&quot;</span>);
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">data</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">data_store</span>.<span class="ident">as_ref</span>() {
             <span class="ident">data</span>.<span class="ident">clear_lifetime</span>(<span class="ident">Lifetime</span>::<span class="ident">Application</span>);
         }
