@@ -1577,6 +1577,7 @@
 <span id="1574">1574</span>
 <span id="1575">1575</span>
 <span id="1576">1576</span>
+<span id="1577">1577</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -1678,6 +1679,7 @@
                 <span class="comment">// Source environment is corrupted.</span>
                 <span class="comment">// We start fresh with the new database.</span>
                 <span class="prelude-val">Err</span>(<span class="ident">MigrateError</span>::<span class="ident">StoreError</span>(<span class="ident">StoreError</span>::<span class="ident">FileInvalid</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">true</span>,
+                <span class="prelude-val">Err</span>(<span class="ident">MigrateError</span>::<span class="ident">StoreError</span>(<span class="ident">StoreError</span>::<span class="ident">DatabaseCorrupted</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">true</span>,
                 <span class="comment">// Path not accessible.</span>
                 <span class="comment">// Somehow our directory vanished between us creating it and reading from it.</span>
                 <span class="comment">// Nothing we can do really.</span>
