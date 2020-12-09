@@ -220,10 +220,10 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Arguments</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// * `extra` - A [`HashMap`] of (key, value) pairs. The key is one of the allowed extra keys as</span>
-    <span class="doccomment">///             set in the metric defintion.</span>
-    <span class="doccomment">///             If a wrong key is used or a value is larger than allowed, an error is reported</span>
-    <span class="doccomment">///             and no event is recorded.</span>
+    <span class="doccomment">/// * `extra` - A [`HashMap`] of (key, value) pairs. The key is an index into</span>
+    <span class="doccomment">///   the metric&#39;s `allowed_extra_keys` vector where the key&#39;s string is</span>
+    <span class="doccomment">///   looked up. If any key index is out of range, an error is reported and</span>
+    <span class="doccomment">///   no event is recorded.</span>
     <span class="kw">fn</span> <span class="ident">record</span><span class="op">&lt;</span><span class="ident">M</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Extra</span>, <span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">extra</span>: <span class="ident">M</span>);
 
     <span class="doccomment">/// **Exported for test purposes.**</span>
