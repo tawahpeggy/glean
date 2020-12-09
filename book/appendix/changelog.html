@@ -172,6 +172,13 @@
                     <main>
                         <h1><a class="header" href="#unreleased-changes" id="unreleased-changes">Unreleased changes</a></h1>
 <p><a href="https://github.com/mozilla/glean/compare/v33.7.0...main">Full changelog</a></p>
+<ul>
+<li>Rust
+<ul>
+<li>Shut down Glean in tests before resetting to make sure they don't mistakenly init Glean twice in parallel.</li>
+</ul>
+</li>
+</ul>
 <h1><a class="header" href="#v3370-2020-12-07" id="v3370-2020-12-07">v33.7.0 (2020-12-07)</a></h1>
 <p><a href="https://github.com/mozilla/glean/compare/v33.6.0...v33.7.0">Full changelog</a></p>
 <ul>

@@ -8292,6 +8292,13 @@ Each ping has its own schedule to gather all its locally saved metrics and creat
 <p><a href="appendix/twig.html">This Week in Glean</a> is a series of blog posts that the Glean Team at Mozilla is using to try to communicate better about our work.</p>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/appendix/glossary.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#unreleased-changes" id="unreleased-changes">Unreleased changes</a></h1>
 <p><a href="https://github.com/mozilla/glean/compare/v33.7.0...main">Full changelog</a></p>
+<ul>
+<li>Rust
+<ul>
+<li>Shut down Glean in tests before resetting to make sure they don't mistakenly init Glean twice in parallel.</li>
+</ul>
+</li>
+</ul>
 <h1><a class="header" href="#v3370-2020-12-07" id="v3370-2020-12-07">v33.7.0 (2020-12-07)</a></h1>
 <p><a href="https://github.com/mozilla/glean/compare/v33.6.0...v33.7.0">Full changelog</a></p>
 <ul>
