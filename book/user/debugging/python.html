@@ -181,13 +181,16 @@ such as <code>pings.custom_ping.submit()</code>, will send it.</p>
 <h2><a class="header" href="#logging-pings" id="logging-pings">Logging pings</a></h2>
 <p>If the <code>GLEAN_LOG_PINGS</code> environment variable is set to <code>true</code>, pings are
 logged to the console on <code>DEBUG</code> level whenever they are submitted.</p>
-<p>Make sure that when you configure logging in your application, you set the
-level for the <code>glean</code> logger to <code>DEBUG</code> or higher. Otherwise pings won't be
+<p>Make sure that when you configure logging in your application, you set the level
+for the Python logging library to <code>DEBUG</code> or higher. Otherwise pings won't be
 logged even if <code>GLEAN_LOG_PINGS</code> is set to <code>true</code>.</p>
-<p>You can set the logging level for Glean to <code>DEBUG</code> as follows:</p>
+<p>You can set the logging level for the Python logging to <code>DEBUG</code> as follows:</p>
 <pre><code class="language-python">import logging
 
-logging.getLogger(&quot;glean&quot;).setLevel(logging.DEBUG)
+logging.basicConfig(level=logging.DEBUG)
+</code></pre>
+<p>All log messages from the Glean SDK are on the <code>glean</code> logger, so if you need to control it independently, you can set a level for just the Glean SDK (but note that the global Python logging level also needs to be set as above):</p>
+<pre><code class="language-python">logging.getLogger(&quot;glean&quot;).setLevel(logging.DEBUG)
 </code></pre>
 <p>See the <a href="https://docs.python.org/3.8/library/logging.html">Python logging documentation</a> for more information.</p>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/debugging/python.md">Edit this file on GitHub.</a></footer>
