@@ -27,9 +27,9 @@
 <span class="doccomment">/// Deserialized experiment data.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Deserialize</span>, <span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">RecordedExperimentData</span> {
-    <span class="doccomment">/// The experiment&#39;s branch as set through `set_experiment_active`.</span>
+    <span class="doccomment">/// The experiment&#39;s branch as set through [`set_experiment_active`](crate::set_experiment_active).</span>
     <span class="kw">pub</span> <span class="ident">branch</span>: <span class="ident">String</span>,
-    <span class="doccomment">/// Any extra data associated with this experiment through `set_experiment_active`.</span>
+    <span class="doccomment">/// Any extra data associated with this experiment through [`set_experiment_active`](crate::set_experiment_active).</span>
     <span class="kw">pub</span> <span class="ident">extra</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 }
 </pre></div>

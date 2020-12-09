@@ -1527,6 +1527,9 @@
 <span id="1524">1524</span>
 <span id="1525">1525</span>
 <span id="1526">1526</span>
+<span id="1527">1527</span>
+<span id="1528">1528</span>
+<span id="1529">1529</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -1535,9 +1538,12 @@
 <span class="doccomment">//! Manages the pending pings queue and directory.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! * Keeps track of pending pings, loading any unsent ping from disk on startup;</span>
-<span class="doccomment">//! * Exposes `get_upload_task` API for the platform layer to request next upload task;</span>
-<span class="doccomment">//! * Exposes `process_ping_upload_response` API to check the HTTP response from the ping upload</span>
-<span class="doccomment">//!   and either delete the corresponding ping from disk or re-enqueue it for sending.</span>
+<span class="doccomment">//! * Exposes [`get_upload_task`](PingUploadManager::get_upload_task) API for</span>
+<span class="doccomment">//!   the platform layer to request next upload task;</span>
+<span class="doccomment">//! * Exposes</span>
+<span class="doccomment">//!   [`process_ping_upload_response`](PingUploadManager::process_ping_upload_response)</span>
+<span class="doccomment">//!   API to check the HTTP response from the ping upload and either delete the</span>
+<span class="doccomment">//!   corresponding ping from disk or re-enqueue it for sending.</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::<span class="ident">VecDeque</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">TryInto</span>;

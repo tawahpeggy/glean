@@ -409,6 +409,8 @@
 <span id="406">406</span>
 <span id="407">407</span>
 <span id="408">408</span>
+<span id="409">409</span>
+<span id="410">410</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -460,7 +462,7 @@
 
     <span class="doccomment">/// Start a new timer and set it to the `start_time`.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// Returns a new `TimerId` identifying the timer.</span>
+    <span class="doccomment">/// Returns a new [`TimerId`] identifying the timer.</span>
     <span class="kw">fn</span> <span class="ident">set_start</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">start_time</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">TimerId</span> {
         <span class="kw">let</span> <span class="ident">id</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">next_id</span>;
         <span class="self">self</span>.<span class="ident">next_id</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
@@ -561,7 +563,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Returns</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// A unique `TimerId` for the new timer.</span>
+    <span class="doccomment">/// A unique [`TimerId`] for the new timer.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_start</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">start_time</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">TimerId</span> {
         <span class="self">self</span>.<span class="ident">timings</span>.<span class="ident">set_start</span>(<span class="ident">start_time</span>)
     }
@@ -569,11 +571,12 @@
     <span class="doccomment">/// Stops tracking time for the provided metric and associated timer id.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Adds a count to the corresponding bucket in the timing distribution.</span>
-    <span class="doccomment">/// This will record an error if no `start` was called.</span>
+    <span class="doccomment">/// This will record an error if no</span>
+    <span class="doccomment">/// [`set_start`](TimingDistributionMetric::set_start) was called.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Arguments</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// * `id` - The `TimerId` to associate with this timing. This allows</span>
+    <span class="doccomment">/// * `id` - The [`TimerId`] to associate with this timing. This allows</span>
     <span class="doccomment">///   for concurrent timing of events associated with different ids to the</span>
     <span class="doccomment">///   same timespan metric.</span>
     <span class="doccomment">/// * `stop_time` - Timestamp in nanoseconds.</span>
@@ -624,12 +627,13 @@
             });
     }
 
-    <span class="doccomment">/// Aborts a previous `set_start` call. No error is recorded if no `set_start`</span>
-    <span class="doccomment">/// was called.</span>
+    <span class="doccomment">/// Aborts a previous [`set_start`](TimingDistributionMetric::set_start)</span>
+    <span class="doccomment">/// call. No error is recorded if no</span>
+    <span class="doccomment">/// [`set_start`](TimingDistributionMetric.set_start) was called.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Arguments</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// * `id` - The `TimerId` to associate with this timing. This allows</span>
+    <span class="doccomment">/// * `id` - The [`TimerId`] to associate with this timing. This allows</span>
     <span class="doccomment">///   for concurrent timing of events associated with different ids to the</span>
     <span class="doccomment">///   same timing distribution metric.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cancel</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">id</span>: <span class="ident">TimerId</span>) {
@@ -645,7 +649,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// Please note that this assumes that the provided samples are already in</span>
     <span class="doccomment">/// the &quot;unit&quot; declared by the instance of the metric type (e.g. if the</span>
-    <span class="doccomment">/// instance this method was called on is using [TimeUnit::Second], then</span>
+    <span class="doccomment">/// instance this method was called on is using [`TimeUnit::Second`], then</span>
     <span class="doccomment">/// `samples` are assumed to be in that unit).</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Arguments</span>
@@ -654,8 +658,8 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// ## Notes</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// Discards any negative value in `samples` and report an `ErrorType::InvalidValue`</span>
-    <span class="doccomment">/// for each of them. Reports an `ErrorType::InvalidOverflow` error for samples that</span>
+    <span class="doccomment">/// Discards any negative value in `samples` and report an [`ErrorType::InvalidValue`]</span>
+    <span class="doccomment">/// for each of them. Reports an [`ErrorType::InvalidOverflow`] error for samples that</span>
     <span class="doccomment">/// are longer than `MAX_SAMPLE_TIME`.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">accumulate_samples_signed</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">glean</span>: <span class="kw-2">&amp;</span><span class="ident">Glean</span>, <span class="ident">samples</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>) {
         <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">should_record</span>(<span class="ident">glean</span>) {

@@ -106,6 +106,12 @@
 <span id="103">103</span>
 <span id="104">104</span>
 <span id="105">105</span>
+<span id="106">106</span>
+<span id="107">107</span>
+<span id="108">108</span>
+<span id="109">109</span>
+<span id="110">110</span>
+<span id="111">111</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -114,7 +120,7 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">metrics</span>::<span class="ident">DistributionData</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">metrics</span>::<span class="ident">TimerId</span>;
 
-<span class="doccomment">/// A description for the `TimingDistributionMetric` type.</span>
+<span class="doccomment">/// A description for the [`TimingDistributionMetric`](crate::metrics::TimingDistributionMetric) type.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// When changing this trait, make sure all the operations are</span>
 <span class="doccomment">/// implemented in the related type in `../metrics/`.</span>
@@ -132,28 +138,30 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Returns</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// A unique `TimerId` for the new timer.</span>
+    <span class="doccomment">/// A unique [`TimerId`] for the new timer.</span>
     <span class="kw">fn</span> <span class="ident">set_start</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">start_time</span>: <span class="ident">u64</span>);
 
     <span class="doccomment">/// Stops tracking time for the provided metric and associated timer id.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Adds a count to the corresponding bucket in the timing distribution.</span>
-    <span class="doccomment">/// This will record an error if no `start` was called.</span>
+    <span class="doccomment">/// This will record an error if no [`set_start`](TimingDistribution::set_start) was</span>
+    <span class="doccomment">/// called.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Arguments</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// * `id` - The `TimerId` to associate with this timing. This allows</span>
+    <span class="doccomment">/// * `id` - The [`TimerId`] to associate with this timing. This allows</span>
     <span class="doccomment">///   for concurrent timing of events associated with different ids to the</span>
     <span class="doccomment">///   same timespan metric.</span>
     <span class="doccomment">/// * `stop_time` - Timestamp in nanoseconds.</span>
     <span class="kw">fn</span> <span class="ident">set_stop_and_accumulate</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">id</span>: <span class="ident">TimerId</span>, <span class="ident">stop_time</span>: <span class="ident">u64</span>);
 
-    <span class="doccomment">/// Aborts a previous `set_start` call. No error is recorded if no `set_start`</span>
-    <span class="doccomment">/// was called.</span>
+    <span class="doccomment">/// Aborts a previous [`set_start`](TimingDistribution::set_start) call. No</span>
+    <span class="doccomment">/// error is recorded if no [`set_start`](TimingDistribution::set_start) was</span>
+    <span class="doccomment">/// called.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Arguments</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// * `id` - The `TimerId` to associate with this timing. This allows</span>
+    <span class="doccomment">/// * `id` - The [`TimerId`] to associate with this timing. This allows</span>
     <span class="doccomment">///   for concurrent timing of events associated with different ids to the</span>
     <span class="doccomment">///   same timing distribution metric.</span>
     <span class="kw">fn</span> <span class="ident">cancel</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">id</span>: <span class="ident">TimerId</span>);
@@ -177,9 +185,13 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// ## Notes</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// Discards any negative value in `samples` and report an `ErrorType::InvalidValue`</span>
-    <span class="doccomment">/// for each of them. Reports an `ErrorType::InvalidOverflow` error for samples that</span>
-    <span class="doccomment">/// are longer than `MAX_SAMPLE_TIME`.</span>
+    <span class="doccomment">/// Discards any negative value in `samples` and report an</span>
+    <span class="doccomment">/// [`ErrorType::InvalidValue`](crate::ErrorType::InvalidValue) for each of</span>
+    <span class="doccomment">/// them.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Reports an</span>
+    <span class="doccomment">/// [`ErrorType::InvalidOverflow`](crate::ErrorType::InvalidOverflow) error</span>
+    <span class="doccomment">/// for samples that are longer than `MAX_SAMPLE_TIME`.</span>
     <span class="kw">fn</span> <span class="ident">accumulate_samples_signed</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">samples</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>);
 
     <span class="doccomment">/// **Exported for test purposes.**</span>

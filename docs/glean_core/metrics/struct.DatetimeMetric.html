@@ -23,7 +23,7 @@ Hemisphere. Negative seconds mean Western Hemisphere.</li>
 <h1 id="arguments-1" class="section-header"><a href="#arguments-1">Arguments</a></h1>
 <ul>
 <li><code>glean</code> - the Glean instance this metric belongs to.</li>
-<li><code>value</code> - Some date/time value, with offset, to set the metric to.
+<li><code>value</code> - Some <a href="https://docs.rs/chrono/latest/chrono/datetime/struct.DateTime.html" title="DateTime"><code>DateTime</code></a> value, with offset, to set the metric to.
 If none, the current local time is used.</li>
 </ul>
 </div><h4 id='method.test_get_value_as_string' class="method"><code>pub fn <a href='#method.test_get_value_as_string' class='fnname'>test_get_value_as_string</a>(<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;self, <br>&nbsp;&nbsp;&nbsp;&nbsp;glean: &amp;<a class="struct" href="../../glean_core/struct.Glean.html" title="struct glean_core::Glean">Glean</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;storage_name: &amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a><br>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>&gt;</code><a class='srclink' href='../../src/glean_core/metrics/datetime.rs.html#153-162' title='goto source code'>[src]</a></h4><div class='docblock'><p><strong>Test-only API (exported for FFI purposes).</strong></p>

@@ -200,7 +200,7 @@
     <span class="doccomment">/// * `timestamp` - A monotonically increasing timestamp, in milliseconds.</span>
     <span class="doccomment">///   This must be provided since the actual recording of the event may</span>
     <span class="doccomment">///   happen some time later than the moment the event occurred.</span>
-    <span class="doccomment">/// * `extra` - A HashMap of (key, value) pairs. The key is an index into</span>
+    <span class="doccomment">/// * `extra` - A [`HashMap`] of (key, value) pairs. The key is an index into</span>
     <span class="doccomment">///   the metric&#39;s `allowed_extra_keys` vector where the key&#39;s string is</span>
     <span class="doccomment">///   looked up. If any key index is out of range, an error is reported and</span>
     <span class="doccomment">///   no event is recorded.</span>

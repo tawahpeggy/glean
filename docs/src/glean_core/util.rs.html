@@ -307,11 +307,11 @@
 }
 
 <span class="doccomment">/// Generates an ISO8601 compliant date/time string for the given time,</span>
-<span class="doccomment">/// truncating it to the provided TimeUnit.</span>
+<span class="doccomment">/// truncating it to the provided [`TimeUnit`].</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Arguments</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// * `datetime` - the `DateTime` object that holds the date, time and timezone information.</span>
+<span class="doccomment">/// * `datetime` - the [`DateTime`] object that holds the date, time and timezone information.</span>
 <span class="doccomment">/// * `truncate_to` - the desired resolution to use for the output string.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Returns</span>
@@ -333,7 +333,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Arguments</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// * `value` - The `String` to truncate.</span>
+<span class="doccomment">/// * `value` - The string to truncate.</span>
 <span class="doccomment">/// * `length` - The length, in bytes, to truncate to.  The resulting string will</span>
 <span class="doccomment">///   be at most this many bytes, but may be shorter to prevent ending in the middle</span>
 <span class="doccomment">///   of a codepoint.</span>
@@ -364,7 +364,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// * `glean` - The Glean instance the metric doing the truncation belongs to.</span>
 <span class="doccomment">/// * `meta` - The metadata for the metric. Used for recording the error.</span>
-<span class="doccomment">/// * `value` - The `String` to truncate.</span>
+<span class="doccomment">/// * `value` - The String to truncate.</span>
 <span class="doccomment">/// * `length` - The length, in bytes, to truncate to.  The resulting string will</span>
 <span class="doccomment">///   be at most this many bytes, but may be shorter to prevent ending in the middle</span>
 <span class="doccomment">///   of a codepoint.</span>

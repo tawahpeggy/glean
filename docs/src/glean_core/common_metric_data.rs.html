@@ -128,6 +128,9 @@
 <span id="125">125</span>
 <span id="126">126</span>
 <span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
+<span id="130">130</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -136,7 +139,8 @@
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">TryFrom</span>;
 
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">error</span>::{<span class="ident">Error</span>, <span class="ident">ErrorKind</span>};
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">metrics</span>::<span class="ident">dynamic_label</span>;
+<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused_imports</span>)]</span>
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">metrics</span>::{<span class="ident">dynamic_label</span>, <span class="ident">LabeledMetric</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">Glean</span>;
 
 <span class="doccomment">/// The supported metrics&#39; lifetimes.</span>
@@ -199,9 +203,11 @@
     <span class="doccomment">/// Disabled metrics are never recorded.</span>
     <span class="kw">pub</span> <span class="ident">disabled</span>: <span class="ident">bool</span>,
     <span class="doccomment">/// Dynamic label.</span>
-    <span class="doccomment">/// When a LabeledMetric&lt;T&gt; factory creates the specific metric to be</span>
-    <span class="doccomment">/// recorded to, dynamic labels are stored in the specific label so that we</span>
-    <span class="doccomment">/// can validate them when the Glean singleton is available.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// When a [`LabeledMetric&lt;T&gt;`](LabeledMetric) factory creates the specific</span>
+    <span class="doccomment">/// metric to be recorded to, dynamic labels are stored in the specific</span>
+    <span class="doccomment">/// label so that we can validate them when the Glean singleton is</span>
+    <span class="doccomment">/// available.</span>
     <span class="kw">pub</span> <span class="ident">dynamic_label</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
 }
 

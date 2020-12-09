@@ -79,6 +79,7 @@
 <span id="76">76</span>
 <span id="77">77</span>
 <span id="78">78</span>
+<span id="79">79</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -86,7 +87,7 @@
 
 <span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">too_many_arguments</span>)]</span>
 
-<span class="doccomment">/// A description for the `DatetimeMetric` type.</span>
+<span class="doccomment">/// A description for the [`DatetimeMetric`](crate::metrics::DatetimeMetric) type.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// When changing this trait, make sure all the operations are</span>
 <span class="doccomment">/// implemented in the related type in `../metrics/`.</span>
@@ -120,8 +121,9 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Arguments</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// * `value` - Some date/time value, with offset, to set the metric to.</span>
-    <span class="doccomment">///             If none, the current local time is used.</span>
+    <span class="doccomment">/// * `value` - Some [`Datetime`](crate::metrics::Datetime), with offset, to</span>
+    <span class="doccomment">///             set the metric to. If [`None`], the current local time is</span>
+    <span class="doccomment">///             used.</span>
     <span class="kw">fn</span> <span class="ident">set</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">value</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw">crate</span>::<span class="ident">metrics</span>::<span class="ident">Datetime</span><span class="op">&gt;</span>);
 
     <span class="doccomment">/// **Exported for test purposes.**</span>

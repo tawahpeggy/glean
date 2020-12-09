@@ -190,6 +190,8 @@
 <span id="187">187</span>
 <span id="188">188</span>
 <span id="189">189</span>
+<span id="190">190</span>
+<span id="191">191</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -231,8 +233,9 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// This uses an internal monotonic timer.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// This records an error if it&#39;s already tracking time (i.e. start was already</span>
-    <span class="doccomment">/// called with no corresponding `stop`): in that case the original</span>
+    <span class="doccomment">/// This records an error if it&#39;s already tracking time (i.e.</span>
+    <span class="doccomment">/// [`start`](TimespanMetric::start) was already called with no</span>
+    <span class="doccomment">/// corresponding [`stop`](TimespanMetric::stop)): in that case the original</span>
     <span class="doccomment">/// start time will be preserved.</span>
     <span class="kw">fn</span> <span class="ident">start</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="kw">let</span> <span class="ident">start_time</span> <span class="op">=</span> <span class="ident">time</span>::<span class="ident">precise_time_ns</span>();
@@ -250,7 +253,7 @@
 
     <span class="doccomment">/// Stops tracking time for the provided metric. Sets the metric to the elapsed time.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// This will record an error if no `start` was called.</span>
+    <span class="doccomment">/// This will record an error if no [`start`](TimespanMetric::start) was called.</span>
     <span class="kw">fn</span> <span class="ident">stop</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="kw">let</span> <span class="ident">stop_time</span> <span class="op">=</span> <span class="ident">time</span>::<span class="ident">precise_time_ns</span>();
 
@@ -265,7 +268,8 @@
         });
     }
 
-    <span class="doccomment">/// Aborts a previous `start` call. No error is recorded if no `start` was called.</span>
+    <span class="doccomment">/// Aborts a previous [`start`](TimespanMetric::start) call. No error is</span>
+    <span class="doccomment">/// recorded if no [`start`](TimespanMetric::start) was called.</span>
     <span class="kw">fn</span> <span class="ident">cancel</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="kw">let</span> <span class="ident">metric</span> <span class="op">=</span> <span class="ident">Arc</span>::<span class="ident">clone</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>);
         <span class="ident">dispatcher</span>::<span class="ident">launch</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {

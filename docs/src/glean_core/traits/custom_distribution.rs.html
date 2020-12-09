@@ -57,12 +57,15 @@
 <span id="54">54</span>
 <span id="55">55</span>
 <span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
 <span class="comment">// file, You can obtain one at https://mozilla.org/MPL/2.0/.</span>
 
-<span class="doccomment">/// A description for the `CustomDistributionMetric` type.</span>
+<span class="doccomment">/// A description for the</span>
+<span class="doccomment">/// [`CustomDistributionMetric`](crate::metrics::CustomDistributionMetric) type.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// When changing this trait, make sure all the operations are</span>
 <span class="doccomment">/// implemented in the related type in `../metrics/`.</span>
@@ -80,8 +83,9 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// ## Notes</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// Discards any negative value in `samples` and report an `ErrorType::InvalidValue`</span>
-    <span class="doccomment">/// for each of them.</span>
+    <span class="doccomment">/// Discards any negative value in `samples` and report an</span>
+    <span class="doccomment">/// [`ErrorType::InvalidValue`](crate::ErrorType::InvalidValue) for each of</span>
+    <span class="doccomment">/// them.</span>
     <span class="kw">fn</span> <span class="ident">accumulate_samples_signed</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">samples</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>);
 
     <span class="doccomment">/// **Exported for test purposes.**</span>

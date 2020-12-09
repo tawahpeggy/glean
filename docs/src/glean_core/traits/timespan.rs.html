@@ -60,6 +60,8 @@
 <span id="57">57</span>
 <span id="58">58</span>
 <span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -67,7 +69,7 @@
 
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ErrorType</span>;
 
-<span class="doccomment">/// A description for the `TimespanMetric` type.</span>
+<span class="doccomment">/// A description for the [`TimespanMetric`](crate::metrics::TimespanMetric) type.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// When changing this trait, make sure all the operations are</span>
 <span class="doccomment">/// implemented in the related type in `../metrics/`.</span>
@@ -76,17 +78,19 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// This uses an internal monotonic timer.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// This records an error if it&#39;s already tracking time (i.e. start was already</span>
-    <span class="doccomment">/// called with no corresponding `stop`): in that case the original</span>
-    <span class="doccomment">/// start time will be preserved.</span>
+    <span class="doccomment">/// This records an error if it&#39;s already tracking time (i.e.</span>
+    <span class="doccomment">/// [`start`](Timespan::start) was already called with no corresponding</span>
+    <span class="doccomment">/// [`stop`](Timespan::stop)): in that case the original start time will be</span>
+    <span class="doccomment">/// preserved.</span>
     <span class="kw">fn</span> <span class="ident">start</span>(<span class="kw-2">&amp;</span><span class="self">self</span>);
 
     <span class="doccomment">/// Stops tracking time for the provided metric. Sets the metric to the elapsed time.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// This will record an error if no `start` was called.</span>
+    <span class="doccomment">/// This will record an error if no [`start`](Timespan::start) was called.</span>
     <span class="kw">fn</span> <span class="ident">stop</span>(<span class="kw-2">&amp;</span><span class="self">self</span>);
 
-    <span class="doccomment">/// Aborts a previous `start` call. No error is recorded if no `start` was called.</span>
+    <span class="doccomment">/// Aborts a previous [`start`](Timespan::start) call. No error is recorded</span>
+    <span class="doccomment">/// if no [`start`](Timespan::start) was called.</span>
     <span class="kw">fn</span> <span class="ident">cancel</span>(<span class="kw-2">&amp;</span><span class="self">self</span>);
 
     <span class="doccomment">/// **Exported for test purposes.**</span>

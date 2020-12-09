@@ -790,12 +790,12 @@
 
 <span class="doccomment">/// Creates and initializes a new Glean object.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// See `glean_core::Glean::new` for more information.</span>
+<span class="doccomment">/// See [`glean_core::Glean::new`] for more information.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Arguments</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// * `cfg` - the `Configuration` options to initialize with.</span>
-<span class="doccomment">/// * `client_info` - the `ClientInfoMetrics` values used to set Glean</span>
+<span class="doccomment">/// * `cfg` - the [`Configuration`] options to initialize with.</span>
+<span class="doccomment">/// * `client_info` - the [`ClientInfoMetrics`] values used to set Glean</span>
 <span class="doccomment">///   core metrics.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">initialize</span>(<span class="ident">cfg</span>: <span class="ident">Configuration</span>, <span class="ident">client_info</span>: <span class="ident">ClientInfoMetrics</span>) {
     <span class="kw">if</span> <span class="ident">was_initialize_called</span>() {
@@ -960,7 +960,7 @@
     }
 }
 
-<span class="doccomment">/// Checks if `glean::initialize` was ever called.</span>
+<span class="doccomment">/// Checks if [`initialize`] was ever called.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Returns</span>
 <span class="doccomment">///</span>
@@ -997,7 +997,7 @@
 
 <span class="doccomment">/// Sets whether upload is enabled or not.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// See `glean_core::Glean.set_upload_enabled`.</span>
+<span class="doccomment">/// See [`glean_core::Glean::set_upload_enabled`].</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_upload_enabled</span>(<span class="ident">enabled</span>: <span class="ident">bool</span>) {
     <span class="kw">if</span> <span class="op">!</span><span class="ident">was_initialize_called</span>() {
         <span class="kw">let</span> <span class="ident">msg</span> <span class="op">=</span>
@@ -1038,7 +1038,7 @@
     });
 }
 
-<span class="doccomment">/// Register a new [`PingType`](metrics/struct.PingType.html).</span>
+<span class="doccomment">/// Register a new [`PingType`](private::PingType).</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">register_ping_type</span>(<span class="ident">ping</span>: <span class="kw-2">&amp;</span><span class="ident">private</span>::<span class="ident">PingType</span>) {
     <span class="comment">// If this happens after Glean.initialize is called (and returns),</span>
     <span class="comment">// we dispatch ping registration on the thread pool.</span>
@@ -1056,7 +1056,7 @@
 
 <span class="doccomment">/// Collects and submits a ping for eventual uploading.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// See `glean_core::Glean.submit_ping`.</span>
+<span class="doccomment">/// See [`glean_core::Glean.submit_ping`].</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">submit_ping</span>(<span class="ident">ping</span>: <span class="kw-2">&amp;</span><span class="ident">private</span>::<span class="ident">PingType</span>, <span class="ident">reason</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>) {
     <span class="ident">submit_ping_by_name</span>(<span class="kw-2">&amp;</span><span class="ident">ping</span>.<span class="ident">name</span>, <span class="ident">reason</span>)
 }
@@ -1066,7 +1066,7 @@
 <span class="doccomment">/// Note that this needs to be public in order for RLB consumers to</span>
 <span class="doccomment">/// use Glean debugging facilities.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// See `glean_core::Glean.submit_ping_by_name`.</span>
+<span class="doccomment">/// See [`glean_core::Glean.submit_ping_by_name`].</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">submit_ping_by_name</span>(<span class="ident">ping</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">reason</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>) {
     <span class="kw">let</span> <span class="ident">ping</span> <span class="op">=</span> <span class="ident">ping</span>.<span class="ident">to_string</span>();
     <span class="kw">let</span> <span class="ident">reason</span> <span class="op">=</span> <span class="ident">reason</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> <span class="ident">s</span>.<span class="ident">to_string</span>());
@@ -1077,7 +1077,7 @@
 
 <span class="doccomment">/// Collect and submit a ping (by its name) for eventual upload, synchronously.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// The ping will be looked up in the known instances of `private::PingType`. If the</span>
+<span class="doccomment">/// The ping will be looked up in the known instances of [`private::PingType`]. If the</span>
 <span class="doccomment">/// ping isn&#39;t known, an error is logged and the ping isn&#39;t queued for uploading.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// The ping content is assembled as soon as possible, but upload is not</span>
@@ -1155,7 +1155,7 @@
 }
 
 <span class="doccomment">/// TEST ONLY FUNCTION.</span>
-<span class="doccomment">/// Returns the `RecordedExperimentData` for the given `experiment_id` or panics if</span>
+<span class="doccomment">/// Returns the [`RecordedExperimentData`] for the given `experiment_id` or panics if</span>
 <span class="doccomment">/// the id isn&#39;t found.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">test_get_experiment_data</span>(<span class="ident">experiment_id</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">RecordedExperimentData</span> {

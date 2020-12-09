@@ -345,7 +345,7 @@
 {
     <span class="doccomment">/// Creates a new labeled metric from the given metric instance and optional list of labels.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// See [`get`](#method.get) for information on how static or dynamic labels are handled.</span>
+    <span class="doccomment">/// See [`get`](LabeledMetric::get) for information on how static or dynamic labels are handled.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">submetric</span>: <span class="ident">T</span>, <span class="ident">labels</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">LabeledMetric</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
         <span class="ident">LabeledMetric</span> { <span class="ident">labels</span>, <span class="ident">submetric</span> }
     }
@@ -443,7 +443,7 @@
     <span class="ident">identifier</span>.<span class="ident">splitn</span>(<span class="number">2</span>, <span class="string">&#39;/&#39;</span>).<span class="ident">next</span>().<span class="ident">unwrap</span>()
 }
 
-<span class="doccomment">/// Validates a dynamic label, changing it to OTHER_LABEL if it&#39;s invalid.</span>
+<span class="doccomment">/// Validates a dynamic label, changing it to `OTHER_LABEL` if it&#39;s invalid.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// Checks the requested label against limitations, such as the label length and allowed</span>
 <span class="doccomment">/// characters.</span>

@@ -212,6 +212,7 @@
 <span id="209">209</span>
 <span id="210">210</span>
 <span id="211">211</span>
+<span id="212">212</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -286,7 +287,7 @@
     <span class="doccomment">/// ## Notes</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Values bigger than 1 Terabyte (2&lt;sup&gt;40&lt;/sup&gt; bytes) are truncated</span>
-    <span class="doccomment">/// and an `ErrorType::InvalidValue` error is recorded.</span>
+    <span class="doccomment">/// and an [`ErrorType::InvalidValue`] error is recorded.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">accumulate</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">glean</span>: <span class="kw-2">&amp;</span><span class="ident">Glean</span>, <span class="ident">sample</span>: <span class="ident">u64</span>) {
         <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">should_record</span>(<span class="ident">glean</span>) {
             <span class="kw">return</span>;
@@ -324,7 +325,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// Please note that this assumes that the provided samples are already in</span>
     <span class="doccomment">/// the &quot;unit&quot; declared by the instance of the metric type (e.g. if the the</span>
-    <span class="doccomment">/// instance this method was called on is using [MemoryUnit::Kilobyte], then</span>
+    <span class="doccomment">/// instance this method was called on is using [`MemoryUnit::Kilobyte`], then</span>
     <span class="doccomment">/// `samples` are assumed to be in that unit).</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Arguments</span>
@@ -333,10 +334,11 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// ## Notes</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// Discards any negative value in `samples` and report an `ErrorType::InvalidValue`</span>
+    <span class="doccomment">/// Discards any negative value in `samples` and report an [`ErrorType::InvalidValue`]</span>
     <span class="doccomment">/// for each of them.</span>
+    <span class="doccomment">///</span>
     <span class="doccomment">/// Values bigger than 1 Terabyte (2&lt;sup&gt;40&lt;/sup&gt; bytes) are truncated</span>
-    <span class="doccomment">/// and an `ErrorType::InvalidValue` error is recorded.</span>
+    <span class="doccomment">/// and an [`ErrorType::InvalidValue`] error is recorded.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">accumulate_samples_signed</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">glean</span>: <span class="kw-2">&amp;</span><span class="ident">Glean</span>, <span class="ident">samples</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>) {
         <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">should_record</span>(<span class="ident">glean</span>) {
             <span class="kw">return</span>;

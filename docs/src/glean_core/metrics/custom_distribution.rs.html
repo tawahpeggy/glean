@@ -266,7 +266,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// ## Notes</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// Discards any negative value in `samples` and report an `ErrorType::InvalidValue`</span>
+    <span class="doccomment">/// Discards any negative value in `samples` and report an [`ErrorType::InvalidValue`]</span>
     <span class="doccomment">/// for each of them.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">accumulate_samples_signed</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">glean</span>: <span class="kw-2">&amp;</span><span class="ident">Glean</span>, <span class="ident">samples</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>) {
         <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">should_record</span>(<span class="ident">glean</span>) {
