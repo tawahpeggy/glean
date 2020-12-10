@@ -171,18 +171,18 @@
                 <div id="content" class="content">
                     <main>
                         <h1><a class="header" href="#unreleased-changes" id="unreleased-changes">Unreleased changes</a></h1>
-<ul>
-<li>Rust
-<ul>
-<li>Introduce the Memory Distribution metric type in the RLB. <a href="https://github.com/mozilla/glean/pull/1376">#1376</a></li>
-</ul>
-</li>
-</ul>
 <p><a href="https://github.com/mozilla/glean/compare/v33.7.0...main">Full changelog</a></p>
 <ul>
 <li>Rust
 <ul>
-<li>Shut down Glean in tests before resetting to make sure they don't mistakenly init Glean twice in parallel.</li>
+<li>Introduce the Memory Distribution metric type in the RLB. <a href="https://github.com/mozilla/glean/pull/1376">#1376</a></li>
+<li>Shut down Glean in tests before resetting to make sure they don't mistakenly init Glean twice in parallel (<a href="https://github.com/mozilla/glean/pull/1375">#1375</a>).</li>
+<li>BUGFIX: Fixing 2 <code>lock-order-inversion</code> bugs found by TSan (<a href="https://github.com/mozilla/glean/pull/1378">#1378</a>).
+<ul>
+<li>TSan runs on mozilla-central tests, which found two (potential) bugs where 2 different locks were acquired in opposite order in different code paths,
+which could lead to deadlocks in multi-threaded code. As RLB uses multiple threads (e.g. for init and the dispatcher) by default, this can easily become an actual issue.</li>
+</ul>
+</li>
 </ul>
 </li>
 <li>Python
