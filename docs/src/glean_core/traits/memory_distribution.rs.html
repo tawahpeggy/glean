@@ -61,34 +61,13 @@
 <span id="58">58</span>
 <span id="59">59</span>
 <span id="60">60</span>
-<span id="61">61</span>
-<span id="62">62</span>
-<span id="63">63</span>
-<span id="64">64</span>
-<span id="65">65</span>
-<span id="66">66</span>
-<span id="67">67</span>
-<span id="68">68</span>
-<span id="69">69</span>
-<span id="70">70</span>
-<span id="71">71</span>
-<span id="72">72</span>
-<span id="73">73</span>
-<span id="74">74</span>
-<span id="75">75</span>
-<span id="76">76</span>
-<span id="77">77</span>
-<span id="78">78</span>
-<span id="79">79</span>
-<span id="80">80</span>
-<span id="81">81</span>
-<span id="82">82</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
 <span class="comment">// file, You can obtain one at https://mozilla.org/MPL/2.0/.</span>
 
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">metrics</span>::<span class="ident">DistributionData</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ErrorType</span>;
 
 <span class="doccomment">/// A description for the</span>
 <span class="doccomment">/// [`MemoryDistributionMetric`](crate::metrics::MemoryDistributionMetric) type.</span>
@@ -109,36 +88,9 @@
     <span class="doccomment">/// and an `ErrorType::InvalidValue` error is recorded.</span>
     <span class="kw">fn</span> <span class="ident">accumulate</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">sample</span>: <span class="ident">u64</span>);
 
-    <span class="doccomment">/// Accumulates the provided signed samples in the metric.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// This is required so that the platform-specific code can provide us with</span>
-    <span class="doccomment">/// 64 bit signed integers if no `u64` comparable type is available. This</span>
-    <span class="doccomment">/// will take care of filtering and reporting errors for any provided negative</span>
-    <span class="doccomment">/// sample.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Please note that this assumes that the provided samples are already in</span>
-    <span class="doccomment">/// the &quot;unit&quot; declared by the instance of the implementing metric type</span>
-    <span class="doccomment">/// (e.g. if the implementing class is a [`MemoryDistribution`] and the</span>
-    <span class="doccomment">/// instance this method was called on is using kilobyte, then `samples` are</span>
-    <span class="doccomment">/// assumed to be in that unit).</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Arguments</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// * `samples` - The vector holding the samples to be recorded by the metric.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ## Notes</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Discards any negative value in `samples` and report an</span>
-    <span class="doccomment">/// [`ErrorType::InvalidValue`](crate::ErrorType::InvalidValue) for each of</span>
-    <span class="doccomment">/// them.</span>
-    <span class="doccomment">/// Values bigger than 1 Terabyte (2&lt;sup&gt;40&lt;/sup&gt; bytes) are truncated and</span>
-    <span class="doccomment">/// an [`ErrorType::InvalidValue`](crate::ErrorType::InvalidValue) error is</span>
-    <span class="doccomment">/// recorded.</span>
-    <span class="kw">fn</span> <span class="ident">accumulate_samples_signed</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">samples</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>);
-
     <span class="doccomment">/// **Exported for test purposes.**</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// Gets the currently stored value as an integer.</span>
+    <span class="doccomment">/// Gets the currently stored value as a DistributionData of the serialized value.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This doesn&#39;t clear the stored value.</span>
     <span class="doccomment">///</span>
@@ -153,18 +105,22 @@
 
     <span class="doccomment">/// **Exported for test purposes.**</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// Gets the currently-stored histogram as a JSON String of the serialized value.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// This doesn&#39;t clear the stored value.</span>
+    <span class="doccomment">/// Gets the number of recorded errors for the given error type.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Arguments</span>
     <span class="doccomment">///</span>
+    <span class="doccomment">/// * `error` - The type of error</span>
     <span class="doccomment">/// * `ping_name` - represents the optional name of the ping to retrieve the</span>
     <span class="doccomment">///   metric for. Defaults to the first value in `send_in_pings`.</span>
-    <span class="kw">fn</span> <span class="ident">test_get_value_as_json_string</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">S</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>(
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Returns</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The number of errors recorded.</span>
+    <span class="kw">fn</span> <span class="ident">test_get_num_recorded_errors</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">S</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">error</span>: <span class="ident">ErrorType</span>,
         <span class="ident">ping_name</span>: <span class="ident">S</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>;
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">i32</span>;
 }
 </pre></div>
 </section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "glean_core";</script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>

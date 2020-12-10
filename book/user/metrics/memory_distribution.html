@@ -308,6 +308,38 @@ Assert.Equal(2L, snapshot.Count);
 Assert.Equal(1, Memory.heapAllocated.TestGetNumRecordedErrors(ErrorType.InvalidValue));
 </code></pre>
 </div>
+<div data-lang="Rust" class="tab">
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean_metrics;
+
+fn allocate_memory(bytes: u64) {
+    memory::heap_allocated.accumulate(bytes / 1024);
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>There are test APIs available too:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean::{DistributionData, ErrorType};
+use glean_metrics;
+
+// Was anything recorded?
+assert!(memory::heap_allocated.test_get_value(None).is_some());
+
+// Is the sum as expected?
+let data = memory::heap_allocated.test_get_value(None).unwrap();
+assert!(11, data.sum)
+// The actual buckets and counts live in `data.values`.
+
+// Were there any errors?
+assert!(1, memory::heap_allocated.test_get_num_recorded_errors(InvalidValue));
+
+<span class="boring">}
+</span></code></pre></pre>
+</div>
 </div>
 </div>
 <h2><a class="header" href="#limits" id="limits">Limits</a></h2>
@@ -328,6 +360,7 @@ Assert.Equal(1, Memory.heapAllocated.TestGetNumRecordedErrors(ErrorType.InvalidV
 <li><a href="../../../javadoc/glean/mozilla.telemetry.glean.private/-memory-distribution-metric-type/index.html">Kotlin API docs</a></li>
 <li><a href="../../../swift/Classes/MemoryDistributionMetricType.html">Swift API docs</a></li>
 <li><a href="../../../python/glean/metrics/timing_distribution.html">Python API docs</a></li>
+<li><a href="../../../docs/glean/private/struct.MemoryDistributionMetric.html">Rust API docs</a></li>
 </ul>
 <h2><a class="header" href="#simulator" id="simulator">Simulator</a></h2>
 <div id="custom-data-modal-overlay">

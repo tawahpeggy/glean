@@ -32,6 +32,7 @@
 <table><tr class='module-item'><td><a class="struct" href="struct.ClientInfoMetrics.html" title='glean::ClientInfoMetrics struct'>ClientInfoMetrics</a></td><td class='docblock-short'><p>Metrics included in every ping as <code>client_info</code>.</p>
 </td></tr><tr class='module-item'><td><a class="struct" href="struct.CommonMetricData.html" title='glean::CommonMetricData struct'>CommonMetricData</a></td><td class='docblock-short'><p>The common set of data shared across all different metric types.</p>
 </td></tr><tr class='module-item'><td><a class="struct" href="struct.Configuration.html" title='glean::Configuration struct'>Configuration</a></td><td class='docblock-short'><p>The Glean configuration.</p>
+</td></tr><tr class='module-item'><td><a class="struct" href="struct.DistributionData.html" title='glean::DistributionData struct'>DistributionData</a></td><td class='docblock-short'><p>A snapshot of all buckets and the accumulated sum of a distribution.</p>
 </td></tr><tr class='module-item'><td><a class="struct" href="struct.Error.html" title='glean::Error struct'>Error</a></td><td class='docblock-short'><p>A specialized <a href="https://doc.rust-lang.org/stable/std/error/trait.Error.html"><code>Error</code></a> type for this crate's operations.</p>
 </td></tr><tr class='module-item'><td><a class="struct" href="struct.Glean.html" title='glean::Glean struct'>Glean</a></td><td class='docblock-short'><p>The object holding meta information about a Glean instance.</p>
 </td></tr><tr class='module-item'><td><a class="struct" href="struct.RecordedEvent.html" title='glean::RecordedEvent struct'>RecordedEvent</a></td><td class='docblock-short'><p>Represents the recorded data for a single event.</p>
@@ -41,6 +42,8 @@ Note: the cases in this enum must be kept in sync with the ones
 in the platform-specific code (e.g. <code>ErrorType.kt</code>) and with the
 metrics in the registry files.</p>
 </td></tr><tr class='module-item'><td><a class="enum" href="enum.Lifetime.html" title='glean::Lifetime enum'>Lifetime</a></td><td class='docblock-short'><p>The supported metrics' lifetimes.</p>
+</td></tr><tr class='module-item'><td><a class="enum" href="enum.MemoryUnit.html" title='glean::MemoryUnit enum'>MemoryUnit</a></td><td class='docblock-short'><p>Different resolutions supported by the memory related metric types (e.g.
+MemoryDistributionMetric).</p>
 </td></tr><tr class='module-item'><td><a class="enum" href="enum.TimeUnit.html" title='glean::TimeUnit enum'>TimeUnit</a></td><td class='docblock-short'><p>Different resolutions supported by the time related
 metric types (e.g. DatetimeMetric).</p>
 </td></tr></table><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
