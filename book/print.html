@@ -2999,6 +2999,36 @@ Assert.Equal(
 );
 </code></pre>
 </div>
+<div data-lang="Rust" class="tab">
+<pre><code class="language-Rust">use glean_metrics;
+
+// Add them one at a time
+engines.iter().for_each(|x|
+  search::engines.add(x)
+);
+
+// Set them in one go
+search::engines.set(engines)
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-Rust">use glean::ErrorType;
+use glean_metrics;
+
+// Was anything recorded?
+assert!(search::engines.test_get_value(None).is_some());
+// Does it have the expected value?
+// IMPORTANT: It may have been truncated -- see &quot;Limits&quot; below
+assert_eq!(
+    vec![&quot;Google&quot;.to_string(), &quot;DuckDuckGo&quot;.to_string()], 
+    search::engines.test_get_value(None)
+);
+// Were any of the values too long, and thus an error was recorded?
+assert_eq!(
+    0, 
+    search::engines.test_get_num_recorded_errors(ErrorType::InvalidValue)
+);
+</code></pre>
+</div>
 </div>
 </div>
 <h2><a class="header" href="#limits-8" id="limits-8">Limits</a></h2>
@@ -3027,6 +3057,7 @@ Assert.Equal(
 <ul>
 <li><a href="user/metrics/../../../javadoc/glean/mozilla.telemetry.glean.private/-string-list-metric-type/index.html">Kotlin API docs</a></li>
 <li><a href="user/metrics/../../../python/glean/metrics/string_list.html">Python API docs</a></li>
+<li><a href="user/metrics/../../../docs/glean/private/struct.StringListMetric.html">Rust API docs</a></li>
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/metrics/string_list.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#timespan" id="timespan">Timespan</a></h1>
 <p>Timespans are used to make a measurement of how much time is spent in a particular task.</p>
@@ -8328,6 +8359,13 @@ Each ping has its own schedule to gather all its locally saved metrics and creat
 <p><a href="appendix/twig.html">This Week in Glean</a> is a series of blog posts that the Glean Team at Mozilla is using to try to communicate better about our work.</p>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/appendix/glossary.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#unreleased-changes" id="unreleased-changes">Unreleased changes</a></h1>
 <p><a href="https://github.com/mozilla/glean/compare/v33.8.0...main">Full changelog</a></p>
+<ul>
+<li>Rust
+<ul>
+<li>Introduce the String List metric type in the RLB. <a href="https://github.com/mozilla/glean/pull/1380">#1380</a></li>
+</ul>
+</li>
+</ul>
 <h1><a class="header" href="#v3380-2020-12-10" id="v3380-2020-12-10">v33.8.0 (2020-12-10)</a></h1>
 <p><a href="https://github.com/mozilla/glean/compare/v33.7.0...v33.8.0">Full changelog</a></p>
 <ul>
