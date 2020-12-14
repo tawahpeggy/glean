@@ -175,7 +175,7 @@
 <p>The device's offset from UTC is recorded and sent with the Datetime value in the ping.</p>
 <p>To record a single elapsed time, see <a href="timespan.html">Timespan</a>. To measure the distribution of multiple timespans, see <a href="timing_distribution.html">Timing Distributions</a>.</p>
 <h2><a class="header" href="#configuration" id="configuration">Configuration</a></h2>
-<p>Datetimes have a required <code>time_unit</code> parameter to specify the smallest unit of resolution that the timespan will record. The allowed values for <code>time_unit</code> are:</p>
+<p>Datetimes have a required <code>time_unit</code> parameter to specify the smallest unit of resolution that the metric will record. The allowed values for <code>time_unit</code> are:</p>
 <ul>
 <li><code>nanosecond</code></li>
 <li><code>microsecond</code></li>
@@ -216,7 +216,7 @@ assertTrue(Install.firstRun.testHasValue())
 // &quot;-05:00&quot; suffix.
 assertEquals(&quot;2019-03-25-05:00&quot;, Install.firstRun.testGetValueAsString())
 // Was the value invalid?
-assertEquals(1, Install.firstRun.testGetNumRecordedErrors(ErrorType.InvalidValue))
+assertEquals(0, Install.firstRun.testGetNumRecordedErrors(ErrorType.InvalidValue))
 </code></pre>
 </div>
 <div data-lang="Java" class="tab">
@@ -235,7 +235,7 @@ assertTrue(Install.INSTANCE.firstRun.testHasValue());
 // &quot;-05:00&quot; suffix.
 assertEquals(&quot;2019-03-25-05:00&quot;, Install.INSTANCE.firstRun.testGetValueAsString());
 // Was the value invalid?
-assertEquals(1, Install.INSTANCE.firstRun.testGetNumRecordedErrors(ErrorType.InvalidValue));
+assertEquals(0, Install.INSTANCE.firstRun.testGetNumRecordedErrors(ErrorType.InvalidValue));
 </code></pre>
 </div>
 <div data-lang="Swift" class="tab">
@@ -255,7 +255,7 @@ XCTAssert(Install.firstRun.testHasValue())
 // Does the datetime have the expected value?
 XCTAssertEqual(6, try Install.firstRun.testGetValue())
 // Was the value invalid?
-XCTAssertEqual(1, Install.firstRun.getNumRecordedErrors(.invalidValue))
+XCTAssertEqual(0, Install.firstRun.getNumRecordedErrors(.invalidValue))
 </code></pre>
 </div>
 <div data-lang="Python" class="tab">
@@ -278,7 +278,7 @@ assert metrics.install.first_run.test_has_value()
 # &quot;-05:00&quot; suffix.
 assert &quot;2019-03-25-05:00&quot; == metrics.install.first_run.test_get_value_as_str()
 # Was the value invalid?
-assert 1 == metrics.install.test_get_num_recorded_errors(
+assert 0 == metrics.install.test_get_num_recorded_errors(
     ErrorType.INVALID_VALUE
 )
 </code></pre>
@@ -301,7 +301,32 @@ Assert.True(Install.firstRun.TestHasValue());
 // &quot;-05:00&quot; suffix.
 Assert.Equal(&quot;2019-03-25-05:00&quot;, Install.firstRun.TestGetValueAsString());
 // Was the value invalid?
-Assert.Equal(1, Install.firstRun.TestGetNumRecordedErrors(ErrorType.InvalidValue));
+Assert.Equal(0, Install.firstRun.TestGetNumRecordedErrors(ErrorType.InvalidValue));
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><code class="language-Rust">use glean::ErrorType;
+use glean_metrics;
+
+use chrono::{FixedOffset, TimeZone};
+
+// Records &quot;now&quot;
+install::first_run.set(None);
+// Records a custom datetime
+let custom_date = FixedOffset::east(0).ymd(2019, 3, 25).and_hms(0, 0, 0);
+install::first_run.set(Some(custom_date));
+</code></pre>
+<p>There are test APIs available too.</p>
+<pre><code class="language-Rust">// Was anything recorded?
+assert!(metrics.install.first_run.test_get_value(None).is_some());
+
+// Was it the expected value?
+let expected_date = FixedOffset::east(0).ymd(2019, 3, 25).and_hms(0, 0, 0);
+assert_eq!(expected_date, metrics.install.first_run.test_get_value(None));
+// Was the value invalid?
+assert_eq!(0, install::first_run.test_get_num_recorded_errors(
+    ErrorType::InvalidValue
+));
 </code></pre>
 </div>
 </div>
@@ -323,6 +348,7 @@ Assert.Equal(1, Install.firstRun.TestGetNumRecordedErrors(ErrorType.InvalidValue
 <li><a href="../../../javadoc/glean/mozilla.telemetry.glean.private/-datetime-metric-type/index.html">Kotlin API docs</a></li>
 <li><a href="../../../swift/Classes/DatetimeMetricType.html">Swift API docs</a></li>
 <li><a href="../../../python/glean/metrics/datetime.html">Python API docs</a></li>
+<li><a href="../../../docs/glean/private/struct.DatetimeMetric.html">Rust API docs</a></li>
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/metrics/datetime.md">Edit this file on GitHub.</a></footer>
                     </main>
