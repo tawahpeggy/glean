@@ -115,9 +115,6 @@
 <span id="112">112</span>
 <span id="113">113</span>
 <span id="114">114</span>
-<span id="115">115</span>
-<span id="116">116</span>
-<span id="117">117</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -142,9 +139,6 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">http_uploader</span>::<span class="kw-2">*</span>;
 
 <span class="kw">mod</span> <span class="ident">http_uploader</span>;
-
-<span class="doccomment">/// The duration the uploader thread should sleep, when told to by glean-core.</span>
-<span class="kw">const</span> <span class="ident">THROTTLE_BACKOFF_TIME</span>: <span class="ident">Duration</span> <span class="op">=</span> <span class="ident">Duration</span>::<span class="ident">from_secs</span>(<span class="number">60</span>);
 
 <span class="doccomment">/// A description of a component used to upload pings.</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PingUploader</span>: <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> {
@@ -221,8 +215,8 @@
                             <span class="comment">// Process the upload response.</span>
                             <span class="ident">with_glean</span>(<span class="op">|</span><span class="ident">glean</span><span class="op">|</span> <span class="ident">glean</span>.<span class="ident">process_ping_upload_response</span>(<span class="kw-2">&amp;</span><span class="ident">doc_id</span>, <span class="ident">result</span>));
                         }
-                        <span class="ident">PingUploadTask</span>::<span class="ident">Wait</span> <span class="op">=</span><span class="op">&gt;</span> {
-                            <span class="ident">thread</span>::<span class="ident">sleep</span>(<span class="ident">THROTTLE_BACKOFF_TIME</span>);
+                        <span class="ident">PingUploadTask</span>::<span class="ident">Wait</span>(<span class="ident">time</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                            <span class="ident">thread</span>::<span class="ident">sleep</span>(<span class="ident">Duration</span>::<span class="ident">from_millis</span>(<span class="ident">time</span>));
                         }
                         <span class="ident">PingUploadTask</span>::<span class="ident">Done</span> <span class="op">=</span><span class="op">&gt;</span> {
                             <span class="comment">// Nothing to do here, break out of the loop and clear the</span>

@@ -473,6 +473,7 @@
 <span id="470">470</span>
 <span id="471">471</span>
 <span id="472">472</span>
+<span id="473">473</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -770,6 +771,7 @@
             <span class="ident">glean</span>.<span class="ident">storage</span>(),
             <span class="ident">storage_name</span>,
             <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">meta</span>.<span class="ident">identifier</span>(<span class="ident">glean</span>),
+            <span class="self">self</span>.<span class="ident">meta</span>.<span class="ident">lifetime</span>,
         ) {
             <span class="prelude-val">Some</span>(<span class="ident">Metric</span>::<span class="ident">Jwe</span>(<span class="ident">b</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">b</span>),
             <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,

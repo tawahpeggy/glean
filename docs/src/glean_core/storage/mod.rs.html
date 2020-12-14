@@ -258,7 +258,6 @@
 <span id="255">255</span>
 <span id="256">256</span>
 <span id="257">257</span>
-<span id="258">258</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -391,6 +390,7 @@
         <span class="ident">storage</span>: <span class="kw-2">&amp;</span><span class="ident">Database</span>,
         <span class="ident">store_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">metric_id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
+        <span class="ident">metric_lifetime</span>: <span class="ident">Lifetime</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Metric</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">snapshot</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Metric</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-val">None</span>;
 
@@ -401,9 +401,7 @@
             }
         };
 
-        <span class="ident">storage</span>.<span class="ident">iter_store_from</span>(<span class="ident">Lifetime</span>::<span class="ident">Ping</span>, <span class="kw-2">&amp;</span><span class="ident">store_name</span>, <span class="prelude-val">None</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">snapshotter</span>);
-        <span class="ident">storage</span>.<span class="ident">iter_store_from</span>(<span class="ident">Lifetime</span>::<span class="ident">Application</span>, <span class="kw-2">&amp;</span><span class="ident">store_name</span>, <span class="prelude-val">None</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">snapshotter</span>);
-        <span class="ident">storage</span>.<span class="ident">iter_store_from</span>(<span class="ident">Lifetime</span>::<span class="ident">User</span>, <span class="kw-2">&amp;</span><span class="ident">store_name</span>, <span class="prelude-val">None</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">snapshotter</span>);
+        <span class="ident">storage</span>.<span class="ident">iter_store_from</span>(<span class="ident">metric_lifetime</span>, <span class="kw-2">&amp;</span><span class="ident">store_name</span>, <span class="prelude-val">None</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">snapshotter</span>);
 
         <span class="ident">snapshot</span>
     }

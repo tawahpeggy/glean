@@ -1530,6 +1530,27 @@
 <span id="1527">1527</span>
 <span id="1528">1528</span>
 <span id="1529">1529</span>
+<span id="1530">1530</span>
+<span id="1531">1531</span>
+<span id="1532">1532</span>
+<span id="1533">1533</span>
+<span id="1534">1534</span>
+<span id="1535">1535</span>
+<span id="1536">1536</span>
+<span id="1537">1537</span>
+<span id="1538">1538</span>
+<span id="1539">1539</span>
+<span id="1540">1540</span>
+<span id="1541">1541</span>
+<span id="1542">1542</span>
+<span id="1543">1543</span>
+<span id="1544">1544</span>
+<span id="1545">1545</span>
+<span id="1546">1546</span>
+<span id="1547">1547</span>
+<span id="1548">1548</span>
+<span id="1549">1549</span>
+<span id="1550">1550</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -1565,6 +1586,8 @@
 <span class="kw">mod</span> <span class="ident">request</span>;
 <span class="kw">mod</span> <span class="ident">result</span>;
 
+<span class="kw">const</span> <span class="ident">WAIT_TIME_FOR_PING_PROCESSING</span>: <span class="ident">u64</span> <span class="op">=</span> <span class="number">1000</span>; <span class="comment">// in milliseconds</span>
+
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="kw">struct</span> <span class="ident">RateLimiter</span> {
     <span class="doccomment">/// The instant the current interval has started.</span>
@@ -1583,7 +1606,10 @@
     <span class="doccomment">/// The RateLimiter has not reached the maximum count and is still incrementing.</span>
     <span class="ident">Incrementing</span>,
     <span class="doccomment">/// The RateLimiter has reached the maximum count for the  current interval.</span>
-    <span class="ident">Throttled</span>,
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This variant contains the remaining time (in milliseconds)</span>
+    <span class="doccomment">/// until the rate limiter is not throttled anymore.</span>
+    <span class="ident">Throttled</span>(<span class="ident">u64</span>),
 }
 
 <span class="kw">impl</span> <span class="ident">RateLimiter</span> {
@@ -1601,6 +1627,10 @@
         <span class="self">self</span>.<span class="ident">count</span> <span class="op">=</span> <span class="number">0</span>;
     }
 
+    <span class="kw">fn</span> <span class="ident">elapsed</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Duration</span> {
+        <span class="self">self</span>.<span class="ident">started</span>.<span class="ident">unwrap</span>().<span class="ident">elapsed</span>()
+    }
+
     <span class="comment">// The counter should reset if</span>
     <span class="comment">//</span>
     <span class="comment">// 1. It has never started;</span>
@@ -1612,8 +1642,7 @@
         }
 
         <span class="comment">// Safe unwrap, we already stated that `self.started` is not `None` above.</span>
-        <span class="kw">let</span> <span class="ident">elapsed</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">started</span>.<span class="ident">unwrap</span>().<span class="ident">elapsed</span>();
-        <span class="kw">if</span> <span class="ident">elapsed</span> <span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">interval</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">elapsed</span>() <span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">interval</span> {
             <span class="kw">return</span> <span class="bool-val">true</span>;
         }
 
@@ -1631,7 +1660,14 @@
         }
 
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">count</span> <span class="op">=</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">max_count</span> {
-            <span class="kw">return</span> <span class="ident">RateLimiterState</span>::<span class="ident">Throttled</span>;
+            <span class="comment">// Note that `remining` can&#39;t be a negative number because we just called `reset`,</span>
+            <span class="comment">// which will check if it is and reset if so.</span>
+            <span class="kw">let</span> <span class="ident">remaining</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">interval</span>.<span class="ident">as_millis</span>() <span class="op">-</span> <span class="self">self</span>.<span class="ident">elapsed</span>().<span class="ident">as_millis</span>();
+            <span class="kw">return</span> <span class="ident">RateLimiterState</span>::<span class="ident">Throttled</span>(
+                <span class="ident">remaining</span>
+                    .<span class="ident">try_into</span>()
+                    .<span class="ident">unwrap_or</span>(<span class="self">self</span>.<span class="ident">interval</span>.<span class="ident">as_secs</span>() <span class="op">*</span> <span class="number">1000</span>),
+            );
         }
 
         <span class="self">self</span>.<span class="ident">count</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
@@ -1652,7 +1688,10 @@
     <span class="ident">Upload</span>(<span class="ident">PingRequest</span>),
     <span class="doccomment">/// A flag signaling that the pending pings directories are not done being processed,</span>
     <span class="doccomment">/// thus the requester should wait and come back later.</span>
-    <span class="ident">Wait</span>,
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Contains the amount of time in milliseconds</span>
+    <span class="doccomment">/// the requester should wait before requesting a new task.</span>
+    <span class="ident">Wait</span>(<span class="ident">u64</span>),
     <span class="doccomment">/// A flag signaling that requester doesn&#39;t need to request any more upload tasks at this moment.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// There are three possibilities for this scenario:</span>
@@ -1666,6 +1705,18 @@
     <span class="doccomment">/// `PingUploadTask::Upload(PingRequest)` response and finishes when they</span>
     <span class="doccomment">/// finally get a `PingUploadTask::Done` or `PingUploadTask::Wait` response.</span>
     <span class="ident">Done</span>,
+}
+
+<span class="kw">impl</span> <span class="ident">PingUploadTask</span> {
+    <span class="doccomment">/// Whether the current task is an upload task.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_upload</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+        <span class="macro">matches</span><span class="macro">!</span>(<span class="self">self</span>, <span class="ident">PingUploadTask</span>::<span class="ident">Upload</span>(<span class="kw">_</span>))
+    }
+
+    <span class="doccomment">/// Whether the current task is wait task.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_wait</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+        <span class="macro">matches</span><span class="macro">!</span>(<span class="self">self</span>, <span class="ident">PingUploadTask</span>::<span class="ident">Wait</span>(<span class="kw">_</span>))
+    }
 }
 
 <span class="doccomment">/// Manages the pending pings queue and directory.</span>
@@ -2007,12 +2058,12 @@
         <span class="comment">//</span>
         <span class="comment">// We want to limit the amount of PingUploadTask::Wait returned in a row,</span>
         <span class="comment">// in case we reach MAX_WAIT_ATTEMPTS we want to actually return PingUploadTask::Done.</span>
-        <span class="kw">let</span> <span class="ident">wait_or_done</span> <span class="op">=</span> <span class="op">|</span><span class="op">|</span> {
+        <span class="kw">let</span> <span class="ident">wait_or_done</span> <span class="op">=</span> <span class="op">|</span><span class="ident">time</span>: <span class="ident">u64</span><span class="op">|</span> {
             <span class="self">self</span>.<span class="ident">wait_attempt_count</span>.<span class="ident">fetch_add</span>(<span class="number">1</span>, <span class="ident">Ordering</span>::<span class="ident">SeqCst</span>);
             <span class="kw">if</span> <span class="self">self</span>.<span class="ident">wait_attempt_count</span>() <span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">policy</span>.<span class="ident">max_wait_attempts</span>() {
                 <span class="ident">PingUploadTask</span>::<span class="ident">Done</span>
             } <span class="kw">else</span> {
-                <span class="ident">PingUploadTask</span>::<span class="ident">Wait</span>
+                <span class="ident">PingUploadTask</span>::<span class="ident">Wait</span>(<span class="ident">time</span>)
             }
         };
 
@@ -2020,7 +2071,7 @@
             <span class="ident">log</span>::<span class="macro">info</span><span class="macro">!</span>(
                 <span class="string">&quot;Tried getting an upload task, but processing is ongoing. Will come back later.&quot;</span>
             );
-            <span class="kw">return</span> <span class="ident">wait_or_done</span>();
+            <span class="kw">return</span> <span class="ident">wait_or_done</span>(<span class="ident">WAIT_TIME_FOR_PING_PROCESSING</span>);
         }
 
         <span class="comment">// This is a no-op in case there are no cached pings.</span>
@@ -2043,11 +2094,11 @@
                     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rate_limiter</span> <span class="op">=</span> <span class="ident">rate_limiter</span>
                         .<span class="ident">write</span>()
                         .<span class="ident">expect</span>(<span class="string">&quot;Can&#39;t write to the rate limiter.&quot;</span>);
-                    <span class="kw">if</span> <span class="ident">rate_limiter</span>.<span class="ident">get_state</span>() <span class="op">=</span><span class="op">=</span> <span class="ident">RateLimiterState</span>::<span class="ident">Throttled</span> {
+                    <span class="kw">if</span> <span class="kw">let</span> <span class="ident">RateLimiterState</span>::<span class="ident">Throttled</span>(<span class="ident">remaining</span>) <span class="op">=</span> <span class="ident">rate_limiter</span>.<span class="ident">get_state</span>() {
                         <span class="ident">log</span>::<span class="macro">info</span><span class="macro">!</span>(
                             <span class="string">&quot;Tried getting an upload task, but we are throttled at the moment.&quot;</span>
                         );
-                        <span class="kw">return</span> <span class="ident">wait_or_done</span>();
+                        <span class="kw">return</span> <span class="ident">wait_or_done</span>(<span class="ident">remaining</span>);
                     }
                 }
 
@@ -2087,13 +2138,11 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_upload_task</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">glean</span>: <span class="kw-2">&amp;</span><span class="ident">Glean</span>, <span class="ident">log_ping</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PingUploadTask</span> {
         <span class="kw">let</span> <span class="ident">task</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_upload_task_internal</span>(<span class="ident">glean</span>, <span class="ident">log_ping</span>);
 
-        <span class="kw">if</span> <span class="ident">task</span> <span class="op">!</span><span class="op">=</span> <span class="ident">PingUploadTask</span>::<span class="ident">Wait</span> <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">wait_attempt_count</span>() <span class="op">&gt;</span> <span class="number">0</span> {
+        <span class="kw">if</span> <span class="op">!</span><span class="ident">task</span>.<span class="ident">is_wait</span>() <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">wait_attempt_count</span>() <span class="op">&gt;</span> <span class="number">0</span> {
             <span class="self">self</span>.<span class="ident">wait_attempt_count</span>.<span class="ident">store</span>(<span class="number">0</span>, <span class="ident">Ordering</span>::<span class="ident">SeqCst</span>);
         }
 
-        <span class="kw">if</span> (<span class="ident">task</span> <span class="op">=</span><span class="op">=</span> <span class="ident">PingUploadTask</span>::<span class="ident">Wait</span> <span class="op">|</span><span class="op">|</span> <span class="ident">task</span> <span class="op">=</span><span class="op">=</span> <span class="ident">PingUploadTask</span>::<span class="ident">Done</span>)
-            <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">recoverable_failure_count</span>() <span class="op">&gt;</span> <span class="number">0</span>
-        {
+        <span class="kw">if</span> <span class="op">!</span><span class="ident">task</span>.<span class="ident">is_upload</span>() <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">recoverable_failure_count</span>() <span class="op">&gt;</span> <span class="number">0</span> {
             <span class="self">self</span>.<span class="ident">recoverable_failure_count</span>.<span class="ident">store</span>(<span class="number">0</span>, <span class="ident">Ordering</span>::<span class="ident">SeqCst</span>);
         }
 
@@ -2280,10 +2329,8 @@
 
         <span class="comment">// Try and get the next request.</span>
         <span class="comment">// Verify request was returned</span>
-        <span class="kw">match</span> <span class="ident">upload_manager</span>.<span class="ident">get_upload_task</span>(<span class="kw-2">&amp;</span><span class="ident">glean</span>, <span class="bool-val">false</span>) {
-            <span class="ident">PingUploadTask</span>::<span class="ident">Upload</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {}
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Expected upload manager to return the next request!&quot;</span>),
-        }
+        <span class="kw">let</span> <span class="ident">task</span> <span class="op">=</span> <span class="ident">upload_manager</span>.<span class="ident">get_upload_task</span>(<span class="kw-2">&amp;</span><span class="ident">glean</span>, <span class="bool-val">false</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">task</span>.<span class="ident">is_upload</span>());
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
@@ -2300,10 +2347,8 @@
 
         <span class="comment">// Verify a request is returned for each submitted ping</span>
         <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">n</span> {
-            <span class="kw">match</span> <span class="ident">upload_manager</span>.<span class="ident">get_upload_task</span>(<span class="kw-2">&amp;</span><span class="ident">glean</span>, <span class="bool-val">false</span>) {
-                <span class="ident">PingUploadTask</span>::<span class="ident">Upload</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {}
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Expected upload manager to return the next request!&quot;</span>),
-            }
+            <span class="kw">let</span> <span class="ident">task</span> <span class="op">=</span> <span class="ident">upload_manager</span>.<span class="ident">get_upload_task</span>(<span class="kw-2">&amp;</span><span class="ident">glean</span>, <span class="bool-val">false</span>);
+            <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">task</span>.<span class="ident">is_upload</span>());
         }
 
         <span class="comment">// Verify that after all requests are returned, none are left</span>
@@ -2320,9 +2365,8 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">upload_manager</span> <span class="op">=</span> <span class="ident">PingUploadManager</span>::<span class="ident">no_policy</span>(<span class="ident">dir</span>.<span class="ident">path</span>());
 
         <span class="comment">// Add a rate limiter to the upload mangager with max of 10 pings every 3 seconds.</span>
-        <span class="kw">let</span> <span class="ident">secs_per_interval</span> <span class="op">=</span> <span class="number">3</span>;
         <span class="kw">let</span> <span class="ident">max_pings_per_interval</span> <span class="op">=</span> <span class="number">10</span>;
-        <span class="ident">upload_manager</span>.<span class="ident">set_rate_limiter</span>(<span class="ident">secs_per_interval</span>, <span class="number">10</span>);
+        <span class="ident">upload_manager</span>.<span class="ident">set_rate_limiter</span>(<span class="number">3</span>, <span class="number">10</span>);
 
         <span class="comment">// Enqueue the max number of pings allowed per uploading window</span>
         <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">max_pings_per_interval</span> {
@@ -2331,28 +2375,24 @@
 
         <span class="comment">// Verify a request is returned for each submitted ping</span>
         <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">max_pings_per_interval</span> {
-            <span class="kw">match</span> <span class="ident">upload_manager</span>.<span class="ident">get_upload_task</span>(<span class="kw-2">&amp;</span><span class="ident">glean</span>, <span class="bool-val">false</span>) {
-                <span class="ident">PingUploadTask</span>::<span class="ident">Upload</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {}
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Expected upload manager to return the next request!&quot;</span>),
-            }
+            <span class="kw">let</span> <span class="ident">task</span> <span class="op">=</span> <span class="ident">upload_manager</span>.<span class="ident">get_upload_task</span>(<span class="kw-2">&amp;</span><span class="ident">glean</span>, <span class="bool-val">false</span>);
+            <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">task</span>.<span class="ident">is_upload</span>());
         }
 
         <span class="comment">// Enqueue just one more ping</span>
         <span class="ident">upload_manager</span>.<span class="ident">enqueue_ping</span>(<span class="kw-2">&amp;</span><span class="ident">glean</span>, <span class="kw-2">&amp;</span><span class="ident">Uuid</span>::<span class="ident">new_v4</span>().<span class="ident">to_string</span>(), <span class="ident">PATH</span>, <span class="string">&quot;&quot;</span>, <span class="prelude-val">None</span>);
 
         <span class="comment">// Verify that we are indeed told to wait because we are at capacity</span>
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
-            <span class="ident">PingUploadTask</span>::<span class="ident">Wait</span>,
-            <span class="ident">upload_manager</span>.<span class="ident">get_upload_task</span>(<span class="kw-2">&amp;</span><span class="ident">glean</span>, <span class="bool-val">false</span>)
-        );
-
-        <span class="comment">// Wait for the uploading window to reset</span>
-        <span class="ident">thread</span>::<span class="ident">sleep</span>(<span class="ident">Duration</span>::<span class="ident">from_secs</span>(<span class="ident">secs_per_interval</span>));
-
         <span class="kw">match</span> <span class="ident">upload_manager</span>.<span class="ident">get_upload_task</span>(<span class="kw-2">&amp;</span><span class="ident">glean</span>, <span class="bool-val">false</span>) {
-            <span class="ident">PingUploadTask</span>::<span class="ident">Upload</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {}
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Expected upload manager to return the next request!&quot;</span>),
-        }
+            <span class="ident">PingUploadTask</span>::<span class="ident">Wait</span>(<span class="ident">time</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="comment">// Wait for the uploading window to reset</span>
+                <span class="ident">thread</span>::<span class="ident">sleep</span>(<span class="ident">Duration</span>::<span class="ident">from_millis</span>(<span class="ident">time</span>));
+            }
+            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Expected upload manager to return a wait task!&quot;</span>),
+        };
+
+        <span class="kw">let</span> <span class="ident">task</span> <span class="op">=</span> <span class="ident">upload_manager</span>.<span class="ident">get_upload_task</span>(<span class="kw-2">&amp;</span><span class="ident">glean</span>, <span class="bool-val">false</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">task</span>.<span class="ident">is_upload</span>());
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
@@ -2428,10 +2468,8 @@
 
         <span class="comment">// Verify the requests were properly enqueued</span>
         <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">n</span> {
-            <span class="kw">match</span> <span class="ident">upload_manager</span>.<span class="ident">get_upload_task</span>(<span class="kw-2">&amp;</span><span class="ident">glean</span>, <span class="bool-val">false</span>) {
-                <span class="ident">PingUploadTask</span>::<span class="ident">Upload</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {}
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Expected upload manager to return the next request!&quot;</span>),
-            }
+            <span class="kw">let</span> <span class="ident">task</span> <span class="op">=</span> <span class="ident">upload_manager</span>.<span class="ident">get_upload_task</span>(<span class="kw-2">&amp;</span><span class="ident">glean</span>, <span class="bool-val">false</span>);
+            <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">task</span>.<span class="ident">is_upload</span>());
         }
 
         <span class="comment">// Verify that after all requests are returned, none are left</span>
@@ -2646,10 +2684,8 @@
         <span class="ident">upload_manager</span>.<span class="ident">enqueue_ping</span>(<span class="kw-2">&amp;</span><span class="ident">glean</span>, <span class="kw-2">&amp;</span><span class="ident">doc_id</span>, <span class="kw-2">&amp;</span><span class="ident">path</span>, <span class="string">&quot;&quot;</span>, <span class="prelude-val">None</span>);
 
         <span class="comment">// Get a task once</span>
-        <span class="kw">match</span> <span class="ident">upload_manager</span>.<span class="ident">get_upload_task</span>(<span class="kw-2">&amp;</span><span class="ident">glean</span>, <span class="bool-val">false</span>) {
-            <span class="ident">PingUploadTask</span>::<span class="ident">Upload</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {}
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Expected upload manager to return the next request!&quot;</span>),
-        }
+        <span class="kw">let</span> <span class="ident">task</span> <span class="op">=</span> <span class="ident">upload_manager</span>.<span class="ident">get_upload_task</span>(<span class="kw-2">&amp;</span><span class="ident">glean</span>, <span class="bool-val">false</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">task</span>.<span class="ident">is_upload</span>());
 
         <span class="comment">// There should be no more queued tasks</span>
         <span class="macro">assert_eq</span><span class="macro">!</span>(
@@ -2701,10 +2737,8 @@
 
         <span class="comment">// Verify all requests are returned when we try again.</span>
         <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">n</span> {
-            <span class="kw">match</span> <span class="ident">upload_manager</span>.<span class="ident">get_upload_task</span>(<span class="kw-2">&amp;</span><span class="ident">glean</span>, <span class="bool-val">false</span>) {
-                <span class="ident">PingUploadTask</span>::<span class="ident">Upload</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {}
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Expected upload manager to return the next request!&quot;</span>),
-            }
+            <span class="kw">let</span> <span class="ident">task</span> <span class="op">=</span> <span class="ident">upload_manager</span>.<span class="ident">get_upload_task</span>(<span class="kw-2">&amp;</span><span class="ident">glean</span>, <span class="bool-val">false</span>);
+            <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">task</span>.<span class="ident">is_upload</span>());
         }
     }
 
@@ -3031,10 +3065,8 @@
         <span class="comment">// we should be throttled and thus get a PingUploadTask::Wait.</span>
         <span class="comment">// Check that we are indeed allowed to get this response as many times as expected.</span>
         <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">max_wait_attempts</span> {
-            <span class="macro">assert_eq</span><span class="macro">!</span>(
-                <span class="ident">upload_manager</span>.<span class="ident">get_upload_task</span>(<span class="kw-2">&amp;</span><span class="ident">glean</span>, <span class="bool-val">false</span>),
-                <span class="ident">PingUploadTask</span>::<span class="ident">Wait</span>
-            );
+            <span class="kw">let</span> <span class="ident">task</span> <span class="op">=</span> <span class="ident">upload_manager</span>.<span class="ident">get_upload_task</span>(<span class="kw-2">&amp;</span><span class="ident">glean</span>, <span class="bool-val">false</span>);
+            <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">task</span>.<span class="ident">is_wait</span>());
         }
 
         <span class="comment">// Check that after we get PingUploadTask::Wait the allowed number of times,</span>
@@ -3048,16 +3080,26 @@
         <span class="ident">thread</span>::<span class="ident">sleep</span>(<span class="ident">Duration</span>::<span class="ident">from_secs</span>(<span class="ident">secs_per_interval</span>));
 
         <span class="comment">// Check that we are allowed again to get pings.</span>
-        <span class="kw">match</span> <span class="ident">upload_manager</span>.<span class="ident">get_upload_task</span>(<span class="kw-2">&amp;</span><span class="ident">glean</span>, <span class="bool-val">false</span>) {
-            <span class="ident">PingUploadTask</span>::<span class="ident">Upload</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {}
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Expected upload manager to return the next request!&quot;</span>),
-        }
+        <span class="kw">let</span> <span class="ident">task</span> <span class="op">=</span> <span class="ident">upload_manager</span>.<span class="ident">get_upload_task</span>(<span class="kw-2">&amp;</span><span class="ident">glean</span>, <span class="bool-val">false</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">task</span>.<span class="ident">is_upload</span>());
 
         <span class="comment">// And once we are done we don&#39;t need to wait anymore.</span>
         <span class="macro">assert_eq</span><span class="macro">!</span>(
             <span class="ident">upload_manager</span>.<span class="ident">get_upload_task</span>(<span class="kw-2">&amp;</span><span class="ident">glean</span>, <span class="bool-val">false</span>),
             <span class="ident">PingUploadTask</span>::<span class="ident">Done</span>
         );
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">wait_task_contains_expected_wait_time_when_pending_pings_dir_not_processed_yet</span>() {
+        <span class="kw">let</span> (<span class="ident">glean</span>, <span class="ident">dir</span>) <span class="op">=</span> <span class="ident">new_glean</span>(<span class="prelude-val">None</span>);
+        <span class="kw">let</span> <span class="ident">upload_manager</span> <span class="op">=</span> <span class="ident">PingUploadManager</span>::<span class="ident">new</span>(<span class="ident">dir</span>.<span class="ident">path</span>(), <span class="string">&quot;test&quot;</span>);
+        <span class="kw">match</span> <span class="ident">upload_manager</span>.<span class="ident">get_upload_task</span>(<span class="kw-2">&amp;</span><span class="ident">glean</span>, <span class="bool-val">false</span>) {
+            <span class="ident">PingUploadTask</span>::<span class="ident">Wait</span>(<span class="ident">time</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">time</span>, <span class="ident">WAIT_TIME_FOR_PING_PROCESSING</span>);
+            }
+            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Expected upload manager to return a wait task!&quot;</span>),
+        };
     }
 }
 </pre></div>
