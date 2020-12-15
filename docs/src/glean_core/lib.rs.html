@@ -929,6 +929,7 @@
 <span id="926">926</span>
 <span id="927">927</span>
 <span id="928">928</span>
+<span id="929">929</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -981,6 +982,7 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">error</span>::{<span class="ident">Error</span>, <span class="ident">ErrorKind</span>, <span class="prelude-ty">Result</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">error_recording</span>::{<span class="ident">test_get_num_recorded_errors</span>, <span class="ident">ErrorType</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">event_database</span>::<span class="ident">EventDatabase</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">histogram</span>::<span class="ident">HistogramType</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">internal_metrics</span>::{<span class="ident">CoreMetrics</span>, <span class="ident">DatabaseMetrics</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">internal_pings</span>::<span class="ident">InternalPings</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">metrics</span>::{<span class="ident">Metric</span>, <span class="ident">MetricType</span>, <span class="ident">PingType</span>};

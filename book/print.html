@@ -3569,9 +3569,46 @@ var snapshot = Pages.pageLoad.TestGetValue();
 // Usually you don't know the exact timing values, but how many should have been recorded.
 Assert.Equal(1, snapshot.Values.Count);
 
-// Assert that no errors were recorded. 
+// Assert that no errors were recorded.
 Assert.Equal(0, Pages.pageLoad.TestGetNumRecordedErrors(ErrorType.InvalidValue));
 </code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean_metrics;
+
+fn on_page_start() {
+    self.timer_id = Pages.page_load.start();
+}
+
+fn on_page_loaded() {
+    pages::page_load.stop_and_accumulate(self.timer_id);
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>There are test APIs available too.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean::ErrorType;
+use glean_metrics;
+
+// Was anything recorded?
+assert!(pages::page_load.test_get_value(None).is_some());
+
+// Assert no errors were recorded.
+let errors = [
+    ErrorType::InvalidValue,
+    ErrorType::InvalidState,
+    ErrorType::InvalidOverflow
+];
+for error in errors {
+    assert_eq!(0, pages::page_load.test_get_num_recorded_errors(error));
+}
+<span class="boring">}
+</span></code></pre></pre>
 </div>
 </div>
 </div>
@@ -3590,6 +3627,11 @@ The time measurement does not include time spent in sleep.</p>
 </li>
 <li>
 <p>On Python 3.7 and later, <a href="https://docs.python.org/3/library/time.html#time.monotonic_ns"><code>time.monotonic_ns()</code></a> is used.  On earlier versions of Python, <a href="https://docs.python.org/3/library/time.html#time.monotonic"><code>time.monotonics()</code></a> is used, which is not guaranteed to have nanosecond resolution.</p>
+</li>
+<li>
+<p>In Rust,
+<a href="https://docs.rs/time/0.1.42/time/fn.precise_time_ns.html"><code>time::precise_time_ns()</code></a>
+is used.</p>
 </li>
 </ul>
 </li>
@@ -4485,6 +4527,10 @@ Otherwise, look at the standard distribution metric types:</p>
 </code></pre>
 <h2><a class="header" href="#api-15" id="api-15">API</a></h2>
 <p>Now you can use the custom distribution from the application's code.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
 <pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Graphics
 
 Graphics.checkerboardPeak.accumulateSamples([23])
@@ -4507,6 +4553,37 @@ assertEquals(2L, snapshot.count())
 /// Did the metric receive a negative value?
 assertEquals(1, Graphics.checkerboardPeak.testGetNumRecordedErrors(ErrorType.InvalidValue))
 </code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean_metrics;
+
+graphics::checkerboard_peak.accumulate_samples_signed(vec![23]);
+<span class="boring">}
+</span></code></pre></pre>
+<p>There are test APIs available too.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean::ErrorType;
+use glean_metrics;
+
+// Was anything recorded?
+assert!(graphics::checkerboard_peak.test_get_value(None).is_some());
+// Does it have the expected value?
+assert_eq!(23, graphics::checkerboard_peak.test_get_value(None).unwrap().sum);
+
+// Were any of the values negative and thus caused an error to be recorded?
+assert_eq!(
+    0,
+    graphics::checkerboard_peak.test_get_num_recorded_errors(ErrorType::InvalidValue));
+<span class="boring">}
+</span></code></pre></pre>
+</div>
+</div>
+</div>
 <h2><a class="header" href="#limits-15" id="limits-15">Limits</a></h2>
 <ul>
 <li>
@@ -8391,6 +8468,7 @@ Each ping has its own schedule to gather all its locally saved metrics and creat
 <ul>
 <li>Introduce the String List metric type in the RLB. <a href="https://github.com/mozilla/glean/pull/1380">#1380</a>.</li>
 <li>Introduce the <code>Datetime</code> metric type in the RLB <a href="https://github.com/mozilla/glean/pull/1384">#1384</a>.</li>
+<li>Introduce the <code>CustomDistribution</code> and <code>TimingDistribution</code> metric type in the RLB <a href="https://github.com/mozilla/glean/pull/1394">#1394</a>.</li>
 </ul>
 </li>
 </ul>

@@ -34,6 +34,10 @@
 <span id="31">31</span>
 <span id="32">32</span>
 <span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -43,6 +47,7 @@
 
 <span class="kw">mod</span> <span class="ident">boolean</span>;
 <span class="kw">mod</span> <span class="ident">counter</span>;
+<span class="kw">mod</span> <span class="ident">custom_distribution</span>;
 <span class="kw">mod</span> <span class="ident">datetime</span>;
 <span class="kw">mod</span> <span class="ident">event</span>;
 <span class="kw">mod</span> <span class="ident">labeled</span>;
@@ -53,11 +58,13 @@
 <span class="kw">mod</span> <span class="ident">string</span>;
 <span class="kw">mod</span> <span class="ident">string_list</span>;
 <span class="kw">mod</span> <span class="ident">timespan</span>;
+<span class="kw">mod</span> <span class="ident">timing_distribution</span>;
 <span class="kw">mod</span> <span class="ident">uuid</span>;
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">uuid</span>::<span class="ident">UuidMetric</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">boolean</span>::<span class="ident">BooleanMetric</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">counter</span>::<span class="ident">CounterMetric</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">custom_distribution</span>::<span class="ident">CustomDistributionMetric</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">datetime</span>::{<span class="ident">Datetime</span>, <span class="ident">DatetimeMetric</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">event</span>::<span class="ident">EventMetric</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">labeled</span>::{<span class="ident">AllowLabeled</span>, <span class="ident">LabeledMetric</span>};
@@ -68,5 +75,6 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">string</span>::<span class="ident">StringMetric</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">string_list</span>::<span class="ident">StringListMetric</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">timespan</span>::<span class="ident">TimespanMetric</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">timing_distribution</span>::<span class="ident">TimingDistributionMetric</span>;
 </pre></div>
 </section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "glean";</script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>
