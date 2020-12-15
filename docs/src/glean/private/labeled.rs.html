@@ -356,8 +356,6 @@
 <span id="353">353</span>
 <span id="354">354</span>
 <span id="355">355</span>
-<span id="356">356</span>
-<span id="357">357</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -368,8 +366,6 @@
 
 <span class="kw">use</span> <span class="ident">glean_core</span>::<span class="ident">metrics</span>::<span class="ident">MetricType</span>;
 <span class="kw">use</span> <span class="ident">glean_core</span>::<span class="ident">ErrorType</span>;
-
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">dispatcher</span>;
 
 <span class="doccomment">/// Sealed traits protect against downstream implementations.</span>
 <span class="doccomment">///</span>
@@ -495,7 +491,7 @@
         <span class="ident">error</span>: <span class="ident">ErrorType</span>,
         <span class="ident">ping_name</span>: <span class="ident">S</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">i32</span> {
-        <span class="ident">dispatcher</span>::<span class="ident">block_on_queue</span>();
+        <span class="kw">crate</span>::<span class="ident">block_on_dispatcher</span>();
 
         <span class="kw">crate</span>::<span class="ident">with_glean_mut</span>(<span class="op">|</span><span class="ident">glean</span><span class="op">|</span> {
             <span class="ident">glean_core</span>::<span class="ident">test_get_num_recorded_errors</span>(

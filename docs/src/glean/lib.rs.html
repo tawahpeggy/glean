@@ -637,6 +637,17 @@
 <span id="634">634</span>
 <span id="635">635</span>
 <span id="636">636</span>
+<span id="637">637</span>
+<span id="638">638</span>
+<span id="639">639</span>
+<span id="640">640</span>
+<span id="641">641</span>
+<span id="642">642</span>
+<span id="643">643</span>
+<span id="644">644</span>
+<span id="645">645</span>
+<span id="646">646</span>
+<span id="647">647</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -960,6 +971,17 @@
     }
 }
 
+<span class="doccomment">/// Block on the dispatcher emptying.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// This will panic if called before Glean is initialized.</span>
+<span class="kw">fn</span> <span class="ident">block_on_dispatcher</span>() {
+    <span class="macro">assert</span><span class="macro">!</span>(
+        <span class="ident">was_initialize_called</span>(),
+        <span class="string">&quot;initialize was never called. Can&#39;t block on the dispatcher queue.&quot;</span>
+    );
+    <span class="ident">dispatcher</span>::<span class="ident">block_on_queue</span>()
+}
+
 <span class="doccomment">/// Checks if [`initialize`] was ever called.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Returns</span>
@@ -1150,7 +1172,7 @@
 <span class="doccomment">/// Checks if an experiment is currently active.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">test_is_experiment_active</span>(<span class="ident">experiment_id</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-    <span class="ident">dispatcher</span>::<span class="ident">block_on_queue</span>();
+    <span class="ident">block_on_dispatcher</span>();
     <span class="ident">with_glean</span>(<span class="op">|</span><span class="ident">glean</span><span class="op">|</span> <span class="ident">glean</span>.<span class="ident">test_is_experiment_active</span>(<span class="ident">experiment_id</span>.<span class="ident">to_owned</span>()))
 }
 
@@ -1159,7 +1181,7 @@
 <span class="doccomment">/// the id isn&#39;t found.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">test_get_experiment_data</span>(<span class="ident">experiment_id</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">RecordedExperimentData</span> {
-    <span class="ident">dispatcher</span>::<span class="ident">block_on_queue</span>();
+    <span class="ident">block_on_dispatcher</span>();
     <span class="ident">with_glean</span>(<span class="op">|</span><span class="ident">glean</span><span class="op">|</span> {
         <span class="kw">let</span> <span class="ident">json_data</span> <span class="op">=</span> <span class="ident">glean</span>
             .<span class="ident">test_get_experiment_data_as_json</span>(<span class="ident">experiment_id</span>.<span class="ident">to_owned</span>())
