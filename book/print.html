@@ -5512,6 +5512,12 @@ Pings.search.Submit(
 );
 </code></pre>
 </div>
+<div data-lang="Rust" class="tab">
+<pre><code class="language-Rust">use glean::Pings;
+
+pings::search.submit(pings::SearchReasonCodes::Performed);
+</code></pre>
+</div>
 </div>
 </div>
 <p>If none of the metrics for the ping contain data the ping is not sent (unless <code>send_if_empty</code> is set to true in the definition file)</p>
@@ -8471,6 +8477,7 @@ Each ping has its own schedule to gather all its locally saved metrics and creat
 <li>Introduce the String List metric type in the RLB. <a href="https://github.com/mozilla/glean/pull/1380">#1380</a>.</li>
 <li>Introduce the <code>Datetime</code> metric type in the RLB <a href="https://github.com/mozilla/glean/pull/1384">#1384</a>.</li>
 <li>Introduce the <code>CustomDistribution</code> and <code>TimingDistribution</code> metric type in the RLB <a href="https://github.com/mozilla/glean/pull/1394">#1394</a>.</li>
+<li>Support ping registration before Glean initializes <a href="https://github.com/mozilla/glean/pull/1393">#1393</a>.</li>
 </ul>
 </li>
 </ul>
