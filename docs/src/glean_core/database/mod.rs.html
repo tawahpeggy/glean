@@ -1578,6 +1578,80 @@
 <span id="1575">1575</span>
 <span id="1576">1576</span>
 <span id="1577">1577</span>
+<span id="1578">1578</span>
+<span id="1579">1579</span>
+<span id="1580">1580</span>
+<span id="1581">1581</span>
+<span id="1582">1582</span>
+<span id="1583">1583</span>
+<span id="1584">1584</span>
+<span id="1585">1585</span>
+<span id="1586">1586</span>
+<span id="1587">1587</span>
+<span id="1588">1588</span>
+<span id="1589">1589</span>
+<span id="1590">1590</span>
+<span id="1591">1591</span>
+<span id="1592">1592</span>
+<span id="1593">1593</span>
+<span id="1594">1594</span>
+<span id="1595">1595</span>
+<span id="1596">1596</span>
+<span id="1597">1597</span>
+<span id="1598">1598</span>
+<span id="1599">1599</span>
+<span id="1600">1600</span>
+<span id="1601">1601</span>
+<span id="1602">1602</span>
+<span id="1603">1603</span>
+<span id="1604">1604</span>
+<span id="1605">1605</span>
+<span id="1606">1606</span>
+<span id="1607">1607</span>
+<span id="1608">1608</span>
+<span id="1609">1609</span>
+<span id="1610">1610</span>
+<span id="1611">1611</span>
+<span id="1612">1612</span>
+<span id="1613">1613</span>
+<span id="1614">1614</span>
+<span id="1615">1615</span>
+<span id="1616">1616</span>
+<span id="1617">1617</span>
+<span id="1618">1618</span>
+<span id="1619">1619</span>
+<span id="1620">1620</span>
+<span id="1621">1621</span>
+<span id="1622">1622</span>
+<span id="1623">1623</span>
+<span id="1624">1624</span>
+<span id="1625">1625</span>
+<span id="1626">1626</span>
+<span id="1627">1627</span>
+<span id="1628">1628</span>
+<span id="1629">1629</span>
+<span id="1630">1630</span>
+<span id="1631">1631</span>
+<span id="1632">1632</span>
+<span id="1633">1633</span>
+<span id="1634">1634</span>
+<span id="1635">1635</span>
+<span id="1636">1636</span>
+<span id="1637">1637</span>
+<span id="1638">1638</span>
+<span id="1639">1639</span>
+<span id="1640">1640</span>
+<span id="1641">1641</span>
+<span id="1642">1642</span>
+<span id="1643">1643</span>
+<span id="1644">1644</span>
+<span id="1645">1645</span>
+<span id="1646">1646</span>
+<span id="1647">1647</span>
+<span id="1648">1648</span>
+<span id="1649">1649</span>
+<span id="1650">1650</span>
+<span id="1651">1651</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -1629,7 +1703,21 @@
     <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Writer</span><span class="op">&lt;</span><span class="lifetime">&#39;t</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">rkv</span>::<span class="ident">Writer</span><span class="op">&lt;</span><span class="ident">rkv</span>::<span class="ident">backend</span>::<span class="ident">SafeModeRwTransaction</span><span class="op">&lt;</span><span class="lifetime">&#39;t</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">rkv_new</span>(<span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Rkv</span>, <span class="ident">rkv</span>::<span class="ident">StoreError</span><span class="op">&gt;</span> {
-        <span class="ident">Rkv</span>::<span class="ident">new</span>::<span class="op">&lt;</span><span class="ident">rkv</span>::<span class="ident">backend</span>::<span class="ident">SafeMode</span><span class="op">&gt;</span>(<span class="ident">path</span>)
+        <span class="kw">match</span> <span class="ident">Rkv</span>::<span class="ident">new</span>::<span class="op">&lt;</span><span class="ident">rkv</span>::<span class="ident">backend</span>::<span class="ident">SafeMode</span><span class="op">&gt;</span>(<span class="ident">path</span>) {
+            <span class="comment">// An invalid file can mean:</span>
+            <span class="comment">// 1. An empty file.</span>
+            <span class="comment">// 2. A corrupted file.</span>
+            <span class="comment">//</span>
+            <span class="comment">// In both instances there&#39;s not much we can do.</span>
+            <span class="comment">// Drop the data by removing the file, and start over.</span>
+            <span class="prelude-val">Err</span>(<span class="ident">rkv</span>::<span class="ident">StoreError</span>::<span class="ident">FileInvalid</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="kw">let</span> <span class="ident">safebin</span> <span class="op">=</span> <span class="ident">path</span>.<span class="ident">join</span>(<span class="string">&quot;data.safe.bin&quot;</span>);
+                <span class="ident">fs</span>::<span class="ident">remove_file</span>(<span class="ident">safebin</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">rkv</span>::<span class="ident">StoreError</span>::<span class="ident">FileInvalid</span>)<span class="question-mark">?</span>;
+                <span class="comment">// Now try again, we only handle that error once.</span>
+                <span class="ident">Rkv</span>::<span class="ident">new</span>::<span class="op">&lt;</span><span class="ident">rkv</span>::<span class="ident">backend</span>::<span class="ident">SafeMode</span><span class="op">&gt;</span>(<span class="ident">path</span>)
+            }
+            <span class="ident">other</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">other</span>,
+        }
     }
 
     <span class="kw">fn</span> <span class="ident">delete_and_log</span>(<span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>, <span class="ident">msg</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) {
@@ -2889,10 +2977,70 @@
         );
     }
 
+    <span class="doccomment">/// LDMB ignores an empty database file just fine.</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rkv-safe-mode&quot;</span>))]</span>
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">empty_data_file</span>() {
+        <span class="kw">let</span> <span class="ident">dir</span> <span class="op">=</span> <span class="ident">tempdir</span>().<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">str_dir</span> <span class="op">=</span> <span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">display</span>().<span class="ident">to_string</span>();
+
+        <span class="comment">// Create database directory structure.</span>
+        <span class="kw">let</span> <span class="ident">database_dir</span> <span class="op">=</span> <span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">join</span>(<span class="string">&quot;db&quot;</span>);
+        <span class="ident">fs</span>::<span class="ident">create_dir_all</span>(<span class="kw-2">&amp;</span><span class="ident">database_dir</span>).<span class="ident">expect</span>(<span class="string">&quot;create database dir&quot;</span>);
+
+        <span class="comment">// Create empty database file.</span>
+        <span class="kw">let</span> <span class="ident">datamdb</span> <span class="op">=</span> <span class="ident">database_dir</span>.<span class="ident">join</span>(<span class="string">&quot;data.mdb&quot;</span>);
+        <span class="kw">let</span> <span class="ident">f</span> <span class="op">=</span> <span class="ident">fs</span>::<span class="ident">File</span>::<span class="ident">create</span>(<span class="ident">datamdb</span>).<span class="ident">expect</span>(<span class="string">&quot;create database file&quot;</span>);
+        <span class="ident">drop</span>(<span class="ident">f</span>);
+
+        <span class="ident">Database</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">str_dir</span>, <span class="bool-val">false</span>).<span class="ident">unwrap</span>();
+
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">exists</span>());
+    }
+
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rkv-safe-mode&quot;</span>)]</span>
-    <span class="kw">mod</span> <span class="ident">safe_mode_migration</span> {
+    <span class="kw">mod</span> <span class="ident">safe_mode</span> {
+        <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fs</span>::<span class="ident">File</span>;
+
         <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
         <span class="kw">use</span> <span class="ident">rkv</span>::<span class="ident">Value</span>;
+
+        <span class="attribute">#[<span class="ident">test</span>]</span>
+        <span class="kw">fn</span> <span class="ident">empty_data_file</span>() {
+            <span class="kw">let</span> <span class="ident">dir</span> <span class="op">=</span> <span class="ident">tempdir</span>().<span class="ident">unwrap</span>();
+            <span class="kw">let</span> <span class="ident">str_dir</span> <span class="op">=</span> <span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">display</span>().<span class="ident">to_string</span>();
+
+            <span class="comment">// Create database directory structure.</span>
+            <span class="kw">let</span> <span class="ident">database_dir</span> <span class="op">=</span> <span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">join</span>(<span class="string">&quot;db&quot;</span>);
+            <span class="ident">fs</span>::<span class="ident">create_dir_all</span>(<span class="kw-2">&amp;</span><span class="ident">database_dir</span>).<span class="ident">expect</span>(<span class="string">&quot;create database dir&quot;</span>);
+
+            <span class="comment">// Create empty database file.</span>
+            <span class="kw">let</span> <span class="ident">safebin</span> <span class="op">=</span> <span class="ident">database_dir</span>.<span class="ident">join</span>(<span class="string">&quot;data.safe.bin&quot;</span>);
+            <span class="kw">let</span> <span class="ident">f</span> <span class="op">=</span> <span class="ident">File</span>::<span class="ident">create</span>(<span class="ident">safebin</span>).<span class="ident">expect</span>(<span class="string">&quot;create database file&quot;</span>);
+            <span class="ident">drop</span>(<span class="ident">f</span>);
+
+            <span class="ident">Database</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">str_dir</span>, <span class="bool-val">false</span>).<span class="ident">unwrap</span>();
+
+            <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">exists</span>());
+        }
+
+        <span class="attribute">#[<span class="ident">test</span>]</span>
+        <span class="kw">fn</span> <span class="ident">corrupted_data_file</span>() {
+            <span class="kw">let</span> <span class="ident">dir</span> <span class="op">=</span> <span class="ident">tempdir</span>().<span class="ident">unwrap</span>();
+            <span class="kw">let</span> <span class="ident">str_dir</span> <span class="op">=</span> <span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">display</span>().<span class="ident">to_string</span>();
+
+            <span class="comment">// Create database directory structure.</span>
+            <span class="kw">let</span> <span class="ident">database_dir</span> <span class="op">=</span> <span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">join</span>(<span class="string">&quot;db&quot;</span>);
+            <span class="ident">fs</span>::<span class="ident">create_dir_all</span>(<span class="kw-2">&amp;</span><span class="ident">database_dir</span>).<span class="ident">expect</span>(<span class="string">&quot;create database dir&quot;</span>);
+
+            <span class="comment">// Create empty database file.</span>
+            <span class="kw">let</span> <span class="ident">safebin</span> <span class="op">=</span> <span class="ident">database_dir</span>.<span class="ident">join</span>(<span class="string">&quot;data.safe.bin&quot;</span>);
+            <span class="ident">fs</span>::<span class="ident">write</span>(<span class="ident">safebin</span>, <span class="string">&quot;&lt;broken&gt;&quot;</span>).<span class="ident">expect</span>(<span class="string">&quot;write to database file&quot;</span>);
+
+            <span class="ident">Database</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">str_dir</span>, <span class="bool-val">false</span>).<span class="ident">unwrap</span>();
+
+            <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">exists</span>());
+        }
 
         <span class="attribute">#[<span class="ident">test</span>]</span>
         <span class="kw">fn</span> <span class="ident">migration_works_on_startup</span>() {

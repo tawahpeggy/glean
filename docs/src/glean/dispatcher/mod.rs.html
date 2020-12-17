@@ -526,6 +526,35 @@
 <span id="523">523</span>
 <span id="524">524</span>
 <span id="525">525</span>
+<span id="526">526</span>
+<span id="527">527</span>
+<span id="528">528</span>
+<span id="529">529</span>
+<span id="530">530</span>
+<span id="531">531</span>
+<span id="532">532</span>
+<span id="533">533</span>
+<span id="534">534</span>
+<span id="535">535</span>
+<span id="536">536</span>
+<span id="537">537</span>
+<span id="538">538</span>
+<span id="539">539</span>
+<span id="540">540</span>
+<span id="541">541</span>
+<span id="542">542</span>
+<span id="543">543</span>
+<span id="544">544</span>
+<span id="545">545</span>
+<span id="546">546</span>
+<span id="547">547</span>
+<span id="548">548</span>
+<span id="549">549</span>
+<span id="550">550</span>
+<span id="551">551</span>
+<span id="552">552</span>
+<span id="553">553</span>
+<span id="554">554</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -570,6 +599,14 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">global</span>::<span class="kw-2">*</span>;
 
 <span class="kw">mod</span> <span class="ident">global</span>;
+
+<span class="doccomment">/// Command received while blocked from further work.</span>
+<span class="kw">enum</span> <span class="ident">Blocked</span> {
+    <span class="doccomment">/// Shutdown immediately without processing the queue.</span>
+    <span class="ident">Shutdown</span>,
+    <span class="doccomment">/// Unblock and continue with work as normal.</span>
+    <span class="ident">Continue</span>,
+}
 
 <span class="doccomment">/// The command a worker should execute.</span>
 <span class="kw">enum</span> <span class="ident">Command</span> {
@@ -629,7 +666,7 @@
     <span class="ident">queue_preinit</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">AtomicBool</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// Used to unblock the worker thread initially.</span>
-    <span class="ident">block_sender</span>: <span class="ident">Sender</span><span class="op">&lt;</span>()<span class="op">&gt;</span>,
+    <span class="ident">block_sender</span>: <span class="ident">Sender</span><span class="op">&lt;</span><span class="ident">Blocked</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// Sender for the preinit queue.</span>
     <span class="ident">preinit_sender</span>: <span class="ident">Sender</span><span class="op">&lt;</span><span class="ident">Command</span><span class="op">&gt;</span>,
@@ -675,6 +712,18 @@
             .<span class="ident">expect</span>(<span class="string">&quot;Failed to receive message on single-use channel&quot;</span>);
     }
 
+    <span class="kw">fn</span> <span class="ident">kill</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">DispatchError</span><span class="op">&gt;</span> {
+        <span class="comment">// We immediately stop queueing in the pre-init buffer.</span>
+        <span class="kw">let</span> <span class="ident">old_val</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">queue_preinit</span>.<span class="ident">swap</span>(<span class="bool-val">false</span>, <span class="ident">Ordering</span>::<span class="ident">SeqCst</span>);
+        <span class="kw">if</span> <span class="op">!</span><span class="ident">old_val</span> {
+            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">DispatchError</span>::<span class="ident">AlreadyFlushed</span>);
+        }
+
+        <span class="comment">// Unblock the worker thread exactly once.</span>
+        <span class="self">self</span>.<span class="ident">block_sender</span>.<span class="ident">send</span>(<span class="ident">Blocked</span>::<span class="ident">Shutdown</span>)<span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(())
+    }
+
     <span class="kw">fn</span> <span class="ident">flush_init</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">DispatchError</span><span class="op">&gt;</span> {
         <span class="comment">// We immediately stop queueing in the pre-init buffer.</span>
         <span class="kw">let</span> <span class="ident">old_val</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">queue_preinit</span>.<span class="ident">swap</span>(<span class="bool-val">false</span>, <span class="ident">Ordering</span>::<span class="ident">SeqCst</span>);
@@ -683,7 +732,7 @@
         }
 
         <span class="comment">// Unblock the worker thread exactly once.</span>
-        <span class="self">self</span>.<span class="ident">block_sender</span>.<span class="ident">send</span>(())<span class="question-mark">?</span>;
+        <span class="self">self</span>.<span class="ident">block_sender</span>.<span class="ident">send</span>(<span class="ident">Blocked</span>::<span class="ident">Continue</span>)<span class="question-mark">?</span>;
 
         <span class="comment">// Single-use channel to communicate with the worker thread.</span>
         <span class="kw">let</span> (<span class="ident">swap_sender</span>, <span class="ident">swap_receiver</span>) <span class="op">=</span> <span class="ident">bounded</span>(<span class="number">0</span>);
@@ -722,7 +771,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// [`flush_init`]: #method.flush_init</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">max_queue_size</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="kw">let</span> (<span class="ident">block_sender</span>, <span class="ident">block_receiver</span>) <span class="op">=</span> <span class="ident">bounded</span>(<span class="number">0</span>);
+        <span class="kw">let</span> (<span class="ident">block_sender</span>, <span class="ident">block_receiver</span>) <span class="op">=</span> <span class="ident">bounded</span>(<span class="number">1</span>);
         <span class="kw">let</span> (<span class="ident">preinit_sender</span>, <span class="ident">preinit_receiver</span>) <span class="op">=</span> <span class="ident">bounded</span>(<span class="ident">max_queue_size</span>);
         <span class="kw">let</span> (<span class="ident">sender</span>, <span class="kw-2">mut</span> <span class="ident">unbounded_receiver</span>) <span class="op">=</span> <span class="ident">unbounded</span>();
 
@@ -731,11 +780,20 @@
         <span class="kw">let</span> <span class="ident">worker</span> <span class="op">=</span> <span class="ident">thread</span>::<span class="ident">Builder</span>::<span class="ident">new</span>()
             .<span class="ident">name</span>(<span class="string">&quot;glean.dispatcher&quot;</span>.<span class="ident">into</span>())
             .<span class="ident">spawn</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
-                <span class="kw">if</span> <span class="ident">block_receiver</span>.<span class="ident">recv</span>().<span class="ident">is_err</span>() {
-                    <span class="comment">// The other side was disconnected.</span>
-                    <span class="comment">// There&#39;s nothing the worker thread can do.</span>
-                    <span class="ident">log</span>::<span class="macro">error</span><span class="macro">!</span>(<span class="string">&quot;The task producer was disconnected. Worker thread will exit.&quot;</span>);
-                    <span class="kw">return</span>;
+                <span class="kw">match</span> <span class="ident">block_receiver</span>.<span class="ident">recv</span>() {
+                    <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                        <span class="comment">// The other side was disconnected.</span>
+                        <span class="comment">// There&#39;s nothing the worker thread can do.</span>
+                        <span class="ident">log</span>::<span class="macro">error</span><span class="macro">!</span>(<span class="string">&quot;The task producer was disconnected. Worker thread will exit.&quot;</span>);
+                        <span class="kw">return</span>;
+                    }
+                    <span class="prelude-val">Ok</span>(<span class="ident">Blocked</span>::<span class="ident">Shutdown</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                        <span class="comment">// The other side wants us to stop immediately</span>
+                        <span class="kw">return</span>;
+                    }
+                    <span class="prelude-val">Ok</span>(<span class="ident">Blocked</span>::<span class="ident">Continue</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                        <span class="comment">// Queue is unblocked, processing continues as normal.</span>
+                    }
                 }
 
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">receiver</span> <span class="op">=</span> <span class="ident">preinit_receiver</span>;

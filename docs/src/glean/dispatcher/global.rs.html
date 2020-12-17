@@ -179,6 +179,19 @@
 <span id="176">176</span>
 <span id="177">177</span>
 <span id="178">178</span>
+<span id="179">179</span>
+<span id="180">180</span>
+<span id="181">181</span>
+<span id="182">182</span>
+<span id="183">183</span>
+<span id="184">184</span>
+<span id="185">185</span>
+<span id="186">186</span>
+<span id="187">187</span>
+<span id="188">188</span>
+<span id="189">189</span>
+<span id="190">190</span>
+<span id="191">191</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -241,13 +254,7 @@
     <span class="ident">guard</span>().<span class="ident">flush_init</span>()
 }
 
-<span class="doccomment">/// Shuts down the dispatch queue.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// This will initiate a shutdown of the worker thread</span>
-<span class="doccomment">/// and no new tasks will be processed after this.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">shutdown</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">DispatchError</span><span class="op">&gt;</span> {
-    <span class="ident">guard</span>().<span class="ident">shutdown</span>()<span class="question-mark">?</span>;
-
+<span class="kw">fn</span> <span class="ident">join_dispatcher_thread</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">DispatchError</span><span class="op">&gt;</span> {
     <span class="comment">// After we issue the shutdown command, make sure to wait for the</span>
     <span class="comment">// worker thread to join.</span>
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">lock</span> <span class="op">=</span> <span class="ident">GLOBAL_DISPATCHER</span>.<span class="ident">write</span>().<span class="ident">unwrap</span>();
@@ -258,6 +265,25 @@
     }
 
     <span class="prelude-val">Ok</span>(())
+}
+
+<span class="doccomment">/// Kill the blocked dispatcher without processing the queue.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// This will immediately shutdown the worker thread</span>
+<span class="doccomment">/// and no other tasks will be processed.</span>
+<span class="doccomment">/// This only has an effect when the queue is still blocked.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">kill</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">DispatchError</span><span class="op">&gt;</span> {
+    <span class="ident">guard</span>().<span class="ident">kill</span>()<span class="question-mark">?</span>;
+    <span class="ident">join_dispatcher_thread</span>()
+}
+
+<span class="doccomment">/// Shuts down the dispatch queue.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// This will initiate a shutdown of the worker thread</span>
+<span class="doccomment">/// and no new tasks will be processed after this.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">shutdown</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">DispatchError</span><span class="op">&gt;</span> {
+    <span class="ident">guard</span>().<span class="ident">shutdown</span>()<span class="question-mark">?</span>;
+    <span class="ident">join_dispatcher_thread</span>()
 }
 
 <span class="doccomment">/// TEST ONLY FUNCTION.</span>

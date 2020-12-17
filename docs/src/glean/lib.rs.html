@@ -667,6 +667,10 @@
 <span id="664">664</span>
 <span id="665">665</span>
 <span id="666">666</span>
+<span id="667">667</span>
+<span id="668">668</span>
+<span id="669">669</span>
+<span id="670">670</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -991,8 +995,12 @@
 <span class="doccomment">/// This currently only attempts to shut down the</span>
 <span class="doccomment">/// internal dispatcher.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">shutdown</span>() {
-    <span class="kw">if</span> <span class="op">!</span><span class="ident">was_initialize_called</span>() {
+    <span class="kw">if</span> <span class="ident">global_glean</span>().<span class="ident">is_none</span>() {
         <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(<span class="string">&quot;Shutdown called before Glean is initialized&quot;</span>);
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="ident">dispatcher</span>::<span class="ident">kill</span>() {
+            <span class="ident">log</span>::<span class="macro">error</span><span class="macro">!</span>(<span class="string">&quot;Can&#39;t kill dispatcher thread: {:?}&quot;</span>, <span class="ident">e</span>);
+        }
+
         <span class="kw">return</span>;
     }
 
