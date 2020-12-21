@@ -14,7 +14,7 @@ implemented in the related type in <code>../metrics/</code>.</p>
 <li><code>value</code> - The string to set the metric to.</li>
 </ul>
 <h2 id="notes" class="section-header"><a href="#notes">Notes</a></h2>
-<p>Truncates the value if it is longer than <code>MAX_STRING_LENGTH</code> bytes and logs an error.</p>
+<p>Truncates the value if it is longer than <code>MAX_LENGTH_VALUE</code> bytes and logs an error.</p>
 </div><h3 id='tymethod.test_get_value' class='method'><code>fn <a href='#tymethod.test_get_value' class='fnname'>test_get_value</a>&lt;'a, S:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;'a <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>&gt;&gt;&gt;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;self, <br>&nbsp;&nbsp;&nbsp;&nbsp;ping_name: S<br>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>&gt;</code></h3><div class='docblock'><p><strong>Exported for test purposes.</strong></p>
 <p>Gets the currently stored value as a string.</p>
 <p>This doesn't clear the stored value.</p>
