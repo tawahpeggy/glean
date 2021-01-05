@@ -318,6 +318,44 @@ assert_eq!(0, views::login_opened.test_get_num_recorded_errors(ErrorType::Invali
 <span class="boring">}
 </span></code></pre></pre>
 </div>
+<div data-lang="C++" class="tab">
+<blockquote>
+<p><strong>Note</strong>: C++ APIs are only available in Firefox Desktop.</p>
+</blockquote>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+using mozilla::glean::views::LoginOpenedKeys;
+nsTArray&lt;Tuple&lt;LoginOpenedKeys, nsCString&gt;&gt; extra;
+nsCString source = &quot;toolbar&quot;_ns;
+extra.AppendElement(MakeTuple(LoginOpenedKeys::SourceOfLogin, source));
+
+mozilla::glean::views::login_opened.Record(std::move(extra))
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+// Does it have a value?
+ASSERT_TRUE(mozilla::glean::views::login_opened.TestGetValue().isSome());
+// Does it have the expected value?
+// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1678567
+// Did it run across any errors?
+// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
+</code></pre>
+</div>
+<div data-lang="JS" class="tab">
+<blockquote>
+<p><strong>Note</strong>: JS APIs are only available in Firefox Desktop.</p>
+</blockquote>
+<pre><code class="language-js">let extra = { sourceOfLogin: &quot;toolbar&quot; };
+Glean.views.loginOpened.record(extra);
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-js">// Does it have the expected value?
+// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1678567
+// Did it run across any errors?
+// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
+</code></pre>
+</div>
 </div>
 </div>
 <h2><a class="header" href="#limits" id="limits">Limits</a></h2>

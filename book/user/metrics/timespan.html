@@ -396,6 +396,39 @@ assert_eq!(1, login_time.test_get_num_recorded_errors(ErrorType::InvalidValue));
 <span class="boring">}
 </span></code></pre></pre>
 </div>
+<div data-lang="C++" class="tab">
+<blockquote>
+<p><strong>Note</strong>: C++ APIs are only available in Firefox Desktop.</p>
+</blockquote>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+mozilla::glean::auth::login_time.Start();
+PR_Sleep(PR_MillisecondsToInterval(10));
+mozilla::glean::auth::login_time.Stop();
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+// Does it have an expected values?
+ASSERT_TRUE(mozilla::glean::auth::login_time.TestGetValue().value() &gt; 0);
+// Did it run across any errors?
+// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
+</code></pre>
+</div>
+<div data-lang="JS" class="tab">
+<blockquote>
+<p><strong>Note</strong>: JS APIs are only available in Firefox Desktop.</p>
+</blockquote>
+<pre><code class="language-js">Glean.auth.loginTime.start();
+await sleep(10);
+Glean.auth.loginTime.stop();
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-js">Assert.ok(Glean.auth.loginTime.testGetValue() &gt; 0);
+// Did it run across any errors?
+// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
+</code></pre>
+</div>
 </div>
 </div>
 <h2><a class="header" href="#raw-api" id="raw-api">Raw API</a></h2>

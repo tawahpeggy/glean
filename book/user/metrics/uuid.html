@@ -293,6 +293,44 @@ assert_eq!(u, user::client_id.test_get_value(None).unwrap());
 <span class="boring">}
 </span></code></pre></pre>
 </div>
+<div data-lang="C++" class="tab">
+<blockquote>
+<p><strong>Note</strong>: C++ APIs are only available in Firefox Desktop.</p>
+</blockquote>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+// Generate a new UUID and record it.
+mozilla::glean::user::client_id.GenerateAndSet();
+// Set a specific value.
+nsCString kUuid(&quot;decafdec-afde-cafd-ecaf-decafdecafde&quot;);
+mozilla::glean::user::client_id.Set(kUuid);
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+// Does it have an expected values?
+ASSERT_STREQ(kUuid.get(), mozilla::glean::user::client_id.TestGetValue().value().get());
+// Did it run across any errors?
+// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
+</code></pre>
+</div>
+<div data-lang="JS" class="tab">
+<blockquote>
+<p><strong>Note</strong>: JS APIs are currently only available in Firefox Desktop.
+General JavaScript support is coming soon via <a href="https://github.com/mozilla/glean.js/">the Glean.js project</a>.</p>
+</blockquote>
+<pre><code class="language-js">// Generate a new UUID and record it.
+Glean.user.clientId.generateAndSet();
+// Set a specific value.
+const uuid = &quot;decafdec-afde-cafd-ecaf-decafdecafde&quot;;
+Glean.user.clientId.set(uuid);
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-js">Assert.equal(Glean.user.clientId.testGetValue(), uuid);
+// Did it run across any errors?
+// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
+</code></pre>
+</div>
 </div>
 </div>
 <h2><a class="header" href="#limits" id="limits">Limits</a></h2>

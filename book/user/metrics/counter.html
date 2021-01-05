@@ -318,6 +318,36 @@ assert_eq!(
 <span class="boring">}
 </span></code></pre></pre>
 </div>
+<div data-lang="C++" class="tab">
+<blockquote>
+<p><strong>Note</strong>: C++ APIs are only available in Firefox Desktop.</p>
+</blockquote>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+mozilla::glean::controls::refresh_pressed.Add(1);
+mozilla::glean::controls::refresh_pressed.Add(5);
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+// Does the counter have the expected value?
+ASSERT_EQ(6, mozilla::glean::controls::refresh_pressed.TestGetValue().value());
+// Did it run across any errors?
+// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
+</code></pre>
+</div>
+<div data-lang="JS" class="tab">
+<blockquote>
+<p><strong>Note</strong>: JS APIs are currently only available in Firefox Desktop.
+General JavaScript support is coming soon via <a href="https://github.com/mozilla/glean.js/">the Glean.js project</a>.</p>
+</blockquote>
+<pre><code class="language-js">Glean.controls.refreshPressed.add(1);
+Glean.controls.refreshPressed.add(5);
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-js">Assert.equal(6, Glean.controls.refreshPressed.testGetValue());
+</code></pre>
+</div>
 </div>
 </div>
 <h2><a class="header" href="#limits" id="limits">Limits</a></h2>

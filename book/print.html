@@ -1834,6 +1834,31 @@ assert!(flags::a11y_enabled.test_get_value(None).unwrap());
 <span class="boring">}
 </span></code></pre></pre>
 </div>
+<div data-lang="C++" class="tab">
+<blockquote>
+<p><strong>Note</strong>: C++ APIs are only available in Firefox Desktop.</p>
+</blockquote>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+mozilla::glean::flags::a11y_enabled.Set(false);
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+ASSERT_EQ(false, mozilla::glean::flags::a11y_enabled.TestGetValue().value());
+</code></pre>
+</div>
+<div data-lang="JS" class="tab">
+<blockquote>
+<p><strong>Note</strong>: JS APIs are currently only available in Firefox Desktop.
+General JavaScript support is coming soon via <a href="https://github.com/mozilla/glean.js/">the Glean.js project</a>.</p>
+</blockquote>
+<pre><code class="language-js">Glean.flags.a11yEnabled.set(false);
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-js">Assert.equal(false, Glean.flags.a11yEnabled.testGetValue());
+</code></pre>
+</div>
 </div>
 </div>
 <h2><a class="header" href="#limits-1" id="limits-1">Limits</a></h2>
@@ -2169,6 +2194,36 @@ assert_eq!(
 );
 <span class="boring">}
 </span></code></pre></pre>
+</div>
+<div data-lang="C++" class="tab">
+<blockquote>
+<p><strong>Note</strong>: C++ APIs are only available in Firefox Desktop.</p>
+</blockquote>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+mozilla::glean::controls::refresh_pressed.Add(1);
+mozilla::glean::controls::refresh_pressed.Add(5);
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+// Does the counter have the expected value?
+ASSERT_EQ(6, mozilla::glean::controls::refresh_pressed.TestGetValue().value());
+// Did it run across any errors?
+// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
+</code></pre>
+</div>
+<div data-lang="JS" class="tab">
+<blockquote>
+<p><strong>Note</strong>: JS APIs are currently only available in Firefox Desktop.
+General JavaScript support is coming soon via <a href="https://github.com/mozilla/glean.js/">the Glean.js project</a>.</p>
+</blockquote>
+<pre><code class="language-js">Glean.controls.refreshPressed.add(1);
+Glean.controls.refreshPressed.add(5);
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-js">Assert.equal(6, Glean.controls.refreshPressed.testGetValue());
+</code></pre>
 </div>
 </div>
 </div>
@@ -2716,6 +2771,39 @@ Assert.Equal(
 );
 </code></pre>
 </div>
+<div data-lang="C++" class="tab">
+<blockquote>
+<p><strong>Note</strong>: C++ APIs are only available in Firefox Desktop.</p>
+</blockquote>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+mozilla::glean::search_default::name.Set(&quot;wikipedia&quot;_ns);
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+// Does it have the expected value?
+ASSERT_STREQ(
+  &quot;wikipedia&quot;,
+  mozilla::glean::search_default::name.TestGetValue().value().get()
+);
+// Did it run across any errors?
+// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
+</code></pre>
+</div>
+<div data-lang="JS" class="tab">
+<blockquote>
+<p><strong>Note</strong>: JS APIs are currently only available in Firefox Desktop.
+General JavaScript support is coming soon via <a href="https://github.com/mozilla/glean.js/">the Glean.js project</a>.</p>
+</blockquote>
+<pre><code class="language-js">Glean.searchDefault.name.set(&quot;wikipedia&quot;);
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-js">Assert.equal(&quot;wikipedia&quot;, Glean.searchDefault.name.testGetValue());
+// Did it run across any errors?
+// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
+</code></pre>
+</div>
 </div>
 </div>
 <h2><a class="header" href="#limits-6" id="limits-6">Limits</a></h2>
@@ -3033,6 +3121,41 @@ assert_eq!(
 );
 </code></pre>
 </div>
+<div data-lang="C++" class="tab">
+<blockquote>
+<p><strong>Note</strong>: C++ APIs are only available in Firefox Desktop.</p>
+</blockquote>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+mozilla::glean::search::engines.Add(&quot;wikipedia&quot;_ns);
+mozilla::glean::search::engines.Add(&quot;duck duck go&quot;_ns);
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+// Does it have the expected values?
+nsTArray&lt;nsCString&gt; list = mozilla::glean::search::engines.TestGetValue();
+ASSERT_TRUE(list.Contains(&quot;wikipedia&quot;_ns));
+ASSERT_TRUE(list.Constains(&quot;duck duck go&quot;_ns));
+// Did it run across any errors?
+// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
+</code></pre>
+</div>
+<div data-lang="JS" class="tab">
+<blockquote>
+<p><strong>Note</strong>: JS APIs are only available in Firefox Desktop.</p>
+</blockquote>
+<pre><code class="language-js">Glean.search.engines.add(&quot;wikipedia&quot;);
+Glean.search.engines.add(&quot;duck duck go&quot;);
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-js">const engines = Glean.search.engines.testGetValue();
+Assert.ok(engines.includes(&quot;wikipedia&quot;));
+Assert.ok(engines.includes(&quot;duck duck go&quot;));
+// Did it run across any errors?
+// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
+</code></pre>
+</div>
 </div>
 </div>
 <h2><a class="header" href="#limits-8" id="limits-8">Limits</a></h2>
@@ -3284,6 +3407,39 @@ assert!(login_time.test_get_value().unwrap() &gt; 0);
 assert_eq!(1, login_time.test_get_num_recorded_errors(ErrorType::InvalidValue));
 <span class="boring">}
 </span></code></pre></pre>
+</div>
+<div data-lang="C++" class="tab">
+<blockquote>
+<p><strong>Note</strong>: C++ APIs are only available in Firefox Desktop.</p>
+</blockquote>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+mozilla::glean::auth::login_time.Start();
+PR_Sleep(PR_MillisecondsToInterval(10));
+mozilla::glean::auth::login_time.Stop();
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+// Does it have an expected values?
+ASSERT_TRUE(mozilla::glean::auth::login_time.TestGetValue().value() &gt; 0);
+// Did it run across any errors?
+// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
+</code></pre>
+</div>
+<div data-lang="JS" class="tab">
+<blockquote>
+<p><strong>Note</strong>: JS APIs are only available in Firefox Desktop.</p>
+</blockquote>
+<pre><code class="language-js">Glean.auth.loginTime.start();
+await sleep(10);
+Glean.auth.loginTime.stop();
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-js">Assert.ok(Glean.auth.loginTime.testGetValue() &gt; 0);
+// Did it run across any errors?
+// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
+</code></pre>
 </div>
 </div>
 </div>
@@ -3584,7 +3740,7 @@ Assert.Equal(0, Pages.pageLoad.TestGetNumRecordedErrors(ErrorType.InvalidValue))
 </span>use glean_metrics;
 
 fn on_page_start() {
-    self.timer_id = Pages.page_load.start();
+    self.timer_id = pages::page_load.start();
 }
 
 fn on_page_loaded() {
@@ -3613,6 +3769,40 @@ for error in errors {
 }
 <span class="boring">}
 </span></code></pre></pre>
+</div>
+<div data-lang="C++" class="tab">
+<blockquote>
+<p><strong>Note</strong>: C++ APIs are only available in Firefox Desktop.</p>
+</blockquote>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+auto timerId = mozilla::glean::pages::page_load.Start();
+PR_Sleep(PR_MillisecondsToInterval(10));
+mozilla::glean::pages::page_load.StopAndAccumulate(timerId);
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+// Does it have an expected values?
+const data = mozilla::glean::pages::page_load.TestGetValue().value();
+ASSERT_TRUE(data.sum &gt; 0);
+// Did it run across any errors?
+// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
+</code></pre>
+</div>
+<div data-lang="JS" class="tab">
+<blockquote>
+<p><strong>Note</strong>: JS APIs are only available in Firefox Desktop.</p>
+</blockquote>
+<pre><code class="language-js">const timerId = Glean.pages.pageLoad.start();
+await sleep(10);
+Glean.pages.pageLoad.stopAndAccumulate(timerId);
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-js">Assert.ok(Glean.pages.pageLoad.testGetValue().sum &gt; 0);
+// Did it run across any errors?
+// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
+</code></pre>
 </div>
 </div>
 </div>
@@ -3900,6 +4090,38 @@ assert_eq!(1, memory::heap_allocated.test_get_num_recorded_errors(InvalidValue))
 <span class="boring">}
 </span></code></pre></pre>
 </div>
+<div data-lang="C++" class="tab">
+<blockquote>
+<p><strong>Note</strong>: C++ APIs are only available in Firefox Desktop.</p>
+</blockquote>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+mozilla::glean::memory::heap_allocated.Accumulate(bytes / 1024);
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+// Does it have the expected value?
+ASSERT_EQ(11 * 1024, mozilla::glean::memory::heap_allocated.TestGetValue().value().sum);
+// Did it run across any errors?
+// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
+</code></pre>
+</div>
+<div data-lang="JS" class="tab">
+<blockquote>
+<p><strong>Note</strong>: JS APIs are only available in Firefox Desktop.</p>
+</blockquote>
+<pre><code class="language-js">Glean.memory.heapAllocated.accumulate(bytes / 1024);
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-js">const data = Glean.memory.heapAllocated.testGetValue();
+Assert.equal(11 * 1024, data.sum);
+// Does it have the right number of samples?
+Assert.equal(1, Object.entries(data.values).reduce(([bucket, count], sum) =&gt; count + sum, 0));
+// Did it run across any errors?
+// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
+</code></pre>
+</div>
 </div>
 </div>
 <h2><a class="header" href="#limits-11" id="limits-11">Limits</a></h2>
@@ -4107,6 +4329,44 @@ assert_eq!(u, user::client_id.test_get_value(None).unwrap());
 <span class="boring">}
 </span></code></pre></pre>
 </div>
+<div data-lang="C++" class="tab">
+<blockquote>
+<p><strong>Note</strong>: C++ APIs are only available in Firefox Desktop.</p>
+</blockquote>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+// Generate a new UUID and record it.
+mozilla::glean::user::client_id.GenerateAndSet();
+// Set a specific value.
+nsCString kUuid(&quot;decafdec-afde-cafd-ecaf-decafdecafde&quot;);
+mozilla::glean::user::client_id.Set(kUuid);
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+// Does it have an expected values?
+ASSERT_STREQ(kUuid.get(), mozilla::glean::user::client_id.TestGetValue().value().get());
+// Did it run across any errors?
+// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
+</code></pre>
+</div>
+<div data-lang="JS" class="tab">
+<blockquote>
+<p><strong>Note</strong>: JS APIs are currently only available in Firefox Desktop.
+General JavaScript support is coming soon via <a href="https://github.com/mozilla/glean.js/">the Glean.js project</a>.</p>
+</blockquote>
+<pre><code class="language-js">// Generate a new UUID and record it.
+Glean.user.clientId.generateAndSet();
+// Set a specific value.
+const uuid = &quot;decafdec-afde-cafd-ecaf-decafdecafde&quot;;
+Glean.user.clientId.set(uuid);
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-js">Assert.equal(Glean.user.clientId.testGetValue(), uuid);
+// Did it run across any errors?
+// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
+</code></pre>
+</div>
 </div>
 </div>
 <h2><a class="header" href="#limits-12" id="limits-12">Limits</a></h2>
@@ -4287,6 +4547,40 @@ assert_eq!(0, install::first_run.test_get_num_recorded_errors(
 ));
 </code></pre>
 </div>
+<div data-lang="C++" class="tab">
+<blockquote>
+<p><strong>Note</strong>: C++ APIs are only available in Firefox Desktop.</p>
+</blockquote>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+PRExplodedTime date = {0, 35, 10, 12, 6, 10, 2020, 0, 0, {5 * 60 * 60, 0}};
+mozilla::glean::install::first_run.Set(&amp;date);
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+// Does it have the expected value?
+ASSERT_STREQ(
+  mozilla::glean::install::first_run.TestGetValue().value(),
+  &quot;2020-11-06T12:10:35+05:00&quot;_ns
+);
+// Did it run across any errors?
+// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
+</code></pre>
+</div>
+<div data-lang="JS" class="tab">
+<blockquote>
+<p><strong>Note</strong>: JS APIs are only available in Firefox Desktop.</p>
+</blockquote>
+<pre><code class="language-js">const value = new Date(&quot;2020-06-11T12:00:00&quot;);
+Glean.install.firstRun.set(value.getTime() * 1000);
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-js">Assert.ok(Glean.install.firstRun.testGetValue().startsWith(&quot;2020-06-11T12:00:00&quot;));
+// Did it run across any errors?
+// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
+</code></pre>
+</div>
 </div>
 </div>
 <h2><a class="header" href="#limits-13" id="limits-13">Limits</a></h2>
@@ -4451,6 +4745,44 @@ assert_eq!(&quot;login_opened&quot;, first.name);
 assert_eq!(0, views::login_opened.test_get_num_recorded_errors(ErrorType::InvalidOverflow, None));
 <span class="boring">}
 </span></code></pre></pre>
+</div>
+<div data-lang="C++" class="tab">
+<blockquote>
+<p><strong>Note</strong>: C++ APIs are only available in Firefox Desktop.</p>
+</blockquote>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+using mozilla::glean::views::LoginOpenedKeys;
+nsTArray&lt;Tuple&lt;LoginOpenedKeys, nsCString&gt;&gt; extra;
+nsCString source = &quot;toolbar&quot;_ns;
+extra.AppendElement(MakeTuple(LoginOpenedKeys::SourceOfLogin, source));
+
+mozilla::glean::views::login_opened.Record(std::move(extra))
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+// Does it have a value?
+ASSERT_TRUE(mozilla::glean::views::login_opened.TestGetValue().isSome());
+// Does it have the expected value?
+// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1678567
+// Did it run across any errors?
+// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
+</code></pre>
+</div>
+<div data-lang="JS" class="tab">
+<blockquote>
+<p><strong>Note</strong>: JS APIs are only available in Firefox Desktop.</p>
+</blockquote>
+<pre><code class="language-js">let extra = { sourceOfLogin: &quot;toolbar&quot; };
+Glean.views.loginOpened.record(extra);
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-js">// Does it have the expected value?
+// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1678567
+// Did it run across any errors?
+// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
+</code></pre>
 </div>
 </div>
 </div>

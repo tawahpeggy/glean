@@ -279,6 +279,31 @@ assert!(flags::a11y_enabled.test_get_value(None).unwrap());
 <span class="boring">}
 </span></code></pre></pre>
 </div>
+<div data-lang="C++" class="tab">
+<blockquote>
+<p><strong>Note</strong>: C++ APIs are only available in Firefox Desktop.</p>
+</blockquote>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+mozilla::glean::flags::a11y_enabled.Set(false);
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+ASSERT_EQ(false, mozilla::glean::flags::a11y_enabled.TestGetValue().value());
+</code></pre>
+</div>
+<div data-lang="JS" class="tab">
+<blockquote>
+<p><strong>Note</strong>: JS APIs are currently only available in Firefox Desktop.
+General JavaScript support is coming soon via <a href="https://github.com/mozilla/glean.js/">the Glean.js project</a>.</p>
+</blockquote>
+<pre><code class="language-js">Glean.flags.a11yEnabled.set(false);
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-js">Assert.equal(false, Glean.flags.a11yEnabled.testGetValue());
+</code></pre>
+</div>
 </div>
 </div>
 <h2><a class="header" href="#limits" id="limits">Limits</a></h2>

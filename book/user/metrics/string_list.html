@@ -320,6 +320,41 @@ assert_eq!(
 );
 </code></pre>
 </div>
+<div data-lang="C++" class="tab">
+<blockquote>
+<p><strong>Note</strong>: C++ APIs are only available in Firefox Desktop.</p>
+</blockquote>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+mozilla::glean::search::engines.Add(&quot;wikipedia&quot;_ns);
+mozilla::glean::search::engines.Add(&quot;duck duck go&quot;_ns);
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+// Does it have the expected values?
+nsTArray&lt;nsCString&gt; list = mozilla::glean::search::engines.TestGetValue();
+ASSERT_TRUE(list.Contains(&quot;wikipedia&quot;_ns));
+ASSERT_TRUE(list.Constains(&quot;duck duck go&quot;_ns));
+// Did it run across any errors?
+// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
+</code></pre>
+</div>
+<div data-lang="JS" class="tab">
+<blockquote>
+<p><strong>Note</strong>: JS APIs are only available in Firefox Desktop.</p>
+</blockquote>
+<pre><code class="language-js">Glean.search.engines.add(&quot;wikipedia&quot;);
+Glean.search.engines.add(&quot;duck duck go&quot;);
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-js">const engines = Glean.search.engines.testGetValue();
+Assert.ok(engines.includes(&quot;wikipedia&quot;));
+Assert.ok(engines.includes(&quot;duck duck go&quot;));
+// Did it run across any errors?
+// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
+</code></pre>
+</div>
 </div>
 </div>
 <h2><a class="header" href="#limits" id="limits">Limits</a></h2>

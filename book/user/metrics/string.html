@@ -305,6 +305,39 @@ Assert.Equal(
 );
 </code></pre>
 </div>
+<div data-lang="C++" class="tab">
+<blockquote>
+<p><strong>Note</strong>: C++ APIs are only available in Firefox Desktop.</p>
+</blockquote>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+mozilla::glean::search_default::name.Set(&quot;wikipedia&quot;_ns);
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+// Does it have the expected value?
+ASSERT_STREQ(
+  &quot;wikipedia&quot;,
+  mozilla::glean::search_default::name.TestGetValue().value().get()
+);
+// Did it run across any errors?
+// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
+</code></pre>
+</div>
+<div data-lang="JS" class="tab">
+<blockquote>
+<p><strong>Note</strong>: JS APIs are currently only available in Firefox Desktop.
+General JavaScript support is coming soon via <a href="https://github.com/mozilla/glean.js/">the Glean.js project</a>.</p>
+</blockquote>
+<pre><code class="language-js">Glean.searchDefault.name.set(&quot;wikipedia&quot;);
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-js">Assert.equal(&quot;wikipedia&quot;, Glean.searchDefault.name.testGetValue());
+// Did it run across any errors?
+// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
+</code></pre>
+</div>
 </div>
 </div>
 <h2><a class="header" href="#limits" id="limits">Limits</a></h2>
