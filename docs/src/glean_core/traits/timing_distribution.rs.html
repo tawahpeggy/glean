@@ -108,7 +108,7 @@
     <span class="doccomment">/// # Returns</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// A unique [`TimerId`] for the new timer.</span>
-    <span class="kw">fn</span> <span class="ident">start</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">TimerId</span>;
+    <span class="kw">fn</span> <span class="ident">start</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">TimerId</span>;
 
     <span class="doccomment">/// Stops tracking time for the provided metric and associated timer id.</span>
     <span class="doccomment">///</span>
@@ -121,7 +121,7 @@
     <span class="doccomment">/// * `id` - The [`TimerId`] to associate with this timing. This allows</span>
     <span class="doccomment">///   for concurrent timing of events associated with different ids to the</span>
     <span class="doccomment">///   same timespan metric.</span>
-    <span class="kw">fn</span> <span class="ident">stop_and_accumulate</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">id</span>: <span class="ident">TimerId</span>);
+    <span class="kw">fn</span> <span class="ident">stop_and_accumulate</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">id</span>: <span class="ident">TimerId</span>);
 
     <span class="doccomment">/// Aborts a previous [`start`](TimingDistribution::start) call. No</span>
     <span class="doccomment">/// error is recorded if no [`start`](TimingDistribution::start) was</span>
@@ -132,11 +132,11 @@
     <span class="doccomment">/// * `id` - The [`TimerId`] to associate with this timing. This allows</span>
     <span class="doccomment">///   for concurrent timing of events associated with different ids to the</span>
     <span class="doccomment">///   same timing distribution metric.</span>
-    <span class="kw">fn</span> <span class="ident">cancel</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">id</span>: <span class="ident">TimerId</span>);
+    <span class="kw">fn</span> <span class="ident">cancel</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">id</span>: <span class="ident">TimerId</span>);
 
     <span class="doccomment">/// **Exported for test purposes.**</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// Gets the currently stored value as an integer.</span>
+    <span class="doccomment">/// Gets the currently stored value of the metric.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This doesn&#39;t clear the stored value.</span>
     <span class="doccomment">///</span>
