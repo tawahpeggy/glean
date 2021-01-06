@@ -288,8 +288,8 @@ You can find the version number on the <a href="https://github.com/mozilla/appli
 </div>
 <div data-lang="Python" class="tab">
 <p>We recommend using a virtual environment for your work to isolate the dependencies for your project. There are many popular abstractions on top of virtual environments in the Python ecosystem which can help manage your project dependencies.</p>
-<p>The Glean SDK Python bindings currently have <a href="https://pypi.org/project/glean-sdk/#files">prebuilt wheels on PyPI for Windows (i686 and x86_64), Linux (x86_64) and macOS (x86_64)</a>.
-For other platforms, the <code>glean_sdk</code> package will be built from source on your machine.
+<p>The Glean SDK Python bindings currently have <a href="https://pypi.org/project/glean-sdk/#files">prebuilt wheels on PyPI for Windows (i686 and x86_64), Linux/glibc (x86_64) and macOS (x86_64)</a>.
+For other platforms, including *BSD or Linux distributions that don't use glibc, such as Alpine Linux, the <code>glean_sdk</code> package will be built from source on your machine.
 This requires that Cargo and Rust are already installed.
 The easiest way to do this is through <a href="https://rustup.rs/">rustup</a>.</p>
 <p>Once you have your virtual environment set up and activated, you can install the Glean SDK into it using:</p>

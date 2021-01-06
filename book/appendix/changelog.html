@@ -175,11 +175,23 @@
                 <div id="content" class="content">
                     <main>
                         <h1><a class="header" href="#unreleased-changes" id="unreleased-changes">Unreleased changes</a></h1>
-<p><a href="https://github.com/mozilla/glean/compare/v33.9.1...main">Full changelog</a></p>
+<p><a href="https://github.com/mozilla/glean/compare/v33.10.0...main">Full changelog</a></p>
+<h1><a class="header" href="#v33100-2021-01-06" id="v33100-2021-01-06">v33.10.0 (2021-01-06)</a></h1>
+<p><a href="https://github.com/mozilla/glean/compare/v33.9.1...v33.10.0">Full changelog</a></p>
 <ul>
+<li>General
+<ul>
+<li>A new metric <code>glean.validation.first_run_hour</code>, analogous to the existing <code>first_run_date</code> but with hour resolution, has been added. Only clients running the app for the first time after this change will report this metric (<a href="https://github.com/mozilla/glean/pull/1403">#1403</a>).</li>
+</ul>
+</li>
 <li>Rust
 <ul>
 <li>BUGFIX: Don't require mutable references in RLB traits (<a href="https://github.com/mozilla/glean/pull/1417">#1417</a>).</li>
+</ul>
+</li>
+<li>Python
+<ul>
+<li>Building the Python package from source now works on musl-based Linux distributions, such as Alpine Linux (<a href="https://github.com/mozilla/glean/pull/1416">#1416</a>).</li>
 </ul>
 </li>
 </ul>
@@ -190,7 +202,7 @@
 <ul>
 <li>BUGFIX: Don't panic on shutdown and avoid running tasks if uninitialized (<a href="https://github.com/mozilla/glean/pull/1398">#1398</a>).</li>
 <li>BUGFIX: Don't fail on empty database files (<a href="https://github.com/mozilla/glean/pull/1398">#1398</a>).</li>
-<li>BUGFIX: Support ping registration before Glean initializes <a href="https://github.com/mozilla/glean/pull/1393">#1393</a>.</li>
+<li>BUGFIX: Support ping registration before Glean initializes (<a href="https://github.com/mozilla/glean/pull/1393">#1393</a>).</li>
 </ul>
 </li>
 </ul>
@@ -199,9 +211,9 @@
 <ul>
 <li>Rust
 <ul>
-<li>Introduce the String List metric type in the RLB. <a href="https://github.com/mozilla/glean/pull/1380">#1380</a>.</li>
-<li>Introduce the <code>Datetime</code> metric type in the RLB <a href="https://github.com/mozilla/glean/pull/1384">#1384</a>.</li>
-<li>Introduce the <code>CustomDistribution</code> and <code>TimingDistribution</code> metric type in the RLB <a href="https://github.com/mozilla/glean/pull/1394">#1394</a>.</li>
+<li>Introduce the String List metric type in the RLB. (<a href="https://github.com/mozilla/glean/pull/1380">#1380</a>).</li>
+<li>Introduce the <code>Datetime</code> metric type in the RLB (<a href="https://github.com/mozilla/glean/pull/1384">#1384</a>).</li>
+<li>Introduce the <code>CustomDistribution</code> and <code>TimingDistribution</code> metric type in the RLB (<a href="https://github.com/mozilla/glean/pull/1394">#1394</a>).</li>
 </ul>
 </li>
 </ul>
@@ -210,7 +222,7 @@
 <ul>
 <li>Rust
 <ul>
-<li>Introduce the Memory Distribution metric type in the RLB. <a href="https://github.com/mozilla/glean/pull/1376">#1376</a></li>
+<li>Introduce the Memory Distribution metric type in the RLB. (<a href="https://github.com/mozilla/glean/pull/1376">#1376</a>).</li>
 <li>Shut down Glean in tests before resetting to make sure they don't mistakenly init Glean twice in parallel (<a href="https://github.com/mozilla/glean/pull/1375">#1375</a>).</li>
 <li>BUGFIX: Fixing 2 <code>lock-order-inversion</code> bugs found by TSan (<a href="https://github.com/mozilla/glean/pull/1378">#1378</a>).
 <ul>
@@ -248,7 +260,7 @@ which could lead to deadlocks in multi-threaded code. As RLB uses multiple threa
 <li>Rust
 <ul>
 <li>BUGFIX: Negative timespans for the timespan metric now correctly record an <code>InvalidValue</code> error (<a href="https://github.com/mozilla/glean/pull/1347">#1347</a>).</li>
-<li>Introduce the Timespan metric type in the RLB <a href="https://github.com/mozilla/glean/pull/1347">#1347</a>.</li>
+<li>Introduce the Timespan metric type in the RLB (<a href="https://github.com/mozilla/glean/pull/1347">#1347</a>).</li>
 </ul>
 </li>
 <li>Python
@@ -264,7 +276,7 @@ which could lead to deadlocks in multi-threaded code. As RLB uses multiple threa
 <li>Rust
 <ul>
 <li>Introduce the UUID metric type in the RLB.</li>
-<li>Introduce the Labeled metric type in the RLB <a href="https://github.com/mozilla/glean/pull/1327">#1327</a>.</li>
+<li>Introduce the Labeled metric type in the RLB (<a href="https://github.com/mozilla/glean/pull/1327">#1327</a>).</li>
 <li>Introduce the Quantity metric type in the RLB.</li>
 <li>Introduce the <code>shutdown</code> API.</li>
 <li>Add Glean debugging APIs.</li>

@@ -324,8 +324,8 @@ You can find the version number on the <a href="https://github.com/mozilla/appli
 </div>
 <div data-lang="Python" class="tab">
 <p>We recommend using a virtual environment for your work to isolate the dependencies for your project. There are many popular abstractions on top of virtual environments in the Python ecosystem which can help manage your project dependencies.</p>
-<p>The Glean SDK Python bindings currently have <a href="https://pypi.org/project/glean-sdk/#files">prebuilt wheels on PyPI for Windows (i686 and x86_64), Linux (x86_64) and macOS (x86_64)</a>.
-For other platforms, the <code>glean_sdk</code> package will be built from source on your machine.
+<p>The Glean SDK Python bindings currently have <a href="https://pypi.org/project/glean-sdk/#files">prebuilt wheels on PyPI for Windows (i686 and x86_64), Linux/glibc (x86_64) and macOS (x86_64)</a>.
+For other platforms, including *BSD or Linux distributions that don't use glibc, such as Alpine Linux, the <code>glean_sdk</code> package will be built from source on your machine.
 This requires that Cargo and Rust are already installed.
 The easiest way to do this is through <a href="https://rustup.rs/">rustup</a>.</p>
 <p>Once you have your virtual environment set up and activated, you can install the Glean SDK into it using:</p>
@@ -605,7 +605,7 @@ class SampleApplication : Application() {
 }
 </code></pre>
 <p>Once initialized, if <code>uploadEnabled</code> is true, the Glean SDK will automatically start collecting <a href="user/pings/metrics.html">baseline metrics</a> and sending its <a href="user/pings/index.html">pings</a>, according to their respective schedules.<br />
-If <code>uploadEnabled</code> is false, any persisted metrics, events and pings (other than <code>first_run_date</code>) are cleared, and subsequent calls to record metrics will be no-ops.</p>
+If <code>uploadEnabled</code> is false, any persisted metrics, events and pings (other than <code>first_run_date</code> and <code>first_run_hour</code>) are cleared, and subsequent calls to record metrics will be no-ops.</p>
 <p>The Glean SDK should be initialized as soon as possible, and importantly, before any other libraries in the application start using Glean.
 Library code should never call <code>Glean.initialize</code>, since it should be called exactly once per application.</p>
 <blockquote>
@@ -658,7 +658,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 </code></pre>
 <p>Once initialized, if <code>uploadEnabled</code> is true, the Glean SDK will automatically start collecting <a href="user/pings/metrics.html">baseline metrics</a> and sending its <a href="user/pings/index.html">pings</a>, according to their respective schedules.<br />
-If <code>uploadEnabled</code> is false, any persisted metrics, events and pings (other than <code>first_run_date</code>) are cleared, and subsequent calls to record metrics will be no-ops.</p>
+If <code>uploadEnabled</code> is false, any persisted metrics, events and pings (other than <code>first_run_date</code> and <code>first_run_hour</code>) are cleared, and subsequent calls to record metrics will be no-ops.</p>
 <p>The Glean SDK should be initialized as soon as possible, and importantly, before any other libraries in the application start using Glean.
 Library code should never call <code>Glean.shared.initialize</code>, since it should be called exactly once per application.</p>
 <blockquote>
@@ -681,7 +681,7 @@ Glean.initialize(
 )
 </code></pre>
 <p>Once initialized, if <code>upload_enabled</code> is true, the Glean SDK will automatically start collecting <a href="user/pings/metrics.html">baseline metrics</a>.
-If <code>upload_enabled</code> is false, any persisted metrics, events and pings (other than <code>first_run_date</code>) are cleared, and subsequent calls to record metrics will be no-ops.</p>
+If <code>upload_enabled</code> is false, any persisted metrics, events and pings (other than <code>first_run_date</code> and <code>first_run_hour</code>) are cleared, and subsequent calls to record metrics will be no-ops.</p>
 <p>Additional configuration is available on the <code>glean.Configuration</code> object, which can be passed into <code>Glean.initialize()</code>.</p>
 <p>Unlike Android and Swift, the Python bindings do not automatically send any pings.
 See the <a href="user/pings/custom.html">custom pings documentation</a> about adding custom pings and sending them.</p>
@@ -741,7 +741,7 @@ Set the initial state using <code>uploadEnabled</code> on <code>GleanInstance.in
 </div>
 </div>
 <p>The application should provide some form of user interface to call this method.</p>
-<p>When going from enabled to disabled, all pending events, metrics and pings are cleared, except for <a href="user/pings/index.html#the-client_info-section"><code>first_run_date</code></a>.
+<p>When going from enabled to disabled, all pending events, metrics and pings are cleared, except for <a href="user/pings/index.html#the-client_info-section"><code>first_run_date</code> and <code>first_run_hour</code></a>.
 When re-enabling, core Glean metrics will be recomputed at that time.</p>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/general-api.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#adding-new-metrics-1" id="adding-new-metrics-1">Adding new metrics</a></h1>
 <h2><a class="header" href="#table-of-contents" id="table-of-contents">Table of Contents</a></h2>
@@ -6414,6 +6414,7 @@ includes when the application starts.</p>
 <p>The following metrics are added to the ping:</p>
 <table><thead><tr><th>Name</th><th>Type</th><th>Description</th><th>Data reviews</th><th>Extras</th><th>Expiration</th><th><a href="https://wiki.mozilla.org/Firefox/Data_Collection">Data Sensitivity</a></th></tr></thead><tbody>
 <tr><td>glean.baseline.duration</td><td><a href="https://mozilla.github.io/glean/book/user/metrics/timespan.html">timespan</a></td><td>The duration of the last foreground session.</td><td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1512938#c3">1</a></td><td></td><td>never</td><td>1, 2</td></tr>
+<tr><td>glean.validation.first_run_hour</td><td><a href="https://mozilla.github.io/glean/book/user/metrics/datetime.html">datetime</a></td><td>The hour of the first run of the application.</td><td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1680783#c5">1</a></td><td></td><td>never</td><td>1</td></tr>
 </tbody></table>
 <h2><a class="header" href="#deletion-request" id="deletion-request">deletion-request</a></h2>
 <p>This is a built-in ping that is assembled out of the box by the Glean SDK.</p>
@@ -6477,6 +6478,7 @@ upgraded.</p>
 <tr><td>glean.upload.ping_upload_failure</td><td><a href="https://mozilla.github.io/glean/book/user/metrics/labeled_counters.html">labeled_counter</a></td><td>Counts the number of ping upload failures, by type of failure. This includes failures for all ping types, though the counts appear in the next successfully sent <code>metrics</code> ping.</td><td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1589124#c1">1</a></td><td><ul><li>status_code_4xx</li><li>status_code_5xx</li><li>status_code_unknown</li><li>unrecoverable</li><li>recoverable</li></ul></td><td></td><td></td></tr>
 <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr><td>never</td><td>1</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>glean.validation.first_run_hour</td><td><a href="https://mozilla.github.io/glean/book/user/metrics/datetime.html">datetime</a></td><td>The hour of the first run of the application.</td><td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1680783#c5">1</a></td><td></td><td>never</td><td>1</td></tr>
 </tbody></table>
 <p>Data categories are <a href="https://wiki.mozilla.org/Firefox/Data_Collection">defined here</a>.</p>
 <!-- AUTOGENERATED BY glean_parser.  DO NOT EDIT. -->
@@ -8335,7 +8337,7 @@ of accidentally sending them.
 There are a couple of exceptions to this:</p>
 <ul>
 <li>
-<p><code>first_run_date</code> is retained so it isn't reset if metrics are later re-enabled.</p>
+<p><code>first_run_date</code> and <code>first_run_hour</code> are retained so they aren't reset if metrics are later re-enabled.</p>
 </li>
 <li>
 <p><code>client_id</code> is set to the special value <code>&quot;c0ffeec0-ffee-c0ff-eec0-ffeec0ffeec0&quot;</code>. This should make it possible to detect the error case when metrics are sent from a client that has been disabled.</p>
@@ -8344,7 +8346,7 @@ There are a couple of exceptions to this:</p>
 <p>When re-enabling metrics:</p>
 <ul>
 <li>
-<p><code>first_run_date</code> is left as-is. (It should remain a correct date of first run of the application, unaffected by disabling/enabling the Glean SDK).</p>
+<p><code>first_run_date</code> and <code>first_run_hour</code> are left as-is. (They should remain a correct time of first run of the application, unaffected by disabling/enabling the Glean SDK).</p>
 </li>
 <li>
 <p>The <code>client_id</code> is set to a newly-generated random UUID. It has no connection to the <code>client_id</code> used prior to disabling the Glean SDK.</p>
@@ -8804,11 +8806,23 @@ Each ping has its own schedule to gather all its locally saved metrics and creat
 <h2><a class="header" href="#this-week-in-glean-twig" id="this-week-in-glean-twig">This Week in Glean (TWiG)</a></h2>
 <p><a href="appendix/twig.html">This Week in Glean</a> is a series of blog posts that the Glean Team at Mozilla is using to try to communicate better about our work.</p>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/appendix/glossary.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#unreleased-changes" id="unreleased-changes">Unreleased changes</a></h1>
-<p><a href="https://github.com/mozilla/glean/compare/v33.9.1...main">Full changelog</a></p>
+<p><a href="https://github.com/mozilla/glean/compare/v33.10.0...main">Full changelog</a></p>
+<h1><a class="header" href="#v33100-2021-01-06" id="v33100-2021-01-06">v33.10.0 (2021-01-06)</a></h1>
+<p><a href="https://github.com/mozilla/glean/compare/v33.9.1...v33.10.0">Full changelog</a></p>
 <ul>
+<li>General
+<ul>
+<li>A new metric <code>glean.validation.first_run_hour</code>, analogous to the existing <code>first_run_date</code> but with hour resolution, has been added. Only clients running the app for the first time after this change will report this metric (<a href="https://github.com/mozilla/glean/pull/1403">#1403</a>).</li>
+</ul>
+</li>
 <li>Rust
 <ul>
 <li>BUGFIX: Don't require mutable references in RLB traits (<a href="https://github.com/mozilla/glean/pull/1417">#1417</a>).</li>
+</ul>
+</li>
+<li>Python
+<ul>
+<li>Building the Python package from source now works on musl-based Linux distributions, such as Alpine Linux (<a href="https://github.com/mozilla/glean/pull/1416">#1416</a>).</li>
 </ul>
 </li>
 </ul>
@@ -8819,7 +8833,7 @@ Each ping has its own schedule to gather all its locally saved metrics and creat
 <ul>
 <li>BUGFIX: Don't panic on shutdown and avoid running tasks if uninitialized (<a href="https://github.com/mozilla/glean/pull/1398">#1398</a>).</li>
 <li>BUGFIX: Don't fail on empty database files (<a href="https://github.com/mozilla/glean/pull/1398">#1398</a>).</li>
-<li>BUGFIX: Support ping registration before Glean initializes <a href="https://github.com/mozilla/glean/pull/1393">#1393</a>.</li>
+<li>BUGFIX: Support ping registration before Glean initializes (<a href="https://github.com/mozilla/glean/pull/1393">#1393</a>).</li>
 </ul>
 </li>
 </ul>
@@ -8828,9 +8842,9 @@ Each ping has its own schedule to gather all its locally saved metrics and creat
 <ul>
 <li>Rust
 <ul>
-<li>Introduce the String List metric type in the RLB. <a href="https://github.com/mozilla/glean/pull/1380">#1380</a>.</li>
-<li>Introduce the <code>Datetime</code> metric type in the RLB <a href="https://github.com/mozilla/glean/pull/1384">#1384</a>.</li>
-<li>Introduce the <code>CustomDistribution</code> and <code>TimingDistribution</code> metric type in the RLB <a href="https://github.com/mozilla/glean/pull/1394">#1394</a>.</li>
+<li>Introduce the String List metric type in the RLB. (<a href="https://github.com/mozilla/glean/pull/1380">#1380</a>).</li>
+<li>Introduce the <code>Datetime</code> metric type in the RLB (<a href="https://github.com/mozilla/glean/pull/1384">#1384</a>).</li>
+<li>Introduce the <code>CustomDistribution</code> and <code>TimingDistribution</code> metric type in the RLB (<a href="https://github.com/mozilla/glean/pull/1394">#1394</a>).</li>
 </ul>
 </li>
 </ul>
@@ -8839,7 +8853,7 @@ Each ping has its own schedule to gather all its locally saved metrics and creat
 <ul>
 <li>Rust
 <ul>
-<li>Introduce the Memory Distribution metric type in the RLB. <a href="https://github.com/mozilla/glean/pull/1376">#1376</a></li>
+<li>Introduce the Memory Distribution metric type in the RLB. (<a href="https://github.com/mozilla/glean/pull/1376">#1376</a>).</li>
 <li>Shut down Glean in tests before resetting to make sure they don't mistakenly init Glean twice in parallel (<a href="https://github.com/mozilla/glean/pull/1375">#1375</a>).</li>
 <li>BUGFIX: Fixing 2 <code>lock-order-inversion</code> bugs found by TSan (<a href="https://github.com/mozilla/glean/pull/1378">#1378</a>).
 <ul>
@@ -8877,7 +8891,7 @@ which could lead to deadlocks in multi-threaded code. As RLB uses multiple threa
 <li>Rust
 <ul>
 <li>BUGFIX: Negative timespans for the timespan metric now correctly record an <code>InvalidValue</code> error (<a href="https://github.com/mozilla/glean/pull/1347">#1347</a>).</li>
-<li>Introduce the Timespan metric type in the RLB <a href="https://github.com/mozilla/glean/pull/1347">#1347</a>.</li>
+<li>Introduce the Timespan metric type in the RLB (<a href="https://github.com/mozilla/glean/pull/1347">#1347</a>).</li>
 </ul>
 </li>
 <li>Python
@@ -8893,7 +8907,7 @@ which could lead to deadlocks in multi-threaded code. As RLB uses multiple threa
 <li>Rust
 <ul>
 <li>Introduce the UUID metric type in the RLB.</li>
-<li>Introduce the Labeled metric type in the RLB <a href="https://github.com/mozilla/glean/pull/1327">#1327</a>.</li>
+<li>Introduce the Labeled metric type in the RLB (<a href="https://github.com/mozilla/glean/pull/1327">#1327</a>).</li>
 <li>Introduce the Quantity metric type in the RLB.</li>
 <li>Introduce the <code>shutdown</code> API.</li>
 <li>Add Glean debugging APIs.</li>

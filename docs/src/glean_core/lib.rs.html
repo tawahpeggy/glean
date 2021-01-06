@@ -930,6 +930,16 @@
 <span id="927">927</span>
 <span id="928">928</span>
 <span id="929">929</span>
+<span id="930">930</span>
+<span id="931">931</span>
+<span id="932">932</span>
+<span id="933">933</span>
+<span id="934">934</span>
+<span id="935">935</span>
+<span id="936">936</span>
+<span id="937">937</span>
+<span id="938">938</span>
+<span id="939">939</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -1266,6 +1276,7 @@
             .<span class="ident">is_none</span>()
         {
             <span class="self">self</span>.<span class="ident">core_metrics</span>.<span class="ident">first_run_date</span>.<span class="ident">set</span>(<span class="self">self</span>, <span class="prelude-val">None</span>);
+            <span class="self">self</span>.<span class="ident">core_metrics</span>.<span class="ident">first_run_hour</span>.<span class="ident">set</span>(<span class="self">self</span>, <span class="prelude-val">None</span>);
             <span class="comment">// The `first_run_date` field is generated on the very first run</span>
             <span class="comment">// and persisted across upload toggling. We can assume that, the only</span>
             <span class="comment">// time it is set, that&#39;s indeed our &quot;first run&quot;.</span>
@@ -1378,13 +1389,15 @@
         <span class="comment">// so that it can&#39;t be accessed until this function is done.</span>
         <span class="kw">let</span> <span class="ident">_lock</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">upload_manager</span>.<span class="ident">clear_ping_queue</span>();
 
-        <span class="comment">// There is only one metric that we want to survive after clearing all</span>
-        <span class="comment">// metrics: first_run_date. Here, we store its value so we can restore</span>
-        <span class="comment">// it after clearing the metrics.</span>
+        <span class="comment">// There are only two metrics that we want to survive after clearing all</span>
+        <span class="comment">// metrics: first_run_date and first_run_hour. Here, we store their values</span>
+        <span class="comment">// so we can restore them after clearing the metrics.</span>
         <span class="kw">let</span> <span class="ident">existing_first_run_date</span> <span class="op">=</span> <span class="self">self</span>
             .<span class="ident">core_metrics</span>
             .<span class="ident">first_run_date</span>
             .<span class="ident">get_value</span>(<span class="self">self</span>, <span class="string">&quot;glean_client_info&quot;</span>);
+
+        <span class="kw">let</span> <span class="ident">existing_first_run_hour</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">core_metrics</span>.<span class="ident">first_run_hour</span>.<span class="ident">get_value</span>(<span class="self">self</span>, <span class="string">&quot;metrics&quot;</span>);
 
         <span class="comment">// Clear any pending pings.</span>
         <span class="kw">let</span> <span class="ident">ping_maker</span> <span class="op">=</span> <span class="ident">PingMaker</span>::<span class="ident">new</span>();
@@ -1426,6 +1439,13 @@
                 <span class="self">self</span>.<span class="ident">core_metrics</span>
                     .<span class="ident">first_run_date</span>
                     .<span class="ident">set</span>(<span class="self">self</span>, <span class="prelude-val">Some</span>(<span class="ident">existing_first_run_date</span>));
+            }
+
+            <span class="comment">// Restore the first_run_hour.</span>
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">existing_first_run_hour</span>) <span class="op">=</span> <span class="ident">existing_first_run_hour</span> {
+                <span class="self">self</span>.<span class="ident">core_metrics</span>
+                    .<span class="ident">first_run_hour</span>
+                    .<span class="ident">set</span>(<span class="self">self</span>, <span class="prelude-val">Some</span>(<span class="ident">existing_first_run_hour</span>));
             }
 
             <span class="self">self</span>.<span class="ident">upload_enabled</span> <span class="op">=</span> <span class="bool-val">false</span>;

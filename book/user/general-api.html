@@ -232,7 +232,7 @@ class SampleApplication : Application() {
 }
 </code></pre>
 <p>Once initialized, if <code>uploadEnabled</code> is true, the Glean SDK will automatically start collecting <a href="pings/metrics.html">baseline metrics</a> and sending its <a href="pings/index.html">pings</a>, according to their respective schedules.<br />
-If <code>uploadEnabled</code> is false, any persisted metrics, events and pings (other than <code>first_run_date</code>) are cleared, and subsequent calls to record metrics will be no-ops.</p>
+If <code>uploadEnabled</code> is false, any persisted metrics, events and pings (other than <code>first_run_date</code> and <code>first_run_hour</code>) are cleared, and subsequent calls to record metrics will be no-ops.</p>
 <p>The Glean SDK should be initialized as soon as possible, and importantly, before any other libraries in the application start using Glean.
 Library code should never call <code>Glean.initialize</code>, since it should be called exactly once per application.</p>
 <blockquote>
@@ -285,7 +285,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 </code></pre>
 <p>Once initialized, if <code>uploadEnabled</code> is true, the Glean SDK will automatically start collecting <a href="pings/metrics.html">baseline metrics</a> and sending its <a href="pings/index.html">pings</a>, according to their respective schedules.<br />
-If <code>uploadEnabled</code> is false, any persisted metrics, events and pings (other than <code>first_run_date</code>) are cleared, and subsequent calls to record metrics will be no-ops.</p>
+If <code>uploadEnabled</code> is false, any persisted metrics, events and pings (other than <code>first_run_date</code> and <code>first_run_hour</code>) are cleared, and subsequent calls to record metrics will be no-ops.</p>
 <p>The Glean SDK should be initialized as soon as possible, and importantly, before any other libraries in the application start using Glean.
 Library code should never call <code>Glean.shared.initialize</code>, since it should be called exactly once per application.</p>
 <blockquote>
@@ -308,7 +308,7 @@ Glean.initialize(
 )
 </code></pre>
 <p>Once initialized, if <code>upload_enabled</code> is true, the Glean SDK will automatically start collecting <a href="pings/metrics.html">baseline metrics</a>.
-If <code>upload_enabled</code> is false, any persisted metrics, events and pings (other than <code>first_run_date</code>) are cleared, and subsequent calls to record metrics will be no-ops.</p>
+If <code>upload_enabled</code> is false, any persisted metrics, events and pings (other than <code>first_run_date</code> and <code>first_run_hour</code>) are cleared, and subsequent calls to record metrics will be no-ops.</p>
 <p>Additional configuration is available on the <code>glean.Configuration</code> object, which can be passed into <code>Glean.initialize()</code>.</p>
 <p>Unlike Android and Swift, the Python bindings do not automatically send any pings.
 See the <a href="pings/custom.html">custom pings documentation</a> about adding custom pings and sending them.</p>
@@ -368,7 +368,7 @@ Set the initial state using <code>uploadEnabled</code> on <code>GleanInstance.in
 </div>
 </div>
 <p>The application should provide some form of user interface to call this method.</p>
-<p>When going from enabled to disabled, all pending events, metrics and pings are cleared, except for <a href="pings/index.html#the-client_info-section"><code>first_run_date</code></a>.
+<p>When going from enabled to disabled, all pending events, metrics and pings are cleared, except for <a href="pings/index.html#the-client_info-section"><code>first_run_date</code> and <code>first_run_hour</code></a>.
 When re-enabling, core Glean metrics will be recomputed at that time.</p>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/general-api.md">Edit this file on GitHub.</a></footer>
                     </main>
