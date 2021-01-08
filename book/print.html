@@ -6714,15 +6714,6 @@ For some developer workflows, <code>upstream</code> can be the same as <code>ori
 <li>You can find the TaskCluster task on the corresponding commit. See <a href="dev/ci.html#how-to-find-taskcluster-tasks">How to find TaskCluster tasks</a> for details.</li>
 </ul>
 </li>
-<li>Release the Rust crates:
-<pre><code>cd glean-core
-cargo publish --verbose
-cd ffi
-cargo publish --verbose
-cd .. &amp;&amp; cd rlb
-cargo publish --verbose
-</code></pre>
-</li>
 <li>Send a pull request to merge back the specific release branch to the development branch: <a href="https://github.com/mozilla/glean/compare/main...release-v25.0.0?expand=1">https://github.com/mozilla/glean/compare/main...release-v25.0.0?expand=1</a>
 <ul>
 <li>This is important so that no changes are lost.</li>
@@ -6791,13 +6782,6 @@ cargo publish --verbose
 <li>You can check <a href="https://circleci.com/gh/mozilla/glean">on CircleCI for the running build</a>.</li>
 <li>You can find the TaskCluster task on the corresponding commit. See <a href="dev/ci.html#how-to-find-taskcluster-tasks">How to find TaskCluster tasks</a> for details.</li>
 </ul>
-</li>
-<li>Release the Rust crates:
-<pre><code>cd glean-core
-cargo publish --verbose
-cd ffi
-cargo publish --verbose
-</code></pre>
 </li>
 <li>Send a pull request to merge back the hotfix branch to the development branch: <a href="https://github.com/mozilla/glean/compare/main...hotfix-v25.0.1?expand=1">https://github.com/mozilla/glean/compare/main...hotfix-v25.0.1?expand=1</a>
 <ul>
@@ -6868,13 +6852,6 @@ git push upstream support/v24.0
 <li>You can check <a href="https://circleci.com/gh/mozilla/glean">on CircleCI for the running build</a>.</li>
 <li>You can find the TaskCluster task on the corresponding commit. See <a href="dev/ci.html#how-to-find-taskcluster-tasks">How to find TaskCluster tasks</a> for details.</li>
 </ul>
-</li>
-<li>Release the Rust crates:
-<pre><code>cd glean-core
-cargo publish --verbose
-cd ffi
-cargo publish --verbose
-</code></pre>
 </li>
 <li>Send a pull request to merge back any bug fixes to the development branch: <a href="https://github.com/mozilla/glean/compare/main...support/v24.0?expand=1">https://github.com/mozilla/glean/compare/main...support/v24.0?expand=1</a>
 <ul>
