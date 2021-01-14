@@ -94,6 +94,12 @@
 <span id="91">91</span>
 <span id="92">92</span>
 <span id="93">93</span>
+<span id="94">94</span>
+<span id="95">95</span>
+<span id="96">96</span>
+<span id="97">97</span>
+<span id="98">98</span>
+<span id="99">99</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -162,12 +168,18 @@
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">DistributionData</span><span class="op">&gt;</span> {
         <span class="kw">crate</span>::<span class="ident">block_on_dispatcher</span>();
 
-        <span class="kw">let</span> <span class="ident">inner</span> <span class="op">=</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">read</span>().<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">queried_ping_name</span> <span class="op">=</span> <span class="ident">ping_name</span>
-            .<span class="ident">into</span>()
-            .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="kw-2">&amp;</span><span class="ident">inner</span>.<span class="ident">meta</span>().<span class="ident">send_in_pings</span>[<span class="number">0</span>]);
+        <span class="kw">crate</span>::<span class="ident">with_glean</span>(<span class="op">|</span><span class="ident">glean</span><span class="op">|</span> {
+            <span class="comment">// The order of taking these locks matter. Glean must be first.</span>
+            <span class="kw">let</span> <span class="ident">inner</span> <span class="op">=</span> <span class="self">self</span>
+                .<span class="number">0</span>
+                .<span class="ident">read</span>()
+                .<span class="ident">expect</span>(<span class="string">&quot;Lock poisoned for timing distribution metric on test_get_value.&quot;</span>);
+            <span class="kw">let</span> <span class="ident">queried_ping_name</span> <span class="op">=</span> <span class="ident">ping_name</span>
+                .<span class="ident">into</span>()
+                .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="kw-2">&amp;</span><span class="ident">inner</span>.<span class="ident">meta</span>().<span class="ident">send_in_pings</span>[<span class="number">0</span>]);
 
-        <span class="kw">crate</span>::<span class="ident">with_glean</span>(<span class="op">|</span><span class="ident">glean</span><span class="op">|</span> <span class="ident">inner</span>.<span class="ident">test_get_value</span>(<span class="ident">glean</span>, <span class="ident">queried_ping_name</span>))
+            <span class="ident">inner</span>.<span class="ident">test_get_value</span>(<span class="ident">glean</span>, <span class="ident">queried_ping_name</span>)
+        })
     }
 
     <span class="kw">fn</span> <span class="ident">test_get_num_recorded_errors</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">S</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>(
