@@ -160,6 +160,22 @@
 <span id="157">157</span>
 <span id="158">158</span>
 <span id="159">159</span>
+<span id="160">160</span>
+<span id="161">161</span>
+<span id="162">162</span>
+<span id="163">163</span>
+<span id="164">164</span>
+<span id="165">165</span>
+<span id="166">166</span>
+<span id="167">167</span>
+<span id="168">168</span>
+<span id="169">169</span>
+<span id="170">170</span>
+<span id="171">171</span>
+<span id="172">172</span>
+<span id="173">173</span>
+<span id="174">174</span>
+<span id="175">175</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -173,6 +189,13 @@
     <span class="kw">pub</span> <span class="ident">first_run_date</span>: <span class="ident">DatetimeMetric</span>,
     <span class="kw">pub</span> <span class="ident">first_run_hour</span>: <span class="ident">DatetimeMetric</span>,
     <span class="kw">pub</span> <span class="ident">os</span>: <span class="ident">StringMetric</span>,
+
+    <span class="doccomment">/// The number of times we encountered an IO error</span>
+    <span class="doccomment">/// when writing a pending ping to disk.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// **Note**: Not a _core_ metric, but an error metric,</span>
+    <span class="doccomment">/// placed here for the lack of a more suitable part in the Glean struct.</span>
+    <span class="kw">pub</span> <span class="ident">io_errors</span>: <span class="ident">CounterMetric</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">CoreMetrics</span> {
@@ -216,6 +239,15 @@
                 <span class="ident">category</span>: <span class="string">&quot;&quot;</span>.<span class="ident">into</span>(),
                 <span class="ident">send_in_pings</span>: <span class="macro">vec</span><span class="macro">!</span>[<span class="string">&quot;glean_client_info&quot;</span>.<span class="ident">into</span>()],
                 <span class="ident">lifetime</span>: <span class="ident">Lifetime</span>::<span class="ident">Application</span>,
+                <span class="ident">disabled</span>: <span class="bool-val">false</span>,
+                <span class="ident">dynamic_label</span>: <span class="prelude-val">None</span>,
+            }),
+
+            <span class="ident">io_errors</span>: <span class="ident">CounterMetric</span>::<span class="ident">new</span>(<span class="ident">CommonMetricData</span> {
+                <span class="ident">name</span>: <span class="string">&quot;io&quot;</span>.<span class="ident">into</span>(),
+                <span class="ident">category</span>: <span class="string">&quot;glean.error&quot;</span>.<span class="ident">into</span>(),
+                <span class="ident">send_in_pings</span>: <span class="macro">vec</span><span class="macro">!</span>[<span class="string">&quot;metrics&quot;</span>.<span class="ident">into</span>()],
+                <span class="ident">lifetime</span>: <span class="ident">Lifetime</span>::<span class="ident">Ping</span>,
                 <span class="ident">disabled</span>: <span class="bool-val">false</span>,
                 <span class="ident">dynamic_label</span>: <span class="prelude-val">None</span>,
             }),

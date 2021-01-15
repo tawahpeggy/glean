@@ -177,9 +177,14 @@
                         <h1><a class="header" href="#unreleased-changes" id="unreleased-changes">Unreleased changes</a></h1>
 <p><a href="https://github.com/mozilla/glean/compare/v33.10.1...main">Full changelog</a></p>
 <ul>
+<li>General:
+<ul>
+<li>A new metric <code>glean.error.io</code> has been added, counting the times an IO error happens when writing a pending ping to disk (<a href="https://github.com/mozilla/glean/pull/1428">#1428</a>)</li>
+</ul>
+</li>
 <li>Android
 <ul>
-<li>A new metric <code>glean.validation.foreground_count</code> was added to the metrics ping.</li>
+<li>A new metric <code>glean.validation.foreground_count</code> was added to the metrics ping (<a href="https://github.com/mozilla/glean/pull/1418">#1418</a>).</li>
 </ul>
 </li>
 <li>Rust
