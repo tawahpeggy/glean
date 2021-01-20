@@ -564,6 +564,26 @@
 <span id="561">561</span>
 <span id="562">562</span>
 <span id="563">563</span>
+<span id="564">564</span>
+<span id="565">565</span>
+<span id="566">566</span>
+<span id="567">567</span>
+<span id="568">568</span>
+<span id="569">569</span>
+<span id="570">570</span>
+<span id="571">571</span>
+<span id="572">572</span>
+<span id="573">573</span>
+<span id="574">574</span>
+<span id="575">575</span>
+<span id="576">576</span>
+<span id="577">577</span>
+<span id="578">578</span>
+<span id="579">579</span>
+<span id="580">580</span>
+<span id="581">581</span>
+<span id="582">582</span>
+<span id="583">583</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -596,7 +616,7 @@
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">mem</span>,
     <span class="ident">sync</span>::{
-        <span class="ident">atomic</span>::{<span class="ident">AtomicBool</span>, <span class="ident">Ordering</span>},
+        <span class="ident">atomic</span>::{<span class="ident">AtomicBool</span>, <span class="ident">AtomicUsize</span>, <span class="ident">Ordering</span>},
         <span class="ident">Arc</span>,
     },
     <span class="ident">thread</span>::{<span class="self">self</span>, <span class="ident">JoinHandle</span>},
@@ -674,6 +694,9 @@
     <span class="doccomment">/// Whether to queue on the preinit buffer or on the unbounded queue</span>
     <span class="ident">queue_preinit</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">AtomicBool</span><span class="op">&gt;</span>,
 
+    <span class="doccomment">/// The number of items that were added to the queue after it filled up.</span>
+    <span class="ident">overflow_count</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">AtomicUsize</span><span class="op">&gt;</span>,
+
     <span class="doccomment">/// Used to unblock the worker thread initially.</span>
     <span class="ident">block_sender</span>: <span class="ident">Sender</span><span class="op">&lt;</span><span class="ident">Blocked</span><span class="op">&gt;</span>,
 
@@ -699,10 +722,20 @@
 
     <span class="kw">fn</span> <span class="ident">send</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">task</span>: <span class="ident">Command</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">DispatchError</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">queue_preinit</span>.<span class="ident">load</span>(<span class="ident">Ordering</span>::<span class="ident">SeqCst</span>) {
-            <span class="kw">match</span> <span class="self">self</span>.<span class="ident">preinit_sender</span>.<span class="ident">try_send</span>(<span class="ident">task</span>) {
-                <span class="prelude-val">Ok</span>(()) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(()),
-                <span class="prelude-val">Err</span>(<span class="ident">TrySendError</span>::<span class="ident">Full</span>(<span class="kw">_</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">DispatchError</span>::<span class="ident">QueueFull</span>),
-                <span class="prelude-val">Err</span>(<span class="ident">TrySendError</span>::<span class="ident">Disconnected</span>(<span class="kw">_</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">DispatchError</span>::<span class="ident">SendError</span>),
+            <span class="kw">match</span> <span class="self">self</span>
+                .<span class="ident">preinit_sender</span>
+                .<span class="ident">try_send</span>(<span class="ident">task</span>)
+                .<span class="ident">map_err</span>(<span class="ident">DispatchError</span>::<span class="ident">from</span>)
+            {
+                <span class="prelude-val">Err</span>(<span class="ident">err</span> @ <span class="ident">DispatchError</span>::<span class="ident">QueueFull</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="comment">// This value ends up in the `preinit_tasks_overflow` metric, but we</span>
+                    <span class="comment">// can&#39;t record directly there, because that would only add</span>
+                    <span class="comment">// the recording to an already-overflowing task queue and would be</span>
+                    <span class="comment">// silently dropped.</span>
+                    <span class="self">self</span>.<span class="ident">overflow_count</span>.<span class="ident">fetch_add</span>(<span class="number">1</span>, <span class="ident">Ordering</span>::<span class="ident">SeqCst</span>);
+                    <span class="prelude-val">Err</span>(<span class="ident">err</span>)
+                }
+                <span class="ident">err</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">err</span>,
             }
         } <span class="kw">else</span> {
             <span class="self">self</span>.<span class="ident">sender</span>.<span class="ident">send</span>(<span class="ident">task</span>)<span class="question-mark">?</span>;
@@ -742,7 +775,7 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">fn</span> <span class="ident">flush_init</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">DispatchError</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">flush_init</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">usize</span>, <span class="ident">DispatchError</span><span class="op">&gt;</span> {
         <span class="comment">// We immediately stop queueing in the pre-init buffer.</span>
         <span class="kw">let</span> <span class="ident">old_val</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">queue_preinit</span>.<span class="ident">swap</span>(<span class="bool-val">false</span>, <span class="ident">Ordering</span>::<span class="ident">SeqCst</span>);
         <span class="kw">if</span> <span class="op">!</span><span class="ident">old_val</span> {
@@ -763,7 +796,12 @@
         <span class="comment">// Now wait for the worker thread to do the swap and inform us.</span>
         <span class="comment">// This blocks until all tasks in the preinit buffer have been processed.</span>
         <span class="ident">swap_receiver</span>.<span class="ident">recv</span>()<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(())
+        <span class="kw">let</span> <span class="ident">overflow_count</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">overflow_count</span>.<span class="ident">load</span>(<span class="ident">Ordering</span>::<span class="ident">SeqCst</span>);
+        <span class="kw">if</span> <span class="ident">overflow_count</span> <span class="op">&gt;</span> <span class="number">0</span> {
+            <span class="prelude-val">Ok</span>(<span class="ident">overflow_count</span> <span class="op">+</span> <span class="ident">global</span>::<span class="ident">GLOBAL_DISPATCHER_LIMIT</span>)
+        } <span class="kw">else</span> {
+            <span class="prelude-val">Ok</span>(<span class="number">0</span>)
+        }
     }
 }
 
@@ -794,6 +832,7 @@
         <span class="kw">let</span> (<span class="ident">sender</span>, <span class="kw-2">mut</span> <span class="ident">unbounded_receiver</span>) <span class="op">=</span> <span class="ident">unbounded</span>();
 
         <span class="kw">let</span> <span class="ident">queue_preinit</span> <span class="op">=</span> <span class="ident">Arc</span>::<span class="ident">new</span>(<span class="ident">AtomicBool</span>::<span class="ident">new</span>(<span class="bool-val">true</span>));
+        <span class="kw">let</span> <span class="ident">overflow_count</span> <span class="op">=</span> <span class="ident">Arc</span>::<span class="ident">new</span>(<span class="ident">AtomicUsize</span>::<span class="ident">new</span>(<span class="number">0</span>));
 
         <span class="kw">let</span> <span class="ident">worker</span> <span class="op">=</span> <span class="ident">thread</span>::<span class="ident">Builder</span>::<span class="ident">new</span>()
             .<span class="ident">name</span>(<span class="string">&quot;glean.dispatcher&quot;</span>.<span class="ident">into</span>())
@@ -858,6 +897,7 @@
 
         <span class="kw">let</span> <span class="ident">guard</span> <span class="op">=</span> <span class="ident">DispatchGuard</span> {
             <span class="ident">queue_preinit</span>,
+            <span class="ident">overflow_count</span>,
             <span class="ident">block_sender</span>,
             <span class="ident">preinit_sender</span>,
             <span class="ident">sender</span>,
@@ -893,7 +933,7 @@
     <span class="doccomment">/// Once the initial queue is empty the dispatcher will wait for new tasks to be launched.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Returns an error if called multiple times.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">flush_init</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">DispatchError</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">flush_init</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">usize</span>, <span class="ident">DispatchError</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">guard</span>().<span class="ident">flush_init</span>()
     }
 }

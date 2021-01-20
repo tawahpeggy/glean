@@ -192,6 +192,11 @@
 <span id="189">189</span>
 <span id="190">190</span>
 <span id="191">191</span>
+<span id="192">192</span>
+<span id="193">193</span>
+<span id="194">194</span>
+<span id="195">195</span>
+<span id="196">196</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -202,7 +207,7 @@
 
 <span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">DispatchError</span>, <span class="ident">DispatchGuard</span>, <span class="ident">Dispatcher</span>};
 
-<span class="kw">const</span> <span class="ident">GLOBAL_DISPATCHER_LIMIT</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">100</span>;
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">GLOBAL_DISPATCHER_LIMIT</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">100</span>;
 <span class="kw">static</span> <span class="ident">GLOBAL_DISPATCHER</span>: <span class="ident">Lazy</span><span class="op">&lt;</span><span class="ident">RwLock</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Dispatcher</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">=</span>
     <span class="ident">Lazy</span>::<span class="ident">new</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">RwLock</span>::<span class="ident">new</span>(<span class="prelude-val">Some</span>(<span class="ident">Dispatcher</span>::<span class="ident">new</span>(<span class="ident">GLOBAL_DISPATCHER_LIMIT</span>))));
 
@@ -250,7 +255,12 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// This function blocks until queued tasks prior to this call are finished.</span>
 <span class="doccomment">/// Once the initial queue is empty the dispatcher will wait for new tasks to be launched.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">flush_init</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">DispatchError</span><span class="op">&gt;</span> {
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Returns</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Returns the total number of items that were added to the queue before being flushed,</span>
+<span class="doccomment">/// or an error if the queue couldn&#39;t be flushed.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">flush_init</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">usize</span>, <span class="ident">DispatchError</span><span class="op">&gt;</span> {
     <span class="ident">guard</span>().<span class="ident">flush_init</span>()
 }
 
