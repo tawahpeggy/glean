@@ -662,6 +662,11 @@
 <span id="659">659</span>
 <span id="660">660</span>
 <span id="661">661</span>
+<span id="662">662</span>
+<span id="663">663</span>
+<span id="664">664</span>
+<span id="665">665</span>
+<span id="666">666</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -915,6 +920,11 @@
                 <span class="comment">// they are registered synchronously before we need them.</span>
                 <span class="comment">// We don&#39;t need to handle the deletion-request ping. It&#39;s never touched</span>
                 <span class="comment">// from the language implementation.</span>
+                <span class="comment">//</span>
+                <span class="comment">// Note: this will actually double-register them.</span>
+                <span class="comment">// On instantiation they will launch a task to register themselves.</span>
+                <span class="comment">// That task could fail to run if the dispatcher queue is full.</span>
+                <span class="comment">// We still register them here synchronously.</span>
                 <span class="ident">glean</span>.<span class="ident">register_ping_type</span>(<span class="kw-2">&amp;</span><span class="ident">glean_metrics</span>::<span class="ident">pings</span>::<span class="ident">baseline</span>.<span class="ident">ping_type</span>);
                 <span class="ident">glean</span>.<span class="ident">register_ping_type</span>(<span class="kw-2">&amp;</span><span class="ident">glean_metrics</span>::<span class="ident">pings</span>::<span class="ident">metrics</span>.<span class="ident">ping_type</span>);
                 <span class="ident">glean</span>.<span class="ident">register_ping_type</span>(<span class="kw-2">&amp;</span><span class="ident">glean_metrics</span>::<span class="ident">pings</span>::<span class="ident">events</span>.<span class="ident">ping_type</span>);
