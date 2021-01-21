@@ -674,6 +674,37 @@
 <span id="671">671</span>
 <span id="672">672</span>
 <span id="673">673</span>
+<span id="674">674</span>
+<span id="675">675</span>
+<span id="676">676</span>
+<span id="677">677</span>
+<span id="678">678</span>
+<span id="679">679</span>
+<span id="680">680</span>
+<span id="681">681</span>
+<span id="682">682</span>
+<span id="683">683</span>
+<span id="684">684</span>
+<span id="685">685</span>
+<span id="686">686</span>
+<span id="687">687</span>
+<span id="688">688</span>
+<span id="689">689</span>
+<span id="690">690</span>
+<span id="691">691</span>
+<span id="692">692</span>
+<span id="693">693</span>
+<span id="694">694</span>
+<span id="695">695</span>
+<span id="696">696</span>
+<span id="697">697</span>
+<span id="698">698</span>
+<span id="699">699</span>
+<span id="700">700</span>
+<span id="701">701</span>
+<span id="702">702</span>
+<span id="703">703</span>
+<span id="704">704</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -1021,6 +1052,37 @@
 
     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="ident">dispatcher</span>::<span class="ident">shutdown</span>() {
         <span class="ident">log</span>::<span class="macro">error</span><span class="macro">!</span>(<span class="string">&quot;Can&#39;t shutdown dispatcher thread: {:?}&quot;</span>, <span class="ident">e</span>);
+    }
+}
+
+<span class="doccomment">/// Unblock the global dispatcher to start processing queued tasks.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// This should _only_ be called if it is guaranteed that `initialize` will never be called.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// **Note**: Exported as a FFI function to be used by other language bindings (e.g. Kotlin/Swift)</span>
+<span class="doccomment">/// to unblock the RLB-internal dispatcher.</span>
+<span class="doccomment">/// This allows the usage of both the RLB and other language bindings (e.g. Kotlin/Swift)</span>
+<span class="doccomment">/// within the same application.</span>
+<span class="attribute">#[<span class="ident">no_mangle</span>]</span>
+<span class="attribute">#[<span class="ident">inline</span>(<span class="ident">never</span>)]</span>
+<span class="kw">pub</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">rlb_flush_dispatcher</span>() {
+    <span class="ident">log</span>::<span class="macro">trace</span><span class="macro">!</span>(<span class="string">&quot;FLushing RLB dispatcher through the FFI&quot;</span>);
+
+    <span class="kw">let</span> <span class="ident">was_initialized</span> <span class="op">=</span> <span class="ident">was_initialize_called</span>();
+
+    <span class="comment">// Panic in debug mode</span>
+    <span class="macro">debug_assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">was_initialized</span>);
+
+    <span class="comment">// In release do a check and bail out</span>
+    <span class="kw">if</span> <span class="ident">was_initialized</span> {
+        <span class="ident">log</span>::<span class="macro">error</span><span class="macro">!</span>(
+            <span class="string">&quot;Tried to flush the dispatcher from outside, but Glean was initialized in the RLB.&quot;</span>
+        );
+        <span class="kw">return</span>;
+    }
+
+    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span> <span class="ident">dispatcher</span>::<span class="ident">flush_init</span>() {
+        <span class="ident">log</span>::<span class="macro">error</span><span class="macro">!</span>(<span class="string">&quot;Unable to flush the preinit queue: {}&quot;</span>, <span class="ident">err</span>);
     }
 }
 

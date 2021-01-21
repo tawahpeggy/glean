@@ -8784,6 +8784,15 @@ Each ping has its own schedule to gather all its locally saved metrics and creat
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/appendix/glossary.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#unreleased-changes" id="unreleased-changes">Unreleased changes</a></h1>
 <p><a href="https://github.com/mozilla/glean/compare/v33.10.3...main">Full changelog</a></p>
 <ul>
+<li>General
+<ul>
+<li>Other bindings detect when RLB is used and try to flush the RLB dispatcher to unblock the Rust API (<a href="https://github.com/mozilla/glean/pull/1442">#1442</a>).
+<ul>
+<li>This is detected automatically, no changes needed for consuming code.</li>
+</ul>
+</li>
+</ul>
+</li>
 <li>RLB
 <ul>
 <li>When the pre-init task queue overruns, this is now recorded in the metric <code>glean.error.preinit_tasks_overflow</code>.</li>

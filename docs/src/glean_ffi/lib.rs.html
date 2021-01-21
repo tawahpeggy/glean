@@ -494,6 +494,39 @@
 <span id="491">491</span>
 <span id="492">492</span>
 <span id="493">493</span>
+<span id="494">494</span>
+<span id="495">495</span>
+<span id="496">496</span>
+<span id="497">497</span>
+<span id="498">498</span>
+<span id="499">499</span>
+<span id="500">500</span>
+<span id="501">501</span>
+<span id="502">502</span>
+<span id="503">503</span>
+<span id="504">504</span>
+<span id="505">505</span>
+<span id="506">506</span>
+<span id="507">507</span>
+<span id="508">508</span>
+<span id="509">509</span>
+<span id="510">510</span>
+<span id="511">511</span>
+<span id="512">512</span>
+<span id="513">513</span>
+<span id="514">514</span>
+<span id="515">515</span>
+<span id="516">516</span>
+<span id="517">517</span>
+<span id="518">518</span>
+<span id="519">519</span>
+<span id="520">520</span>
+<span id="521">521</span>
+<span id="522">522</span>
+<span id="523">523</span>
+<span id="524">524</span>
+<span id="525">525</span>
+<span id="526">526</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -542,6 +575,10 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">not</span>(<span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;android&quot;</span>), <span class="ident">not</span>(<span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;ios&quot;</span>)))]</span>
 <span class="kw">mod</span> <span class="ident">fd_logger</span>;
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">unix</span>)]</span>
+<span class="attribute">#[<span class="ident">macro_use</span>]</span>
+<span class="kw">mod</span> <span class="ident">weak</span>;
 
 <span class="kw">use</span> <span class="ident">ffi_string_ext</span>::<span class="ident">FallibleToString</span>;
 <span class="kw">use</span> <span class="ident">from_raw</span>::<span class="kw-2">*</span>;
@@ -861,6 +898,35 @@
 <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
 <span class="kw">pub</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">glean_clear_application_lifetime_metrics</span>() {
     <span class="ident">with_glean_value</span>(<span class="op">|</span><span class="ident">glean</span><span class="op">|</span> <span class="ident">glean</span>.<span class="ident">clear_application_lifetime_metrics</span>());
+}
+
+<span class="doccomment">/// Try to unblock the RLB dispatcher to start processing queued tasks.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// **Note**: glean-core does not have its own dispatcher at the moment.</span>
+<span class="doccomment">/// This tries to detect the RLB and, if loaded, instructs the RLB dispatcher to flush.</span>
+<span class="doccomment">/// This allows the usage of both the RLB and other language bindings (e.g. Kotlin/Swift)</span>
+<span class="doccomment">/// within the same application.</span>
+<span class="attribute">#[<span class="ident">no_mangle</span>]</span>
+<span class="kw">pub</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">glean_flush_rlb_dispatcher</span>() {
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">unix</span>)]</span>
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_upper_case_globals</span>)]</span>
+    {
+        <span class="macro">weak</span><span class="macro">!</span>(<span class="kw">fn</span> <span class="ident">rlb_flush_dispatcher</span>() <span class="op">-</span><span class="op">&gt;</span> ());
+
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">f</span>) <span class="op">=</span> <span class="ident">rlb_flush_dispatcher</span>.<span class="ident">get</span>() {
+            <span class="comment">// SAFETY:</span>
+            <span class="comment">//</span>
+            <span class="comment">// We did a dynamic lookup for this symbol.</span>
+            <span class="comment">// This is only called if we found it.</span>
+            <span class="comment">// We don&#39;t pass any data and don&#39;t read any return value, thus no data we directly</span>
+            <span class="comment">// depend on will be corruptable.</span>
+            <span class="kw">unsafe</span> {
+                <span class="ident">f</span>();
+            }
+        } <span class="kw">else</span> {
+            <span class="ident">log</span>::<span class="macro">info</span><span class="macro">!</span>(<span class="string">&quot;No RLB symbol found. Not trying to flush the RLB dispatcher.&quot;</span>);
+        }
+    }
 }
 
 <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
