@@ -7351,8 +7351,6 @@ change <code>mozilla_glean</code> to reference the <code>libraryVersion</code> y
 </li>
 <li>
 <p>Add the following block in the <a href="https://github.com/mozilla-mobile/android-components/blob/d67f83af679a2e847e5bd284ea4a30b412403241/settings.gradle#L7"><code>settings.gradle</code></a> file, before any other statement in the script, in order to have the Glean Gradle plugin loaded from the local Maven repository.</p>
-</li>
-</ol>
 <pre><code>pluginManagement {
   repositories {
       mavenLocal()
@@ -7360,7 +7358,7 @@ change <code>mozilla_glean</code> to reference the <code>libraryVersion</code> y
   }
 }
 </code></pre>
-<ol start="5">
+</li>
 <li>
 <p>Inside the android-component's <code>local.properties</code> file, ensure
 <code>substitutions.glean.dir</code> is <em>NOT</em> set.</p>
@@ -7374,18 +7372,26 @@ change <code>mozilla_glean</code> to reference the <code>libraryVersion</code> y
 <p>Inside the <code>fenix</code> repository root:</p>
 <ol>
 <li>
-<p>Inside <a href="https://github.com/mozilla-mobile/fenix/blob/f897c2e295cd1b97d4024c7a9cb45dceb7a2fa89/build.gradle#L26"><code>build.gradle</code></a>, add
-<code>mavenLocal()</code> inside <code>allprojects { repositories { &lt;here&gt; } }</code>.</p>
+<p>Inside <a href="https://github.com/mozilla-mobile/fenix/blob/c21b41c1b23e6e25e0b5a8392f0c6dcb5ad25473/build.gradle#L5"><code>build.gradle</code></a> you need to add <code>mavenLocal()</code> twice.<br />
+First add <code>mavenLocal()</code> inside <code>buildscript</code> like this:</p>
+<pre><code>buildscript {
+    repositories {
+        mavenLocal()
+        ...
+</code></pre>
+<p>Second add <code>mavenLocal()</code> inside <code>allprojects</code>:</p>
+<pre><code>allprojects {
+    repositories {
+        mavenLocal()
+        ...
+</code></pre>
 </li>
 <li>
-<p>Inside <a href="https://github.com/mozilla-mobile/fenix/blob/8a330d413c1d55d14446abe3cfd57a5494884396/buildSrc/src/main/java/Dependencies.kt#L48"><code>buildSrc/src/main/java/Dependencies.kt</code></a>, change
-<code>mozilla_android_components</code> to the version you defined in step 3 part 1.</p>
-<p>Example: <code>const val mozilla_android_components = &quot;24.0.0-TESTING1&quot;</code></p>
-<p>In the same file change <code>mozilla_glean</code> to the version you defined in step 1 part 1.</p>
-<p>Example: <code>const val mozilla_glean = &quot;22.0.0-TESTING1&quot;</code></p>
-</li>
-<li>
-<p>Change the <code>Versions.mozilla_android_components.endsWith('-SNAPSHOT')</code> line in <a href="https://github.com/mozilla-mobile/fenix/blob/1f250a730d4f1bbd42bc15079eb98d1b01a34cf0/app/build.gradle#L628"><code>app/build.gradle</code></a> to <code>Versions.mozilla_android_components.endsWith('-TESTING$N')</code> where <code>$N</code> is the number to reference the version you published in part 2.</p>
+<p>Inside <a href="https://github.com/mozilla-mobile/fenix/blob/c21b41c1b23e6e25e0b5a8392f0c6dcb5ad25473/buildSrc/src/main/java/AndroidComponents.kt#L6"><code>buildSrc/src/main/java/AndroidComponents.kt</code></a>, change
+<code>VERSION</code> to the version you defined in step 3 part 1.</p>
+<p>Example:</p>
+<pre><code>const val VERSION = &quot;24.0.0-TESTING1&quot;
+</code></pre>
 </li>
 </ol>
 </li>
