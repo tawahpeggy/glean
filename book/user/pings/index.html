@@ -175,7 +175,8 @@
                 <div id="content" class="content">
                     <main>
                         <h1><a class="header" href="#glean-pings" id="glean-pings">Glean Pings</a></h1>
-<p>Every Glean ping is in JSON format and contains one or more of the <a href="#ping-sections">common sections</a> with shared information data.</p>
+<p>A ping is a bundle of related metrics, gathered in a payload to be transmitted.
+The ping payload will be encoded in JSON format and contains one or more of the <a href="#ping-sections">common sections</a> with shared information data.</p>
 <p>If data collection is enabled, the Glean SDK provides a set of built-in pings that are assembled out of the box without any developer intervention.  The following is a list of these built-in pings:</p>
 <ul>
 <li><a href="baseline.html"><code>baseline</code> ping</a>: A small ping sent every time the application goes to foreground and background. Going to foreground also includes when the application starts.</li>

@@ -44,14 +44,16 @@
 <span id="41">41</span>
 <span id="42">42</span>
 <span id="43">43</span>
+<span id="44">44</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
 <span class="comment">// file, You can obtain one at https://mozilla.org/MPL/2.0/.</span>
 
-<span class="doccomment">//! Important: consider this module unstable / experimental.</span>
+<span class="doccomment">//! API definitions for the different metric types supported by the Glean SDK.</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! The different metric types supported by the Glean SDK to handle data.</span>
+<span class="doccomment">//! Individual metric types implement this trait to expose the specific metrics API.</span>
+<span class="doccomment">//! It can be used by wrapping implementations to guarantee API conformance.</span>
 
 <span class="kw">mod</span> <span class="ident">boolean</span>;
 <span class="kw">mod</span> <span class="ident">counter</span>;
