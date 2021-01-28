@@ -184,16 +184,27 @@
 <li>This is detected automatically, no changes needed for consuming code.</li>
 </ul>
 </li>
+<li>Add support for the client activity API. This API is either automatically used or exposed by the language bindings.</li>
+<li>Rename the reason <code>background</code> to <code>inactive</code> for both the <code>baseline</code> and <code>events</code> ping. Rename the reason <code>foreground</code> to <code>active</code> for the <code>baseline</code> ping.</li>
 </ul>
 </li>
 <li>RLB
 <ul>
 <li>When the pre-init task queue overruns, this is now recorded in the metric <code>glean.error.preinit_tasks_overflow</code>.</li>
+<li>Expose the client activity API.</li>
+<li>Send the <code>baseline</code> ping with reason <code>dirty_startup</code>, if needed, at startup.</li>
 </ul>
 </li>
 <li>Android
 <ul>
 <li>BUGFIX: Don't crash the ping uploader when throttled due to reading too large wait time values (<a href="https://github.com/mozilla/glean/pull/1454">#1454</a>).</li>
+<li>Use the client activity API.</li>
+</ul>
+</li>
+<li>iOS
+<ul>
+<li>Use the client activity API (<a href="https://github.com/mozilla/glean/pull/1465">#1465</a>).
+Note: this now introduces a baseline ping with reason <code>active</code> on startup.</li>
 </ul>
 </li>
 </ul>

@@ -181,9 +181,9 @@
 <p><strong>Note:</strong> As the <code>baseline</code> ping was specifically designed for mobile operating systems, it is not sent when using the Glean Python bindings.</p>
 </blockquote>
 <h2><a class="header" href="#scheduling" id="scheduling">Scheduling</a></h2>
-<p>The <code>baseline</code> ping is automatically submitted with a <code>reason: foreground</code> when the application is moved to the <a href="index.html#defining-foreground-and-background-state">foreground</a>.  These baseline pings do not contain <code>duration</code>.</p>
-<p>The <code>baseline</code> ping is automatically submitted with a <code>reason: background</code> when the application is moved to the <a href="index.html#defining-foreground-and-background-state">background</a>.
-Occasionally, the <code>baseline</code> ping may fail to send when going to background (e.g. the process is killed quickly).  In that case, it will be submitted at startup with a <code>reason: dirty_startup</code>, if the previous session was not cleanly closed. This only happens from the second start onward.</p>
+<p>The <code>baseline</code> ping is automatically submitted with a <code>reason: active</code> when the application becomes active (on mobile it means getting to <a href="index.html#defining-foreground-and-background-state">foreground</a>).  These baseline pings do not contain <code>duration</code>.</p>
+<p>The <code>baseline</code> ping is automatically submitted with a <code>reason: inactive</code> when the application becomes inactive (on mobile it means getting to <a href="index.html#defining-foreground-and-background-state">background</a>).
+If no <code>baseline</code> ping is triggered when becoming inactive (e.g. the process is abruptly killed) a <code>baseline</code> ping with reason <code>dirty_startup</code> will be submitted on the next application startup. This only happens from the second application start onward.</p>
 <p>See also the <a href="ping-schedules-and-timings.html">ping schedules and timing overview</a>.</p>
 <h2><a class="header" href="#contents" id="contents">Contents</a></h2>
 <p>The baseline ping includes the following fields:</p>

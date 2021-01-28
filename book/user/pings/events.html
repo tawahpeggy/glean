@@ -182,7 +182,7 @@ If the application crashes, an <code>events</code> ping is generated next time t
 <p>The <code>events</code> ping is collected under the following circumstances:</p>
 <ol>
 <li>
-<p>Normally, it is collected when the application goes into the <a href="index.html#defining-foreground-and-background-state">background</a>, if there are any recorded events to send.</p>
+<p>Normally, it is collected when the application becomes inactive (on mobile, this means going to <a href="index.html#defining-foreground-and-background-state">background</a>), if there are any recorded events to send.</p>
 </li>
 <li>
 <p>When the queue of events exceeds <code>Glean.configuration.maxEvents</code> (default 500).</p>

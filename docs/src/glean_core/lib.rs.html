@@ -941,6 +941,34 @@
 <span id="938">938</span>
 <span id="939">939</span>
 <span id="940">940</span>
+<span id="941">941</span>
+<span id="942">942</span>
+<span id="943">943</span>
+<span id="944">944</span>
+<span id="945">945</span>
+<span id="946">946</span>
+<span id="947">947</span>
+<span id="948">948</span>
+<span id="949">949</span>
+<span id="950">950</span>
+<span id="951">951</span>
+<span id="952">952</span>
+<span id="953">953</span>
+<span id="954">954</span>
+<span id="955">955</span>
+<span id="956">956</span>
+<span id="957">957</span>
+<span id="958">958</span>
+<span id="959">959</span>
+<span id="960">960</span>
+<span id="961">961</span>
+<span id="962">962</span>
+<span id="963">963</span>
+<span id="964">964</span>
+<span id="965">965</span>
+<span id="966">966</span>
+<span id="967">967</span>
+<span id="968">968</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -1824,6 +1852,34 @@
             <span class="prelude-val">Some</span>(<span class="ident">Metric</span>::<span class="ident">Boolean</span>(<span class="ident">b</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">b</span>,
             <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">false</span>,
         }
+    }
+
+    <span class="doccomment">/// Performs the collection/cleanup operations required by becoming active.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This functions generates a baseline ping with reason `active`</span>
+    <span class="doccomment">/// and then sets the dirty bit.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">handle_client_active</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">internal_pings</span>.<span class="ident">baseline</span>.<span class="ident">submit</span>(<span class="self">self</span>, <span class="prelude-val">Some</span>(<span class="string">&quot;active&quot;</span>)) {
+            <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(<span class="string">&quot;Failed to submit baseline ping on active: {}&quot;</span>, <span class="ident">err</span>);
+        }
+
+        <span class="self">self</span>.<span class="ident">set_dirty_flag</span>(<span class="bool-val">true</span>);
+    }
+
+    <span class="doccomment">/// Performs the collection/cleanup operations required by becoming inactive.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This functions generates a baseline and an events ping with reason</span>
+    <span class="doccomment">/// `inactive` and then clears the dirty bit.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">handle_client_inactive</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">internal_pings</span>.<span class="ident">baseline</span>.<span class="ident">submit</span>(<span class="self">self</span>, <span class="prelude-val">Some</span>(<span class="string">&quot;inactive&quot;</span>)) {
+            <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(<span class="string">&quot;Failed to submit baseline ping on inactive: {}&quot;</span>, <span class="ident">err</span>);
+        }
+
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">internal_pings</span>.<span class="ident">events</span>.<span class="ident">submit</span>(<span class="self">self</span>, <span class="prelude-val">Some</span>(<span class="string">&quot;inactive&quot;</span>)) {
+            <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(<span class="string">&quot;Failed to submit events ping on inactive: {}&quot;</span>, <span class="ident">err</span>);
+        }
+
+        <span class="self">self</span>.<span class="ident">set_dirty_flag</span>(<span class="bool-val">false</span>);
     }
 
     <span class="doccomment">/// **Test-only API (exported for FFI purposes).**</span>

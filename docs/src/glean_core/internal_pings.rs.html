@@ -42,6 +42,24 @@
 <span id="39">39</span>
 <span id="40">40</span>
 <span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -66,7 +84,16 @@
 <span class="kw">impl</span> <span class="ident">InternalPings</span> {
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">InternalPings</span> {
         <span class="ident">InternalPings</span> {
-            <span class="ident">baseline</span>: <span class="ident">PingType</span>::<span class="ident">new</span>(<span class="string">&quot;baseline&quot;</span>, <span class="bool-val">true</span>, <span class="bool-val">false</span>, <span class="macro">vec</span><span class="macro">!</span>[]),
+            <span class="ident">baseline</span>: <span class="ident">PingType</span>::<span class="ident">new</span>(
+                <span class="string">&quot;baseline&quot;</span>,
+                <span class="bool-val">true</span>,
+                <span class="bool-val">false</span>,
+                <span class="macro">vec</span><span class="macro">!</span>[
+                    <span class="string">&quot;active&quot;</span>.<span class="ident">to_string</span>(),
+                    <span class="string">&quot;dirty_startup&quot;</span>.<span class="ident">to_string</span>(),
+                    <span class="string">&quot;inactive&quot;</span>.<span class="ident">to_string</span>(),
+                ],
+            ),
             <span class="ident">metrics</span>: <span class="ident">PingType</span>::<span class="ident">new</span>(
                 <span class="string">&quot;metrics&quot;</span>,
                 <span class="bool-val">true</span>,
@@ -79,7 +106,16 @@
                     <span class="string">&quot;upgrade&quot;</span>.<span class="ident">to_string</span>(),
                 ],
             ),
-            <span class="ident">events</span>: <span class="ident">PingType</span>::<span class="ident">new</span>(<span class="string">&quot;events&quot;</span>, <span class="bool-val">true</span>, <span class="bool-val">false</span>, <span class="macro">vec</span><span class="macro">!</span>[]),
+            <span class="ident">events</span>: <span class="ident">PingType</span>::<span class="ident">new</span>(
+                <span class="string">&quot;events&quot;</span>,
+                <span class="bool-val">true</span>,
+                <span class="bool-val">false</span>,
+                <span class="macro">vec</span><span class="macro">!</span>[
+                    <span class="string">&quot;startup&quot;</span>.<span class="ident">to_string</span>(),
+                    <span class="string">&quot;inactive&quot;</span>.<span class="ident">to_string</span>(),
+                    <span class="string">&quot;max_capacity&quot;</span>.<span class="ident">to_string</span>(),
+                ],
+            ),
             <span class="ident">deletion_request</span>: <span class="ident">PingType</span>::<span class="ident">new</span>(<span class="string">&quot;deletion-request&quot;</span>, <span class="bool-val">true</span>, <span class="bool-val">true</span>, <span class="macro">vec</span><span class="macro">!</span>[]),
         }
     }

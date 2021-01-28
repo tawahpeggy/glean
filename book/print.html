@@ -5250,7 +5250,7 @@ The number of deleted pings due to exceeding storage quota is recorded on the me
 <div class="tabbar"></div>
 <div class="tabcontents">
 <div data-lang="Kotlin" class="tab">
-<h4><a class="header" href="#foreground" id="foreground">Foreground</a></h4>
+<h3><a class="header" href="#foreground" id="foreground">Foreground</a></h3>
 <p>For Android, this specifically means the activity becomes visible to the user, it has entered the <code>Started</code> state, and the system invokes the <a href="https://developer.android.com/reference/android/app/Activity.html#onStart()"><code>onStart()</code></a> callback.</p>
 <h3><a class="header" href="#background" id="background">Background</a></h3>
 <p>This specifically means when the activity is no longer visible to the user, it has entered the <code>Stopped</code> state, and the system invokes the <a href="https://developer.android.com/reference/android/app/Activity.html#onStop()"><code>onStop()</code></a> callback.</p>
@@ -5294,9 +5294,9 @@ means.</p>
 <p><strong>Note:</strong> As the <code>baseline</code> ping was specifically designed for mobile operating systems, it is not sent when using the Glean Python bindings.</p>
 </blockquote>
 <h2><a class="header" href="#scheduling" id="scheduling">Scheduling</a></h2>
-<p>The <code>baseline</code> ping is automatically submitted with a <code>reason: foreground</code> when the application is moved to the <a href="user/pings/index.html#defining-foreground-and-background-state">foreground</a>.  These baseline pings do not contain <code>duration</code>.</p>
-<p>The <code>baseline</code> ping is automatically submitted with a <code>reason: background</code> when the application is moved to the <a href="user/pings/index.html#defining-foreground-and-background-state">background</a>.
-Occasionally, the <code>baseline</code> ping may fail to send when going to background (e.g. the process is killed quickly).  In that case, it will be submitted at startup with a <code>reason: dirty_startup</code>, if the previous session was not cleanly closed. This only happens from the second start onward.</p>
+<p>The <code>baseline</code> ping is automatically submitted with a <code>reason: active</code> when the application becomes active (on mobile it means getting to <a href="user/pings/index.html#defining-foreground-and-background-state">foreground</a>).  These baseline pings do not contain <code>duration</code>.</p>
+<p>The <code>baseline</code> ping is automatically submitted with a <code>reason: inactive</code> when the application becomes inactive (on mobile it means getting to <a href="user/pings/index.html#defining-foreground-and-background-state">background</a>).
+If no <code>baseline</code> ping is triggered when becoming inactive (e.g. the process is abruptly killed) a <code>baseline</code> ping with reason <code>dirty_startup</code> will be submitted on the next application startup. This only happens from the second application start onward.</p>
 <p>See also the <a href="user/pings/ping-schedules-and-timings.html">ping schedules and timing overview</a>.</p>
 <h2><a class="header" href="#contents" id="contents">Contents</a></h2>
 <p>The baseline ping includes the following fields:</p>
@@ -5608,7 +5608,7 @@ If the application crashes, an <code>events</code> ping is generated next time t
 <p>The <code>events</code> ping is collected under the following circumstances:</p>
 <ol>
 <li>
-<p>Normally, it is collected when the application goes into the <a href="user/pings/index.html#defining-foreground-and-background-state">background</a>, if there are any recorded events to send.</p>
+<p>Normally, it is collected when the application becomes inactive (on mobile, this means going to <a href="user/pings/index.html#defining-foreground-and-background-state">background</a>), if there are any recorded events to send.</p>
 </li>
 <li>
 <p>When the queue of events exceeds <code>Glean.configuration.maxEvents</code> (default 500).</p>
@@ -6396,20 +6396,22 @@ This means you might have to go searching through the dependency tree to get a f
 <p><strong>Reasons this ping may be sent:</strong></p>
 <ul>
 <li>
-<p><code>background</code>: The ping was submitted before going to background.</p>
+<p><code>active</code>: The ping was submitted when the application became active again, which
+includes when the application starts. In earlier versions, this was called
+<code>foreground</code>.</p>
+<pre><code>*Note*: this ping will not contain the `glean.baseline.duration` metric.
+</code></pre>
 </li>
 <li>
 <p><code>dirty_startup</code>: The ping was submitted at startup, because the application process was
-killed before the Glean SDK had the chance to generate this ping, when
-going to background, in the last session.</p>
+killed before the Glean SDK had the chance to generate this ping, before
+becoming inactive, in the last session.</p>
 <pre><code>*Note*: this ping will not contain the `glean.baseline.duration` metric.
 </code></pre>
 </li>
 <li>
-<p><code>foreground</code>: The ping was submitted when the application went to foreground, which
-includes when the application starts.</p>
-<pre><code>*Note*: this ping will not contain the `glean.baseline.duration` metric.
-</code></pre>
+<p><code>inactive</code>: The ping was submitted when becoming inactive. In earlier versions, this
+was called <code>background</code>.</p>
 </li>
 </ul>
 <p>The following metrics are added to the ping:</p>
@@ -8798,16 +8800,27 @@ Each ping has its own schedule to gather all its locally saved metrics and creat
 <li>This is detected automatically, no changes needed for consuming code.</li>
 </ul>
 </li>
+<li>Add support for the client activity API. This API is either automatically used or exposed by the language bindings.</li>
+<li>Rename the reason <code>background</code> to <code>inactive</code> for both the <code>baseline</code> and <code>events</code> ping. Rename the reason <code>foreground</code> to <code>active</code> for the <code>baseline</code> ping.</li>
 </ul>
 </li>
 <li>RLB
 <ul>
 <li>When the pre-init task queue overruns, this is now recorded in the metric <code>glean.error.preinit_tasks_overflow</code>.</li>
+<li>Expose the client activity API.</li>
+<li>Send the <code>baseline</code> ping with reason <code>dirty_startup</code>, if needed, at startup.</li>
 </ul>
 </li>
 <li>Android
 <ul>
 <li>BUGFIX: Don't crash the ping uploader when throttled due to reading too large wait time values (<a href="https://github.com/mozilla/glean/pull/1454">#1454</a>).</li>
+<li>Use the client activity API.</li>
+</ul>
+</li>
+<li>iOS
+<ul>
+<li>Use the client activity API (<a href="https://github.com/mozilla/glean/pull/1465">#1465</a>).
+Note: this now introduces a baseline ping with reason <code>active</code> on startup.</li>
 </ul>
 </li>
 </ul>
@@ -10155,6 +10168,7 @@ They could be release notes, documentation, hopes, dreams, or whatever: so long 
 <li>2020-11-19: <a href="https://blog.mozilla.org/data/2020/11/19/this-week-in-glean-fantastic-facts-and-where-to-find-them/">Fantastic Facts and Where To Find Them</a></li>
 <li>2020-12-01: <a href="https://blog.mozilla.org/data/2020/12/01/this-week-in-glean-glean-is-frictionless-data-collection/">Glean is Frictionless Data Collection</a></li>
 <li>2020-12-18: <a href="https://fnordig.de/2020/12/18/glean-in-2021/">Glean in 2021</a></li>
+<li>2021-01-15: <a href="https://blog.mozilla.org/data/2021/01/15/this-week-in-glean-proposals-for-asynchronous-design/">Proposals for Asynchronous Design</a></li>
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/appendix/twig.md">Edit this file on GitHub.</a></footer>
                     </main>
