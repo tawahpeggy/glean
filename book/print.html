@@ -8791,7 +8791,9 @@ Each ping has its own schedule to gather all its locally saved metrics and creat
 <h2><a class="header" href="#this-week-in-glean-twig" id="this-week-in-glean-twig">This Week in Glean (TWiG)</a></h2>
 <p><a href="appendix/twig.html">This Week in Glean</a> is a series of blog posts that the Glean Team at Mozilla is using to try to communicate better about our work.</p>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/appendix/glossary.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#unreleased-changes" id="unreleased-changes">Unreleased changes</a></h1>
-<p><a href="https://github.com/mozilla/glean/compare/v33.10.3...main">Full changelog</a></p>
+<p><a href="https://github.com/mozilla/glean/compare/v34.0.0...main">Full changelog</a></p>
+<h1><a class="header" href="#v3400-2021-01-29" id="v3400-2021-01-29">v34.0.0 (2021-01-29)</a></h1>
+<p><a href="https://github.com/mozilla/glean/compare/v33.10.3...v34.0.0">Full changelog</a></p>
 <ul>
 <li>General
 <ul>
@@ -8800,21 +8802,27 @@ Each ping has its own schedule to gather all its locally saved metrics and creat
 <li>This is detected automatically, no changes needed for consuming code.</li>
 </ul>
 </li>
-<li>Add support for the client activity API. This API is either automatically used or exposed by the language bindings.</li>
+<li>Add support for the client activity API (<a href="https://github.com/mozilla/glean/pull/1455">#1455</a>). This API is either automatically used or exposed by the language bindings.</li>
 <li>Rename the reason <code>background</code> to <code>inactive</code> for both the <code>baseline</code> and <code>events</code> ping. Rename the reason <code>foreground</code> to <code>active</code> for the <code>baseline</code> ping.</li>
 </ul>
 </li>
 <li>RLB
 <ul>
-<li>When the pre-init task queue overruns, this is now recorded in the metric <code>glean.error.preinit_tasks_overflow</code>.</li>
-<li>Expose the client activity API.</li>
+<li>When the pre-init task queue overruns, this is now recorded in the metric <code>glean.error.preinit_tasks_overflow</code> (<a href="https://github.com/mozilla/glean/pull/1438">#1438</a>).</li>
+<li>Expose the client activity API (<a href="https://github.com/mozilla/glean/pull/1455">#1455</a>).</li>
 <li>Send the <code>baseline</code> ping with reason <code>dirty_startup</code>, if needed, at startup.</li>
+<li>Expose all required types directly (<a href="https://github.com/mozilla/glean/pull/1452">#1452</a>).
+<ul>
+<li>Rust consumers will not need to depend on <code>glean-core</code> anymore.</li>
+</ul>
+</li>
 </ul>
 </li>
 <li>Android
 <ul>
 <li>BUGFIX: Don't crash the ping uploader when throttled due to reading too large wait time values (<a href="https://github.com/mozilla/glean/pull/1454">#1454</a>).</li>
-<li>Use the client activity API.</li>
+<li>Use the client activity API (<a href="https://github.com/mozilla/glean/pull/1455">#1455</a>).</li>
+<li>Update <code>AndroidX</code> dependencies (<a href="https://github.com/mozilla/glean/pull/1441">#1441</a>).</li>
 </ul>
 </li>
 <li>iOS
