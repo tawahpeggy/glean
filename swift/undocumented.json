@@ -2,7 +2,7 @@
   "warnings": [
     {
       "file": "/Users/distiller/project/glean-core/ios/Glean/Glean.swift",
-      "line": 18,
+      "line": 19,
       "symbol": "Glean",
       "symbol_kind": "source.lang.swift.decl.class",
       "warning": "undocumented"
