@@ -1001,7 +1001,7 @@ Consider adding both a group email address and an individual who is responsible 
 <p><code>data_reviews</code>: <strong>Required.</strong> A list of URIs to any data collection reviews <em>responses</em> relevant to the metric.</p>
 </li>
 <li>
-<p><code>expires</code>: <strong>Required.</strong> May be one of the following values:</p>
+<p><code>expires</code>: <strong>Required.</strong> When the metric is set to expire. After a metric expires, an application will no longer collect or send data related to it. May be one of the following values:</p>
 <ul>
 <li><code>&lt;build date&gt;</code>: An ISO date <code>yyyy-mm-dd</code> in UTC on which the metric expires. For example, <code>2019-03-13</code>. This date is checked at build time. Except in special cases, this form should be used so that the metric automatically &quot;sunsets&quot; after a period of time.
 Emails will be sent to the <code>notification_emails</code> addresses when the metric is about to expire.
@@ -8801,6 +8801,7 @@ Each ping has its own schedule to gather all its locally saved metrics and creat
 <li>iOS
 <ul>
 <li>The metric <code>glean.validation.foreground_count</code> is now sent in the metrics ping (<a href="https://github.com/mozilla/glean/pull/1472">#1472</a>).</li>
+<li>BUGFIX: baseline pings with reason <code>dirty_startup</code> are no longer sent if Glean did not full initialize in the previous run (<a href="https://github.com/mozilla/glean/pull/1476">#1476</a>).</li>
 </ul>
 </li>
 </ul>
