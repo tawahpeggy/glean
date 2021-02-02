@@ -502,6 +502,55 @@ class Glean:
         return RecordedExperimentData(**json_tree)  # type: ignore
 
     @classmethod
+    def handle_client_active(cls):
+        &#34;&#34;&#34;
+        Performs the collection/cleanup operations required by becoming active.
+
+        This functions generates a baseline ping with reason `active`
+        and then sets the dirty bit.
+        This should be called whenever the consuming product becomes active (e.g.
+        getting to foreground).
+        &#34;&#34;&#34;
+        from ._builtins import metrics
+
+        _ffi.lib.glean_handle_client_active()
+
+        # The above call may generate pings, so we need to trigger
+        # the uploader. It&#39;s fine to trigger it if no ping was generated:
+        # it will bail out.
+        PingUploadWorker.process()
+
+        # The previous block of code may send a ping containing the `duration` metric,
+        # in `_ffi.lib.handle_client_active`. We intentionally start recording a new
+        # `duration` after that happens, so that the measurement gets reported when
+        # calling `handle_client_inactive`.
+        metrics.glean.baseline.duration.start()
+
+    @classmethod
+    def handle_client_inactive(cls):
+        &#34;&#34;&#34;
+        Performs the collection/cleanup operations required by becoming inactive.
+
+        This functions generates a baseline and an events ping with reason
+        `inactive` and then clears the dirty bit.
+        This should be called whenever the consuming product becomes inactive (e.g.
+        getting to background).
+        &#34;&#34;&#34;
+        from ._builtins import metrics
+
+        # This needs to be called before the `handle_client_inactive` api: it stops
+        # measuring the duration of the previous activity time, before any ping is sent
+        # by the next call.
+        metrics.glean.baseline.duration.stop()
+
+        _ffi.lib.glean_handle_client_inactive()
+
+        # The above call may generate pings, so we need to trigger
+        # the uploader. It&#39;s fine to trigger it if no ping was generated:
+        # it will bail out.
+        PingUploadWorker.process()
+
+    @classmethod
     def _initialize_core_metrics(cls) -&gt; None:
         &#34;&#34;&#34;
         Set a few metrics that will be sent as part of every ping.
@@ -1051,6 +1100,55 @@ initialized from the application.</p>
         return RecordedExperimentData(**json_tree)  # type: ignore
 
     @classmethod
+    def handle_client_active(cls):
+        &#34;&#34;&#34;
+        Performs the collection/cleanup operations required by becoming active.
+
+        This functions generates a baseline ping with reason `active`
+        and then sets the dirty bit.
+        This should be called whenever the consuming product becomes active (e.g.
+        getting to foreground).
+        &#34;&#34;&#34;
+        from ._builtins import metrics
+
+        _ffi.lib.glean_handle_client_active()
+
+        # The above call may generate pings, so we need to trigger
+        # the uploader. It&#39;s fine to trigger it if no ping was generated:
+        # it will bail out.
+        PingUploadWorker.process()
+
+        # The previous block of code may send a ping containing the `duration` metric,
+        # in `_ffi.lib.handle_client_active`. We intentionally start recording a new
+        # `duration` after that happens, so that the measurement gets reported when
+        # calling `handle_client_inactive`.
+        metrics.glean.baseline.duration.start()
+
+    @classmethod
+    def handle_client_inactive(cls):
+        &#34;&#34;&#34;
+        Performs the collection/cleanup operations required by becoming inactive.
+
+        This functions generates a baseline and an events ping with reason
+        `inactive` and then clears the dirty bit.
+        This should be called whenever the consuming product becomes inactive (e.g.
+        getting to background).
+        &#34;&#34;&#34;
+        from ._builtins import metrics
+
+        # This needs to be called before the `handle_client_inactive` api: it stops
+        # measuring the duration of the previous activity time, before any ping is sent
+        # by the next call.
+        metrics.glean.baseline.duration.stop()
+
+        _ffi.lib.glean_handle_client_inactive()
+
+        # The above call may generate pings, so we need to trigger
+        # the uploader. It&#39;s fine to trigger it if no ping was generated:
+        # it will bail out.
+        PingUploadWorker.process()
+
+    @classmethod
     def _initialize_core_metrics(cls) -&gt; None:
         &#34;&#34;&#34;
         Set a few metrics that will be sent as part of every ping.
@@ -1158,6 +1256,83 @@ def get_data_dir(cls) -&gt; Path:
     Get the data directory for Glean.
     &#34;&#34;&#34;
     return cls._data_dir</code></pre>
+</details>
+</dd>
+<dt id="glean.glean.Glean.handle_client_active"><code class="name flex">
+<span>def <span class="ident">handle_client_active</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Performs the collection/cleanup operations required by becoming active.</p>
+<p>This functions generates a baseline ping with reason <code>active</code>
+and then sets the dirty bit.
+This should be called whenever the consuming product becomes active (e.g.
+getting to foreground).</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@classmethod
+def handle_client_active(cls):
+    &#34;&#34;&#34;
+    Performs the collection/cleanup operations required by becoming active.
+
+    This functions generates a baseline ping with reason `active`
+    and then sets the dirty bit.
+    This should be called whenever the consuming product becomes active (e.g.
+    getting to foreground).
+    &#34;&#34;&#34;
+    from ._builtins import metrics
+
+    _ffi.lib.glean_handle_client_active()
+
+    # The above call may generate pings, so we need to trigger
+    # the uploader. It&#39;s fine to trigger it if no ping was generated:
+    # it will bail out.
+    PingUploadWorker.process()
+
+    # The previous block of code may send a ping containing the `duration` metric,
+    # in `_ffi.lib.handle_client_active`. We intentionally start recording a new
+    # `duration` after that happens, so that the measurement gets reported when
+    # calling `handle_client_inactive`.
+    metrics.glean.baseline.duration.start()</code></pre>
+</details>
+</dd>
+<dt id="glean.glean.Glean.handle_client_inactive"><code class="name flex">
+<span>def <span class="ident">handle_client_inactive</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Performs the collection/cleanup operations required by becoming inactive.</p>
+<p>This functions generates a baseline and an events ping with reason
+<code>inactive</code> and then clears the dirty bit.
+This should be called whenever the consuming product becomes inactive (e.g.
+getting to background).</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@classmethod
+def handle_client_inactive(cls):
+    &#34;&#34;&#34;
+    Performs the collection/cleanup operations required by becoming inactive.
+
+    This functions generates a baseline and an events ping with reason
+    `inactive` and then clears the dirty bit.
+    This should be called whenever the consuming product becomes inactive (e.g.
+    getting to background).
+    &#34;&#34;&#34;
+    from ._builtins import metrics
+
+    # This needs to be called before the `handle_client_inactive` api: it stops
+    # measuring the duration of the previous activity time, before any ping is sent
+    # by the next call.
+    metrics.glean.baseline.duration.stop()
+
+    _ffi.lib.glean_handle_client_inactive()
+
+    # The above call may generate pings, so we need to trigger
+    # the uploader. It&#39;s fine to trigger it if no ping was generated:
+    # it will bail out.
+    PingUploadWorker.process()</code></pre>
 </details>
 </dd>
 <dt id="glean.glean.Glean.initialize"><code class="name flex">
@@ -1675,6 +1850,8 @@ def test_is_experiment_active(cls, experiment_id: str) -&gt; bool:
 <ul class="">
 <li><code><a title="glean.glean.Glean.configuration" href="#glean.glean.Glean.configuration">configuration</a></code></li>
 <li><code><a title="glean.glean.Glean.get_data_dir" href="#glean.glean.Glean.get_data_dir">get_data_dir</a></code></li>
+<li><code><a title="glean.glean.Glean.handle_client_active" href="#glean.glean.Glean.handle_client_active">handle_client_active</a></code></li>
+<li><code><a title="glean.glean.Glean.handle_client_inactive" href="#glean.glean.Glean.handle_client_inactive">handle_client_inactive</a></code></li>
 <li><code><a title="glean.glean.Glean.initialize" href="#glean.glean.Glean.initialize">initialize</a></code></li>
 <li><code><a title="glean.glean.Glean.is_initialized" href="#glean.glean.Glean.is_initialized">is_initialized</a></code></li>
 <li><code><a title="glean.glean.Glean.register_ping_type" href="#glean.glean.Glean.register_ping_type">register_ping_type</a></code></li>

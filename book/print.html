@@ -5306,7 +5306,7 @@ If no <code>baseline</code> ping is triggered when becoming inactive (e.g. the p
 <h2><a class="header" href="#contents" id="contents">Contents</a></h2>
 <p>The baseline ping includes the following fields:</p>
 <table><thead><tr><th>Field name</th><th>Type</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>duration</code></td><td>Timespan</td><td>The duration, in seconds, of the last foreground session. Only available if <code>reason: background</code>. <sup class="footnote-reference"><a href="#1">1</a></sup></td></tr>
+<tr><td><code>duration</code></td><td>Timespan</td><td>The duration, in seconds, of the last foreground session. Only available if <code>reason: inactive</code>. <sup class="footnote-reference"><a href="#1">1</a></sup></td></tr>
 </tbody></table>
 <div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
 <p>See also the <a href="user/pings/ping-schedules-and-timings.html">ping schedules and timing overview</a> for how the <code>duration</code> metric relates to other sources of timing in the <code>baseline</code> ping.</p>
@@ -8802,6 +8802,11 @@ Each ping has its own schedule to gather all its locally saved metrics and creat
 <ul>
 <li>The metric <code>glean.validation.foreground_count</code> is now sent in the metrics ping (<a href="https://github.com/mozilla/glean/pull/1472">#1472</a>).</li>
 <li>BUGFIX: baseline pings with reason <code>dirty_startup</code> are no longer sent if Glean did not full initialize in the previous run (<a href="https://github.com/mozilla/glean/pull/1476">#1476</a>).</li>
+</ul>
+</li>
+<li>Python
+<ul>
+<li>Expose the client activity API (<a href="https://github.com/mozilla/glean/pull/1481">#1481</a>).</li>
 </ul>
 </li>
 </ul>
