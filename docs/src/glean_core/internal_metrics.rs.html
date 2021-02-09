@@ -176,6 +176,19 @@
 <span id="173">173</span>
 <span id="174">174</span>
 <span id="175">175</span>
+<span id="176">176</span>
+<span id="177">177</span>
+<span id="178">178</span>
+<span id="179">179</span>
+<span id="180">180</span>
+<span id="181">181</span>
+<span id="182">182</span>
+<span id="183">183</span>
+<span id="184">184</span>
+<span id="185">185</span>
+<span id="186">186</span>
+<span id="187">187</span>
+<span id="188">188</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -196,6 +209,7 @@
     <span class="doccomment">/// **Note**: Not a _core_ metric, but an error metric,</span>
     <span class="doccomment">/// placed here for the lack of a more suitable part in the Glean struct.</span>
     <span class="kw">pub</span> <span class="ident">io_errors</span>: <span class="ident">CounterMetric</span>,
+    <span class="kw">pub</span> <span class="ident">pings_submitted</span>: <span class="ident">LabeledMetric</span><span class="op">&lt;</span><span class="ident">CounterMetric</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">CoreMetrics</span> {
@@ -251,6 +265,18 @@
                 <span class="ident">disabled</span>: <span class="bool-val">false</span>,
                 <span class="ident">dynamic_label</span>: <span class="prelude-val">None</span>,
             }),
+
+            <span class="ident">pings_submitted</span>: <span class="ident">LabeledMetric</span>::<span class="ident">new</span>(
+                <span class="ident">CounterMetric</span>::<span class="ident">new</span>(<span class="ident">CommonMetricData</span> {
+                    <span class="ident">name</span>: <span class="string">&quot;pings_submitted&quot;</span>.<span class="ident">into</span>(),
+                    <span class="ident">category</span>: <span class="string">&quot;glean.validation&quot;</span>.<span class="ident">into</span>(),
+                    <span class="ident">send_in_pings</span>: <span class="macro">vec</span><span class="macro">!</span>[<span class="string">&quot;metrics&quot;</span>.<span class="ident">into</span>(), <span class="string">&quot;baseline&quot;</span>.<span class="ident">into</span>()],
+                    <span class="ident">lifetime</span>: <span class="ident">Lifetime</span>::<span class="ident">Ping</span>,
+                    <span class="ident">disabled</span>: <span class="bool-val">false</span>,
+                    <span class="ident">dynamic_label</span>: <span class="prelude-val">None</span>,
+                }),
+                <span class="prelude-val">None</span>,
+            ),
         }
     }
 }

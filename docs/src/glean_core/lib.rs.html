@@ -969,6 +969,15 @@
 <span id="966">966</span>
 <span id="967">967</span>
 <span id="968">968</span>
+<span id="969">969</span>
+<span id="970">970</span>
+<span id="971">971</span>
+<span id="972">972</span>
+<span id="973">973</span>
+<span id="974">974</span>
+<span id="975">975</span>
+<span id="976">976</span>
+<span id="977">977</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -1599,6 +1608,15 @@
                 <span class="prelude-val">Ok</span>(<span class="bool-val">false</span>)
             }
             <span class="prelude-val">Some</span>(<span class="ident">content</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="comment">// This metric is recorded *after* the ping is collected (since</span>
+                <span class="comment">// that is the only way to know *if* it will be submitted). The</span>
+                <span class="comment">// implication of this is that the count for a metrics ping will</span>
+                <span class="comment">// be included in the *next* metrics ping.</span>
+                <span class="self">self</span>.<span class="ident">core_metrics</span>
+                    .<span class="ident">pings_submitted</span>
+                    .<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">ping</span>.<span class="ident">name</span>)
+                    .<span class="ident">add</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="number">1</span>);
+
                 <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="ident">ping_maker</span>.<span class="ident">store_ping</span>(
                     <span class="self">self</span>,
                     <span class="kw-2">&amp;</span><span class="ident">doc_id</span>,
