@@ -177,7 +177,7 @@
                         <h1><a class="header" href="#setup-the-ios-build-environment" id="setup-the-ios-build-environment">Setup the iOS Build Environment</a></h1>
 <h2><a class="header" href="#prepare-your-build-environment" id="prepare-your-build-environment">Prepare your build environment</a></h2>
 <ol>
-<li>Install Xcode 11.0</li>
+<li>Install Xcode 12.4</li>
 <li>Install <a href="https://github.com/Carthage/Carthage">Carthage</a>: <code>brew install carthage</code></li>
 <li>Ensure you have Python 3 installed: <code>brew install python</code></li>
 <li>Install linting and formatting tools: <code>brew install swiftlint</code></li>
@@ -195,17 +195,15 @@ done using the <code>rustup target</code> command. In order to enable building t
 devices and iOS emulators, the following targets need to be installed:</p>
 <pre><code>rustup target add aarch64-apple-ios x86_64-apple-ios
 </code></pre>
+<p>Install helper tools:</p>
+<pre><code>cargo install cargo-lipo
+</code></pre>
 <h2><a class="header" href="#building" id="building">Building</a></h2>
 <p>This should be relatively straightforward and painless:</p>
 <ol>
-<li>
-<p>Ensure your repository is up-to-date.</p>
-</li>
-<li>
-<p>Ensure Rust is up-to-date by running <code>rustup update</code>.</p>
-</li>
-<li>
-<p>Run a build using the command <code>make build-swift</code></p>
+<li>Ensure your repository is up-to-date.</li>
+<li>Ensure Rust is up-to-date by running <code>rustup update</code>.</li>
+<li>Run a build using the command <code>make build-swift</code>
 <ul>
 <li>To run tests use <code>make test-swift</code></li>
 </ul>
