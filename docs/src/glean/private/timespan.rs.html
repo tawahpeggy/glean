@@ -160,10 +160,6 @@
 <span id="157">157</span>
 <span id="158">158</span>
 <span id="159">159</span>
-<span id="160">160</span>
-<span id="161">161</span>
-<span id="162">162</span>
-<span id="163">163</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -205,13 +201,11 @@
         <span class="kw">let</span> <span class="ident">start_time</span> <span class="op">=</span> <span class="ident">time</span>::<span class="ident">precise_time_ns</span>();
 
         <span class="kw">let</span> <span class="ident">metric</span> <span class="op">=</span> <span class="ident">Arc</span>::<span class="ident">clone</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>);
-        <span class="ident">dispatcher</span>::<span class="ident">launch</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
-            <span class="kw">crate</span>::<span class="ident">with_glean</span>(<span class="op">|</span><span class="ident">glean</span><span class="op">|</span> {
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">lock</span> <span class="op">=</span> <span class="ident">metric</span>
-                    .<span class="ident">write</span>()
-                    .<span class="ident">expect</span>(<span class="string">&quot;Lock poisoned for timespan metric on start.&quot;</span>);
-                <span class="ident">lock</span>.<span class="ident">set_start</span>(<span class="ident">glean</span>, <span class="ident">start_time</span>)
-            })
+        <span class="kw">crate</span>::<span class="ident">launch_with_glean</span>(<span class="kw">move</span> <span class="op">|</span><span class="ident">glean</span><span class="op">|</span> {
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">lock</span> <span class="op">=</span> <span class="ident">metric</span>
+                .<span class="ident">write</span>()
+                .<span class="ident">expect</span>(<span class="string">&quot;Lock poisoned for timespan metric on start.&quot;</span>);
+            <span class="ident">lock</span>.<span class="ident">set_start</span>(<span class="ident">glean</span>, <span class="ident">start_time</span>)
         });
     }
 
@@ -219,13 +213,11 @@
         <span class="kw">let</span> <span class="ident">stop_time</span> <span class="op">=</span> <span class="ident">time</span>::<span class="ident">precise_time_ns</span>();
 
         <span class="kw">let</span> <span class="ident">metric</span> <span class="op">=</span> <span class="ident">Arc</span>::<span class="ident">clone</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>);
-        <span class="ident">dispatcher</span>::<span class="ident">launch</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
-            <span class="kw">crate</span>::<span class="ident">with_glean</span>(<span class="op">|</span><span class="ident">glean</span><span class="op">|</span> {
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">lock</span> <span class="op">=</span> <span class="ident">metric</span>
-                    .<span class="ident">write</span>()
-                    .<span class="ident">expect</span>(<span class="string">&quot;Lock poisoned for timespan metric on stop.&quot;</span>);
-                <span class="ident">lock</span>.<span class="ident">set_stop</span>(<span class="ident">glean</span>, <span class="ident">stop_time</span>)
-            })
+        <span class="kw">crate</span>::<span class="ident">launch_with_glean</span>(<span class="kw">move</span> <span class="op">|</span><span class="ident">glean</span><span class="op">|</span> {
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">lock</span> <span class="op">=</span> <span class="ident">metric</span>
+                .<span class="ident">write</span>()
+                .<span class="ident">expect</span>(<span class="string">&quot;Lock poisoned for timespan metric on stop.&quot;</span>);
+            <span class="ident">lock</span>.<span class="ident">set_stop</span>(<span class="ident">glean</span>, <span class="ident">stop_time</span>)
         });
     }
 

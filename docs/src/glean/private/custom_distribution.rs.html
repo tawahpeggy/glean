@@ -78,10 +78,6 @@
 <span id="75">75</span>
 <span id="76">76</span>
 <span id="77">77</span>
-<span id="78">78</span>
-<span id="79">79</span>
-<span id="80">80</span>
-<span id="81">81</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -92,8 +88,6 @@
 
 <span class="kw">use</span> <span class="ident">glean_core</span>::<span class="ident">metrics</span>::{<span class="ident">DistributionData</span>, <span class="ident">MetricType</span>};
 <span class="kw">use</span> <span class="ident">glean_core</span>::{<span class="ident">CommonMetricData</span>, <span class="ident">ErrorType</span>, <span class="ident">HistogramType</span>};
-
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">dispatcher</span>;
 
 <span class="comment">// We need to wrap the glean-core type: otherwise if we try to implement</span>
 <span class="comment">// the trait for the metric in `glean_core::metrics` we hit error[E0117]:</span>
@@ -133,9 +127,7 @@
 <span class="kw">impl</span> <span class="ident">glean_core</span>::<span class="ident">traits</span>::<span class="ident">CustomDistribution</span> <span class="kw">for</span> <span class="ident">CustomDistributionMetric</span> {
     <span class="kw">fn</span> <span class="ident">accumulate_samples_signed</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">samples</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>) {
         <span class="kw">let</span> <span class="ident">metric</span> <span class="op">=</span> <span class="ident">Arc</span>::<span class="ident">clone</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>);
-        <span class="ident">dispatcher</span>::<span class="ident">launch</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
-            <span class="kw">crate</span>::<span class="ident">with_glean</span>(<span class="op">|</span><span class="ident">glean</span><span class="op">|</span> <span class="ident">metric</span>.<span class="ident">accumulate_samples_signed</span>(<span class="ident">glean</span>, <span class="ident">samples</span>))
-        });
+        <span class="kw">crate</span>::<span class="ident">launch_with_glean</span>(<span class="kw">move</span> <span class="op">|</span><span class="ident">glean</span><span class="op">|</span> <span class="ident">metric</span>.<span class="ident">accumulate_samples_signed</span>(<span class="ident">glean</span>, <span class="ident">samples</span>));
     }
 
     <span class="kw">fn</span> <span class="ident">test_get_value</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">S</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>(
