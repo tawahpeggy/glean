@@ -534,9 +534,6 @@
 <span id="531">531</span>
 <span id="532">532</span>
 <span id="533">533</span>
-<span id="534">534</span>
-<span id="535">535</span>
-<span id="536">536</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -756,13 +753,10 @@
         <span class="comment">// Set the level so everything goes through to the language</span>
         <span class="comment">// binding side where it will be filtered by the language</span>
         <span class="comment">// binding&#39;s logging system.</span>
-        <span class="kw">if</span> <span class="ident">log</span>::<span class="ident">set_logger</span>(<span class="ident">FD_LOGGER</span>.<span class="ident">get</span>().<span class="ident">unwrap</span>())
-            .<span class="ident">map</span>(<span class="op">|</span>()<span class="op">|</span> <span class="ident">log</span>::<span class="ident">set_max_level</span>(<span class="ident">log</span>::<span class="ident">LevelFilter</span>::<span class="ident">Debug</span>))
-            .<span class="ident">is_ok</span>()
-        {
-            <span class="kw">return</span>;
+        <span class="kw">if</span> <span class="ident">log</span>::<span class="ident">set_logger</span>(<span class="ident">FD_LOGGER</span>.<span class="ident">get</span>().<span class="ident">unwrap</span>()).<span class="ident">is_ok</span>() {
+            <span class="ident">log</span>::<span class="ident">set_max_level</span>(<span class="ident">log</span>::<span class="ident">LevelFilter</span>::<span class="ident">Debug</span>);
         }
-    };
+    }
 }
 
 <span class="doccomment">/// Configuration over FFI.</span>
