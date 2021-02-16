@@ -209,7 +209,8 @@ tasks, or perform other required operations.</p>
 Additionally, Glean must be initialized on the main (UI) thread of the applications main process. Failure to do so will throw an <code>IllegalThreadStateException</code>.</p>
 </blockquote>
 <p>An excellent place to initialize Glean is within the <code>onCreate</code> method of the class that extends Android's <code>Application</code> class.</p>
-<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Pings
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.GleanBuildInfo
+import org.mozilla.yourApplication.GleanMetrics.Pings
 
 class SampleApplication : Application() {
 
@@ -226,19 +227,25 @@ class SampleApplication : Application() {
             applicationContext,
             // Here, `settings()` is a method to get user preferences, specific to
             // your application and not part of the Glean SDK API.
-            uploadEnabled = settings().isTelemetryEnabled
+            uploadEnabled = settings().isTelemetryEnabled,
+            buildInfo = GleanBuildInfo.buildInfo
         )
     }
 }
 </code></pre>
-<p>Once initialized, if <code>uploadEnabled</code> is true, the Glean SDK will automatically start collecting <a href="pings/metrics.html">baseline metrics</a> and sending its <a href="pings/index.html">pings</a>, according to their respective schedules.<br />
+<p>Once initialized, if <code>uploadEnabled</code> is true, the Glean SDK will automatically start collecting <a href="pings/metrics.html">baseline metrics</a> and sending its <a href="pings/index.html">pings</a>, according to their respective schedules.
 If <code>uploadEnabled</code> is false, any persisted metrics, events and pings (other than <code>first_run_date</code> and <code>first_run_hour</code>) are cleared, and subsequent calls to record metrics will be no-ops.</p>
 <p>The Glean SDK should be initialized as soon as possible, and importantly, before any other libraries in the application start using Glean.
 Library code should never call <code>Glean.initialize</code>, since it should be called exactly once per application.</p>
 <blockquote>
 <p><strong>Note</strong>: if the application has the concept of release channels and knows which channel it is on at run-time, then it can provide the Glean SDK with this information by setting it as part of the <code>Configuration</code> object parameter of the <code>Glean.initialize</code> method. For example:</p>
 </blockquote>
-<pre><code class="language-Kotlin">Glean.initialize(applicationContext, Configuration(channel = &quot;beta&quot;))
+<pre><code class="language-Kotlin">Glean.initialize(
+    applicationContext,
+    uploadEnabled = setting().isTelemetryEnabled,
+    configuration = Configuration(channel = &quot;beta&quot;),
+    buildInfo = GleanBuildInfo.buildInfo
+)
 </code></pre>
 <blockquote>
 <p><strong>Note</strong>: When the Glean SDK is consumed through Android Components, it is required to configure an HTTP client to be used for upload.
@@ -256,7 +263,12 @@ import mozilla.components.service.glean.net.ConceptFetchHttpUploader
 
 val httpClient = ConceptFetchHttpUploader(lazy { HttpURLConnectionClient() as Client })
 val config = Configuration(httpClient = httpClient)
-Glean.initialize(context, uploadEnabled = true, configuration = config)
+Glean.initialize(
+    context,
+    uploadEnabled = true,
+    configuration = config,
+    buildInfo = GleanBuildInfo.buildInfo
+)
 </code></pre>
 </div>
 <div data-lang="Swift" class="tab">
@@ -284,7 +296,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 </code></pre>
-<p>Once initialized, if <code>uploadEnabled</code> is true, the Glean SDK will automatically start collecting <a href="pings/metrics.html">baseline metrics</a> and sending its <a href="pings/index.html">pings</a>, according to their respective schedules.<br />
+<p>Once initialized, if <code>uploadEnabled</code> is true, the Glean SDK will automatically start collecting <a href="pings/metrics.html">baseline metrics</a> and sending its <a href="pings/index.html">pings</a>, according to their respective schedules.
 If <code>uploadEnabled</code> is false, any persisted metrics, events and pings (other than <code>first_run_date</code> and <code>first_run_hour</code>) are cleared, and subsequent calls to record metrics will be no-ops.</p>
 <p>The Glean SDK should be initialized as soon as possible, and importantly, before any other libraries in the application start using Glean.
 Library code should never call <code>Glean.shared.initialize</code>, since it should be called exactly once per application.</p>
