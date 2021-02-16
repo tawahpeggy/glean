@@ -4342,10 +4342,8 @@ previously registered in the metrics.yaml file.</p></div>
 
     def start(self) -&gt; Optional[int]:
         &#34;&#34;&#34;
-        Start tracking time. This records an error if it’s already tracking
-        time (i.e. start was already called with no corresponding
-        `stop_and_ccumulate`): in that case the original start time will be
-        preserved.
+        Start tracking time for the provided metric.
+        Multiple timers can run simultaneously.
 
         Returns:
             timer_id: The object to associate with this timing.
@@ -4612,10 +4610,8 @@ is not recorded.</p>
 <span>def <span class="ident">start</span></span>(<span>self) ‑> Union[int, NoneType]</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Start tracking time. This records an error if it’s already tracking
-time (i.e. start was already called with no corresponding
-<code>stop_and_ccumulate</code>): in that case the original start time will be
-preserved.</p>
+<div class="desc"><p>Start tracking time for the provided metric.
+Multiple timers can run simultaneously.</p>
 <h2 id="returns">Returns</h2>
 <dl>
 <dt><code>timer_id</code></dt>
@@ -4627,10 +4623,8 @@ preserved.</p>
 </summary>
 <pre><code class="python">def start(self) -&gt; Optional[int]:
     &#34;&#34;&#34;
-    Start tracking time. This records an error if it’s already tracking
-    time (i.e. start was already called with no corresponding
-    `stop_and_ccumulate`): in that case the original start time will be
-    preserved.
+    Start tracking time for the provided metric.
+    Multiple timers can run simultaneously.
 
     Returns:
         timer_id: The object to associate with this timing.

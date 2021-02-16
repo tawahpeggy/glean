@@ -62,10 +62,8 @@ allowing developers to record values that were previously registered in the metr
 </td>
 <td>
 <code><span class="keyword">fun </span><span class="identifier">start</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="../../mozilla.telemetry.glean/-glean-timer-id.html"><span class="identifier">GleanTimerId</span></a><span class="symbol">?</span></code>
-<p>Start tracking time for the provided metric. This records an error if
-it’s already tracking time (i.e. start was already called with no
-corresponding <a href="stop-and-accumulate.html">stopAndAccumulate</a>): in that case the original start time will
-be preserved.</p>
+<p>Start tracking time for the provided metric.
+Multiple timers can run simultaneously.</p>
 </td>
 </tr>
 <tr>
