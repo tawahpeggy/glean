@@ -1,0 +1,440 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Payload format - Glean - Cross-platform Telemetry library</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="../../favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="../../favicon.png">
+        
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+        <link rel="stylesheet" href="../../../shared/glean.css">
+        
+        <link rel="stylesheet" href="../../../shared/mermaid.css">
+        
+
+        
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../index.html">Developing the Glean SDK</a></li><li class="chapter-item expanded "><a href="../../testing.html"><strong aria-hidden="true">1.</strong> Testing</a></li><li class="chapter-item expanded "><a href="../../ci.html"><strong aria-hidden="true">2.</strong> Continuous Integration</a></li><li class="chapter-item expanded "><a href="../../cut-a-new-release.html"><strong aria-hidden="true">3.</strong> Release process</a></li><li class="chapter-item expanded "><a href="../../contributing.html"><strong aria-hidden="true">4.</strong> Contributing</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../code_coverage.html"><strong aria-hidden="true">4.1.</strong> Code coverage</a></li></ol></li><li class="chapter-item expanded "><a href="../../docs.html"><strong aria-hidden="true">5.</strong> Developing documentation</a></li><li class="chapter-item expanded "><a href="../../upgrading-glean-parser.html"><strong aria-hidden="true">6.</strong> Upgrading glean_parser</a></li><li class="chapter-item expanded "><a href="../../android/index.html"><strong aria-hidden="true">7.</strong> Android bindings</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../android/setup-android-build-environment.html"><strong aria-hidden="true">7.1.</strong> Setup Build Environment</a></li><li class="chapter-item expanded "><a href="../../android/sdk-ndk-versions.html"><strong aria-hidden="true">7.2.</strong> Android SDK/NDK versions</a></li><li class="chapter-item expanded "><a href="../../android/development-with-android-components.html"><strong aria-hidden="true">7.3.</strong> Development with android-components</a></li><li class="chapter-item expanded "><a href="../../android/locally-published-components-in-fenix.html"><strong aria-hidden="true">7.4.</strong> Locally-published components in Fenix</a></li></ol></li><li class="chapter-item expanded "><a href="../../ios/index.html"><strong aria-hidden="true">8.</strong> iOS bindings</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../ios/setup-ios-build-environment.html"><strong aria-hidden="true">8.1.</strong> Setup Build Environment</a></li><li class="chapter-item expanded "><a href="../../ios/debug-glean-on-ios.html"><strong aria-hidden="true">8.2.</strong> Debugging Different Versions of Glean</a></li></ol></li><li class="chapter-item expanded "><a href="../../python/index.html"><strong aria-hidden="true">9.</strong> Python bindings</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../python/setting-up-python-build-environment.html"><strong aria-hidden="true">9.1.</strong> Setup Build Environment</a></li></ol></li><li class="chapter-item expanded "><a href="../../core/index.html"><strong aria-hidden="true">10.</strong> Rust Component</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../core/documentation-guidelines.html"><strong aria-hidden="true">10.1.</strong> Documentation guidelines</a></li><li class="chapter-item expanded "><a href="../../core/dependency-management.html"><strong aria-hidden="true">10.2.</strong> Dependency Management</a></li><li class="chapter-item expanded "><a href="../../core/new-metric-type.html"><strong aria-hidden="true">10.3.</strong> Adding a new metric type</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../core/new-metric-type/ffi.html"><strong aria-hidden="true">10.3.1.</strong> FFI</a></li><li class="chapter-item expanded "><a href="../../core/new-metric-type/kotlin.html"><strong aria-hidden="true">10.3.2.</strong> Kotlin</a></li><li class="chapter-item expanded "><a href="../../core/new-metric-type/swift.html"><strong aria-hidden="true">10.3.3.</strong> Swift</a></li><li class="chapter-item expanded "><a href="../../core/new-metric-type/python.html"><strong aria-hidden="true">10.3.4.</strong> Python</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../../ffi/index.html"><strong aria-hidden="true">11.</strong> FFI Layer</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../ffi/when-to-use-what-in-the-ffi.html"><strong aria-hidden="true">11.1.</strong> When/How FFI</a></li></ol></li><li class="chapter-item expanded "><a href="../../core/internal/index.html"><strong aria-hidden="true">12.</strong> Internal implementation details</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../core/internal/reserved-ping-names.html"><strong aria-hidden="true">12.1.</strong> Reserved ping names</a></li><li class="chapter-item expanded "><a href="../../core/internal/clearing.html"><strong aria-hidden="true">12.2.</strong> Clearing metrics when disabling/enabling Glean</a></li><li class="chapter-item expanded "><a href="../../core/internal/payload.html" class="active"><strong aria-hidden="true">12.3.</strong> Payload format</a></li><li class="chapter-item expanded "><a href="../../core/internal/directory-structure.html"><strong aria-hidden="true">12.4.</strong> Directory &amp; file structure</a></li><li class="chapter-item expanded "><a href="../../core/internal/debug-pings.html"><strong aria-hidden="true">12.5.</strong> Debug Pings</a></li><li class="chapter-item expanded "><a href="../../core/internal/upload.html"><strong aria-hidden="true">12.6.</strong> Upload mechanism</a></li><li class="chapter-item expanded "><a href="../../core/internal/implementations.html"><strong aria-hidden="true">12.7.</strong> Implementations</a></li></ol></li><li class="chapter-item expanded "><a href="../../api/index.html"><strong aria-hidden="true">13.</strong> API Documentation</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Glean - Cross-platform Telemetry library</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                        <a href="https://github.com/mozilla/glean" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#payload-format" id="payload-format">Payload format</a></h1>
+<p>The main sections of a Glean ping are described in <a href="../../../user/pings/index.html#ping-sections">Ping Sections</a>.
+This <strong>Payload format</strong> chapter describes details of the ping payload that are relevant for decoding Glean pings in the pipeline.</p>
+<blockquote>
+<p>NOTE: The payload format is an implementation detail of the Glean SDK and subject to change at any time. 
+External users should not rely on this information. 
+It is provided as a reference for contributing to Glean only.</p>
+</blockquote>
+<h2><a class="header" href="#json-schema" id="json-schema">JSON Schema</a></h2>
+<p>Glean's ping payloads have a formal JSON schema defined in the <a href="https://github.com/mozilla-services/mozilla-pipeline-schemas/">mozilla-pipeline-schemas</a> project.
+It is written as a set of <a href="https://github.com/mozilla-services/mozilla-pipeline-schemas/tree/HEAD/templates/include/glean">templates</a> that are expanded by the mozilla-pipeline-schemas build infrastructure into a <a href="https://github.com/mozilla-services/mozilla-pipeline-schemas/blob/HEAD/schemas/glean/baseline/baseline.1.schema.json">fully expanded schema</a>.</p>
+<h2><a class="header" href="#metric-types" id="metric-types">Metric types</a></h2>
+<h3><a class="header" href="#boolean" id="boolean">Boolean</a></h3>
+<p>A <a href="../../../user/metrics/boolean.html">Boolean</a> is represented by its boolean value.</p>
+<h4><a class="header" href="#example" id="example">Example</a></h4>
+<pre><code class="language-json">true
+</code></pre>
+<h3><a class="header" href="#counter" id="counter">Counter</a></h3>
+<p>A <a href="../../../user/metrics/counter.html">Counter</a> is represented by its integer value.</p>
+<h4><a class="header" href="#example-1" id="example-1">Example</a></h4>
+<pre><code class="language-json">17
+</code></pre>
+<h3><a class="header" href="#quantity" id="quantity">Quantity</a></h3>
+<p>A <a href="../../../user/metrics/quantity.html">Quantity</a> is represented by its integer value.</p>
+<h4><a class="header" href="#example-2" id="example-2">Example</a></h4>
+<pre><code class="language-json">42
+</code></pre>
+<h3><a class="header" href="#string" id="string">String</a></h3>
+<p>A <a href="../../../user/metrics/string.html">String</a> is represented by its string value.</p>
+<h4><a class="header" href="#example-3" id="example-3">Example</a></h4>
+<pre><code class="language-json">&quot;sample string&quot;
+</code></pre>
+<h3><a class="header" href="#jwe" id="jwe">JWE</a></h3>
+<p>A <a href="../../../user/metrics/jwe.html">JWE</a> is represented by its <a href="https://tools.ietf.org/html/rfc7516#appendix-A.2.7">compact representation</a>.</p>
+<h4><a class="header" href="#example-4" id="example-4">Example</a></h4>
+<pre><code class="language-json">&quot;eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZHQ00ifQ..48V1_ALb6US04U3b.5eym8TW_c8SuK0ltJ3rpYIzOeDQz7TALvtu6UG9oMo4vpzs9tX_EFShS8iB7j6jiSdiwkIr3ajwQzaBtQD_A.XFBoMYUZodetZdvTiFvSkQ&quot;
+</code></pre>
+<h3><a class="header" href="#string-list" id="string-list">String list</a></h3>
+<p>A <a href="../../../user/metrics/string_list.html">String List</a> is represented as an array of strings.</p>
+<pre><code class="language-json">[&quot;sample string&quot;, &quot;another one&quot;]
+</code></pre>
+<h3><a class="header" href="#timespan" id="timespan">Timespan</a></h3>
+<p>A <a href="../../../user/metrics/timespan.html">Timespan</a> is represented as an object of their duration as an integer and the time unit.</p>
+<table><thead><tr><th>Field name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>value</code></td><td>Integer</td><td>The value in the marked time unit.</td></tr>
+<tr><td><code>time_unit</code></td><td>String</td><td>The time unit, see the <a href="../../../user/metrics/timespan.html#configuration">timespan's configuration</a> for valid values.</td></tr>
+</tbody></table>
+<h4><a class="header" href="#example-5" id="example-5">Example</a></h4>
+<pre><code class="language-json">{
+    &quot;time_unit&quot;: &quot;milliseconds&quot;,
+    &quot;value&quot;: 10
+}
+</code></pre>
+<h3><a class="header" href="#timing-distribution" id="timing-distribution">Timing Distribution</a></h3>
+<p>A <a href="../../../user/metrics/timing_distribution.html">Timing distribution</a> is represented as an object with the following fields.</p>
+<table><thead><tr><th>Field name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>sum</code></td><td>Integer</td><td>The sum of all recorded values.</td></tr>
+<tr><td><code>values</code></td><td>Map&lt;String, Integer&gt;</td><td>The values in each bucket. The key is the minimum value for the range of that bucket.</td></tr>
+</tbody></table>
+<p>A contiguous range of buckets is always sent, so that the server can aggregate and visualize distributions, without knowing anything about the specific bucketing function used.
+This range starts with the first bucket with a non-zero accumulation, and ends at one bucket beyond the last bucket with a non-zero accumulation (so that the upper bound on the last bucket is retained).</p>
+<p>For example, the following shows the recorded values vs. what is sent in the payload.</p>
+<pre><code>recorded:  1024: 2, 1116: 1,                   1448: 1,
+sent:      1024: 2, 1116: 1, 1217: 0, 1327: 0, 1448: 1, 1579: 0
+</code></pre>
+<h4><a class="header" href="#example-6" id="example-6">Example:</a></h4>
+<pre><code class="language-json">{
+    &quot;sum&quot;: 4612,
+    &quot;values&quot;: {
+        &quot;1024&quot;: 2,
+        &quot;1116&quot;: 1,
+        &quot;1217&quot;: 0,
+        &quot;1327&quot;: 0,
+        &quot;1448&quot;: 1,
+        &quot;1579&quot;: 0
+    }
+}
+</code></pre>
+<h3><a class="header" href="#memory-distribution" id="memory-distribution">Memory Distribution</a></h3>
+<p>A <a href="../../../user/metrics/memory_distribution.html">Memory distribution</a> is represented as an object with the following fields.</p>
+<table><thead><tr><th>Field name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>sum</code></td><td>Integer</td><td>The sum of all recorded values.</td></tr>
+<tr><td><code>values</code></td><td>Map&lt;String, Integer&gt;</td><td>The values in each bucket. The key is the minimum value for the range of that bucket.</td></tr>
+</tbody></table>
+<p>A contiguous range of buckets is always sent.
+See <a href="#timing-distribution">timing distribution</a> for more details.</p>
+<h4><a class="header" href="#example-7" id="example-7">Example:</a></h4>
+<pre><code class="language-json">{
+    &quot;sum&quot;: 3,
+    &quot;values&quot;: {
+        &quot;0&quot;: 1,
+        &quot;1&quot;: 3,
+    }
+}
+</code></pre>
+<h3><a class="header" href="#uuid" id="uuid">UUID</a></h3>
+<p>A <a href="../../../user/metrics/uuid.html">UUID</a> is represented by the string representation of the UUID.</p>
+<h4><a class="header" href="#example-8" id="example-8">Example</a></h4>
+<pre><code class="language-json">&quot;29711dc8-a954-11e9-898a-eb4ea7e8fd3f&quot;
+</code></pre>
+<h3><a class="header" href="#datetime" id="datetime">Datetime</a></h3>
+<p>A <a href="../../../user/metrics/datetime.html">Datetime</a> is represented by its ISO8601 string representation, truncated to the metric's time unit.
+It always includes the timezone offset.</p>
+<h4><a class="header" href="#example-9" id="example-9">Example</a></h4>
+<pre><code class="language-json">&quot;2019-07-18T14:06:00.000+02:00&quot;
+</code></pre>
+<h3><a class="header" href="#event" id="event">Event</a></h3>
+<p><a href="../../../user/metrics/event.html">Events</a> are represented as an array of objects, with one object for each event.
+Each event object has the following keys:</p>
+<table><thead><tr><th>Field name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>timestamp</code></td><td>Integer</td><td>A monotonically increasing timestamp value, in milliseconds. To avoid leaking absolute times, the first timestamp in the array is always zero, and subsequent timestamps in the array are relative to that reference point.</td></tr>
+<tr><td><code>category</code></td><td>String</td><td>The event's category. This comes directly from the category under which the metric was defined in the <code>metrics.yaml</code> file.</td></tr>
+<tr><td><code>name</code></td><td>String</td><td>The event's name, as defined in the <code>metrics.yaml</code> file.</td></tr>
+<tr><td><code>extra</code></td><td>Object (optional)</td><td>Extra data associated with the event. Both the keys and values of this object are strings. The keys must be from the set defined for this event in the <code>metrics.yaml</code> file. The values have a maximum length of 50 bytes, when encoded as UTF-8.</td></tr>
+</tbody></table>
+<h4><a class="header" href="#example-10" id="example-10">Example</a></h4>
+<pre><code class="language-json">[
+  {
+    &quot;timestamp&quot;: 0,
+    &quot;category&quot;: &quot;app&quot;,
+    &quot;name&quot;: &quot;ss_menu_opened&quot;
+  },
+  {
+    &quot;timestamp&quot;: 124,
+    &quot;category&quot;: &quot;search&quot;,
+    &quot;name&quot;: &quot;performed_search&quot;,
+    &quot;extra&quot;: {
+      &quot;source&quot;: &quot;default.action&quot;
+    }
+  }
+]
+</code></pre>
+<p>Also see <a href="https://github.com/mozilla-services/mozilla-pipeline-schemas/blob/HEAD/templates/include/glean/event.1.schema.json">the JSON schema for events</a>.</p>
+<p>To avoid losing events when the application is killed by the operating system, events are queued on disk as they are recorded.
+When the application starts up again, there is no good way to determine if the device has rebooted since the last run and therefore any timestamps recorded in the new run could not be guaranteed to be consistent with those recorded in the previous run.
+To get around this, on application startup, any queued events are immediately collected into pings and then cleared.
+These &quot;startup-triggered pings&quot; are likely to have a very short duration, as recorded in <code>ping_info.start_time</code> and <code>ping_info.end_time</code> (see <a href="../../../user/pings/index.html#the-ping_info-section">the <code>ping_info</code> section</a>).
+The maximum timestamp of the events in these pings are quite likely to exceed the duration of the ping, but this is to be expected.</p>
+<h3><a class="header" href="#custom-distribution" id="custom-distribution">Custom Distribution</a></h3>
+<p>A <a href="../../../user/metrics/custom_distribution.html">Custom distribution</a> is represented as an object with the following fields.</p>
+<table><thead><tr><th>Field name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>sum</code></td><td>Integer</td><td>The sum of all recorded values.</td></tr>
+<tr><td><code>values</code></td><td>Map&lt;String, Integer&gt;</td><td>The values in each bucket. The key is the minimum value for the range of that bucket.</td></tr>
+</tbody></table>
+<p>A contiguous range of buckets is always sent, so that the server can aggregate and visualize distributions, without knowing anything about the specific bucketing function used.
+This range starts with the first bucket (as specified in the <code>range_min</code> parameter), and ends at one bucket beyond the last bucket with a non-zero accumulation (so that the upper bound on the last bucket is retained).</p>
+<p>For example, suppose you had a custom distribution defined by the following parameters:</p>
+<ul>
+<li><code>range_min</code>: 10</li>
+<li><code>range_max</code>: 200</li>
+<li><code>bucket_count</code>: 80</li>
+<li><code>histogram_type</code>: <code>'linear'</code></li>
+</ul>
+<p>The following shows the recorded values vs. what is sent in the payload.</p>
+<pre><code>recorded:        12: 2,                      22: 1
+sent:     10: 0, 12: 2, 14: 0, 17: 0, 19: 0, 22: 1, 24: 0
+</code></pre>
+<h4><a class="header" href="#example-11" id="example-11">Example:</a></h4>
+<pre><code class="language-json">{
+    &quot;sum&quot;: 3,
+    &quot;values&quot;: {
+        &quot;10&quot;: 0,
+        &quot;12&quot;: 2,
+        &quot;14&quot;: 0,
+        &quot;17&quot;: 0,
+        &quot;19&quot;: 0,
+        &quot;22&quot;: 1,
+        &quot;24&quot;: 0
+    }
+}
+</code></pre>
+<h3><a class="header" href="#labeled-metrics" id="labeled-metrics">Labeled metrics</a></h3>
+<p>Currently several labeled metrics are supported:</p>
+<ul>
+<li><a href="../../../user/metrics/labeled_counters.html">Labeled Counters</a>.</li>
+<li><a href="../../../user/metrics/labeled_strings.html">Labeled Strings</a>.</li>
+</ul>
+<p>All are on the top-level represented in the same way, as an object mapping the label to the metric's value.
+See the individual metric types for details on the value payload:</p>
+<ul>
+<li><a href="#counter">Counter</a></li>
+<li><a href="#string">String</a></li>
+</ul>
+<h4><a class="header" href="#example-for-labeled-counters" id="example-for-labeled-counters">Example for Labeled Counters</a></h4>
+<pre><code class="language-json">{
+    &quot;label1&quot;: 2,
+    &quot;label2&quot;: 17
+}
+</code></pre>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/core/internal/payload.md">Edit this file on GitHub.</a></footer>
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../../core/internal/clearing.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../../core/internal/directory-structure.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="../../core/internal/clearing.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="../../core/internal/directory-structure.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="../../../shared/tabs.js"></script>
+        
+        <script type="text/javascript" src="../../../shared/mermaid.min.js"></script>
+        
+        <script type="text/javascript" src="../../../shared/mermaid-init.js"></script>
+        
+
+        
+
+    </body>
+</html>

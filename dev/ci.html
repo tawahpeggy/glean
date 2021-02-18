@@ -1,0 +1,343 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Continuous Integration - Glean - Cross-platform Telemetry library</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="favicon.png">
+        
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        
+        <link rel="stylesheet" href="css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+        <link rel="stylesheet" href="../shared/glean.css">
+        
+        <link rel="stylesheet" href="../shared/mermaid.css">
+        
+
+        
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Developing the Glean SDK</a></li><li class="chapter-item expanded "><a href="testing.html"><strong aria-hidden="true">1.</strong> Testing</a></li><li class="chapter-item expanded "><a href="ci.html" class="active"><strong aria-hidden="true">2.</strong> Continuous Integration</a></li><li class="chapter-item expanded "><a href="cut-a-new-release.html"><strong aria-hidden="true">3.</strong> Release process</a></li><li class="chapter-item expanded "><a href="contributing.html"><strong aria-hidden="true">4.</strong> Contributing</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="code_coverage.html"><strong aria-hidden="true">4.1.</strong> Code coverage</a></li></ol></li><li class="chapter-item expanded "><a href="docs.html"><strong aria-hidden="true">5.</strong> Developing documentation</a></li><li class="chapter-item expanded "><a href="upgrading-glean-parser.html"><strong aria-hidden="true">6.</strong> Upgrading glean_parser</a></li><li class="chapter-item expanded "><a href="android/index.html"><strong aria-hidden="true">7.</strong> Android bindings</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="android/setup-android-build-environment.html"><strong aria-hidden="true">7.1.</strong> Setup Build Environment</a></li><li class="chapter-item expanded "><a href="android/sdk-ndk-versions.html"><strong aria-hidden="true">7.2.</strong> Android SDK/NDK versions</a></li><li class="chapter-item expanded "><a href="android/development-with-android-components.html"><strong aria-hidden="true">7.3.</strong> Development with android-components</a></li><li class="chapter-item expanded "><a href="android/locally-published-components-in-fenix.html"><strong aria-hidden="true">7.4.</strong> Locally-published components in Fenix</a></li></ol></li><li class="chapter-item expanded "><a href="ios/index.html"><strong aria-hidden="true">8.</strong> iOS bindings</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ios/setup-ios-build-environment.html"><strong aria-hidden="true">8.1.</strong> Setup Build Environment</a></li><li class="chapter-item expanded "><a href="ios/debug-glean-on-ios.html"><strong aria-hidden="true">8.2.</strong> Debugging Different Versions of Glean</a></li></ol></li><li class="chapter-item expanded "><a href="python/index.html"><strong aria-hidden="true">9.</strong> Python bindings</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="python/setting-up-python-build-environment.html"><strong aria-hidden="true">9.1.</strong> Setup Build Environment</a></li></ol></li><li class="chapter-item expanded "><a href="core/index.html"><strong aria-hidden="true">10.</strong> Rust Component</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="core/documentation-guidelines.html"><strong aria-hidden="true">10.1.</strong> Documentation guidelines</a></li><li class="chapter-item expanded "><a href="core/dependency-management.html"><strong aria-hidden="true">10.2.</strong> Dependency Management</a></li><li class="chapter-item expanded "><a href="core/new-metric-type.html"><strong aria-hidden="true">10.3.</strong> Adding a new metric type</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="core/new-metric-type/ffi.html"><strong aria-hidden="true">10.3.1.</strong> FFI</a></li><li class="chapter-item expanded "><a href="core/new-metric-type/kotlin.html"><strong aria-hidden="true">10.3.2.</strong> Kotlin</a></li><li class="chapter-item expanded "><a href="core/new-metric-type/swift.html"><strong aria-hidden="true">10.3.3.</strong> Swift</a></li><li class="chapter-item expanded "><a href="core/new-metric-type/python.html"><strong aria-hidden="true">10.3.4.</strong> Python</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="ffi/index.html"><strong aria-hidden="true">11.</strong> FFI Layer</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ffi/when-to-use-what-in-the-ffi.html"><strong aria-hidden="true">11.1.</strong> When/How FFI</a></li></ol></li><li class="chapter-item expanded "><a href="core/internal/index.html"><strong aria-hidden="true">12.</strong> Internal implementation details</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="core/internal/reserved-ping-names.html"><strong aria-hidden="true">12.1.</strong> Reserved ping names</a></li><li class="chapter-item expanded "><a href="core/internal/clearing.html"><strong aria-hidden="true">12.2.</strong> Clearing metrics when disabling/enabling Glean</a></li><li class="chapter-item expanded "><a href="core/internal/payload.html"><strong aria-hidden="true">12.3.</strong> Payload format</a></li><li class="chapter-item expanded "><a href="core/internal/directory-structure.html"><strong aria-hidden="true">12.4.</strong> Directory &amp; file structure</a></li><li class="chapter-item expanded "><a href="core/internal/debug-pings.html"><strong aria-hidden="true">12.5.</strong> Debug Pings</a></li><li class="chapter-item expanded "><a href="core/internal/upload.html"><strong aria-hidden="true">12.6.</strong> Upload mechanism</a></li><li class="chapter-item expanded "><a href="core/internal/implementations.html"><strong aria-hidden="true">12.7.</strong> Implementations</a></li></ol></li><li class="chapter-item expanded "><a href="api/index.html"><strong aria-hidden="true">13.</strong> API Documentation</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Glean - Cross-platform Telemetry library</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                        <a href="https://github.com/mozilla/glean" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#how-the-glean-ci-works" id="how-the-glean-ci-works">How the Glean CI works</a></h1>
+<p>Current build status: <a href="https://circleci.com/gh/mozilla/glean"><img src="https://img.shields.io/circleci/build/github/mozilla/glean/main" alt="Build Status" /></a></p>
+<p>The <code>mozilla/glean</code> repository uses both <a href="https://circleci.com">CircleCI</a> and <a href="https://taskcluster.net/">TaskCluster</a> to run tests on each Pull Request,
+each merge to the <code>main</code> branch and on releases.</p>
+<h2><a class="header" href="#which-tasks-we-run" id="which-tasks-we-run">Which tasks we run</a></h2>
+<h3><a class="header" href="#pull-request---testing" id="pull-request---testing">Pull Request - testing</a></h3>
+<p>For each opened pull request we run a number of checks to ensure consistent formatting, no lint failures and that tests across all language bindings pass.
+These checks are required to pass before a Pull Request is merged.
+This includes by default the following tasks:</p>
+<p>On CircleCI:</p>
+<ul>
+<li>Formatting &amp; lints for Rust, Kotlin, Swift &amp; Python</li>
+<li>Consistency checks for generated header files, license checks across dependencies and a schema check</li>
+<li>Builds &amp; tests for Rust, Kotlin, Python &amp; C#
+<ul>
+<li>The Python language bindings are build for multiple platforms and Python versions</li>
+</ul>
+</li>
+<li>Documentation generation for all languages and the book, including spell check &amp; link check</li>
+<li>By default no Swift/iOS tests are launched. These can be run manually. See below.</li>
+</ul>
+<p>On TaskCluster:</p>
+<ul>
+<li>A full Android build &amp; test</li>
+</ul>
+<p>For all tasks you can always find the full log and generated artifacts by following the &quot;Details&quot; links on each task.</p>
+<h4><a class="header" href="#ios-tests-on-pull-request" id="ios-tests-on-pull-request">iOS tests on Pull Request</a></h4>
+<p>Due to the long runtime and costs iOS tests are not run by default on Pull Requests.
+Admins of the <code>mozilla/glean</code> repository can run them on demand.</p>
+<ol>
+<li>On the pull request scroll to the list of all checks running on that PR on the bottom.</li>
+<li>Find the job titled &quot;ci/circleci: iOS/hold&quot;.</li>
+<li>Click &quot;Details&quot; to get to Circle CI.</li>
+<li>Click on the &quot;hold&quot; task, then approve it.</li>
+<li>The iOS tasks will now run.</li>
+</ol>
+<h3><a class="header" href="#merge-to-main" id="merge-to-main">Merge to <code>main</code></a></h3>
+<p>Current build status: <a href="https://circleci.com/gh/mozilla/glean"><img src="https://img.shields.io/circleci/build/github/mozilla/glean/main" alt="Build Status" /></a></p>
+<p>When pull requests are merged to the <code>main</code> branch we run the same checks as we do on pull requests.
+Additionally we run the following tasks:</p>
+<ul>
+<li>Documentation deployment</li>
+<li>iOS build, unit &amp; integration test</li>
+</ul>
+<p>If you notice that they fail please take a look and <a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Data+Platform+and+Tools&amp;component=Glean%3A+SDK&amp;priority=P3&amp;status_whiteboard=%5Btelemetry%3Aglean-rs%3Am%3F%5D">open a bug</a> to investigate build failures.</p>
+<h3><a class="header" href="#releases" id="releases">Releases</a></h3>
+<p>When <a href="cut-a-new-release.html">cutting a new release</a> of the Glean SDK our CI setup is responsible for building, packaging and uploading release builds.
+We don't run the full test suite again.</p>
+<p>We run the following tasks:</p>
+<p>On CircleCI:</p>
+<ul>
+<li>Build the iOS framework &amp; push to <a href="https://github.com/mozilla/glean/releases">a GitHub release</a></li>
+<li>Build the Python wheel &amp; push to <a href="https://github.com/mozilla/glean/releases">a GitHub release</a></li>
+</ul>
+<p>On TaskCluster:</p>
+<ul>
+<li>Build &amp; package Glean for Android and push a <a href="https://maven.mozilla.org/?prefix=maven2/org/mozilla/telemetry/">release to Maven</a></li>
+<li>Build &amp; package the Glean Gradle Plugin and push a <a href="https://maven.mozilla.org/?prefix=maven2/org/mozilla/telemetry/">release to Maven</a></li>
+</ul>
+<p>On release the full TaskCluster suite takes up to 30 minutes to run.</p>
+<h4><a class="header" href="#how-to-find-taskcluster-tasks" id="how-to-find-taskcluster-tasks">How to find TaskCluster tasks</a></h4>
+<ol>
+<li>Go to <a href="https://github.com/mozilla/glean/releases">GitHub releases</a> and find the version</li>
+<li>Go to the release commit, indicated by its commit id on the left</li>
+<li>Click the green tick or red cross left of the commit title to open the list of all checks.</li>
+<li>Find the &quot;Decision task&quot; and click &quot;Details&quot;</li>
+<li>From the list of tasks pick the one you want to look at and follow the &quot;View task in Taskcluster&quot; link.</li>
+</ol>
+<h2><a class="header" href="#special-behavior" id="special-behavior">Special behavior</a></h2>
+<h3><a class="header" href="#documentation-only-changes" id="documentation-only-changes">Documentation-only changes</a></h3>
+<p>Documentation is deployed from CI, we therefore need it to run on documentation changes.
+However, some of the long-running code tests can be skipped.
+For that add the following literal string to the last commit message of your pull request:</p>
+<pre><code>[doc only]
+</code></pre>
+<h3><a class="header" href="#skipping-ci-completely" id="skipping-ci-completely">Skipping CI completely</a></h3>
+<p>It is possible to completely skip running CI checks on a pull request.</p>
+<p>To skip tasks on CircleCI include the following literal string in the commit message.<br />
+To skip tasks on TaskCluster add the following to the title of your pull request.</p>
+<pre><code>[ci skip]
+</code></pre>
+<p>This should only be used for metadata files, such as those in <code>.github</code>, <code>LICENSE</code> or <code>CODE_OF_CONDUCT.md</code>.</p>
+<h3><a class="header" href="#release-like-android-builds" id="release-like-android-builds">Release-like Android builds</a></h3>
+<p>Release builds are done on <a href="https://taskcluster.net/">TaskCluster</a>.
+As it builds for multiple platforms this task is quite long and does not run on pull requests by default.</p>
+<p>It is possible trigger the task on pull requests.
+Add the following literal string to the pull request <strong>title</strong>:</p>
+<pre><code>[ci full]
+</code></pre>
+<p>If added after initially opening the pull request, you need to close, then re-open the pull request to trigger a new build.</p>
+<p>The <code>Decision Task</code> will spawn <code>module-build-glean</code> and <code>module-build-glean-gradle-plugin</code> tasks.
+When they finish you will find the generated files under <code>Artifacts</code> on TaskCluster.</p>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/ci.md">Edit this file on GitHub.</a></footer>
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="testing.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="cut-a-new-release.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="testing.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="cut-a-new-release.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="../shared/tabs.js"></script>
+        
+        <script type="text/javascript" src="../shared/mermaid.min.js"></script>
+        
+        <script type="text/javascript" src="../shared/mermaid-init.js"></script>
+        
+
+        
+
+    </body>
+</html>

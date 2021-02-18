@@ -1,0 +1,294 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Testing - Glean - Cross-platform Telemetry library</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="favicon.png">
+        
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        
+        <link rel="stylesheet" href="css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+        <link rel="stylesheet" href="../shared/glean.css">
+        
+        <link rel="stylesheet" href="../shared/mermaid.css">
+        
+
+        
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Developing the Glean SDK</a></li><li class="chapter-item expanded "><a href="testing.html" class="active"><strong aria-hidden="true">1.</strong> Testing</a></li><li class="chapter-item expanded "><a href="ci.html"><strong aria-hidden="true">2.</strong> Continuous Integration</a></li><li class="chapter-item expanded "><a href="cut-a-new-release.html"><strong aria-hidden="true">3.</strong> Release process</a></li><li class="chapter-item expanded "><a href="contributing.html"><strong aria-hidden="true">4.</strong> Contributing</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="code_coverage.html"><strong aria-hidden="true">4.1.</strong> Code coverage</a></li></ol></li><li class="chapter-item expanded "><a href="docs.html"><strong aria-hidden="true">5.</strong> Developing documentation</a></li><li class="chapter-item expanded "><a href="upgrading-glean-parser.html"><strong aria-hidden="true">6.</strong> Upgrading glean_parser</a></li><li class="chapter-item expanded "><a href="android/index.html"><strong aria-hidden="true">7.</strong> Android bindings</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="android/setup-android-build-environment.html"><strong aria-hidden="true">7.1.</strong> Setup Build Environment</a></li><li class="chapter-item expanded "><a href="android/sdk-ndk-versions.html"><strong aria-hidden="true">7.2.</strong> Android SDK/NDK versions</a></li><li class="chapter-item expanded "><a href="android/development-with-android-components.html"><strong aria-hidden="true">7.3.</strong> Development with android-components</a></li><li class="chapter-item expanded "><a href="android/locally-published-components-in-fenix.html"><strong aria-hidden="true">7.4.</strong> Locally-published components in Fenix</a></li></ol></li><li class="chapter-item expanded "><a href="ios/index.html"><strong aria-hidden="true">8.</strong> iOS bindings</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ios/setup-ios-build-environment.html"><strong aria-hidden="true">8.1.</strong> Setup Build Environment</a></li><li class="chapter-item expanded "><a href="ios/debug-glean-on-ios.html"><strong aria-hidden="true">8.2.</strong> Debugging Different Versions of Glean</a></li></ol></li><li class="chapter-item expanded "><a href="python/index.html"><strong aria-hidden="true">9.</strong> Python bindings</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="python/setting-up-python-build-environment.html"><strong aria-hidden="true">9.1.</strong> Setup Build Environment</a></li></ol></li><li class="chapter-item expanded "><a href="core/index.html"><strong aria-hidden="true">10.</strong> Rust Component</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="core/documentation-guidelines.html"><strong aria-hidden="true">10.1.</strong> Documentation guidelines</a></li><li class="chapter-item expanded "><a href="core/dependency-management.html"><strong aria-hidden="true">10.2.</strong> Dependency Management</a></li><li class="chapter-item expanded "><a href="core/new-metric-type.html"><strong aria-hidden="true">10.3.</strong> Adding a new metric type</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="core/new-metric-type/ffi.html"><strong aria-hidden="true">10.3.1.</strong> FFI</a></li><li class="chapter-item expanded "><a href="core/new-metric-type/kotlin.html"><strong aria-hidden="true">10.3.2.</strong> Kotlin</a></li><li class="chapter-item expanded "><a href="core/new-metric-type/swift.html"><strong aria-hidden="true">10.3.3.</strong> Swift</a></li><li class="chapter-item expanded "><a href="core/new-metric-type/python.html"><strong aria-hidden="true">10.3.4.</strong> Python</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="ffi/index.html"><strong aria-hidden="true">11.</strong> FFI Layer</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ffi/when-to-use-what-in-the-ffi.html"><strong aria-hidden="true">11.1.</strong> When/How FFI</a></li></ol></li><li class="chapter-item expanded "><a href="core/internal/index.html"><strong aria-hidden="true">12.</strong> Internal implementation details</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="core/internal/reserved-ping-names.html"><strong aria-hidden="true">12.1.</strong> Reserved ping names</a></li><li class="chapter-item expanded "><a href="core/internal/clearing.html"><strong aria-hidden="true">12.2.</strong> Clearing metrics when disabling/enabling Glean</a></li><li class="chapter-item expanded "><a href="core/internal/payload.html"><strong aria-hidden="true">12.3.</strong> Payload format</a></li><li class="chapter-item expanded "><a href="core/internal/directory-structure.html"><strong aria-hidden="true">12.4.</strong> Directory &amp; file structure</a></li><li class="chapter-item expanded "><a href="core/internal/debug-pings.html"><strong aria-hidden="true">12.5.</strong> Debug Pings</a></li><li class="chapter-item expanded "><a href="core/internal/upload.html"><strong aria-hidden="true">12.6.</strong> Upload mechanism</a></li><li class="chapter-item expanded "><a href="core/internal/implementations.html"><strong aria-hidden="true">12.7.</strong> Implementations</a></li></ol></li><li class="chapter-item expanded "><a href="api/index.html"><strong aria-hidden="true">13.</strong> API Documentation</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Glean - Cross-platform Telemetry library</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                        <a href="https://github.com/mozilla/glean" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#running-the-tests" id="running-the-tests">Running the tests</a></h1>
+<h2><a class="header" href="#running-all-tests" id="running-all-tests">Running all tests</a></h2>
+<p>The tests for all languages may be run from the command line:</p>
+<pre><code>make test
+</code></pre>
+<blockquote>
+<p><strong>Windows Note:</strong> On Windows, <code>make</code> is not available by default. While not required, installing <code>make</code> will allow you to use the convenience features in the <code>Makefile</code>.</p>
+</blockquote>
+<h2><a class="header" href="#running-the-rust-tests" id="running-the-rust-tests">Running the Rust tests</a></h2>
+<p>The Rust tests may be run with the following command:</p>
+<pre><code>cargo test --all
+</code></pre>
+<p>Log output can be controlled via the environment variable <code>RUST_LOG</code> for the <code>glean_core</code> crate:</p>
+<pre><code>export RUST_LOG=glean_core=debug
+</code></pre>
+<p>When running tests with logging you need to tell <code>cargo</code> to not suppress output:</p>
+<pre><code>cargo test -- --nocapture
+</code></pre>
+<p>Tests run in parallel by default, leading to interleaving log lines.
+This makes it harder to understand what's going on.
+For debugging you can force single-threaded tests:</p>
+<pre><code>cargo test -- --nocapture --test-threads=1
+</code></pre>
+<h2><a class="header" href="#running-the-kotlinandroid-tests" id="running-the-kotlinandroid-tests">Running the Kotlin/Android tests</a></h2>
+<h3><a class="header" href="#from-the-command-line" id="from-the-command-line">From the command line</a></h3>
+<p>The full Android test suite may be run from the command line with:</p>
+<pre><code>./gradlew test
+</code></pre>
+<h3><a class="header" href="#from-android-studio" id="from-android-studio">From Android Studio</a></h3>
+<p>To run the full Android test suite, in the &quot;Gradle&quot; pane, navigate to <code>glean-core</code> -&gt; <code>Tasks</code> -&gt; <code>verification</code> and double-click either <code>testDebugUnitTest</code> or <code>testReleaseUnitTest</code> (depending on whether you want to run in Debug or Release mode).
+You can save this task permanently by opening the task dropdown in the toolbar and selecting <code>&quot;Save glean.rs:glean:android [testDebugUnitTest] Configuration&quot;</code>.</p>
+<p>To run a single Android test, navigate to the file containing the test, and right click on the green arrow in the left margin next to the test.  There you have a choice of running or debugging the test.</p>
+<h2><a class="header" href="#running-the-swiftios-tests" id="running-the-swiftios-tests">Running the Swift/iOS tests</a></h2>
+<h3><a class="header" href="#from-the-command-line-1" id="from-the-command-line-1">From the command line</a></h3>
+<p>The full iOS test suite may be run from the command line with:</p>
+<pre><code>make test-swift
+</code></pre>
+<h3><a class="header" href="#from-xcode" id="from-xcode">From Xcode</a></h3>
+<p>To run the full iOS test suite, run tests in Xcode (<code>Product -&gt; Test</code>).
+To run a single Swift test, navigate to the file containing the test,
+and click on the arrow in the left margin next to the test.</p>
+<h2><a class="header" href="#testing-in-ci" id="testing-in-ci">Testing in CI</a></h2>
+<p>See <a href="ci.html">Continuous Integration</a> for details.</p>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/testing.md">Edit this file on GitHub.</a></footer>
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="ci.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="ci.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="../shared/tabs.js"></script>
+        
+        <script type="text/javascript" src="../shared/mermaid.min.js"></script>
+        
+        <script type="text/javascript" src="../shared/mermaid-init.js"></script>
+        
+
+        
+
+    </body>
+</html>

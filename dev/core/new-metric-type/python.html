@@ -1,0 +1,391 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Python - Glean - Cross-platform Telemetry library</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="../../favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="../../favicon.png">
+        
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+        <link rel="stylesheet" href="../../../shared/glean.css">
+        
+        <link rel="stylesheet" href="../../../shared/mermaid.css">
+        
+
+        
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../index.html">Developing the Glean SDK</a></li><li class="chapter-item expanded "><a href="../../testing.html"><strong aria-hidden="true">1.</strong> Testing</a></li><li class="chapter-item expanded "><a href="../../ci.html"><strong aria-hidden="true">2.</strong> Continuous Integration</a></li><li class="chapter-item expanded "><a href="../../cut-a-new-release.html"><strong aria-hidden="true">3.</strong> Release process</a></li><li class="chapter-item expanded "><a href="../../contributing.html"><strong aria-hidden="true">4.</strong> Contributing</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../code_coverage.html"><strong aria-hidden="true">4.1.</strong> Code coverage</a></li></ol></li><li class="chapter-item expanded "><a href="../../docs.html"><strong aria-hidden="true">5.</strong> Developing documentation</a></li><li class="chapter-item expanded "><a href="../../upgrading-glean-parser.html"><strong aria-hidden="true">6.</strong> Upgrading glean_parser</a></li><li class="chapter-item expanded "><a href="../../android/index.html"><strong aria-hidden="true">7.</strong> Android bindings</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../android/setup-android-build-environment.html"><strong aria-hidden="true">7.1.</strong> Setup Build Environment</a></li><li class="chapter-item expanded "><a href="../../android/sdk-ndk-versions.html"><strong aria-hidden="true">7.2.</strong> Android SDK/NDK versions</a></li><li class="chapter-item expanded "><a href="../../android/development-with-android-components.html"><strong aria-hidden="true">7.3.</strong> Development with android-components</a></li><li class="chapter-item expanded "><a href="../../android/locally-published-components-in-fenix.html"><strong aria-hidden="true">7.4.</strong> Locally-published components in Fenix</a></li></ol></li><li class="chapter-item expanded "><a href="../../ios/index.html"><strong aria-hidden="true">8.</strong> iOS bindings</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../ios/setup-ios-build-environment.html"><strong aria-hidden="true">8.1.</strong> Setup Build Environment</a></li><li class="chapter-item expanded "><a href="../../ios/debug-glean-on-ios.html"><strong aria-hidden="true">8.2.</strong> Debugging Different Versions of Glean</a></li></ol></li><li class="chapter-item expanded "><a href="../../python/index.html"><strong aria-hidden="true">9.</strong> Python bindings</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../python/setting-up-python-build-environment.html"><strong aria-hidden="true">9.1.</strong> Setup Build Environment</a></li></ol></li><li class="chapter-item expanded "><a href="../../core/index.html"><strong aria-hidden="true">10.</strong> Rust Component</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../core/documentation-guidelines.html"><strong aria-hidden="true">10.1.</strong> Documentation guidelines</a></li><li class="chapter-item expanded "><a href="../../core/dependency-management.html"><strong aria-hidden="true">10.2.</strong> Dependency Management</a></li><li class="chapter-item expanded "><a href="../../core/new-metric-type.html"><strong aria-hidden="true">10.3.</strong> Adding a new metric type</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../core/new-metric-type/ffi.html"><strong aria-hidden="true">10.3.1.</strong> FFI</a></li><li class="chapter-item expanded "><a href="../../core/new-metric-type/kotlin.html"><strong aria-hidden="true">10.3.2.</strong> Kotlin</a></li><li class="chapter-item expanded "><a href="../../core/new-metric-type/swift.html"><strong aria-hidden="true">10.3.3.</strong> Swift</a></li><li class="chapter-item expanded "><a href="../../core/new-metric-type/python.html" class="active"><strong aria-hidden="true">10.3.4.</strong> Python</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../../ffi/index.html"><strong aria-hidden="true">11.</strong> FFI Layer</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../ffi/when-to-use-what-in-the-ffi.html"><strong aria-hidden="true">11.1.</strong> When/How FFI</a></li></ol></li><li class="chapter-item expanded "><a href="../../core/internal/index.html"><strong aria-hidden="true">12.</strong> Internal implementation details</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../core/internal/reserved-ping-names.html"><strong aria-hidden="true">12.1.</strong> Reserved ping names</a></li><li class="chapter-item expanded "><a href="../../core/internal/clearing.html"><strong aria-hidden="true">12.2.</strong> Clearing metrics when disabling/enabling Glean</a></li><li class="chapter-item expanded "><a href="../../core/internal/payload.html"><strong aria-hidden="true">12.3.</strong> Payload format</a></li><li class="chapter-item expanded "><a href="../../core/internal/directory-structure.html"><strong aria-hidden="true">12.4.</strong> Directory &amp; file structure</a></li><li class="chapter-item expanded "><a href="../../core/internal/debug-pings.html"><strong aria-hidden="true">12.5.</strong> Debug Pings</a></li><li class="chapter-item expanded "><a href="../../core/internal/upload.html"><strong aria-hidden="true">12.6.</strong> Upload mechanism</a></li><li class="chapter-item expanded "><a href="../../core/internal/implementations.html"><strong aria-hidden="true">12.7.</strong> Implementations</a></li></ol></li><li class="chapter-item expanded "><a href="../../api/index.html"><strong aria-hidden="true">13.</strong> API Documentation</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Glean - Cross-platform Telemetry library</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                        <a href="https://github.com/mozilla/glean" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#adding-a-new-metric-type---python" id="adding-a-new-metric-type---python">Adding a new metric type - Python</a></h1>
+<h2><a class="header" href="#ffi" id="ffi">FFI</a></h2>
+<p>Python can use the generated C header file directly, through <a href="https://cffi.readthedocs.io/"><code>cffi</code></a>.
+Re-generate it with</p>
+<pre><code class="language-sh">make cbindgen
+</code></pre>
+<h2><a class="header" href="#python-api" id="python-api">Python API</a></h2>
+<p>Finally, create a platform-specific metric type wrapper.
+For Python this would be <code>glean-core/python/glean/metrics/counter.py</code>:</p>
+<pre><code class="language-python">class CounterMetricType:
+    &quot;&quot;&quot;
+    This implements the developer facing API for recording counter metrics.
+
+    Instances of this class type are automatically generated by
+    `glean.load_metrics`, allowing developers to record values that were
+    previously registered in the metrics.yaml file.
+
+    The counter API only exposes the `CounterMetricType.add` method, which
+    takes care of validating the input data and making sure that limits are
+    enforced.
+    &quot;&quot;&quot;
+
+    def __init__(
+        self,
+        disabled: bool,
+        category: str,
+        lifetime: Lifetime,
+        name: str,
+        send_in_pings: List[str],
+    ):
+        self._disabled = disabled
+        self._send_in_pings = send_in_pings
+
+        self._handle = _ffi.lib.glean_new_counter_metric(
+            _ffi.ffi_encode_string(category),
+            _ffi.ffi_encode_string(name),
+            _ffi.ffi_encode_vec_string(send_in_pings),
+            len(send_in_pings),
+            lifetime.value,
+            disabled,
+        )
+
+    def __del__(self):
+        if getattr(self, &quot;_handle&quot;, 0) != 0:
+            _ffi.lib.glean_destroy_counter_metric(self._handle)
+
+    def add(self, amount: int = 1):
+        &quot;&quot;&quot;
+        Add to counter value.
+
+        Args:
+            amount (int): (default: 1) This is the amount to increment the
+                counter by.
+        &quot;&quot;&quot;
+        if self._disabled:
+            return
+
+        @Dispatcher.launch
+        def add():
+            _ffi.lib.glean_counter_add(self._handle, amount)
+
+    def test_has_value(self, ping_name: Optional[str] = None) -&gt; bool:
+        &quot;&quot;&quot;
+        Tests whether a value is stored for the metric for testing purposes
+        only.
+
+        Args:
+            ping_name (str): (default: first value in send_in_pings) The name
+                of the ping to retrieve the metric for.
+
+        Returns:
+            has_value (bool): True if the metric value exists.
+        &quot;&quot;&quot;
+        if ping_name is None:
+            ping_name = self._send_in_pings[0]
+
+        return bool(
+            _ffi.lib.glean_counter_test_has_value(
+                self._handle, _ffi.ffi_encode_string(ping_name)
+            )
+        )
+
+    def test_get_value(self, ping_name: Optional[str] = None) -&gt; int:
+        &quot;&quot;&quot;
+        Returns the stored value for testing purposes only.
+
+        Args:
+            ping_name (str): (default: first value in send_in_pings) The name
+                of the ping to retrieve the metric for.
+
+        Returns:
+            value (int): value of the stored metric.
+        &quot;&quot;&quot;
+        if ping_name is None:
+            ping_name = self._send_in_pings[0]
+
+        if not self.test_has_value(ping_name):
+            raise ValueError(&quot;metric has no value&quot;)
+
+        return _ffi.lib.glean_counter_test_get_value(
+            self._handle, _ffi.ffi_encode_string(ping_name)
+        )
+
+    def test_get_num_recorded_errors(
+        self, error_type: ErrorType, ping_name: Optional[str] = None
+    ) -&gt; int:
+        &quot;&quot;&quot;
+        Returns the number of errors recorded for the given metric.
+
+        Args:
+            error_type (ErrorType): The type of error recorded.
+            ping_name (str): (default: first value in send_in_pings) The name
+                of the ping to retrieve the metric for.
+
+        Returns:
+            num_errors (int): The number of errors recorded for the metric for
+                the given error type.
+        &quot;&quot;&quot;
+        if ping_name is None:
+            ping_name = self._send_in_pings[0]
+
+        return _ffi.lib.glean_counter_test_get_num_recorded_errors(
+            self._handle, error_type.value, _ffi.ffi_encode_string(ping_name),
+        )
+</code></pre>
+<p>The new metric type also needs to be imported from <code>glean-core/python/glean/metrics/__init__.py</code>:</p>
+<pre><code class="language-python">from .counter import CounterMetricType
+
+
+__all__ = [
+    &quot;CounterMetricType&quot;,
+    # ...
+]
+</code></pre>
+<p>It also must be added to the <code>_TYPE_MAPPING</code> in <code>glean-core/python/glean/_loader.py</code>:</p>
+<pre><code class="language-python">_TYPE_MAPPING = {
+    &quot;counter&quot;: metrics.CounterMetricType,
+    # ...
+}
+</code></pre>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/core/new-metric-type/python.md">Edit this file on GitHub.</a></footer>
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../../core/new-metric-type/swift.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../../ffi/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="../../core/new-metric-type/swift.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="../../ffi/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="../../../shared/tabs.js"></script>
+        
+        <script type="text/javascript" src="../../../shared/mermaid.min.js"></script>
+        
+        <script type="text/javascript" src="../../../shared/mermaid-init.js"></script>
+        
+
+        
+
+    </body>
+</html>

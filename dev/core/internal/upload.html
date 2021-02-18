@@ -1,0 +1,377 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Upload mechanism - Glean - Cross-platform Telemetry library</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="../../favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="../../favicon.png">
+        
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+        <link rel="stylesheet" href="../../../shared/glean.css">
+        
+        <link rel="stylesheet" href="../../../shared/mermaid.css">
+        
+
+        
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../index.html">Developing the Glean SDK</a></li><li class="chapter-item expanded "><a href="../../testing.html"><strong aria-hidden="true">1.</strong> Testing</a></li><li class="chapter-item expanded "><a href="../../ci.html"><strong aria-hidden="true">2.</strong> Continuous Integration</a></li><li class="chapter-item expanded "><a href="../../cut-a-new-release.html"><strong aria-hidden="true">3.</strong> Release process</a></li><li class="chapter-item expanded "><a href="../../contributing.html"><strong aria-hidden="true">4.</strong> Contributing</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../code_coverage.html"><strong aria-hidden="true">4.1.</strong> Code coverage</a></li></ol></li><li class="chapter-item expanded "><a href="../../docs.html"><strong aria-hidden="true">5.</strong> Developing documentation</a></li><li class="chapter-item expanded "><a href="../../upgrading-glean-parser.html"><strong aria-hidden="true">6.</strong> Upgrading glean_parser</a></li><li class="chapter-item expanded "><a href="../../android/index.html"><strong aria-hidden="true">7.</strong> Android bindings</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../android/setup-android-build-environment.html"><strong aria-hidden="true">7.1.</strong> Setup Build Environment</a></li><li class="chapter-item expanded "><a href="../../android/sdk-ndk-versions.html"><strong aria-hidden="true">7.2.</strong> Android SDK/NDK versions</a></li><li class="chapter-item expanded "><a href="../../android/development-with-android-components.html"><strong aria-hidden="true">7.3.</strong> Development with android-components</a></li><li class="chapter-item expanded "><a href="../../android/locally-published-components-in-fenix.html"><strong aria-hidden="true">7.4.</strong> Locally-published components in Fenix</a></li></ol></li><li class="chapter-item expanded "><a href="../../ios/index.html"><strong aria-hidden="true">8.</strong> iOS bindings</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../ios/setup-ios-build-environment.html"><strong aria-hidden="true">8.1.</strong> Setup Build Environment</a></li><li class="chapter-item expanded "><a href="../../ios/debug-glean-on-ios.html"><strong aria-hidden="true">8.2.</strong> Debugging Different Versions of Glean</a></li></ol></li><li class="chapter-item expanded "><a href="../../python/index.html"><strong aria-hidden="true">9.</strong> Python bindings</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../python/setting-up-python-build-environment.html"><strong aria-hidden="true">9.1.</strong> Setup Build Environment</a></li></ol></li><li class="chapter-item expanded "><a href="../../core/index.html"><strong aria-hidden="true">10.</strong> Rust Component</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../core/documentation-guidelines.html"><strong aria-hidden="true">10.1.</strong> Documentation guidelines</a></li><li class="chapter-item expanded "><a href="../../core/dependency-management.html"><strong aria-hidden="true">10.2.</strong> Dependency Management</a></li><li class="chapter-item expanded "><a href="../../core/new-metric-type.html"><strong aria-hidden="true">10.3.</strong> Adding a new metric type</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../core/new-metric-type/ffi.html"><strong aria-hidden="true">10.3.1.</strong> FFI</a></li><li class="chapter-item expanded "><a href="../../core/new-metric-type/kotlin.html"><strong aria-hidden="true">10.3.2.</strong> Kotlin</a></li><li class="chapter-item expanded "><a href="../../core/new-metric-type/swift.html"><strong aria-hidden="true">10.3.3.</strong> Swift</a></li><li class="chapter-item expanded "><a href="../../core/new-metric-type/python.html"><strong aria-hidden="true">10.3.4.</strong> Python</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../../ffi/index.html"><strong aria-hidden="true">11.</strong> FFI Layer</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../ffi/when-to-use-what-in-the-ffi.html"><strong aria-hidden="true">11.1.</strong> When/How FFI</a></li></ol></li><li class="chapter-item expanded "><a href="../../core/internal/index.html"><strong aria-hidden="true">12.</strong> Internal implementation details</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../core/internal/reserved-ping-names.html"><strong aria-hidden="true">12.1.</strong> Reserved ping names</a></li><li class="chapter-item expanded "><a href="../../core/internal/clearing.html"><strong aria-hidden="true">12.2.</strong> Clearing metrics when disabling/enabling Glean</a></li><li class="chapter-item expanded "><a href="../../core/internal/payload.html"><strong aria-hidden="true">12.3.</strong> Payload format</a></li><li class="chapter-item expanded "><a href="../../core/internal/directory-structure.html"><strong aria-hidden="true">12.4.</strong> Directory &amp; file structure</a></li><li class="chapter-item expanded "><a href="../../core/internal/debug-pings.html"><strong aria-hidden="true">12.5.</strong> Debug Pings</a></li><li class="chapter-item expanded "><a href="../../core/internal/upload.html" class="active"><strong aria-hidden="true">12.6.</strong> Upload mechanism</a></li><li class="chapter-item expanded "><a href="../../core/internal/implementations.html"><strong aria-hidden="true">12.7.</strong> Implementations</a></li></ol></li><li class="chapter-item expanded "><a href="../../api/index.html"><strong aria-hidden="true">13.</strong> API Documentation</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Glean - Cross-platform Telemetry library</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                        <a href="https://github.com/mozilla/glean" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#upload-mechanism" id="upload-mechanism">Upload mechanism</a></h1>
+<p>The <code>glean-core</code> Rust crate does not handle the ping upload directly.
+Network stacks vastly differ between platforms, applications and operating systems.
+The Glean SDK leverages the available platform capabilities to implement any network communication.</p>
+<p>Glean core controls all upload and coordinates the platform side with its own internals.
+All language bindings implement ping uploading around a common API and protocol.</p>
+<h2><a class="header" href="#the-upload-module-in-the-language-bindings" id="the-upload-module-in-the-language-bindings">The upload module in the language bindings</a></h2>
+<pre class="mermaid">classDiagram
+    class UploadResult {
+        ~ToFFI()* int
+    }
+
+    class HttpResponse {
+        int statusCode
+        ~ToFFI() int
+    }
+
+    class UnrecoverableFailure {
+        ~ToFFI() int
+    }
+
+    class RecoverableFailure {
+        ~ToFFI() int
+    }
+
+    class PingUploader {
+        &lt;&lt;interface&gt;&gt;
+        +Upload() UploadResult
+    }
+
+    class BaseUploader {
+        +BaseUploader(PingUploader)
+        ~TriggerUploads()
+        ~CancelUploads()
+    }
+
+    class HttpUploader {
+        +Upload() UploadResult
+    }
+
+    UploadResult &lt;|-- HttpResponse
+    UploadResult &lt;|-- UnrecoverableFailure
+    UploadResult &lt;|-- RecoverableFailure
+    PingUploader &lt;|-- HttpUploader
+    PingUploader o-- BaseUploader
+
+</pre>
+<h3><a class="header" href="#pinguploader" id="pinguploader"><code>PingUploader</code></a></h3>
+<p>The <code>PingUploader</code> interface describes the contract between the <code>BaseUploader</code> and the SDK or user-provided upload modules.</p>
+<h3><a class="header" href="#baseuploader" id="baseuploader"><code>BaseUploader</code></a></h3>
+<p>The <code>BaseUploader</code> component is responsible for interfacing with the lower level <code>get_upload_task</code> calls and dealing with the logic in a platform-coherent way.</p>
+<ul>
+<li>Every Glean instance will always have a single <code>BaseUploader</code> instance.</li>
+<li>The <code>BaseUploader</code> is fed, at Glean initialization, with an instance of an implementation of the <code>PingUploader</code> interface.</li>
+<li>Whenever <code>BaseUploader</code> thinks it should perform an upload, it will call the provided instance of the <code>PingUploader</code> interface and call <code>upload</code> with the data it's getting from the glean-core/FFI.</li>
+<li>Any throttling happens at this layer: the core will orchestrate the throttling, while this layer will be responsible to abide to what the core is telling it to do.</li>
+<li>Any logic for aborting uploads or triggering uploads is provided by this object.</li>
+</ul>
+<h3><a class="header" href="#httpclientuploader" id="httpclientuploader"><code>HttpClientUploader</code></a></h3>
+<p>The <code>HttpClientUploader</code> is the default SDK-provided HTTP uploader. It acts as an adapter between the platform-specific upload library and the Glean upload APIs.</p>
+<blockquote>
+<p>Note that most of the languages have now diverged, due to the many iterations, from this design. For example, in Kotlin, the <a href="https://searchfox.org/glean/source/glean-core/android/src/main/java/mozilla/telemetry/glean/net/BaseUploader.kt"><code>BaseUploader</code> is mostly empty</a> and its functionalities are spread in the <a href="https://searchfox.org/glean/source/glean-core/android/src/main/java/mozilla/telemetry/glean/scheduler/PingUploadWorker.kt"><code>PingUploadWorker</code></a>.</p>
+</blockquote>
+<h2><a class="header" href="#upload-task-api" id="upload-task-api">Upload task API</a></h2>
+<p>The following diagram visualizes the communication between Glean core (the Rust crate),
+a Glean language binding (e.g. the Kotlin or Swift implementation) and a Glean end point server.</p>
+<pre class="mermaid">sequenceDiagram
+    participant Glean core
+    participant Glean wrapper
+    participant Server
+
+    Glean wrapper-&gt;&gt;Glean core: get_upload_task()
+    Glean core-&gt;&gt;Glean wrapper: Task::Upload(PingRequest)
+    Glean wrapper--&gt;&gt;Server: POST /submit/{task.id}
+    Server--&gt;&gt;Glean wrapper: 200 OK
+    Glean wrapper-&gt;&gt;Glean core: upload_response(200)
+    Glean wrapper-&gt;&gt;Glean core: get_upload_task()
+    Glean core-&gt;&gt;Glean wrapper: Task::Done
+</pre>
+<p>Glean core will take care of file management, cleanup, rescheduling and rate limiting<sup class="footnote-reference"><a href="#1">1</a></sup>.</p>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>Rate limiting is achieved by limiting the amount of times a language binding is allowed to get a <code>Task::Upload(PingRequest)</code> from <code>get_upload_task</code> in a given time interval. Currently, the default limit is for a maximum of 15 upload tasks every 60 seconds and there are no exposed methods that allow changing this default (follow <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1647630">Bug 1647630</a> for updates). If the caller has reached the maximum tasks for the current interval, they will get a <code>Task::Wait</code> regardless if there are other <code>Task::Upload(PingRequest)</code>s queued.</p>
+</div>
+<h2><a class="header" href="#available-apis" id="available-apis">Available APIs</a></h2>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Rust" class="tab">
+<p>For direct Rust consumers the global <code>Glean</code> object provides these methods:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>/// Gets the next task for an uploader.
+fn get_upload_task(&amp;self) -&gt; PingUploadTask
+
+/// Processes the response from an attempt to upload a ping.
+fn process_ping_upload_response(&amp;self, uuid: &amp;str, status: UploadResult)
+<span class="boring">}
+</span></code></pre></pre>
+<p>See the documentation for further usage and explanation of the additional types:</p>
+<ul>
+<li><a href="../../../../docs/glean_core/struct.Glean.html#method.get_upload_task"><code>get_upload_task</code></a></li>
+<li><a href="../../../../docs/glean_core/struct.Glean.html#method.process_ping_upload_response"><code>process_ping_upload_response</code></a></li>
+<li><a href="../../../../docs/glean_core/upload/enum.PingUploadTask.html"><code>PingUploadTask</code></a></li>
+<li><a href="../../../../docs/glean_core/upload/enum.UploadResult.html"><code>UploadResult</code></a></li>
+</ul>
+</div>
+<div data-lang="FFI" class="tab">
+<p>For FFI consumers (e.g. Kotlin/Swift/Python implementations) these functions are available:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>/// Gets the next task for an uploader. Which can be either:
+extern &quot;C&quot; fn glean_get_upload_task(result: *mut FfiPingUploadTask)
+
+/// Processes the response from an attempt to upload a ping.
+extern &quot;C&quot; fn glean_process_ping_upload_response(task: *mut FfiPingUploadTask, status: u32)
+<span class="boring">}
+</span></code></pre></pre>
+<p>See the documentation for additional information about the types:</p>
+<ul>
+<li><a href="../../../../docs/glean_ffi/upload/index.html"><code>glean_ffi::upload</code></a></li>
+</ul>
+</div>
+</div>
+</div>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/core/internal/upload.md">Edit this file on GitHub.</a></footer>
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../../core/internal/debug-pings.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../../core/internal/implementations.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="../../core/internal/debug-pings.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="../../core/internal/implementations.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="../../../shared/tabs.js"></script>
+        
+        <script type="text/javascript" src="../../../shared/mermaid.min.js"></script>
+        
+        <script type="text/javascript" src="../../../shared/mermaid-init.js"></script>
+        
+
+        
+
+    </body>
+</html>

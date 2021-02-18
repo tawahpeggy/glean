@@ -1,0 +1,2523 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Glean - Cross-platform Telemetry library</title>
+        
+        <meta name="robots" content="noindex" />
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="favicon.png">
+        
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        
+        <link rel="stylesheet" href="css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+        <link rel="stylesheet" href="../shared/glean.css">
+        
+        <link rel="stylesheet" href="../shared/mermaid.css">
+        
+
+        
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Developing the Glean SDK</a></li><li class="chapter-item expanded "><a href="testing.html"><strong aria-hidden="true">1.</strong> Testing</a></li><li class="chapter-item expanded "><a href="ci.html"><strong aria-hidden="true">2.</strong> Continuous Integration</a></li><li class="chapter-item expanded "><a href="cut-a-new-release.html"><strong aria-hidden="true">3.</strong> Release process</a></li><li class="chapter-item expanded "><a href="contributing.html"><strong aria-hidden="true">4.</strong> Contributing</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="code_coverage.html"><strong aria-hidden="true">4.1.</strong> Code coverage</a></li></ol></li><li class="chapter-item expanded "><a href="docs.html"><strong aria-hidden="true">5.</strong> Developing documentation</a></li><li class="chapter-item expanded "><a href="upgrading-glean-parser.html"><strong aria-hidden="true">6.</strong> Upgrading glean_parser</a></li><li class="chapter-item expanded "><a href="android/index.html"><strong aria-hidden="true">7.</strong> Android bindings</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="android/setup-android-build-environment.html"><strong aria-hidden="true">7.1.</strong> Setup Build Environment</a></li><li class="chapter-item expanded "><a href="android/sdk-ndk-versions.html"><strong aria-hidden="true">7.2.</strong> Android SDK/NDK versions</a></li><li class="chapter-item expanded "><a href="android/development-with-android-components.html"><strong aria-hidden="true">7.3.</strong> Development with android-components</a></li><li class="chapter-item expanded "><a href="android/locally-published-components-in-fenix.html"><strong aria-hidden="true">7.4.</strong> Locally-published components in Fenix</a></li></ol></li><li class="chapter-item expanded "><a href="ios/index.html"><strong aria-hidden="true">8.</strong> iOS bindings</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ios/setup-ios-build-environment.html"><strong aria-hidden="true">8.1.</strong> Setup Build Environment</a></li><li class="chapter-item expanded "><a href="ios/debug-glean-on-ios.html"><strong aria-hidden="true">8.2.</strong> Debugging Different Versions of Glean</a></li></ol></li><li class="chapter-item expanded "><a href="python/index.html"><strong aria-hidden="true">9.</strong> Python bindings</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="python/setting-up-python-build-environment.html"><strong aria-hidden="true">9.1.</strong> Setup Build Environment</a></li></ol></li><li class="chapter-item expanded "><a href="core/index.html"><strong aria-hidden="true">10.</strong> Rust Component</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="core/documentation-guidelines.html"><strong aria-hidden="true">10.1.</strong> Documentation guidelines</a></li><li class="chapter-item expanded "><a href="core/dependency-management.html"><strong aria-hidden="true">10.2.</strong> Dependency Management</a></li><li class="chapter-item expanded "><a href="core/new-metric-type.html"><strong aria-hidden="true">10.3.</strong> Adding a new metric type</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="core/new-metric-type/ffi.html"><strong aria-hidden="true">10.3.1.</strong> FFI</a></li><li class="chapter-item expanded "><a href="core/new-metric-type/kotlin.html"><strong aria-hidden="true">10.3.2.</strong> Kotlin</a></li><li class="chapter-item expanded "><a href="core/new-metric-type/swift.html"><strong aria-hidden="true">10.3.3.</strong> Swift</a></li><li class="chapter-item expanded "><a href="core/new-metric-type/python.html"><strong aria-hidden="true">10.3.4.</strong> Python</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="ffi/index.html"><strong aria-hidden="true">11.</strong> FFI Layer</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ffi/when-to-use-what-in-the-ffi.html"><strong aria-hidden="true">11.1.</strong> When/How FFI</a></li></ol></li><li class="chapter-item expanded "><a href="core/internal/index.html"><strong aria-hidden="true">12.</strong> Internal implementation details</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="core/internal/reserved-ping-names.html"><strong aria-hidden="true">12.1.</strong> Reserved ping names</a></li><li class="chapter-item expanded "><a href="core/internal/clearing.html"><strong aria-hidden="true">12.2.</strong> Clearing metrics when disabling/enabling Glean</a></li><li class="chapter-item expanded "><a href="core/internal/payload.html"><strong aria-hidden="true">12.3.</strong> Payload format</a></li><li class="chapter-item expanded "><a href="core/internal/directory-structure.html"><strong aria-hidden="true">12.4.</strong> Directory &amp; file structure</a></li><li class="chapter-item expanded "><a href="core/internal/debug-pings.html"><strong aria-hidden="true">12.5.</strong> Debug Pings</a></li><li class="chapter-item expanded "><a href="core/internal/upload.html"><strong aria-hidden="true">12.6.</strong> Upload mechanism</a></li><li class="chapter-item expanded "><a href="core/internal/implementations.html"><strong aria-hidden="true">12.7.</strong> Implementations</a></li></ol></li><li class="chapter-item expanded "><a href="api/index.html"><strong aria-hidden="true">13.</strong> API Documentation</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Glean - Cross-platform Telemetry library</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                        <a href="https://github.com/mozilla/glean" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#developing-the-glean-sdk" id="developing-the-glean-sdk">Developing the Glean SDK</a></h1>
+<p><img src="glean.jpeg" alt="Glean logo" /></p>
+<p>The <code>Glean SDK</code> is a modern approach for a Telemetry library and is part of the <a href="https://docs.telemetry.mozilla.org/concepts/glean/glean.html">Glean project</a>.</p>
+<p>To contact us you can:</p>
+<ul>
+<li>Find us in the <a href="https://chat.mozilla.org/#/room/#glean:mozilla.org">#glean channel on chat.mozilla.org</a>.</li>
+<li>To report issues or request changes, file a bug in <a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Data+Platform+and+Tools&amp;component=Glean%3A+SDK&amp;priority=P3&amp;status_whiteboard=%5Btelemetry%3Aglean-rs%3Am%3F%5D">Bugzilla in Data Platform &amp; Tools :: Glean: SDK</a>.</li>
+<li>Send an email to <em>glean-team@mozilla.com</em>.</li>
+<li>The Glean SDK team is: <em>:janerik</em>, <em>:dexter</em>, <em>:travis</em>, <em>:mdroettboom</em>, <em>:gfritzsche</em>, <em>:chutten</em>, <em>:brizental</em>.</li>
+</ul>
+<p>The source code is available <a href="https://github.com/mozilla/glean/">on GitHub</a>.</p>
+<h2><a class="header" href="#using-this-book" id="using-this-book">Using this book</a></h2>
+<p>This book is specifically about <strong>contributing to and developing</strong> the <code>Glean SDK</code>.</p>
+<p>For documentation on <strong>using</strong> the <code>Glean SDK</code>, refer to <a href="../book">the Glean Book</a>.</p>
+<p>For documentation about the broader end-to-end Glean project, refer to the <a href="https://docs.telemetry.mozilla.org/concepts/glean/glean.html">Mozilla Data Documentation</a>.</p>
+<p>This book is divided into 2 main parts:</p>
+<h3><a class="header" href="#a-hreftestinghtmldeveloping-the-glean-sdka" id="a-hreftestinghtmldeveloping-the-glean-sdka"><a href="testing.html">Developing the Glean SDK</a></a></h3>
+<p>This chapter describes how to develop the Glean SDK and its various implementations.
+This is relevant if you plan to contribute to the Glean SDK code base.</p>
+<h3><a class="header" href="#a-hrefapiindexhtmlapi-reference-documentationa" id="a-hrefapiindexhtmlapi-reference-documentationa"><a href="api/index.html">API Reference Documentation</a></a></h3>
+<p>Reference documentation for the API in its various language bindings.</p>
+<h2><a class="header" href="#license" id="license">License</a></h2>
+<p>The Glean SDK Source Code is subject to the terms of the Mozilla Public License v2.0.
+You can obtain a copy of the MPL at <a href="https://mozilla.org/MPL/2.0/">https://mozilla.org/MPL/2.0/</a>.</p>
+<h1><a class="header" href="#running-the-tests" id="running-the-tests">Running the tests</a></h1>
+<h2><a class="header" href="#running-all-tests" id="running-all-tests">Running all tests</a></h2>
+<p>The tests for all languages may be run from the command line:</p>
+<pre><code>make test
+</code></pre>
+<blockquote>
+<p><strong>Windows Note:</strong> On Windows, <code>make</code> is not available by default. While not required, installing <code>make</code> will allow you to use the convenience features in the <code>Makefile</code>.</p>
+</blockquote>
+<h2><a class="header" href="#running-the-rust-tests" id="running-the-rust-tests">Running the Rust tests</a></h2>
+<p>The Rust tests may be run with the following command:</p>
+<pre><code>cargo test --all
+</code></pre>
+<p>Log output can be controlled via the environment variable <code>RUST_LOG</code> for the <code>glean_core</code> crate:</p>
+<pre><code>export RUST_LOG=glean_core=debug
+</code></pre>
+<p>When running tests with logging you need to tell <code>cargo</code> to not suppress output:</p>
+<pre><code>cargo test -- --nocapture
+</code></pre>
+<p>Tests run in parallel by default, leading to interleaving log lines.
+This makes it harder to understand what's going on.
+For debugging you can force single-threaded tests:</p>
+<pre><code>cargo test -- --nocapture --test-threads=1
+</code></pre>
+<h2><a class="header" href="#running-the-kotlinandroid-tests" id="running-the-kotlinandroid-tests">Running the Kotlin/Android tests</a></h2>
+<h3><a class="header" href="#from-the-command-line" id="from-the-command-line">From the command line</a></h3>
+<p>The full Android test suite may be run from the command line with:</p>
+<pre><code>./gradlew test
+</code></pre>
+<h3><a class="header" href="#from-android-studio" id="from-android-studio">From Android Studio</a></h3>
+<p>To run the full Android test suite, in the &quot;Gradle&quot; pane, navigate to <code>glean-core</code> -&gt; <code>Tasks</code> -&gt; <code>verification</code> and double-click either <code>testDebugUnitTest</code> or <code>testReleaseUnitTest</code> (depending on whether you want to run in Debug or Release mode).
+You can save this task permanently by opening the task dropdown in the toolbar and selecting <code>&quot;Save glean.rs:glean:android [testDebugUnitTest] Configuration&quot;</code>.</p>
+<p>To run a single Android test, navigate to the file containing the test, and right click on the green arrow in the left margin next to the test.  There you have a choice of running or debugging the test.</p>
+<h2><a class="header" href="#running-the-swiftios-tests" id="running-the-swiftios-tests">Running the Swift/iOS tests</a></h2>
+<h3><a class="header" href="#from-the-command-line-1" id="from-the-command-line-1">From the command line</a></h3>
+<p>The full iOS test suite may be run from the command line with:</p>
+<pre><code>make test-swift
+</code></pre>
+<h3><a class="header" href="#from-xcode" id="from-xcode">From Xcode</a></h3>
+<p>To run the full iOS test suite, run tests in Xcode (<code>Product -&gt; Test</code>).
+To run a single Swift test, navigate to the file containing the test,
+and click on the arrow in the left margin next to the test.</p>
+<h2><a class="header" href="#testing-in-ci" id="testing-in-ci">Testing in CI</a></h2>
+<p>See <a href="ci.html">Continuous Integration</a> for details.</p>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/testing.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#how-the-glean-ci-works" id="how-the-glean-ci-works">How the Glean CI works</a></h1>
+<p>Current build status: <a href="https://circleci.com/gh/mozilla/glean"><img src="https://img.shields.io/circleci/build/github/mozilla/glean/main" alt="Build Status" /></a></p>
+<p>The <code>mozilla/glean</code> repository uses both <a href="https://circleci.com">CircleCI</a> and <a href="https://taskcluster.net/">TaskCluster</a> to run tests on each Pull Request,
+each merge to the <code>main</code> branch and on releases.</p>
+<h2><a class="header" href="#which-tasks-we-run" id="which-tasks-we-run">Which tasks we run</a></h2>
+<h3><a class="header" href="#pull-request---testing" id="pull-request---testing">Pull Request - testing</a></h3>
+<p>For each opened pull request we run a number of checks to ensure consistent formatting, no lint failures and that tests across all language bindings pass.
+These checks are required to pass before a Pull Request is merged.
+This includes by default the following tasks:</p>
+<p>On CircleCI:</p>
+<ul>
+<li>Formatting &amp; lints for Rust, Kotlin, Swift &amp; Python</li>
+<li>Consistency checks for generated header files, license checks across dependencies and a schema check</li>
+<li>Builds &amp; tests for Rust, Kotlin, Python &amp; C#
+<ul>
+<li>The Python language bindings are build for multiple platforms and Python versions</li>
+</ul>
+</li>
+<li>Documentation generation for all languages and the book, including spell check &amp; link check</li>
+<li>By default no Swift/iOS tests are launched. These can be run manually. See below.</li>
+</ul>
+<p>On TaskCluster:</p>
+<ul>
+<li>A full Android build &amp; test</li>
+</ul>
+<p>For all tasks you can always find the full log and generated artifacts by following the &quot;Details&quot; links on each task.</p>
+<h4><a class="header" href="#ios-tests-on-pull-request" id="ios-tests-on-pull-request">iOS tests on Pull Request</a></h4>
+<p>Due to the long runtime and costs iOS tests are not run by default on Pull Requests.
+Admins of the <code>mozilla/glean</code> repository can run them on demand.</p>
+<ol>
+<li>On the pull request scroll to the list of all checks running on that PR on the bottom.</li>
+<li>Find the job titled &quot;ci/circleci: iOS/hold&quot;.</li>
+<li>Click &quot;Details&quot; to get to Circle CI.</li>
+<li>Click on the &quot;hold&quot; task, then approve it.</li>
+<li>The iOS tasks will now run.</li>
+</ol>
+<h3><a class="header" href="#merge-to-main" id="merge-to-main">Merge to <code>main</code></a></h3>
+<p>Current build status: <a href="https://circleci.com/gh/mozilla/glean"><img src="https://img.shields.io/circleci/build/github/mozilla/glean/main" alt="Build Status" /></a></p>
+<p>When pull requests are merged to the <code>main</code> branch we run the same checks as we do on pull requests.
+Additionally we run the following tasks:</p>
+<ul>
+<li>Documentation deployment</li>
+<li>iOS build, unit &amp; integration test</li>
+</ul>
+<p>If you notice that they fail please take a look and <a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Data+Platform+and+Tools&amp;component=Glean%3A+SDK&amp;priority=P3&amp;status_whiteboard=%5Btelemetry%3Aglean-rs%3Am%3F%5D">open a bug</a> to investigate build failures.</p>
+<h3><a class="header" href="#releases" id="releases">Releases</a></h3>
+<p>When <a href="cut-a-new-release.html">cutting a new release</a> of the Glean SDK our CI setup is responsible for building, packaging and uploading release builds.
+We don't run the full test suite again.</p>
+<p>We run the following tasks:</p>
+<p>On CircleCI:</p>
+<ul>
+<li>Build the iOS framework &amp; push to <a href="https://github.com/mozilla/glean/releases">a GitHub release</a></li>
+<li>Build the Python wheel &amp; push to <a href="https://github.com/mozilla/glean/releases">a GitHub release</a></li>
+</ul>
+<p>On TaskCluster:</p>
+<ul>
+<li>Build &amp; package Glean for Android and push a <a href="https://maven.mozilla.org/?prefix=maven2/org/mozilla/telemetry/">release to Maven</a></li>
+<li>Build &amp; package the Glean Gradle Plugin and push a <a href="https://maven.mozilla.org/?prefix=maven2/org/mozilla/telemetry/">release to Maven</a></li>
+</ul>
+<p>On release the full TaskCluster suite takes up to 30 minutes to run.</p>
+<h4><a class="header" href="#how-to-find-taskcluster-tasks" id="how-to-find-taskcluster-tasks">How to find TaskCluster tasks</a></h4>
+<ol>
+<li>Go to <a href="https://github.com/mozilla/glean/releases">GitHub releases</a> and find the version</li>
+<li>Go to the release commit, indicated by its commit id on the left</li>
+<li>Click the green tick or red cross left of the commit title to open the list of all checks.</li>
+<li>Find the &quot;Decision task&quot; and click &quot;Details&quot;</li>
+<li>From the list of tasks pick the one you want to look at and follow the &quot;View task in Taskcluster&quot; link.</li>
+</ol>
+<h2><a class="header" href="#special-behavior" id="special-behavior">Special behavior</a></h2>
+<h3><a class="header" href="#documentation-only-changes" id="documentation-only-changes">Documentation-only changes</a></h3>
+<p>Documentation is deployed from CI, we therefore need it to run on documentation changes.
+However, some of the long-running code tests can be skipped.
+For that add the following literal string to the last commit message of your pull request:</p>
+<pre><code>[doc only]
+</code></pre>
+<h3><a class="header" href="#skipping-ci-completely" id="skipping-ci-completely">Skipping CI completely</a></h3>
+<p>It is possible to completely skip running CI checks on a pull request.</p>
+<p>To skip tasks on CircleCI include the following literal string in the commit message.<br />
+To skip tasks on TaskCluster add the following to the title of your pull request.</p>
+<pre><code>[ci skip]
+</code></pre>
+<p>This should only be used for metadata files, such as those in <code>.github</code>, <code>LICENSE</code> or <code>CODE_OF_CONDUCT.md</code>.</p>
+<h3><a class="header" href="#release-like-android-builds" id="release-like-android-builds">Release-like Android builds</a></h3>
+<p>Release builds are done on <a href="https://taskcluster.net/">TaskCluster</a>.
+As it builds for multiple platforms this task is quite long and does not run on pull requests by default.</p>
+<p>It is possible trigger the task on pull requests.
+Add the following literal string to the pull request <strong>title</strong>:</p>
+<pre><code>[ci full]
+</code></pre>
+<p>If added after initially opening the pull request, you need to close, then re-open the pull request to trigger a new build.</p>
+<p>The <code>Decision Task</code> will spawn <code>module-build-glean</code> and <code>module-build-glean-gradle-plugin</code> tasks.
+When they finish you will find the generated files under <code>Artifacts</code> on TaskCluster.</p>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/ci.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#glean-release-process" id="glean-release-process">Glean release process</a></h1>
+<p>The Glean SDK consists of multiple libraries for different platforms and targets.
+The main supported libraries are released as one.
+Development happens on the main repository <a href="https://github.com/mozilla/glean">https://github.com/mozilla/glean</a>.
+See <a href="../contributing.html">Contributing</a> for how to contribute changes to the Glean SDK.</p>
+<p>The development &amp; release process roughly follows the <a href="https://nvie.com/posts/a-successful-git-branching-model/">GitFlow model</a>.</p>
+<blockquote>
+<p><strong>Note:</strong> The rest of this section assumes that <code>upstream</code> points to the <code>https://github.com/mozilla/glean</code> repository,
+while <code>origin</code> points to the developer fork.
+For some developer workflows, <code>upstream</code> can be the same as <code>origin</code>.</p>
+</blockquote>
+<p><strong>Table of Contents</strong>:</p>
+<ul>
+<li><a href="cut-a-new-release.html#published-artifacts">Published artifacts</a></li>
+<li><a href="cut-a-new-release.html#standard-release">Standard release</a></li>
+<li><a href="cut-a-new-release.html#hotfix-release-for-latest-version">Hotfix release for latest version</a></li>
+<li><a href="cut-a-new-release.html#hotfix-release-for-previous-version">Hotfix release for previous version</a></li>
+<li><a href="cut-a-new-release.html#upgrading-android-components-to-a-new-version-of-glean">Upgrading android-components to a new version of Glean</a></li>
+</ul>
+<h2><a class="header" href="#published-artifacts" id="published-artifacts">Published artifacts</a></h2>
+<ul>
+<li>The Kotlin libraries are published to <a href="https://github.com/mozilla/glean/releases">GitHub Releases</a> and <a href="https://maven.mozilla.org/?prefix=maven2/org/mozilla/telemetry/">Mozilla Maven</a>.</li>
+<li>Python bindings are published on PyPI: <a href="https://pypi.org/project/glean-sdk/">glean-sdk</a>.</li>
+<li>iOS framework artifacts: <a href="https://github.com/mozilla/glean/releases">GitHub Releases</a>.</li>
+<li>Rust crates are published on crates.io: <a href="https://crates.io/crates/glean-core">glean-core</a>, <a href="https://crates.io/crates/glean-ffi">glean-ffi</a>.</li>
+</ul>
+<h2><a class="header" href="#standard-release" id="standard-release">Standard Release</a></h2>
+<p>Releases can only be done by one of the Glean maintainers.</p>
+<ul>
+<li>Main development branch: <code>main</code></li>
+<li>Main release branch: <code>release</code></li>
+<li>Specific release branch: <code>release-vX.Y.Z</code></li>
+<li>Hotfix branch: <code>hotfix-X.Y.(Z+1)</code></li>
+</ul>
+<h3><a class="header" href="#create-a-release-branch" id="create-a-release-branch">Create a release branch</a></h3>
+<ol>
+<li>Create a release branch from the <code>main</code> branch:
+<pre><code>git checkout -b release-v25.0.0 main
+</code></pre>
+</li>
+<li>Update the changelog .
+<ol>
+<li>Add any missing important changes under the <code>Unreleased changes</code> headline.</li>
+<li>Commit any changes to the changelog file due to the previous step.</li>
+</ol>
+</li>
+<li>Run <code>bin/prepare-release.sh &lt;new version&gt;</code> to bump the version number.
+<ol>
+<li>The new version should be the next patch, minor or major version of what is currently released.</li>
+<li>Let it create a commit for you.</li>
+</ol>
+</li>
+<li>Push the new release branch:
+<pre><code>git push upstream release-v25.0.0
+</code></pre>
+</li>
+<li>Wait for CI to finish on that branch and ensure it's green:
+<ul>
+<li><a href="https://circleci.com/gh/mozilla/glean/tree/release-v25.0.0">https://circleci.com/gh/mozilla/glean/tree/release-v25.0.0</a></li>
+<li>You can find the TaskCluster task on the corresponding commit. See <a href="ci.html#how-to-find-taskcluster-tasks">How to find TaskCluster tasks</a> for details.</li>
+</ul>
+</li>
+<li>Apply additional commits for bug fixes to this branch.
+<ul>
+<li>Adding large new features here is strictly prohibited. They need to go to the <code>main</code> branch and wait for the next release.</li>
+</ul>
+</li>
+</ol>
+<h3><a class="header" href="#finish-a-release-branch" id="finish-a-release-branch">Finish a release branch</a></h3>
+<p>When CI has finished and is green for your specific release branch, you are ready to cut a release.</p>
+<ol>
+<li>Check out the main release branch:
+<pre><code>git checkout release
+</code></pre>
+</li>
+<li>Merge the specific release branch:
+<pre><code>git merge --no-ff release-v25.0.0
+</code></pre>
+</li>
+<li>Push the main release branch:
+<pre><code>git push upstream release
+</code></pre>
+</li>
+<li>Tag the release on GitHub:
+<ol>
+<li><a href="https://github.com/mozilla/glean/releases/new">Draft a New Release</a> in the GitHub UI (<code>Releases &gt; Draft a New Release</code>).</li>
+<li>Enter <code>v&lt;myversion&gt;</code> as the tag. It's important this is the same as the version you specified to the <code>prepare_release.sh</code> script, with the <code>v</code> prefix added.</li>
+<li>Select the <code>release</code> branch as the target.</li>
+<li>Under the description, paste the contents of the release notes from <code>CHANGELOG.md</code>.</li>
+</ol>
+</li>
+<li>Wait for the CI build to complete for the tag.
+<ul>
+<li>You can check <a href="https://circleci.com/gh/mozilla/glean">on CircleCI for the running build</a>.</li>
+<li>You can find the TaskCluster task on the corresponding commit. See <a href="ci.html#how-to-find-taskcluster-tasks">How to find TaskCluster tasks</a> for details.</li>
+</ul>
+</li>
+<li>Send a pull request to merge back the specific release branch to the development branch: <a href="https://github.com/mozilla/glean/compare/main...release-v25.0.0?expand=1">https://github.com/mozilla/glean/compare/main...release-v25.0.0?expand=1</a>
+<ul>
+<li>This is important so that no changes are lost.</li>
+<li>This might have merge conflicts with the <code>main</code> branch, which you need to fix before it is merged.</li>
+</ul>
+</li>
+<li>Once the above pull request lands, delete the specific release branch.</li>
+<li>Update <code>glean-ffi</code> in the iOS megazord. See the <a href="https://github.com/mozilla/application-services/blob/main/megazords/ios/README.md#glean-component">application-services documentation for that</a>.</li>
+</ol>
+<h2><a class="header" href="#hotfix-release-for-latest-version" id="hotfix-release-for-latest-version">Hotfix release for latest version</a></h2>
+<p>If the latest released version requires a bug fix, a hotfix branch is used.</p>
+<h3><a class="header" href="#create-a-hotfix-branch" id="create-a-hotfix-branch">Create a hotfix branch</a></h3>
+<ol>
+<li>Create a hotfix branch from the main release branch:
+<pre><code>git checkout -b hotfix-v25.0.1 release
+</code></pre>
+</li>
+<li>Run <code>bin/prepare-release.sh &lt;new version&gt;</code> to bump the version number.
+<ol>
+<li>The new version should be the next patch version of what is currently released.</li>
+<li>Let it create a commit for you.</li>
+</ol>
+</li>
+<li>Push the hotfix branch:
+<pre><code>git push upstream hotfix-v25.0.1
+</code></pre>
+</li>
+<li>Create a local hotfix branch for bugfixes:
+<pre><code>git checkout -b bugfix hotfix-v25.0.1
+</code></pre>
+</li>
+<li>Fix the bug and commit the fix in one or more separate commits.</li>
+<li>Push your bug fixes and create a pull request against the hotfix branch: <a href="https://github.com/mozilla/glean/compare/hotfix-v25.0.1...your-name:bugfix?expand=1">https://github.com/mozilla/glean/compare/hotfix-v25.0.1...your-name:bugfix?expand=1</a></li>
+<li>When that pull request lands, wait for CI to finish on that branch and ensure it's green:
+<ul>
+<li><a href="https://circleci.com/gh/mozilla/glean/tree/hotfix-v25.0.1">https://circleci.com/gh/mozilla/glean/tree/hotfix-v25.0.1</a></li>
+<li>You can find the TaskCluster task on the corresponding commit. See <a href="ci.html#how-to-find-taskcluster-tasks">How to find TaskCluster tasks</a> for details.</li>
+</ul>
+</li>
+</ol>
+<h3><a class="header" href="#finish-a-hotfix-branch" id="finish-a-hotfix-branch">Finish a hotfix branch</a></h3>
+<p>When CI has finished and is green for your hotfix branch, you are ready to cut a release, similar to a normal release:</p>
+<ol>
+<li>Check out the main release branch:
+<pre><code>git checkout release
+</code></pre>
+</li>
+<li>Merge the hotfix branch:
+<pre><code>git merge --no-ff hotfix-v25.0.1
+</code></pre>
+</li>
+<li>Push the main release branch:
+<pre><code>git push upstream release
+</code></pre>
+</li>
+<li>Tag the release on GitHub:
+<ol>
+<li><a href="https://github.com/mozilla/glean/releases/new">Draft a New Release</a> in the GitHub UI (<code>Releases &gt; Draft a New Release</code>).</li>
+<li>Enter <code>v&lt;myversion&gt;</code> as the tag. It's important this is the same as the version you specified to the <code>prepare_release.sh</code> script, with the <code>v</code> prefix added.</li>
+<li>Select the <code>release</code> branch as the target.</li>
+<li>Under the description, paste the contents of the release notes from <code>CHANGELOG.md</code>.</li>
+</ol>
+</li>
+<li>Wait for the CI build to complete for the tag.
+<ul>
+<li>You can check <a href="https://circleci.com/gh/mozilla/glean">on CircleCI for the running build</a>.</li>
+<li>You can find the TaskCluster task on the corresponding commit. See <a href="ci.html#how-to-find-taskcluster-tasks">How to find TaskCluster tasks</a> for details.</li>
+</ul>
+</li>
+<li>Send a pull request to merge back the hotfix branch to the development branch: <a href="https://github.com/mozilla/glean/compare/main...hotfix-v25.0.1?expand=1">https://github.com/mozilla/glean/compare/main...hotfix-v25.0.1?expand=1</a>
+<ul>
+<li>This is important so that no changes are lost.</li>
+<li>This might have merge conflicts with the <code>main</code> branch, which you need to fix before it is merged.</li>
+</ul>
+</li>
+<li>Once the above pull request lands, delete the hotfix branch.</li>
+<li>Update <code>glean-ffi</code> in the iOS megazord. See the <a href="https://github.com/mozilla/application-services/blob/main/megazords/ios/README.md#glean-component">application-services documentation for that</a>.</li>
+</ol>
+<h2><a class="header" href="#hotfix-release-for-previous-version" id="hotfix-release-for-previous-version">Hotfix release for previous version</a></h2>
+<p>If you need to release a hotfix for a previously released version (that is: not the latest released version), you need a support branch.</p>
+<blockquote>
+<p><strong>Note</strong>: This should rarely happen. We generally support only the latest released version of Glean.</p>
+</blockquote>
+<h3><a class="header" href="#create-a-support-and-hotfix-branch" id="create-a-support-and-hotfix-branch">Create a support and hotfix branch</a></h3>
+<ol>
+<li>Create a support branch from the version tag and push it:
+<pre><code>git checkout -b support/v24.0 v24.0.0
+git push upstream support/v24.0
+</code></pre>
+</li>
+<li>Create a hotfix branch for this support branch:
+<pre><code>git checkout -b hotfix-v24.0.1 support/v24.0
+</code></pre>
+</li>
+<li>Fix the bug and commit the fix in one or more separate commits into your hotfix branch.</li>
+<li>Push your bug fixes and create a pull request against the support branch: <a href="https://github.com/mozilla/glean/compare/support/v24.0...your-name:hotfix-v24.0.1?expand=1">https://github.com/mozilla/glean/compare/support/v24.0...your-name:hotfix-v24.0.1?expand=1</a></li>
+<li>When that pull request lands, wait for CI to finish on that branch and ensure it's green:
+<ul>
+<li><a href="https://circleci.com/gh/mozilla/glean/tree/support/v24.0">https://circleci.com/gh/mozilla/glean/tree/support/v24.0</a></li>
+<li>You can find the TaskCluster task on the corresponding commit. See <a href="ci.html#how-to-find-taskcluster-tasks">How to find TaskCluster tasks</a> for details.</li>
+</ul>
+</li>
+</ol>
+<h3><a class="header" href="#finish-a-support-branch" id="finish-a-support-branch">Finish a support branch</a></h3>
+<ol>
+<li>Check out the support branch:
+<pre><code>git checkout support/v24.0
+</code></pre>
+</li>
+<li>Update the changelog .
+<ol>
+<li>Add any missing important changes under the <code>Unreleased changes</code> headline.</li>
+<li>Commit any changes to the changelog file due to the previous step.</li>
+</ol>
+</li>
+<li>Run <code>bin/prepare-release.sh &lt;new version&gt;</code> to bump the version number.
+<ol>
+<li>The new version should be the next patch version of the support branch.</li>
+<li>Let it create a commit for you.</li>
+</ol>
+</li>
+<li>Push the support branch:
+<pre><code>git push upstream support/v24.0
+</code></pre>
+</li>
+<li>Tag the release on GitHub:
+<ol>
+<li><a href="https://github.com/mozilla/glean/releases/new">Draft a New Release</a> in the GitHub UI (<code>Releases &gt; Draft a New Release</code>).</li>
+<li>Enter <code>v&lt;myversion&gt;</code> as the tag. It's important this is the same as the version you specified to the <code>prepare_release.sh</code> script, with the <code>v</code> prefix added.</li>
+<li>Select the support branch (e.g. <code>support/v24.0</code>) as the target.</li>
+<li>Under the description, paste the contents of the release notes from <code>CHANGELOG.md</code>.</li>
+</ol>
+</li>
+<li>Wait for the CI build to complete for the tag.
+<ul>
+<li>You can check <a href="https://circleci.com/gh/mozilla/glean">on CircleCI for the running build</a>.</li>
+<li>You can find the TaskCluster task on the corresponding commit. See <a href="ci.html#how-to-find-taskcluster-tasks">How to find TaskCluster tasks</a> for details.</li>
+</ul>
+</li>
+<li>Send a pull request to merge back any bug fixes to the development branch: <a href="https://github.com/mozilla/glean/compare/main...support/v24.0?expand=1">https://github.com/mozilla/glean/compare/main...support/v24.0?expand=1</a>
+<ul>
+<li>This is important so that no changes are lost.</li>
+<li>This might have merge conflicts with the <code>main</code> branch, which you need to fix before it is merged.</li>
+</ul>
+</li>
+<li>Once the above pull request lands, delete the support branch.</li>
+</ol>
+<h2><a class="header" href="#upgrading-android-components-to-a-new-version-of-glean" id="upgrading-android-components-to-a-new-version-of-glean">Upgrading android-components to a new version of Glean</a></h2>
+<p>On Android, Mozilla products consume the Glean SDK through its wrapper in <a href="https://github.com/mozilla-mobile/android-components"><code>android-components</code></a>.
+Therefore, when a new Glean SDK release is made, <code>android-components</code> must also be updated.</p>
+<p>After following one of the above instructions to make a Glean SDK release:</p>
+<ol>
+<li>
+<p>Ensure that CI has completed and the artifacts are published on <a href="https://maven.mozilla.org/?prefix=maven2/org/mozilla/telemetry/">Mozilla's Maven repository</a>.</p>
+</li>
+<li>
+<p>Create a pull request against <code>android-components</code> to update the Glean version with the following changes:</p>
+<ul>
+<li>
+<p>The Glean version is updated in the <code>mozilla_glean</code> variable in the <a href="https://github.com/mozilla-mobile/android-components/blob/69546999739ab19d21425e9a98e107e438a3f905/buildSrc/src/main/java/Dependencies.kt#L32"><code>buildSrc/src/main/java/Dependencies.kt</code></a> file.</p>
+</li>
+<li>
+<p>The relevant parts of the Glean changelog copied into the top part of the <a href="https://github.com/mozilla-mobile/android-components/blob/main/docs/changelog.md"><code>android-components</code> changelog</a>.
+This involves copying the Android-specific changes and the general changes to Glean, but can omit other platform-specific changes.</p>
+</li>
+</ul>
+</li>
+</ol>
+<p><strong>IMPORTANT:</strong> Until the <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1592947">Glean Gradle plugin work is complete</a>, all downstream consumers of android-components will also need to update their version of Glean to match the version used in android-components so that their unit tests can run correctly.</p>
+<p>In Fenix, for example, the <a href="https://github.com/mozilla-mobile/fenix/blob/5e4ef202b85e273cf46ec5c7ec1b80f30ca4e77c/buildSrc/src/main/java/Dependencies.kt#L44">Glean version is specified here</a>.</p>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/cut-a-new-release.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#contributing-to-the-glean-sdk" id="contributing-to-the-glean-sdk">Contributing to the Glean SDK</a></h1>
+<p>Anyone is welcome to help with the Glean SDK project. Feel free to get in touch with other community members on <code>chat.mozilla.org</code>
+or through issues on GitHub or Bugzilla.</p>
+<ul>
+<li>Matrix: <a href="https://chat.mozilla.org/#/room/#glean:mozilla.org">#glean channel on chat.mozilla.org</a></li>
+<li><a href="https://bugzilla.mozilla.org/buglist.cgi?list_id=14844212&amp;resolution=---&amp;classification=Client%20Software&amp;classification=Developer%20Infrastructure&amp;classification=Components&amp;classification=Server%20Software&amp;classification=Other&amp;query_format=advanced&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;component=Glean%3A%20SDK&amp;product=Data%20Platform%20and%20Tools">the Bugzilla issues list</a></li>
+<li><a href="https://github.com/mozilla/glean/issues">the GitHub issues list</a></li>
+</ul>
+<p>Participation in this project is governed by the
+<a href="https://www.mozilla.org/en-US/about/governance/policies/participation/">Mozilla Community Participation Guidelines</a>.</p>
+<h2><a class="header" href="#bug-reports" id="bug-reports">Bug Reports</a></h2>
+<p>To report issues or request changes, file a bug in <a href="https://bugzilla.mozilla.org/enter_bug.cgi?assigned_to=nobody%40mozilla.org&amp;bug_ignored=0&amp;bug_severity=normal&amp;bug_status=NEW&amp;cf_fission_milestone=---&amp;cf_fx_iteration=---&amp;cf_fx_points=---&amp;cf_status_firefox65=---&amp;cf_status_firefox66=---&amp;cf_status_firefox67=---&amp;cf_status_firefox_esr60=---&amp;cf_status_thunderbird_esr60=---&amp;cf_tracking_firefox65=---&amp;cf_tracking_firefox66=---&amp;cf_tracking_firefox67=---&amp;cf_tracking_firefox_esr60=---&amp;cf_tracking_firefox_relnote=---&amp;cf_tracking_thunderbird_esr60=---&amp;product=Data%20Platform%20and%20Tools&amp;component=Glean%3A%20SDK&amp;contenttypemethod=list&amp;contenttypeselection=text%2Fplain&amp;defined_groups=1&amp;flag_type-203=X&amp;flag_type-37=X&amp;flag_type-41=X&amp;flag_type-607=X&amp;flag_type-721=X&amp;flag_type-737=X&amp;flag_type-787=X&amp;flag_type-799=X&amp;flag_type-800=X&amp;flag_type-803=X&amp;flag_type-835=X&amp;flag_type-846=X&amp;flag_type-855=X&amp;flag_type-864=X&amp;flag_type-916=X&amp;flag_type-929=X&amp;flag_type-930=X&amp;flag_type-935=X&amp;flag_type-936=X&amp;flag_type-937=X&amp;form_name=enter_bug&amp;maketemplate=Remember%20values%20as%20bookmarkable%20template&amp;op_sys=Unspecified&amp;priority=P3&amp;&amp;rep_platform=Unspecified&amp;status_whiteboard=%5Btelemetry%3Aglean-rs%3Am%3F%5D&amp;target_milestone=---&amp;version=unspecified">Bugzilla in Data Platform &amp; Tools :: Glean: SDK</a>.</p>
+<p>If you don't have a Bugzilla account, we also accept <a href="https://github.com/mozilla/glean/issues/new">issues on GitHub</a>.</p>
+<h2><a class="header" href="#making-code-changes" id="making-code-changes">Making Code Changes</a></h2>
+<p>To work on the code in this repository you will need to be familiar with
+the <a href="https://www.rust-lang.org/">Rust</a> programming language.
+You can get a working rust compiler and toolchain via <a href="https://rustup.rs/">rustup</a>.</p>
+<p>You can check that everything compiles by running the following from the
+root of your checkout:</p>
+<pre><code>make test-rust
+</code></pre>
+<p>If you plan to work on the Android component bindings, you should also review
+the instructions for <a href="dev/android/setup-android-build-environment.html">setting up an Android build environment</a>.</p>
+<p>To run all Kotlin tests:</p>
+<pre><code>make test-kotlin
+</code></pre>
+<p>or run tests in Android Studio.</p>
+<p>To run all Swift tests:</p>
+<pre><code>make test-swift
+</code></pre>
+<p>or run tests in Xcode.</p>
+<h2><a class="header" href="#sending-pull-requests" id="sending-pull-requests">Sending Pull Requests</a></h2>
+<p>Patches should be submitted as <a href="https://help.github.com/articles/about-pull-requests/">pull requests</a> (PRs).</p>
+<p>Before submitting a PR:</p>
+<ul>
+<li>Your code must run and pass all the automated tests before you submit your PR for review.</li>
+<li>&quot;Work in progress&quot; pull requests are allowed to be submitted, but should be clearly labeled as such and should not be merged until all tests pass and the code has been reviewed.</li>
+<li>For changes to Rust code
+<ul>
+<li><code>make test-rust</code> produces no test failures</li>
+<li><code>make clippy</code> runs without emitting any warnings or errors.</li>
+<li><code>make rustfmt</code> does not produce any changes to the code.</li>
+</ul>
+</li>
+<li>For changes to Kotlin code
+<ul>
+<li><code>make test-kotlin</code> runs without emitting any warnings or errors.</li>
+<li><code>make ktlint</code> runs without emitting any warnings.</li>
+</ul>
+</li>
+<li>For changes to Swift code
+<ul>
+<li><code>make test-swift</code> (or running tests in Xcode) runs without emitting any warnings or errors.</li>
+<li><code>make swiftlint</code> runs without emitting any warnings or errors.</li>
+</ul>
+</li>
+<li>Your patch should include new tests that cover your changes. It is your and your reviewer's responsibility to ensure your patch includes adequate tests.</li>
+</ul>
+<p>When submitting a PR:</p>
+<ul>
+<li>You agree to license your code under the project's open source license (<a href="https://mozilla.org/MPL/2.0/">MPL 2.0</a>).</li>
+<li>Base your branch off the current <code>main</code>.</li>
+<li>Add both your code and new tests if relevant.</li>
+<li>Please do not include merge commits in pull requests; include only commits with the new relevant code.</li>
+</ul>
+<h2><a class="header" href="#code-review" id="code-review">Code Review</a></h2>
+<p>This project is production Mozilla code and subject to our
+<a href="https://developer.mozilla.org/en-US/docs/Mozilla/Developer_guide/Committing_Rules_and_Responsibilities">engineering practices and quality standards</a>.
+Every patch must be peer reviewed by a member of the Glean core team.</p>
+<p>Reviewers are defined in the <a href="https://github.com/mozilla/glean/blob/main/.github/CODEOWNERS">CODEOWNERS</a> file
+and are automatically added for every pull request.
+Every pull request needs to be approved by at least one of these people before landing.</p>
+<p>The submitter needs to decide on their own discretion whether the changes require a look from more than a single reviewer or any outside developer.
+Reviewers can also ask for additional approval from other reviewers.</p>
+<h2><a class="header" href="#release" id="release">Release</a></h2>
+<p>See the <a href="dev/cut-a-new-release.html">Release process</a> on how to release a new version of the Glean SDK.</p>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/contributing.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#code-coverage" id="code-coverage">Code Coverage</a></h1>
+<blockquote>
+<p>In computer science, test coverage is a measure used to describe the degree to which the source code of a program is executed when a particular test suite runs.
+A program with high test coverage, measured as a percentage, has had more of its source code executed during testing,
+which suggests it has a lower chance of containing undetected software bugs compared to a program with low test coverage.
+(<a href="https://en.wikipedia.org/wiki/Code_coverage">Wikipedia</a>)</p>
+</blockquote>
+<h2><a class="header" href="#generating-kotlin-reports-locally" id="generating-kotlin-reports-locally">Generating Kotlin reports locally</a></h2>
+<p>Locally you can generate a coverage report with the following command:</p>
+<pre><code class="language-bash">./gradlew -Pcoverage :glean:build
+</code></pre>
+<p>After that you'll find an HTML report at the following location:</p>
+<pre><code>glean-core/android/build/reports/jacoco/jacocoTestReport/jacocoTestReport/html/index.html
+</code></pre>
+<h2><a class="header" href="#generating-rust-reports-locally" id="generating-rust-reports-locally">Generating Rust reports locally</a></h2>
+<blockquote>
+<p>Generating the Rust coverage report requires a significant amount of RAM during the build.</p>
+</blockquote>
+<p>We use <a href="https://github.com/mozilla/grcov">grcov</a> to collect and aggregate code coverage information.
+Releases can be found on the <a href="https://github.com/mozilla/grcov/releases">grcov Release page</a>.</p>
+<p>The build process requires a Rust Nightly version. Install it using <code>rustup</code>:</p>
+<pre><code class="language-bash">rustup toolchain add nightly
+</code></pre>
+<p>To generate an HTML report, <code>genhtml</code> from the <code>lcov</code> package is required. Install it through your system's package manager.</p>
+<p>After installation you can build the Rust code and generate a report:</p>
+<pre><code class="language-bash">export CARGO_INCREMENTAL=0
+export RUSTFLAGS='-Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off -Zno-landing-pads'
+cargo +nightly test
+
+zip -0 ccov.zip `find . \( -name &quot;glean*.gc*&quot; \) -print`
+grcov ccov.zip -s . -t lcov --llvm --branch --ignore-not-existing --ignore-dir &quot;/*&quot; -o lcov.info
+genhtml -o report/ --show-details --highlight --ignore-errors source --legend lcov.info
+</code></pre>
+<p>After that you'll find an HTML report at the following location:</p>
+<pre><code>report/index.html
+</code></pre>
+<h2><a class="header" href="#generating-swift-reports-locally" id="generating-swift-reports-locally">Generating Swift reports locally</a></h2>
+<p>Xcode automatically generates code coverage when running tests.
+You can find the report in the Report Navigator (<code>View -&gt; Navigators -&gt; Show Report Navigator -&gt; Coverage</code>).</p>
+<h2><a class="header" href="#generating-python-reports-locally" id="generating-python-reports-locally">Generating Python reports locally</a></h2>
+<p>Python code coverage is determined using the <a href="https://coverage.readthedocs.io/en/latest/">coverage.py</a> library.</p>
+<p>Run</p>
+<pre><code class="language-bash">make python-coverage
+</code></pre>
+<p>to generate code coverage reports in the Glean virtual environment.</p>
+<p>After running, the report will be in <code>htmlcov</code>.</p>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/code_coverage.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#developing-documentation" id="developing-documentation">Developing documentation</a></h1>
+<p>The documentation in this repository pertains to the Glean SDK.  That is, the client-side code for Glean telemetry.
+Documentation for Glean in general, and the Glean-specific parts of the data pipeline and analysis is <a href="https://docs.telemetry.mozilla.org/concepts/glean/glean.html">documented elsewhere</a> in the <a href="https://github.com/mozilla/firefox-data-docs"><code>firefox-data-docs</code> repository</a>.</p>
+<p>The main narrative documentation is written in Markdown and converted to static HTML using <a href="https://rust-lang.github.io/mdBook/">mdbook</a>.</p>
+<p>API docs are also generated from docstrings for Rust, Kotlin, Swift and Python.</p>
+<h2><a class="header" href="#building-documentation" id="building-documentation">Building documentation</a></h2>
+<h3><a class="header" href="#building-the-narrative-book-documentation" id="building-the-narrative-book-documentation">Building the narrative (book) documentation</a></h3>
+<p>The <code>mdbook</code> crate is required in order to build the narrative documentation:</p>
+<pre><code class="language-sh">cargo install mdbook mdbook-mermaid mdbook-open-on-gh
+</code></pre>
+<p>Then both the narrative and Rust API docs can be built with:</p>
+<pre><code class="language-sh">make docs
+# ...or...
+bin/build-rust-docs.sh
+# ...or on Windows...
+bin/build-rust-docs.bat
+</code></pre>
+<p>The built narrative documentation is saved in <code>build/docs/book</code>, and the Rust API documentation is saved in <code>build/docs/docs</code>.</p>
+<h3><a class="header" href="#building-api-documentation" id="building-api-documentation">Building API documentation</a></h3>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<p>Kotlin API documentation is generated using <a href="https://github.com/Kotlin/dokka">dokka</a>.
+It is automatically installed by Gradle.</p>
+<p>To build the Kotlin API documentation:</p>
+<pre><code class="language-sh">make kotlin-docs
+</code></pre>
+<p>The generated documentation is saved in <code>build/docs/javadoc</code>.</p>
+</div>
+<div data-lang="Swift" class="tab">
+<p>Swift API documentation is generated using <a href="https://github.com/realm/jazzy">jazzy</a>.
+It can be installed using:</p>
+<ol>
+<li>Install the latest Ruby: <code>brew install ruby</code></li>
+<li>Make the installed Ruby available: <code>export PATH=/usr/local/opt/ruby/bin:$PATH</code> (and add that line to your <code>.bashrc</code>)</li>
+<li>Install the documentation tool: <code>gem install jazzy</code></li>
+</ol>
+<p>To build the Swift API documentation:</p>
+<pre><code class="language-sh">make swift-docs
+</code></pre>
+<p>The generated documentation is saved in <code>build/docs/swift</code>.</p>
+</div>
+<div data-lang="Python" class="tab">
+<p>The Python API docs are generated using <a href="https://pdoc3.github.io/pdoc/">pdoc3</a>.
+It is installed as part of <a href="python/setting-up-python-build-environment.html#create-a-virtual-environment">creating the virtual environment for Python development</a>.</p>
+<p>To build the Python API documentation:</p>
+<pre><code>make python-docs
+</code></pre>
+<p>The generated documentation is saved in <code>build/docs/python</code>.</p>
+</div>
+<div data-lang="C#" class="tab">
+<p>TODO. To be implemented in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1648410">bug 1648410</a>.</p>
+</div>
+</div>
+</div>
+<h3><a class="header" href="#checking-links" id="checking-links">Checking links</a></h3>
+<p>Internal links within the documentation can be checked using the <a href="https://www.npmjs.com/package/link-checker"><code>link-checker</code></a> tool.
+External links are currently not checked, since this takes considerable time and frequently fails in CI due to networking restrictions or issues.</p>
+<p>Link checking requires building the narrative documentation as well as all of the API documentation for all languages.
+It is rare to build all of these locally (and in particular, the Swift API documentation can only be built on macOS), therefore it is reasonable to let CI catch broken link errors for you.</p>
+<p>If you do want to run the <code>link-checker</code> locally, it can be installed using <code>npm</code> or your system's package manager.
+Then, run <code>link-checker</code> with:</p>
+<pre><code class="language-sh">make linkcheck
+</code></pre>
+<h3><a class="header" href="#spell-checking" id="spell-checking">Spell checking</a></h3>
+<p>The narrative documentation (but not the API documentation) is spell checked using <a href="http://aspell.net/">aspell</a>.</p>
+<p>On Unix-like platforms, it can be installed using your system's package manager:</p>
+<pre><code class="language-sh">sudo apt install aspell-en
+# ...or...
+sudo dnf install aspell-en
+# ...or...
+brew install aspell
+</code></pre>
+<p>Note that aspell 0.60.8 or later is required, as that is the first release with markdown support.</p>
+<p>You can the spell check the narrative documentation using the following:</p>
+<pre><code class="language-sh">make spellcheck
+# ...or...
+bin/spellcheck.sh
+</code></pre>
+<p>This will bring up an interactive spell-checking environment in the console.
+Pressing <code>a</code> to add a word will add it to the project's local <code>.dictionary</code> file, and the changes should be committed to <code>git</code>.</p>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/docs.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#upgrading-glean_parser" id="upgrading-glean_parser">Upgrading glean_parser</a></h1>
+<p>To upgrade the version of <code>glean_parser</code> used by the Glean SDK, run the <code>bin/update-glean-parser-version.sh</code> script, providing the version as a command line parameter:</p>
+<pre><code class="language-sh">bin/update-glean-parser-version.sh 1.28.3
+</code></pre>
+<p>This will update the version in all of the required places. Commit those changes to <code>git</code> and submit a pull request.</p>
+<p>No further steps are required to use the new version of <code>glean_parser</code> for code generation: all of the build integrations automatically update <code>glean_parser</code> to the correct version.</p>
+<p>For testing the Glean Python bindings, the virtual environment needs to be deleted to force an upgrade of <code>glean_parser</code>:</p>
+<pre><code class="language-sh">rm -rf glean-core/python/.venv*
+</code></pre>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/upgrading-glean-parser.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#android-bindings" id="android-bindings">Android bindings</a></h1>
+<p>The Glean SDK contains the Kotlin bindings for use by Android applications.
+It makes use of the underlying <a href="android/../core/index.html">Rust component</a> with a Kotlin-specific API on top.
+It also includes integrations into the Android platform.</p>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/android/index.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#setup-the-android-build-environment" id="setup-the-android-build-environment">Setup the Android Build Environment</a></h1>
+<h2><a class="header" href="#doing-a-local-build-of-the-glean-sdk" id="doing-a-local-build-of-the-glean-sdk">Doing a local build of the Glean SDK:</a></h2>
+<p>This document describes how to make local builds of the Android bindings in this repository.
+Most consumers of these bindings <em>do not</em> need to follow this process,
+but will instead <a href="android/../../user/adding-glean-to-your-project.html">use pre-built bindings</a>.</p>
+<h2><a class="header" href="#prepare-your-build-environment" id="prepare-your-build-environment">Prepare your build environment</a></h2>
+<p>Typically, this process only needs to be run once, although periodically you
+may need to repeat some steps (e.g., Rust updates should be done periodically).</p>
+<h3><a class="header" href="#setting-up-android-dependencies" id="setting-up-android-dependencies">Setting up Android dependencies</a></h3>
+<h4><a class="header" href="#with-android-studio" id="with-android-studio">With Android Studio</a></h4>
+<p>The easiest way to install all the dependencies (and automatically
+handle updates), is by using <a href="https://developer.android.com/studio/index.html">Android Studio</a>.
+Once this is installed, start Android Studio and open the Glean project.
+If Android Studio asks you to upgrade the version of Gradle, decline.</p>
+<p>The following dependencies can be installed in Android Studio through <code>Tools &gt; SDK Manager &gt; SDK Tools</code>:</p>
+<ul>
+<li>Android SDK Tools (may already be selected)</li>
+<li>NDK r21</li>
+<li>CMake</li>
+<li>LLDB</li>
+</ul>
+<p>You should be set to build Glean from within Android Studio now.</p>
+<h4><a class="header" href="#manually" id="manually">Manually</a></h4>
+<p>Set <code>JAVA_HOME</code> to be the location of Android Studio's JDK which can be found in Android Studio's &quot;Project Structure&quot; menu (you may need to escape spaces in the path).</p>
+<p>Note down the location of your SDK.
+If installed through Android Studio you will find the <code>Android SDK Location</code> in <code>Tools &gt; SDK Manager</code>.</p>
+<p>Set the <code>ANDROID_HOME</code> environment variable to that path.
+Alternatively add the following line to the <code>local.properties</code> file in the root of the Glean checkout (create the file if it does not exist):</p>
+<pre><code>sdk.dir=/path/to/sdk
+</code></pre>
+<p>For the Android NDK:</p>
+<ol>
+<li>Download NDK r21 from <a href="https://developer.android.com/ndk/downloads">https://developer.android.com/ndk/downloads</a>.</li>
+<li>Extract it and put it somewhere (<code>$HOME/.android-ndk-r21</code> is a reasonable choice, but it doesn't matter).</li>
+<li>Add the following line to the <code>local.properties</code> file in the root of the Glean checkout (create the file if it does not exist):
+<pre><code>ndk.dir=/path/to/.android-ndk-r21
+</code></pre>
+</li>
+</ol>
+<h3><a class="header" href="#setting-up-rust" id="setting-up-rust">Setting up Rust</a></h3>
+<p>Rust can be installed using <code>rustup</code>, with the following commands:</p>
+<pre><code>curl https://sh.rustup.rs -sSf | sh
+rustup update
+</code></pre>
+<p>Platform specific toolchains need to be installed for Rust.
+This can be done using the <code>rustup target</code> command.
+In order to enable building for real devices and Android emulators,
+the following targets need to be installed:</p>
+<pre><code>rustup target add aarch64-linux-android
+rustup target add armv7-linux-androideabi
+rustup target add i686-linux-android
+rustup target add x86_64-linux-android
+</code></pre>
+<h2><a class="header" href="#building" id="building">Building</a></h2>
+<p>Before building:</p>
+<ul>
+<li>Ensure your repository is up-to-date.</li>
+<li>Ensure Rust is up-to-date by running <code>rustup update</code>.</li>
+</ul>
+<h3><a class="header" href="#with-android-studio-1" id="with-android-studio-1">With Android Studio</a></h3>
+<p>After importing the Glean project into Android Studio it should be all set up and you can build the project using <code>Build &gt; Make Project</code></p>
+<h3><a class="header" href="#manually-1" id="manually-1">Manually</a></h3>
+<p>The builds are all performed by <code>./gradlew</code> and the general syntax used is <code>./gradlew project:task</code></p>
+<p>Build the whole project and run tests:</p>
+<pre><code>./gradlew build
+</code></pre>
+<p>You can see a list of projects by executing <code>./gradlew projects</code> and a list of tasks by executing <code>./gradlew tasks</code>.</p>
+<h2><a class="header" href="#faq" id="faq">FAQ</a></h2>
+<ul>
+<li><strong>Q: Android Studio complains about Python not being found when building.</strong></li>
+<li>A: Make sure that the <code>python</code> binary is on your <code>PATH</code>. On Windows, in addition to that,
+it might be required to add its full path to the <code>rust.pythonCommand</code> entry in  <code>$project_root/local.properties</code>.</li>
+</ul>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/android/setup-android-build-environment.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#android-sdk--ndk-versions" id="android-sdk--ndk-versions">Android SDK / NDK versions</a></h1>
+<p>The Glean SDK implementation is currently build against the following versions:</p>
+<ul>
+<li>SDK API 28
+<ul>
+<li>Look for <code>android-28</code> in the SDK manager</li>
+<li>or install with: <code>sdkmanager --verbose &quot;platforms;android-28&quot;</code></li>
+</ul>
+</li>
+<li>Android build tools 28.0.3
+<ul>
+<li>Download link: <a href="https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip">https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip</a></li>
+</ul>
+</li>
+<li>NDK r21
+<ul>
+<li>Download link: <a href="https://dl.google.com/android/repository/android-ndk-r21-linux-x86_64.zip">https://dl.google.com/android/repository/android-ndk-r21-linux-x86_64.zip</a></li>
+</ul>
+</li>
+</ul>
+<p>For the full setup see <a href="android/setup-android-build-environment.html">Setup the Android Build Environment</a>.</p>
+<p>The versions are defined in the following files.
+All locations need to be updated on upgrades:</p>
+<ul>
+<li>Documentation
+<ul>
+<li>this file (<code>docs/dev/core/internal/sdk-ndk-versions.md</code>)</li>
+<li><code>dev/android/setup-android-build-environment.md</code></li>
+</ul>
+</li>
+<li>CI configuration
+<ul>
+<li><code>.circleci/config.yml</code>
+<ul>
+<li><code>sdkmanager 'build-tools;28.0.3'</code></li>
+<li><code>image: circleci/android:api-28-ndk</code></li>
+</ul>
+</li>
+<li><code>taskcluster/docker/linux/Dockerfile</code>.
+<ul>
+<li><code>ENV ANDROID_BUILD_TOOLS &quot;28.0.3&quot;</code></li>
+<li><code>ENV ANDROID_SDK_VERSION &quot;3859397&quot;</code></li>
+<li><code>ENV ANDROID_PLATFORM_VERSION &quot;28&quot;</code></li>
+<li><code>ENV ANDROID_NDK_VERSION &quot;r21&quot;</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/android/sdk-ndk-versions.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#working-on-unreleased-glean-code-in-android-components" id="working-on-unreleased-glean-code-in-android-components">Working on unreleased Glean code in android-components</a></h1>
+<p>This is a companion to the <a href="https://mozilla-mobile.github.io/android-components/contributing/testing-components-inside-app">equivalent instructions for the android-components repository</a>.</p>
+<p>Modern Gradle supports <a href="https://docs.gradle.org/current/userguide/composite_builds.html">composite builds</a>, which allows to substitute on-disk projects for binary publications.  Composite builds transparently accomplish what is usually a frustrating loop of:</p>
+<ol>
+<li>change library</li>
+<li>publish library snapshot to the local Maven repository</li>
+<li>consume library snapshot in application</li>
+</ol>
+<blockquote>
+<p><strong>Note</strong>: this substitution-based approach will not work for testing updates to the Glean Gradle Plugin.
+For that to work, the library and the plugin need to be published to a local maven and manually imported
+in the consuming projects.
+Please refer to <a href="android/./locally-published-components-in-fenix.html">Using locally-published Glean in Fenix</a> for
+how to do that.</p>
+</blockquote>
+<h2><a class="header" href="#preparation" id="preparation">Preparation</a></h2>
+<p>Clone the Glean SDK and android-components repositories:</p>
+<pre><code class="language-sh">git clone https://github.com/mozilla/glean
+git clone https://github.com/mozilla-mobile/android-components
+</code></pre>
+<h2><a class="header" href="#cargo-build-targets" id="cargo-build-targets">Cargo build targets</a></h2>
+<p>By default when building Android Components using gradle, the gradle-cargo plugin will compile Glean for every possible platform,
+which might end up in failures.
+You can customize which targets are built in <code>glean/local.properties</code>
+(<a href="https://github.com/ncalexan/rust-android-gradle/blob/HEAD/README.md#specifying-local-targets">more information</a>):</p>
+<pre><code># For physical devices:
+rust.targets=arm
+
+# For unit tests:
+# rust.targets=darwin # Or linux-*, windows-* (* = x86/x64)
+
+# For emulator only:
+rust.targets=x86
+</code></pre>
+<h2><a class="header" href="#substituting-projects" id="substituting-projects">Substituting projects</a></h2>
+<p>android-components has custom build logic for dealing with composite builds,
+so you should be able to configure it by simply adding the path to the Glean repository in the correct <code>local.properties</code> file:</p>
+<p>In <code>android-components/local.properties</code>:</p>
+<pre><code class="language-groovy">substitutions.glean.dir=../glean
+</code></pre>
+<p>If this doesn't seem to work, or if you need to configure composite builds for a project that does not contain this custom logic,
+add the following to <code>settings.gradle</code>:</p>
+<p>In <code>android-components/settings.gradle</code>:</p>
+<pre><code class="language-groovy">includeBuild('../glean') {
+  dependencySubstitution {
+    substitute module('org.mozilla.telemetry:glean') with project(':glean')
+    substitute module('org.mozilla.telemetry:glean-forUnitTests') with project(':glean')
+  }
+}
+</code></pre>
+<p>Composite builds will ensure the Glean SDK is build as part of tasks inside <code>android-components</code>.</p>
+<h2><a class="header" href="#caveat" id="caveat">Caveat</a></h2>
+<p>There's a big gotcha with library substitutions: the Gradle build computes lazily, and AARs don't include their transitive dependencies' JNI libraries.
+This means that in <code>android-components</code>, <code>./gradlew :service-glean:assembleDebug</code> <strong>does not</strong> invoke <code>:glean:cargoBuild</code>,
+even though <code>:service-glean</code> depends on the substitution for <code>:glean</code> and even if the inputs to Cargo have changed!
+It's the final consumer of the <code>:service-glean</code> project (or publication) that will incorporate the JNI libraries.</p>
+<p>In practice that means <em>you should always be targeting something that produces an APK</em>: a test or a sample module.
+Then you should find that the <code>cargoBuild</code> tasks are invoked as you expect.</p>
+<p>Inside the <code>android-components</code> repository <code>./gradlew :samples-glean:connectedAndroidTest</code> should work.
+Other tests like <code>:service-glean:testDebugUnitTest</code> or <code>:support-sync-telemetry:testDebugUnitTest</code> will currently fail, because the JNI libraries are not included.</p>
+<h2><a class="header" href="#notes" id="notes">Notes</a></h2>
+<p>This document is based on the equivalent documentation for application-services:
+<a href="https://github.com/mozilla/application-services/blob/HEAD/docs/howtos/working-with-reference-browser.md">Development with the Reference Browser</a></p>
+<ol>
+<li>Transitive substitutions (as shown above) work but require newer Gradle versions (4.10+).</li>
+</ol>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/android/development-with-android-components.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#using-locally-published-glean-in-fenix" id="using-locally-published-glean-in-fenix">Using locally-published Glean in Fenix</a></h1>
+<blockquote>
+<p>Note: This is a bit tedious, and you might like to try the substitution-based approach documented in
+<a href="android/./development-with-android-components.html">Working on unreleased Glean code in android-components</a>.
+That approach is still fairly new, and the local-publishing approach in this document is necessary if it fails.</p>
+</blockquote>
+<blockquote>
+<p>Note: This is Fenix-specific only in that some links on the page go to the <code>mozilla-mobile/fenix</code> repository,
+however these steps should work for e.g. <code>reference-browser</code>, as well.
+(Same goes for Lockwise, or any other consumer of Glean, but they may use a different structure -- Lockwise has no Dependencies.kt, for example)</p>
+</blockquote>
+<h2><a class="header" href="#preparation-1" id="preparation-1">Preparation</a></h2>
+<p>Clone the Glean SDK, android-components and Fenix repositories:</p>
+<pre><code class="language-sh">git clone https://github.com/mozilla/glean
+git clone https://github.com/mozilla-mobile/android-components
+git clone https://github.com/mozilla-mobile/fenix/
+</code></pre>
+<h2><a class="header" href="#local-publishing" id="local-publishing">Local publishing</a></h2>
+<ol>
+<li>
+<p>Inside the <code>glean</code> repository root:</p>
+<ol>
+<li>
+<p>In <a href="https://github.com/mozilla/glean/blob/main/.buildconfig.yml#L1"><code>.buildconfig.yml</code></a>, change
+<code>libraryVersion</code> to end in <code>-TESTING$N</code><sup class="footnote-reference"><a href="#1">1</a></sup>,
+where <code>$N</code> is some number that you haven't used for this before.</p>
+<p>Example: <code>libraryVersion: 22.0.0-TESTING1</code></p>
+</li>
+<li>
+<p>Check your <code>local.properties</code> file,
+and add <code>rust.targets=x86</code> if you're testing on the emulator,
+<code>rust.targets=arm</code> if you're testing on 32-bit arm (arm64 for 64-bit arm, etc).
+This will make the build that's done in the next step much faster.</p>
+</li>
+<li>
+<p>Run <code>./gradlew publishToMavenLocal</code>. This may take a few minutes.</p>
+</li>
+</ol>
+</li>
+<li>
+<p>Inside the <code>android-components</code> repository root:</p>
+<ol>
+<li>
+<p>In <a href="https://github.com/mozilla-mobile/android-components/blob/HEAD/.buildconfig.yml#L1"><code>.buildconfig.yml</code></a>, change
+<code>componentsVersion</code> to end in <code>-TESTING$N</code><sup class="footnote-reference"><a href="#1">1</a></sup>,
+where <code>$N</code> is some number that you haven't used for this before.</p>
+<p>Example: <code>componentsVersion: 24.0.0-TESTING1</code></p>
+</li>
+<li>
+<p>Inside <a href="https://github.com/mozilla-mobile/android-components/blob/50a2f28027f291bf1c6056d42b55e75ba3c050db/buildSrc/src/main/java/Dependencies.kt#L32"><code>buildSrc/src/main/java/Dependencies.kt</code></a>,
+change <code>mozilla_glean</code> to reference the <code>libraryVersion</code> you published in step 2 part 1.</p>
+<p>Example: <code>const val mozilla_glean = &quot;22.0.0-TESTING1&quot;</code></p>
+</li>
+<li>
+<p>Inside <a href="https://github.com/mozilla-mobile/android-components/blob/b98206cf8de818499bdc87c00de942a41f8aa2fb/build.gradle#L28"><code>build.gradle</code></a>, add
+<code>mavenLocal()</code> inside <code>allprojects { repositories { &lt;here&gt; } }</code>.</p>
+</li>
+<li>
+<p>Add the following block in the <a href="https://github.com/mozilla-mobile/android-components/blob/d67f83af679a2e847e5bd284ea4a30b412403241/settings.gradle#L7"><code>settings.gradle</code></a> file, before any other statement in the script, in order to have the Glean Gradle plugin loaded from the local Maven repository.</p>
+<pre><code>pluginManagement {
+  repositories {
+      mavenLocal()
+      gradlePluginPortal()
+  }
+}
+</code></pre>
+</li>
+<li>
+<p>Inside the android-component's <code>local.properties</code> file, ensure
+<code>substitutions.glean.dir</code> is <em>NOT</em> set.</p>
+</li>
+<li>
+<p>Run <code>./gradlew publishToMavenLocal</code>.</p>
+</li>
+</ol>
+</li>
+<li>
+<p>Inside the <code>fenix</code> repository root:</p>
+<ol>
+<li>
+<p>Inside <a href="https://github.com/mozilla-mobile/fenix/blob/c21b41c1b23e6e25e0b5a8392f0c6dcb5ad25473/build.gradle#L5"><code>build.gradle</code></a> you need to add <code>mavenLocal()</code> twice.<br />
+First add <code>mavenLocal()</code> inside <code>buildscript</code> like this:</p>
+<pre><code>buildscript {
+    repositories {
+        mavenLocal()
+        ...
+</code></pre>
+<p>Second add <code>mavenLocal()</code> inside <code>allprojects</code>:</p>
+<pre><code>allprojects {
+    repositories {
+        mavenLocal()
+        ...
+</code></pre>
+</li>
+<li>
+<p>Inside <a href="https://github.com/mozilla-mobile/fenix/blob/c21b41c1b23e6e25e0b5a8392f0c6dcb5ad25473/buildSrc/src/main/java/AndroidComponents.kt#L6"><code>buildSrc/src/main/java/AndroidComponents.kt</code></a>, change
+<code>VERSION</code> to the version you defined in step 3 part 1.</p>
+<p>Example:</p>
+<pre><code>const val VERSION = &quot;24.0.0-TESTING1&quot;
+</code></pre>
+</li>
+</ol>
+</li>
+</ol>
+<p>You should now be able to build and run Fenix (assuming you could before all this).</p>
+<h2><a class="header" href="#caveats" id="caveats">Caveats</a></h2>
+<ol>
+<li>This assumes you have followed the <a href="android/setup-android-build-environment.html">Android/Rust build setup</a></li>
+<li>Make sure you're fully up to date in all repositories, unless you know you need to not be.</li>
+<li>This omits the steps if changes needed because, e.g. Glean made a breaking change to an API used in android-components.
+These should be understandable to fix, you usually should be able to find a PR with the fixes somewhere in the android-component's list of pending PRs
+(or, failing that, a description of what to do in the Glean changelog).</li>
+<li>Ask in the <a href="https://chat.mozilla.org/#/room/#glean:mozilla.org">#glean channel on chat.mozilla.org</a>.</li>
+</ol>
+<h2><a class="header" href="#notes-1" id="notes-1">Notes</a></h2>
+<p>This document is based on the equivalent documentation for application-services:
+<a href="https://github.com/mozilla/application-services/blob/HEAD/docs/howtos/locally-published-components-in-fenix.md">Using locally-published components in Fenix</a></p>
+<hr />
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>It doesn't have to end with <code>-TESTING$N</code>, it only needs to have the format <code>-someidentifier</code>.
+<code>-SNAPSHOT$N</code> is also very common to use, however without the numeric suffix, this has specific meaning to gradle,
+so we avoid it.
+Additionally, while the <code>$N</code> we have used in our running example has matched
+(e.g. all of the identifiers ended in <code>-TESTING1</code>, this is not required, so long as you match everything up correctly at the end).</p>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/android/locally-published-components-in-fenix.md">Edit this file on GitHub.</a></footer></div>
+<h1><a class="header" href="#ios-bindings" id="ios-bindings">iOS bindings</a></h1>
+<p>The Glean SDK contains the Swift bindings for use by iOS applications.
+It makes use of the underlying <a href="ios/../core/index.html">Rust component</a> with a Swift-specific API on top.
+It also includes integrations into the iOS platform.</p>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/ios/index.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#setup-the-ios-build-environment" id="setup-the-ios-build-environment">Setup the iOS Build Environment</a></h1>
+<h2><a class="header" href="#prepare-your-build-environment-1" id="prepare-your-build-environment-1">Prepare your build environment</a></h2>
+<ol>
+<li>Install Xcode 12.4</li>
+<li>Install <a href="https://github.com/Carthage/Carthage">Carthage</a>: <code>brew install carthage</code></li>
+<li>Ensure you have Python 3 installed: <code>brew install python</code></li>
+<li>Install linting and formatting tools: <code>brew install swiftlint</code></li>
+<li>Run <code>bin/bootstrap.sh</code> to download dependencies.</li>
+<li>(Optional, only required for building on the CLI) Install <a href="https://github.com/xcpretty/xcpretty">xcpretty</a>: <code>gem install xcpretty</code></li>
+</ol>
+<h3><a class="header" href="#setting-up-rust-1" id="setting-up-rust-1">Setting up Rust</a></h3>
+<p>Rust can be installed using <code>rustup</code>, with the following commands:</p>
+<ul>
+<li><code>curl https://sh.rustup.rs -sSf | sh</code></li>
+<li><code>rustup update</code></li>
+</ul>
+<p>Platform specific toolchains need to be installed for Rust. This can be
+done using the <code>rustup target</code> command. In order to enable building to real
+devices and iOS emulators, the following targets need to be installed:</p>
+<pre><code>rustup target add aarch64-apple-ios x86_64-apple-ios
+</code></pre>
+<p>Install helper tools:</p>
+<pre><code>cargo install cargo-lipo
+</code></pre>
+<h2><a class="header" href="#building-1" id="building-1">Building</a></h2>
+<p>This should be relatively straightforward and painless:</p>
+<ol>
+<li>Ensure your repository is up-to-date.</li>
+<li>Ensure Rust is up-to-date by running <code>rustup update</code>.</li>
+<li>Run a build using the command <code>make build-swift</code>
+<ul>
+<li>To run tests use <code>make test-swift</code></li>
+</ul>
+</li>
+</ol>
+<p>The above can be skipped if using Xcode.
+The project directory can be imported and all the build details can be left to the IDE.</p>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/ios/setup-ios-build-environment.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#debug-an-ios-application-against-different-builds-of-glean" id="debug-an-ios-application-against-different-builds-of-glean">Debug an iOS application against different builds of Glean</a></h1>
+<p>At times it may be necessary to debug against a local build of Glean or another git fork or branch in order to test new features or specific versions of Glean.</p>
+<p>Since Glean is consumed through <a href="https://github.com/Carthage/Carthage">Carthage</a>, this can be as simple as modifying the Cartfile for the consuming application.</p>
+<h2><a class="header" href="#building-against-the-latest-glean" id="building-against-the-latest-glean">Building against the latest Glean</a></h2>
+<p>For consuming the latest version of Glean, the Cartfile contents would include the following line:</p>
+<pre><code>github &quot;mozilla/glean&quot; &quot;main&quot;
+</code></pre>
+<p>This will fetch and compile Glean from the <a href="https://github.com/mozilla/glean/">mozilla/glean GitHub</a> repository from the &quot;main&quot; branch.</p>
+<h2><a class="header" href="#building-against-a-specific-release-of-glean" id="building-against-a-specific-release-of-glean">Building against a specific release of Glean</a></h2>
+<p>For consuming a specific version of Glean, you can specify a branch name, tag name, or commit ID, like this:</p>
+<pre><code>github &quot;mozilla/glean&quot; &quot;v0.0.1&quot;
+</code></pre>
+<p>Where <code>v0.0.1</code> is a tagged release name, but could also be a branch name or a specific commit ID like <code>832b222</code></p>
+<p>If the custom Glean you wish to build from is a different fork on GitHub, you could simply modify the Cartfile to point at your fork like this:</p>
+<pre><code>github &quot;myGitHubHandle/glean&quot; &quot;myBranchName&quot;
+</code></pre>
+<p>Replace the <code>myGitHubHandle</code> and <code>myBranchName</code> with your GitHub handle and branch name, as appropriate.</p>
+<h2><a class="header" href="#build-from-a-locally-cloned-glean" id="build-from-a-locally-cloned-glean">Build from a locally cloned Glean</a></h2>
+<p>You can also use Carthage to build from a local clone by replacing the Cartfile line with the following:</p>
+<pre><code>git &quot;file:///Users/yourname/path/to/glean&quot; &quot;localBranchName&quot;
+</code></pre>
+<p>Notice that the initial Carthage command is <code>git</code> now instead of <code>github</code>, and we need to use a file URL of the path to the locally cloned Glean</p>
+<h2><a class="header" href="#perform-the-carthage-update" id="perform-the-carthage-update">Perform the Carthage update</a></h2>
+<p>One last thing not to forget is to run the <code>carthage update</code> command in the directory your Cartfile resides in order to fetch and build Glean.</p>
+<p>Once that is done, your local application should be building against the version of Glean that you specified in the Cartfile.</p>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/ios/debug-glean-on-ios.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#python-bindings" id="python-bindings">Python bindings</a></h1>
+<p>The Glean SDK contains Python bindings for use in Python applications and test frameworks.
+It makes use of the underlying <a href="python/../core/index.html">Rust component</a> with a Python-specific API on top.</p>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/python/index.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#setup-the-python-build-environment" id="setup-the-python-build-environment">Setup the Python Build Environment</a></h1>
+<p>This document describes how to set up an environment for the development of the Glean Python bindings.</p>
+<p>Instructions for installing a copy of the Glean Python bindings into your own environment for use in your project are described in <a href="python/../../user/adding-glean-to-your-project.html">adding Glean to your project</a>.</p>
+<h2><a class="header" href="#prerequisites" id="prerequisites">Prerequisites</a></h2>
+<p>Glean requires Python 3.6 or later.</p>
+<p>Make sure it is installed on your system and accessible on the <code>PATH</code> as <code>python3</code>.</p>
+<h3><a class="header" href="#setting-up-rust-2" id="setting-up-rust-2">Setting up Rust</a></h3>
+<p>If you've already set up Rust for building Glean for Android or iOS, you already have everything you need and can skip this section.</p>
+<p>Rust can be installed using <code>rustup</code>, with the following commands:</p>
+<ul>
+<li><code>curl https://sh.rustup.rs -sSf | sh</code></li>
+<li><code>rustup update</code></li>
+</ul>
+<h2><a class="header" href="#create-a-virtual-environment" id="create-a-virtual-environment">Create a virtual environment</a></h2>
+<p>It is recommended to do all Python development inside a virtual environment to make sure there are no interactions with other Python libraries installed on your system.</p>
+<p>You may want to manage your own virtual environment if, for example, you are developing a library that is using Glean and you want to install Glean into it.  If you are just developing Glean itself, however, Glean's <code>Makefile</code> will handle the creation and use of a virtual environment automatically (though the <code>Makefile</code> unfortunately does not work on Microsoft Windows).</p>
+<p>The instructions below all have both the manual instructions and the <code>Makefile</code> shortcuts.</p>
+<h3><a class="header" href="#manual-method" id="manual-method">Manual method</a></h3>
+<p>The following instructions use the basic <a href="https://docs.python.org/3/library/venv.html">virtual environment functionality that comes in the Python standard library</a>.
+Other higher level tools exist to manage virtual environments, such as <a href="https://pipenv.kennethreitz.org/en/latest/">pipenv</a> and <a href="https://docs.conda.io/en/latest/">conda</a>.
+These will work just as well, but are not documented here.
+Using an alternative tool would replace the instructions in this section only, but all other instructions below would remain the same.</p>
+<p>To create a virtual environment, enter the following command, replacing <code>&lt;venv&gt;</code> with the path to the virtual environment you want to create.  You will need to do this only once.</p>
+<pre><code class="language-bash">  $ python3 -m venv &lt;venv&gt;
+</code></pre>
+<p>Then activate the environment. You will need to do this for each new shell session when you want to develop Glean.
+The command to use depends on your shell environment.</p>
+<table><thead><tr><th>Platform</th><th>Shell</th><th>Command to activate virtual environment</th></tr></thead><tbody>
+<tr><td>POSIX</td><td>bash/zsh</td><td><code>source &lt;venv&gt;/bin/activate</code></td></tr>
+<tr><td></td><td>fish</td><td><code>. &lt;venv&gt;/bin/activate.fish</code></td></tr>
+<tr><td></td><td>csh/tcsh</td><td><code>source &lt;venv&gt;bin/activate.csh</code></td></tr>
+<tr><td></td><td>PowerShell Core</td><td><code>&lt;venv&gt;/bin/Activate.ps1</code></td></tr>
+<tr><td>Windows</td><td>cmd.exe</td><td><code>&lt;venv&gt;\Scripts\activate.bat</code></td></tr>
+<tr><td></td><td>PowerShell</td><td><code>&lt;venv&gt;\Scripts\Activate.ps1</code></td></tr>
+</tbody></table>
+<p>Lastly, install Glean's Python development dependencies into the virtual environment.</p>
+<pre><code class="language-bash">cd glean-core/python
+pip install -r requirements_dev.txt
+</code></pre>
+<h3><a class="header" href="#makefile-method" id="makefile-method">Makefile method</a></h3>
+<pre><code class="language-bash">  $ make python-setup
+</code></pre>
+<p>The default location of the virtual environment used by the make file is <code>glean-core/python/.venvX.Y</code>, where <code>X.Y</code> is the version of Python in use. This makes it possible to build and test for multiple versions of Python in the same checkout.</p>
+<blockquote>
+<p><em>Note:</em> If you wish to change the location of the virtual environment that the <code>Makefile</code> uses, pass the <code>GLEAN_PYENV</code> environment variable: <code>make python-setup GLEAN_PYENV=mypyenv</code>.</p>
+</blockquote>
+<p>By default, the <code>Makefile</code> installs the latest version available of each of Glean's dependencies.  If you wish to install the minimum required versions instead, (useful primarily to ensure that Glean doesn't unintentionally use newer APIs in its dependencies) pass the <code>GLEAN_PYDEPS=min</code> environment variable: <code>make python-setup GLEAN_PYDEPS=min</code>.</p>
+<h2><a class="header" href="#build-the-python-bindings" id="build-the-python-bindings">Build the Python bindings</a></h2>
+<h3><a class="header" href="#manual-method-1" id="manual-method-1">Manual method</a></h3>
+<p>Building the Python bindings also builds the Rust shared object for the Glean SDK core.</p>
+<pre><code class="language-bash">  $ cd glean-core/python
+  $ python setup.py build install
+</code></pre>
+<h3><a class="header" href="#makefile-method-1" id="makefile-method-1">Makefile method</a></h3>
+<p>This will implicitly setup the Python environment, rebuild the Rust core and then build the Python bindings.</p>
+<pre><code class="language-bash">  $ make build-python
+</code></pre>
+<h2><a class="header" href="#running-the-python-unit-tests" id="running-the-python-unit-tests">Running the Python unit tests</a></h2>
+<h3><a class="header" href="#manual-method-2" id="manual-method-2">Manual method</a></h3>
+<p>Make sure the Python bindings are built, then:</p>
+<pre><code class="language-bash">  $ cd glean-core/python
+  $ py.test
+</code></pre>
+<h3><a class="header" href="#makefile-method-2" id="makefile-method-2">Makefile method</a></h3>
+<p>The following will run the Python unit tests using <code>py.test</code>:</p>
+<pre><code class="language-bash">  $ make test-python
+</code></pre>
+<p>You can send extra parameters to the <code>py.test</code> command by setting the <code>PYTEST_ARGS</code> variable:</p>
+<pre><code class="language-bash">  $ make test-python PYTEST_ARGS=&quot;-s --pdb&quot;
+</code></pre>
+<h2><a class="header" href="#viewing-logging-output" id="viewing-logging-output">Viewing logging output</a></h2>
+<p>Log messages (whether originating in Python or Rust) are emitted using the Python standard library's <a href="https://docs.python.org/3/library/logging.html"><code>logging</code> module</a>.
+This module provides a lot of possibilities for customization, but the easiest way to control the log level globally is with <a href="https://docs.python.org/3/library/logging.html#logging.basicConfig"><code>logging.basicConfig</code></a>:</p>
+<pre><code class="language-python">import logging
+logging.basicConfig(level=logging.DEBUG)
+</code></pre>
+<h2><a class="header" href="#linting-formatting-and-type-checking" id="linting-formatting-and-type-checking">Linting, formatting and type checking</a></h2>
+<p>The Glean Python bindings use the following tools:</p>
+<ul>
+<li>Linting: <a href="http://flake8.pycqa.org/en/latest/">flake8</a></li>
+<li>Formatting: <a href="https://black.readthedocs.io/en/stable/">black</a></li>
+<li>Type-checking: <a href="http://mypy-lang.org/">mypy</a></li>
+</ul>
+<h3><a class="header" href="#manual-method-3" id="manual-method-3">Manual method</a></h3>
+<pre><code class="language-bash">  $ cd glean-core/python
+  $ flake8 glean tests
+  $ black glean tests
+  $ mypy glean
+</code></pre>
+<h3><a class="header" href="#makefile-method-3" id="makefile-method-3">Makefile method</a></h3>
+<p>To just check the lints:</p>
+<pre><code class="language-bash">  $ make pythonlint
+</code></pre>
+<p>To reformat the Python files in-place:</p>
+<pre><code class="language-bash">  $ make pythonfmt
+</code></pre>
+<h2><a class="header" href="#building-the-python-api-docs" id="building-the-python-api-docs">Building the Python API docs</a></h2>
+<p>The Python API docs are built using <a href="https://pdoc3.github.io/pdoc/">pdoc3</a>.</p>
+<h3><a class="header" href="#manual-method-4" id="manual-method-4">Manual method</a></h3>
+<pre><code class="language-bash">  $ python -m pdoc --html glean --force -o build/docs/python
+</code></pre>
+<h3><a class="header" href="#makefile-method-4" id="makefile-method-4">Makefile method</a></h3>
+<pre><code class="language-bash">  $ make python-docs
+</code></pre>
+<h2><a class="header" href="#building-wheels-for-linux" id="building-wheels-for-linux">Building wheels for Linux</a></h2>
+<p>Building on Linux using the above instructions will create Linux binaries that dynamically link against the version of <code>libc</code> installed on your machine. 
+This generally will not be portable to other Linux distributions, and PyPI will not even allow it to be uploaded.
+In order to create wheels that can be installed on the broadest range of Linux distributions, the Python Packaging Authority's <a href="https://github.com/pypa/manylinux">manylinux</a> project maintains a Docker image for building compatible Linux wheels.</p>
+<p>The CircleCI configuration handles making these wheels from tagged releases.
+If you need to reproduce this locally, see the CircleCI job <code>pypi-linux-release</code> for an example of how this Docker image is used in practice.</p>
+<h2><a class="header" href="#building-wheels-for-windows" id="building-wheels-for-windows">Building wheels for Windows</a></h2>
+<p>The official wheels for Windows are produced on a Linux virtual machine using the Mingw toolchain.</p>
+<p>The CircleCI configuration handles making these wheels from tagged releases.
+If you need to reproduce this locally, see the CircleCI job <code>pypi-windows-release</code> for an example of how this is done in practice.</p>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/python/setting-up-python-build-environment.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#rust-component" id="rust-component">Rust component</a></h1>
+<p>The majority of the Glean SDK is implemented as a Rust component, to be usable across all platforms.</p>
+<p>This includes:</p>
+<ul>
+<li>Implementations of all metric types</li>
+<li>A storage layer</li>
+<li>A ping serializer</li>
+</ul>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/core/index.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#rust-documentation-guidelines" id="rust-documentation-guidelines">Rust documentation guidelines</a></h1>
+<p>The documentation for the Glean SDK Rust crates is automatically generated by the <a href="https://doc.rust-lang.org/rustdoc/what-is-rustdoc.html"><code>rustdoc</code></a> tool. That means the documentation for our Rust code is written as doc comments throughout the code.</p>
+<p>Here we outline some guidelines to be followed when writing these doc comments.</p>
+<h2><a class="header" href="#module-level-documentation" id="module-level-documentation">Module level documentation</a></h2>
+<p>Every module's index file must have a <a href="https://doc.rust-lang.org/book/ch14-02-publishing-to-crates-io.html#commenting-contained-items">module level doc comment</a>.</p>
+<p>The module level documentation must start with a one-liner summary of the purpose of the module,
+the rest of the text is free form and optional.</p>
+<h2><a class="header" href="#function-and-constants-level-documentation" id="function-and-constants-level-documentation">Function and constants level documentation</a></h2>
+<p>Every public function / constant must have a dedicated <a href="https://doc.rust-lang.org/book/ch14-02-publishing-to-crates-io.html#making-useful-documentation-comments">doc comment</a>.</p>
+<p>Non public functions / constants are not required to, but may have doc comments. These comments should follow
+the same structure as public functions.</p>
+<blockquote>
+<p><strong>Note</strong> Private functions are not added to the generated documentation by default, but may be by using the <a href="https://doc.rust-lang.org/cargo/commands/cargo-doc.html"><code>--document-private-items</code></a> option.</p>
+</blockquote>
+<h3><a class="header" href="#structure" id="structure">Structure</a></h3>
+<p>Below is an example of the structure of a doc comment in one of the Glean SDK's public functions.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>/// Collects and submits a ping for eventual uploading.
+///
+/// The ping content is assembled as soon as possible, but upload is not
+/// guaranteed to happen immediately, as that depends on the upload policies.
+///
+/// If the ping currently contains no content, it will not be sent,
+/// unless it is configured to be sent if empty.
+///
+/// # Arguments
+///
+/// * `ping` - The ping to submit
+/// * `reason` - A reason code to include in the ping
+///
+/// # Returns
+///
+/// Whether the ping was succesfully assembled and queued.
+///
+/// # Errors
+///
+/// If collecting or writing the ping to disk failed.
+pub fn submit_ping(&amp;self, ping: &amp;PingType, reason: Option&lt;&amp;str&gt;) -&gt; Result&lt;bool&gt; {
+    ...
+}
+<span class="boring">}
+</span></code></pre></pre>
+<h4><a class="header" href="#every-doc-comment-must-start-with-a-one-liner-summary-of-what-that-function-is-about" id="every-doc-comment-must-start-with-a-one-liner-summary-of-what-that-function-is-about">Every doc comment must start with a one-liner summary of what that function is about</a></h4>
+<p>The text of this section should always be in the third person and describe an action.</p>
+<p>If any additional information is necessary, that can be added following a new line after the summary.</p>
+<h4><a class="header" href="#depending-on-the-signature-and-behavior-of-the-function-additional-sections-can-be-added-to-its-doc-comment" id="depending-on-the-signature-and-behavior-of-the-function-additional-sections-can-be-added-to-its-doc-comment">Depending on the signature and behavior of the function, additional sections can be added to its doc comment</a></h4>
+<p>These sections are:</p>
+<ol>
+<li><code># Arguments</code> - A list of the functions arguments and a short description of what they are. Note that there is no need to point out the type of the given argument on the doc comment since it is already outlined in the code.</li>
+<li><code># Returns</code> - A short summary of what this function returns. Note that there is no need to start this summary with &quot;Returns...&quot; since that is already the title of the section.</li>
+<li><code># Errors</code> - The possible paths that will or won't lead this function to return an error. It is at the discretion of the programmer to decide which cases are worth pointing out here.</li>
+<li><code># Panics</code> - The possible paths that will or won't lead this function to <code>panic!</code>. It is at the discretion of the programmer to decide which cases are worth pointing out here.</li>
+<li><code># Safety</code> - In case there are any safety concerns or guarantees, this is the section to point them out. It is at the discretion of the programmer to decide which cases are worth pointing out here.</li>
+<li><code># Examples</code> - If necessary, this section holds examples of usage of the function.</li>
+</ol>
+<p>These sections should only be added to a doc comment when necessary, e.g. we only add an <code># Arguments</code> section when a function has arguments.</p>
+<blockquote>
+<p><strong>Note</strong> The titles of these sections must be level-1 headers. Additional sections not listed here can be level-2 or below.</p>
+</blockquote>
+<h3><a class="header" href="#link-to-all-the-things" id="link-to-all-the-things">Link to all the things</a></h3>
+<p>If the doc comment refers to some external structure, either from the Glean SDK's code base or external, make sure to link to it.</p>
+<p>Example:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>/// Gets a [`PingType`] by name.
+///
+/// # Returns
+///
+/// The [`PingType`] of a ping if the given name was registered before, `None` otherwise.
+///
+/// [`PingType`]: metrics/struct.PingType.html
+pub fn get_ping_by_name(&amp;self, ping_name: &amp;str) -&gt; Option&lt;&amp;PingType&gt; {
+    ...
+}
+<span class="boring">}
+</span></code></pre></pre>
+<blockquote>
+<p><strong>Note</strong> To avoid polluting the text with multiple links, prefer using <a href="https://spec.commonmark.org/0.27/#reference-link">reference links</a> which allow for adding the actual links at the end of the text block.</p>
+</blockquote>
+<h3><a class="header" href="#warnings" id="warnings">Warnings</a></h3>
+<p>Important warnings about a function should be added, when necessary, before the one-liner summary in bold text.</p>
+<p>Example:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>/// **Test-only API (exported for FFI purposes).**
+///
+/// Deletes all stored metrics.
+///
+/// Note that this also includes the ping sequence numbers, so it has
+/// the effect of resetting those to their initial values.
+pub fn test_clear_all_stores(&amp;self) {
+    ...
+}
+<span class="boring">}
+</span></code></pre></pre>
+<h3><a class="header" href="#semantic-line-breaks" id="semantic-line-breaks">Semantic line breaks</a></h3>
+<p>Prefer using <a href="https://sembr.org/">semantic line breaks</a> when breaking lines in any doc or non-doc comment.</p>
+<h2><a class="header" href="#references" id="references">References</a></h2>
+<p>These guidelines are largely based on the Rust API documentation guidelines.</p>
+<ul>
+<li><a href="https://github.com/rust-lang/rfcs/blob/master/text/1574-more-api-documentation-conventions.md">RFC 1574 - More API Documentation Conventions</a></li>
+<li><a href="https://rust-lang.github.io/api-guidelines/documentation.html">Rust API Guidelines</a></li>
+</ul>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/core/documentation-guidelines.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#dependency-management-guidelines" id="dependency-management-guidelines">Dependency Management Guidelines</a></h1>
+<p>This repository uses third-party code from a variety of sources, so we need to be mindful
+of how these dependencies will affect our consumers.  Considerations include:</p>
+<ul>
+<li>General code quality.</li>
+<li><a href="https://www.mozilla.org/en-US/MPL/license-policy/#Licenses_Compatible_with_the_MPL">Licensing compatibility</a>.</li>
+<li>Handling of security vulnerabilities.</li>
+<li>The potential for <a href="https://medium.com/intrinsic/compromised-npm-package-event-stream-d47d08605502">supply-chain compromise</a>.</li>
+</ul>
+<p>We're still evolving our policies in this area, but these are the
+guidelines we've developed so far.</p>
+<h2><a class="header" href="#rust-code" id="rust-code">Rust Code</a></h2>
+<p>Unlike <a href="https://firefox-source-docs.mozilla.org/build/buildsystem/rust.html">Firefox</a>,
+we do not vendor third-party source code directly into the repository.  Instead we rely on
+<code>Cargo.lock</code> and its hash validation to ensure that each build uses an identical copy
+of all third-party crates.  These are the measures we use for ongoing maintenance of our
+existing dependencies:</p>
+<ul>
+<li>Check <code>Cargo.lock</code> into the repository.</li>
+<li>Generate built artifacts using the <code>--locked</code> flag to <code>cargo build</code>, as an additional
+assurance that the existing <code>Cargo.lock</code> will be respected.</li>
+<li>Use <a href="https://github.com/EmbarkStudios/cargo-deny">cargo-deny</a> for a basic license-compatibility
+check as part of CI, to guard against human error.</li>
+</ul>
+<p>Adding a new dependency, whether we like it or not, is a big deal - that dependency and everything
+it brings with it will become part of Firefox-branded products that we ship to end users.
+We try to balance this responsibility against the many benefits of using existing code, as follows:</p>
+<ul>
+<li>In general, be conservative in adding new third-party dependencies.
+<ul>
+<li>For trivial functionality, consider just writing it yourself.
+Remember the cautionary tale of <a href="https://www.theregister.co.uk/2016/03/23/npm_left_pad_chaos/">left-pad</a>.</li>
+<li>Check if we already have a crate in our dependency tree that can provide the needed functionality.</li>
+</ul>
+</li>
+<li>Prefer crates that have a a high level of due-diligence already applied, such as:
+<ul>
+<li>Crates that are <a href="https://dxr.mozilla.org/mozilla-central/source/third_party/rust">already vendored into Firefox</a>.</li>
+<li>Crates from <a href="https://github.com/rust-lang-nursery">rust-lang-nursery</a> or <a href="https://github.com/rust-lang">rust-lang</a>.</li>
+<li>Crates that appear to be widely used in the Rust community.</li>
+</ul>
+</li>
+<li>Check that it is clearly licensed and is <a href="https://www.mozilla.org/en-US/MPL/license-policy/#Licenses_Compatible_with_the_MPL">MPL-2.0 compatible</a>.</li>
+<li>Take the time to investigate the crate's source and ensure it is suitably high-quality.
+<ul>
+<li>Be especially wary of uses of <code>unsafe</code>, or of code that is unusually resource-intensive to build.</li>
+<li>Development dependencies do not require as much scrutiny as dependencies that will ship in consuming applications,
+but should still be given some thought.
+<ul>
+<li>There is still the potential for supply-chain compromise with development dependencies!</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Explicitly describe your consideration of these points in the PR that introduces the new dependency.</li>
+</ul>
+<p>Updating to new versions of existing dependencies is a normal part of software development
+and is not accompanied by any particular ceremony.</p>
+<h3><a class="header" href="#dependency-updates" id="dependency-updates">Dependency updates</a></h3>
+<p>We use <a href="https://dependabot.com/">Dependabot</a> to automatically open pull requests when dependencies release a new version.
+All CI tasks run on those pull requests to ensure updates don't break anything.</p>
+<p>As <code>glean-core</code> is now also vendored into mozilla-central, including all of its Rust dependencies, we need to be a bit careful about these updates.
+Landing upgrades of the Glean SDK itself in mozilla-central is a separate process.
+See <a href="https://firefox-source-docs.mozilla.org/toolkit/components/glean/updating_sdk.html">Updating the Glean SDK</a> in the Firefox Source Docs.
+Following are some guidelines to ensure compatibility with mozilla-central:</p>
+<ul>
+<li>Patch releases of dependencies should be fine in most cases.</li>
+<li>Minor releases should be compatible. Best to check the changelog of the updated dependency to make sure. These updates should only land in <code>Cargo.lock</code>. No updates in <code>Cargo.toml</code> are necessary</li>
+<li>Major releases will always need a check against mozilla-central. See <a href="https://firefox-source-docs.mozilla.org/toolkit/components/glean/updating_sdk.html">Updating the Glean SDK</a>.</li>
+</ul>
+<p>In case of uncertainty defer a decision to :janerik or :chutten.</p>
+<h4><a class="header" href="#manual-dependency-updates" id="manual-dependency-updates">Manual dependency updates</a></h4>
+<p>You can manually check for outdated dependencies using <a href="https://crates.io/crates/cargo-outdated">cargo-outdated</a>.
+Individual crate updates for version compatible with the requirement in <code>Cargo.toml</code> can be done using:</p>
+<pre><code>cargo update -p $cratename
+</code></pre>
+<p>To update all transitive dependencies to the latest semver-compatible version use:</p>
+<pre><code>cargo update
+</code></pre>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/core/dependency-management.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#adding-a-new-metric-type" id="adding-a-new-metric-type">Adding a new metric type</a></h1>
+<p>Data in the Glean SDK is stored in so-called metrics.
+You can find the full list of implemented metric types <a href="core/../../user/metrics/index.html">in the user overview</a>.</p>
+<p>Adding a new metric type involves defining the metric type's API, its persisted and in-memory storage as well as its serialization into the ping payload.</p>
+<h2><a class="header" href="#the-metric-types-api" id="the-metric-types-api">The metric type's API</a></h2>
+<p>A metric type implementation is defined in its own file under <code>glean-core/src/metrics/</code>, e.g. <code>glean-core/src/metrics/counter.rs</code> for a <a href="core/../../user/metrics/counter.html">Counter</a>.</p>
+<p>Start by defining a structure to hold the metric's metadata:</p>
+<pre><code class="language-rust noplaypen">#[derive(Clone, Debug)]
+pub struct CounterMetric {
+    meta: CommonMetricData
+}
+</code></pre>
+<p>Implement the <code>MetricType</code> trait to create a metric from the meta data as well as expose the meta data.
+This also gives you a <code>should_record</code> method on the metric type.</p>
+<pre><code class="language-rust noplaypen">impl MetricType for CounterMetric {
+    fn meta(&amp;self) -&gt; &amp;CommonMetricData {
+        &amp;self.meta
+    }
+
+    fn meta_mut(&amp;mut self) -&gt; &amp;mut CommonMetricData {
+        &amp;mut self.meta
+    }
+}
+</code></pre>
+<p>Its implementation should have a way to create a new metric from the common metric data. It should be the same for all metric types.</p>
+<pre><code class="language-rust noplaypen">impl CounterMetric {
+    pub fn new(meta: CommonMetricData) -&gt; Self {
+        Self { meta }
+    }
+}
+</code></pre>
+<p>Implement each method for the type. The first argument to accept should always be <code>glean: &amp;Glean</code>, that is: a reference to the <code>Glean</code> object, used to access the storage:</p>
+<pre><code class="language-rust noplaypen">impl CounterMetric { // same block as above
+    pub fn add(&amp;self, glean: &amp;Glean, amount: i32) {
+        // Always include this check!
+        if !self.should_record() {
+            return;
+        }
+
+        // Do error handling here
+
+        glean
+            .storage()
+            .record_with(&amp;self.meta, |old_value| match old_value {
+                Some(Metric::Counter(old_value)) =&gt; Metric::Counter(old_value + amount),
+                _ =&gt; Metric::Counter(amount),
+            })
+    }
+}
+</code></pre>
+<p>Use <code>glean.storage().record()</code> to record a fixed value or <code>glean.storage.record_with()</code> to construct a new value from the currently stored one.</p>
+<p>The storage operation makes use of the metric's variant of the <code>Metric</code> enumeration.</p>
+<h2><a class="header" href="#the-metric-enumeration" id="the-metric-enumeration">The <code>Metric</code> enumeration</a></h2>
+<p>Persistence and in-memory serialization as well as ping payload serialization are handled through the <code>Metric</code> enumeration.
+This is defined in <code>glean-core/src/metrics/mod.rs</code>.
+Variants of this enumeration are used in the storage implementation of the metric type.</p>
+<p>To add a new metric type, include the metric module and declare its use, then add a new variant to the <code>Metric</code> enum:</p>
+<pre><code class="language-rust noplaypen">
+mod counter;
+
+// ...
+
+pub use self::counter::CounterMetric;
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub enum Metric {
+    // ...
+    Counter(i32),
+}
+</code></pre>
+<p>Then modify the below implementation and define the right ping section name for the new type. This will be used in the ping payload:</p>
+<pre><code class="language-rust noplaypen">impl Metric {
+    pub fn ping_section(&amp;self) -&gt; &amp;'static str {
+        match self {
+            // ...
+            Metric::Counter(_) =&gt; &quot;counter&quot;,
+        }
+    }
+}
+</code></pre>
+<p>Finally, define the ping payload serialization (as JSON).
+In the simple cases where the in-memory representation maps to its JSON representation it is enough to call the <code>json!</code> macro.</p>
+<pre><code class="language-rust noplaypen">impl Metric { // same block as above
+    pub fn as_json(&amp;self) -&gt; JsonValue {
+        match self {
+            // ...
+            Metric::Counter(c) =&gt; json!(c),
+        }
+    }
+}
+</code></pre>
+<p>For more complex serialization consider implementing serialization logic as a function returning a <a href="https://docs.rs/serde_json/*/serde_json/enum.Value.html"><code>serde_json::Value</code></a>
+or another object that can be serialized.</p>
+<p>For example, the <code>DateTime</code> serializer has the following entry, where <code>get_iso_time_string</code> is a function to convert from the <code>DateTime</code> metric representation to a string:</p>
+<pre><code class="language-rust noplaypen">Metric::Datetime(d, time_unit) =&gt; json!(get_iso_time_string(*d, *time_unit)),
+</code></pre>
+<hr />
+<p>In the next step we will create the FFI wrapper and platform-specific wrappers.</p>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/core/new-metric-type.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#adding-a-new-metric-type---ffi-layer" id="adding-a-new-metric-type---ffi-layer">Adding a new metric type - FFI layer</a></h1>
+<p>In order to use a new metric type over the FFI layer, it needs implementations in the FFI component.</p>
+<h2><a class="header" href="#ffi-component" id="ffi-component">FFI component</a></h2>
+<p>The FFI component implementation can be found in <code>glean-core/ffi/src</code>.
+Each metric type is implemented in its own module.</p>
+<p>Add a new file named after your metric, e.g. <code>glean-core/ffi/src/counter.rs</code>, and declare it in <code>glean-core/ffi/src/lib.rs</code> with <code>mod counter;</code>.</p>
+<p>In the metric type module define your metric type using the <code>define_metric</code> macro.
+This allows referencing the metric name and defines the global map as well as some common functions such as the constructor and destructor.
+Simple operations can be also defined in the same macro invocation:</p>
+<pre><code class="language-rust noplaypen">use crate::{define_metric, handlemap_ext::HandleMapExtension, GLEAN};
+
+define_metric!(CounterMetric =&gt; COUNTER_METRICS {
+    new           -&gt; glean_new_counter_metric(),
+    destroy       -&gt; glean_destroy_counter_metric,
+
+    add -&gt; glean_counter_add(amount: i32),
+});
+</code></pre>
+<p>More complex operations need to be defined as plain functions.
+For example the test helper function for a counter metric can be defined as:</p>
+<pre><code class="language-rust noplaypen">#[no_mangle]
+pub extern &quot;C&quot; fn glean_counter_test_has_value(
+    glean_handle: u64,
+    metric_id: u64,
+    storage_name: FfiStr,
+) -&gt; u8 {
+    GLEAN.call_infallible(glean_handle, |glean| {
+        COUNTER_METRICS.call_infallible(metric_id, |metric| {
+            metric
+                .test_get_value(glean, storage_name.as_str())
+                .is_some()
+        })
+    })
+}
+</code></pre>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/core/new-metric-type/ffi.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#adding-a-new-metric-type---kotlin" id="adding-a-new-metric-type---kotlin">Adding a new metric type - Kotlin</a></h1>
+<h2><a class="header" href="#ffi" id="ffi">FFI</a></h2>
+<p>The platform-specific FFI wrapper needs the definitions of these new functions.
+For Kotlin this is in <code>glean-core/android/src/main/java/mozilla/telemetry/glean/rust/LibGleanFFI.kt</code>:</p>
+<pre><code class="language-kotlin">fun glean_new_counter_metric(category: String, name: String, send_in_pings: StringArray, send_in_pings_len: Int, lifetime: Int, disabled: Byte): Long
+fun glean_destroy_counter_metric(handle: Long)
+fun glean_counter_add(glean_handle: Long, metric_id: Long, amount: Int)
+</code></pre>
+<h2><a class="header" href="#kotlin-api" id="kotlin-api">Kotlin API</a></h2>
+<p>Finally, create a platform-specific metric type wrapper.
+For Kotlin this would be <code>glean-core/android/src/main/java/mozilla/telemetry/glean/private/CounterMetricType.kt</code>:</p>
+<pre><code class="language-kotlin">class CounterMetricType(
+    private var handle: Long,
+    private val disabled: Boolean,
+    private val sendInPings: List&lt;String&gt;
+) {
+    /**
+     * The public constructor used by automatically generated metrics.
+     */
+    constructor(
+        disabled: Boolean,
+        category: String,
+        lifetime: Lifetime,
+        name: String,
+        sendInPings: List&lt;String&gt;
+    ) : this(handle = 0, disabled = disabled, sendInPings = sendInPings) {
+        val ffiPingsList = StringArray(sendInPings.toTypedArray(), &quot;utf-8&quot;)
+        this.handle = LibGleanFFI.INSTANCE.glean_new_counter_metric(
+                category = category,
+                name = name,
+                send_in_pings = ffiPingsList,
+                send_in_pings_len = sendInPings.size,
+                lifetime = lifetime.ordinal,
+                disabled = disabled.toByte())
+    }
+
+    fun add(amount: Int = 1) {
+        if (disabled) {
+            return
+        }
+
+        @Suppress(&quot;EXPERIMENTAL_API_USAGE&quot;)
+        Dispatchers.API.launch {
+            LibGleanFFI.INSTANCE.glean_counter_add(
+                Glean.handle,
+                this@CounterMetricType.handle,
+                amount)
+        }
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    fun testHasValue(pingName: String = sendInPings.first()): Boolean {
+        @Suppress(&quot;EXPERIMENTAL_API_USAGE&quot;)
+        Dispatchers.API.assertInTestingMode()
+
+        val res = LibGleanFFI.INSTANCE.glean_counter_test_has_value(Glean.handle, this.handle, pingName)
+        return res.toBoolean()
+    }
+}
+</code></pre>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/core/new-metric-type/kotlin.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#adding-a-new-metric-type---swift" id="adding-a-new-metric-type---swift">Adding a new metric type - Swift</a></h1>
+<h2><a class="header" href="#ffi-1" id="ffi-1">FFI</a></h2>
+<p>Swift can re-use the generated C header file.
+Re-generate it with</p>
+<pre><code class="language-sh">make cbindgen
+</code></pre>
+<h2><a class="header" href="#swift-api" id="swift-api">Swift API</a></h2>
+<p>Finally, create a platform-specific metric type wrapper.
+For Swift this would be <code>glean-core/ios/Glean/Metrics/CounterMetric.swift</code>:</p>
+<pre><code class="language-swift">public class CounterMetricType {
+    let handle: UInt64
+    let disabled: Bool
+    let sendInPings: [String]
+
+    /// The public constructor used by automatically generated metrics.
+    public init(category: String, name: String, sendInPings: [String], lifetime: Lifetime, disabled: Bool) {
+        self.disabled = disabled
+        self.sendInPings = sendInPings
+        self.handle = withArrayOfCStrings(sendInPings) { pingArray in
+            glean_new_counter_metric(
+                category,
+                name,
+                pingArray,
+                Int32(sendInPings.count),
+                lifetime.rawValue,
+                disabled.toByte()
+            )
+        }
+    }
+
+    public func add(amount: Int32 = 1) {
+        guard !self.disabled else { return }
+
+        _ = Dispatchers.shared.launch {
+            glean_counter_add(Glean.shared.handle, self.handle, amount)
+        }
+    }
+
+    func testHasValue(_ pingName: String? = nil) -&gt; Bool {
+        let pingName = pingName ?? self.sendInPings[0]
+        return glean_counter_test_has_value(Glean.shared.handle, self.handle, pingName) != 0
+    }
+
+    func testGetValue(_ pingName: String? = nil) throws -&gt; Int32 {
+        let pingName = pingName ?? self.sendInPings[0]
+
+        if !testHasValue(pingName) {
+            throw &quot;Missing value&quot;
+        }
+
+        return glean_counter_test_get_value(Glean.shared.handle, self.handle, pingName)
+    }
+}
+</code></pre>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/core/new-metric-type/swift.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#adding-a-new-metric-type---python" id="adding-a-new-metric-type---python">Adding a new metric type - Python</a></h1>
+<h2><a class="header" href="#ffi-2" id="ffi-2">FFI</a></h2>
+<p>Python can use the generated C header file directly, through <a href="https://cffi.readthedocs.io/"><code>cffi</code></a>.
+Re-generate it with</p>
+<pre><code class="language-sh">make cbindgen
+</code></pre>
+<h2><a class="header" href="#python-api" id="python-api">Python API</a></h2>
+<p>Finally, create a platform-specific metric type wrapper.
+For Python this would be <code>glean-core/python/glean/metrics/counter.py</code>:</p>
+<pre><code class="language-python">class CounterMetricType:
+    &quot;&quot;&quot;
+    This implements the developer facing API for recording counter metrics.
+
+    Instances of this class type are automatically generated by
+    `glean.load_metrics`, allowing developers to record values that were
+    previously registered in the metrics.yaml file.
+
+    The counter API only exposes the `CounterMetricType.add` method, which
+    takes care of validating the input data and making sure that limits are
+    enforced.
+    &quot;&quot;&quot;
+
+    def __init__(
+        self,
+        disabled: bool,
+        category: str,
+        lifetime: Lifetime,
+        name: str,
+        send_in_pings: List[str],
+    ):
+        self._disabled = disabled
+        self._send_in_pings = send_in_pings
+
+        self._handle = _ffi.lib.glean_new_counter_metric(
+            _ffi.ffi_encode_string(category),
+            _ffi.ffi_encode_string(name),
+            _ffi.ffi_encode_vec_string(send_in_pings),
+            len(send_in_pings),
+            lifetime.value,
+            disabled,
+        )
+
+    def __del__(self):
+        if getattr(self, &quot;_handle&quot;, 0) != 0:
+            _ffi.lib.glean_destroy_counter_metric(self._handle)
+
+    def add(self, amount: int = 1):
+        &quot;&quot;&quot;
+        Add to counter value.
+
+        Args:
+            amount (int): (default: 1) This is the amount to increment the
+                counter by.
+        &quot;&quot;&quot;
+        if self._disabled:
+            return
+
+        @Dispatcher.launch
+        def add():
+            _ffi.lib.glean_counter_add(self._handle, amount)
+
+    def test_has_value(self, ping_name: Optional[str] = None) -&gt; bool:
+        &quot;&quot;&quot;
+        Tests whether a value is stored for the metric for testing purposes
+        only.
+
+        Args:
+            ping_name (str): (default: first value in send_in_pings) The name
+                of the ping to retrieve the metric for.
+
+        Returns:
+            has_value (bool): True if the metric value exists.
+        &quot;&quot;&quot;
+        if ping_name is None:
+            ping_name = self._send_in_pings[0]
+
+        return bool(
+            _ffi.lib.glean_counter_test_has_value(
+                self._handle, _ffi.ffi_encode_string(ping_name)
+            )
+        )
+
+    def test_get_value(self, ping_name: Optional[str] = None) -&gt; int:
+        &quot;&quot;&quot;
+        Returns the stored value for testing purposes only.
+
+        Args:
+            ping_name (str): (default: first value in send_in_pings) The name
+                of the ping to retrieve the metric for.
+
+        Returns:
+            value (int): value of the stored metric.
+        &quot;&quot;&quot;
+        if ping_name is None:
+            ping_name = self._send_in_pings[0]
+
+        if not self.test_has_value(ping_name):
+            raise ValueError(&quot;metric has no value&quot;)
+
+        return _ffi.lib.glean_counter_test_get_value(
+            self._handle, _ffi.ffi_encode_string(ping_name)
+        )
+
+    def test_get_num_recorded_errors(
+        self, error_type: ErrorType, ping_name: Optional[str] = None
+    ) -&gt; int:
+        &quot;&quot;&quot;
+        Returns the number of errors recorded for the given metric.
+
+        Args:
+            error_type (ErrorType): The type of error recorded.
+            ping_name (str): (default: first value in send_in_pings) The name
+                of the ping to retrieve the metric for.
+
+        Returns:
+            num_errors (int): The number of errors recorded for the metric for
+                the given error type.
+        &quot;&quot;&quot;
+        if ping_name is None:
+            ping_name = self._send_in_pings[0]
+
+        return _ffi.lib.glean_counter_test_get_num_recorded_errors(
+            self._handle, error_type.value, _ffi.ffi_encode_string(ping_name),
+        )
+</code></pre>
+<p>The new metric type also needs to be imported from <code>glean-core/python/glean/metrics/__init__.py</code>:</p>
+<pre><code class="language-python">from .counter import CounterMetricType
+
+
+__all__ = [
+    &quot;CounterMetricType&quot;,
+    # ...
+]
+</code></pre>
+<p>It also must be added to the <code>_TYPE_MAPPING</code> in <code>glean-core/python/glean/_loader.py</code>:</p>
+<pre><code class="language-python">_TYPE_MAPPING = {
+    &quot;counter&quot;: metrics.CounterMetricType,
+    # ...
+}
+</code></pre>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/core/new-metric-type/python.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#ffi-layer" id="ffi-layer">FFI layer</a></h1>
+<p>The core part of the Glean SDK provides an FFI layer for its API.
+This FFI layer can be consumed by platform-specific bindings, such as the <a href="ffi/../android/index.html">Kotlin bindings for Android</a>.</p>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/ffi/index.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#when-to-use-what-method-of-passing-data-between-rust-and-javaswift" id="when-to-use-what-method-of-passing-data-between-rust-and-javaswift">When to use what method of passing data between Rust and Java/Swift</a></h1>
+<p>There are a bunch of options here. For the purposes of our discussion,
+there are two kinds of values you may want to pass over the FFI.</p>
+<ol>
+<li>Types with identity (includes stateful types, resource types, or anything that
+isn't really serializable).</li>
+<li>Plain ol' data.</li>
+</ol>
+<h2><a class="header" href="#types-with-identity" id="types-with-identity">Types with identity</a></h2>
+<p>Examples of this are all metric type implementations, e.g. <code>StringMetric</code>.
+These types are complex, implemented in Rust and make use of the global Glean singleton on the Rust side,
+They have an equivalent on the wrapper side (Kotlin/Swift/Python), that forwards calls through FFI.</p>
+<p>They all follow the same pattern:</p>
+<p>A <code>ConcurrentHandleMap</code> stores all instances of the same type,
+A handle is passed back and forth as a <code>u64</code> from Rust, <code>Long</code> from Kotlin, <code>UInt64</code> from Swift
+or other equivalent type in other languages.</p>
+<p>This is recommended for most cases, as it's the hardest to mess up.
+Additionally, for types T such that <code>&amp;T: Sync + Send</code>, or that you
+need to call <code>&amp;mut self</code> method, this is the safest choice.</p>
+<p>Additionally, this will ensure panic-safety, as it will poison the internal Mutex, making further access impossible.</p>
+<p>The <a href="https://docs.rs/ffi-support/*/ffi_support/handle_map/index.html"><code>ffi_support::handle_map</code> docs</a> are good,
+and under <code>ConcurrentHandleMap</code> include an example of how to set this up.</p>
+<h2><a class="header" href="#plain-old-data" id="plain-old-data">Plain Old Data</a></h2>
+<p>This includes both primitive values, strings, arrays, or arbitrarily nested
+structures containing them.</p>
+<h3><a class="header" href="#primitives" id="primitives">Primitives</a></h3>
+<p>Numeric primitives are the easiest to pass between languages.
+The main recommendation is: use the equivalent and same-sized type as the one provided by Rust.</p>
+<p>There are a couple of exceptions/caveats, especially for Kotlin. All of them are caused by JNA/Android issues.
+Swift has very good support for calling over the FFI.</p>
+<ol>
+<li>
+<p><code>bool</code>: Don't use it. JNA doesn't handle it well. Instead, use a numeric type
+(like <code>u8</code>) and represent 0 for <code>false</code> and 1 for <code>true</code> for interchange over the
+FFI, converting back to Kotlin's <code>Boolean</code> or Swift's <code>Bool</code> after (as to
+not expose this somewhat annoying limitation in our public API).
+All wrappers already include utility functions to turn 8-bit integers (<code>u8</code>) back to booleans
+(<code>toBool()</code> or equivalent methods).</p>
+</li>
+<li>
+<p><code>usize</code>/<code>isize</code>: These cause the structure size to be different based on the
+platform. JNA does handle this if you use <code>NativeSize</code>, but it's awkward.
+Use the size-defined integers instead, such as <code>i64</code>/<code>i32</code> and their language-equivalents
+(Kotlin: <code>Long</code>/<code>Int</code>, Swift:<code>UInt64</code>/<code>UInt32</code>).
+<em>Caution:</em> In Kotlin integers are signed by default. You can use <code>u64</code>/<code>u32</code> for <code>Long</code>/<code>Int</code> if you ensure the values are non-negative through asserts or error reporting code.</p>
+</li>
+<li>
+<p><code>char</code>: Avoid these if possible. If you really have a use case consider <code>u32</code> instead.</p>
+<p>If you do this, you should probably be aware of the fact that Java chars are 16
+bit, and Swift <code>Character</code>s are actually strings (they represent Extended
+Grapheme Clusters, not codepoints).</p>
+</li>
+</ol>
+<h3><a class="header" href="#strings" id="strings">Strings</a></h3>
+<p>These we pass as null-terminated UTF-8 C-strings.</p>
+<p>For return values, used <code>*mut c_char</code>, and for input, use
+<a href="https://docs.rs/ffi-support/*/ffi_support/struct.FfiStr.html"><code>ffi_support::FfiStr</code></a></p>
+<ol>
+<li>
+<p>If the string is returned from Rust to Kotlin/Swift, you need to expose a
+string destructor from your ffi crate. See
+<a href="https://docs.rs/ffi-support/*/ffi_support/macro.define_string_destructor.html"><code>ffi_support::define_string_destructor!</code></a>).</p>
+<p>For converting to a <code>*mut c_char</code>, use either
+<a href="https://docs.rs/ffi-support/*/ffi_support/fn.rust_string_to_c.html"><code>rust_string_to_c</code></a>
+if you have a <code>String</code>, or
+<a href="https://docs.rs/ffi-support/*/ffi_support/fn.opt_rust_string_to_c.html"><code>opt_rust_string_to_c</code></a>
+for <code>Option&lt;String&gt;</code> (None becomes <code>std::ptr::null_mut()</code>).</p>
+<p><strong>Important</strong>: In Kotlin, the type returned by a function that produces this
+must be <code>Pointer</code>, and not <code>String</code>, and the parameter that the destructor takes
+as input must also be <code>Pointer</code>.</p>
+<p>Using <code>String</code> will <em>almost</em> work. JNA will convert the return value to
+<code>String</code> automatically, leaking the value Rust provides. Then, when passing
+to the destructor, it will allocate a temporary buffer, pass it to Rust, which
+we'll free, corrupting both heaps 💥. Oops!</p>
+</li>
+<li>
+<p>If the string is passed into Rust from Kotlin/Swift, the Rust code should
+declare the parameter as a <a href="https://docs.rs/ffi-support/*/ffi_support/struct.FfiStr.html"><code>FfiStr&lt;'_&gt;</code></a>.
+and things should then work more or less automatically. The <code>FfiStr</code> has methods
+for extracting it's data as <code>&amp;str</code>, <code>Option&lt;&amp;str&gt;</code>, <code>String</code>, and <code>Option&lt;String&gt;</code>.</p>
+</li>
+</ol>
+<h3><a class="header" href="#aggregates" id="aggregates">Aggregates</a></h3>
+<p>This is any type that's more complex than a primitive or a string (arrays,
+structures, and combinations there-in).
+There are two options we recommend for these cases:</p>
+<ol>
+<li>
+<p>Passing data as JSON. This is very easy and useful for prototyping, but is
+much slower and requires a great deal of copying and redundant encode/decode
+steps (in general, the data will be copied at least 4 times to make this
+work, and almost certainly more in practice).
+It can be done relatively easily by <code>derive(Serialize, Deserialize)</code>,
+and converting to a JSON string using <code>serde_json::to_string</code>.</p>
+<p>This is a viable option for test-only functions, where the overhead is not important.</p>
+</li>
+<li>
+<p>Use <code>repr(C)</code> structures and copy the data across the boundary,
+carefully replicating the same structure on the wrapper side.
+In Kotlin this will require <code>@Structure.FieldOrder</code> annotations.
+Swift can directly handle C types.</p>
+<p><strong>Caution:</strong> This is error prone! Structures, enumerations and unions need to be kept the same across all layers
+(Rust, generated C header, Kotlin, Swift, ...).
+Be extra careful, avoid adding references to structures and ensure the structures are correctly freed inside Rust.
+Copy out the data and convert into language-appropriate types (e.g. convert <code>*mut c_char</code> into Swift/Kotlin strings) as soon as possible.</p>
+</li>
+</ol>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/ffi/when-to-use-what-in-the-ffi.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#internal-documentation" id="internal-documentation">Internal documentation</a></h1>
+<p>This chapter describes aspects of Glean that are internal implementation details.</p>
+<blockquote>
+<p>NOTE: As implementation details, this information is subject to change at any time.
+External users should not rely on this information. 
+It is provided as a reference for contributing to Glean only.</p>
+</blockquote>
+<p>This includes:</p>
+<ul>
+<li><a href="core/internal/reserved-ping-names.html">Reserved ping names</a></li>
+<li><a href="core/internal/clearing.html">Clearing metrics when disabling/enabling Glean</a></li>
+<li><a href="core/internal/payload.html">Payload format</a></li>
+<li><a href="core/internal/directory-structure.html">Directory structure</a></li>
+<li><a href="core/internal/debug-pings.html">Debug Pings</a></li>
+<li><a href="core/internal/implementations.html">Implementations</a></li>
+</ul>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/core/internal/index.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#reserved-ping-names" id="reserved-ping-names">Reserved ping names</a></h1>
+<p>The Glean SDK reserves all ping names in <code>send_in_pings</code> starting with <code>glean_</code>.</p>
+<p>This currently includes, but is not limited to:</p>
+<ul>
+<li><code>glean_client_info</code>: metrics sent with this ping are added to every ping in its <code>client_info</code> section;</li>
+<li><code>glean_internal_info</code>: metrics sent with this ping are added to every ping in its <code>ping_info</code> section.</li>
+</ul>
+<p>Additionally, only Glean may specify <code>all-pings</code>.  This special value has no effect in the client, but indicates to the backend infrastructure that a metric may appear in any ping.</p>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/core/internal/reserved-ping-names.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#clearing-metrics-when-disablingenabling-glean" id="clearing-metrics-when-disablingenabling-glean">Clearing metrics when disabling/enabling Glean</a></h1>
+<p>When disabling upload (<code>Glean.setUploadEnabled(false)</code>), metrics are also cleared to prevent their storage on the local device, and lessen the likelihood
+of accidentally sending them.
+There are a couple of exceptions to this:</p>
+<ul>
+<li>
+<p><code>first_run_date</code> and <code>first_run_hour</code> are retained so they aren't reset if metrics are later re-enabled.</p>
+</li>
+<li>
+<p><code>client_id</code> is set to the special value <code>&quot;c0ffeec0-ffee-c0ff-eec0-ffeec0ffeec0&quot;</code>. This should make it possible to detect the error case when metrics are sent from a client that has been disabled.</p>
+</li>
+</ul>
+<p>When re-enabling metrics:</p>
+<ul>
+<li>
+<p><code>first_run_date</code> and <code>first_run_hour</code> are left as-is. (They should remain a correct time of first run of the application, unaffected by disabling/enabling the Glean SDK).</p>
+</li>
+<li>
+<p>The <code>client_id</code> is set to a newly-generated random UUID. It has no connection to the <code>client_id</code> used prior to disabling the Glean SDK.</p>
+</li>
+<li>
+<p>Application lifetime metrics owned by Glean are regenerated from scratch so that they will appear in subsequent pings. This is the same process that happens during every startup of the application when the Glean SDK is enabled. The application is also responsible for setting any application lifetime metrics that it manages at this time.</p>
+</li>
+<li>
+<p>Ping lifetime metrics do not need special handling.  They will begin recording again after metric uploading is re-enabled.</p>
+</li>
+</ul>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/core/internal/clearing.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#payload-format" id="payload-format">Payload format</a></h1>
+<p>The main sections of a Glean ping are described in <a href="core/internal/../../../user/pings/index.html#ping-sections">Ping Sections</a>.
+This <strong>Payload format</strong> chapter describes details of the ping payload that are relevant for decoding Glean pings in the pipeline.</p>
+<blockquote>
+<p>NOTE: The payload format is an implementation detail of the Glean SDK and subject to change at any time. 
+External users should not rely on this information. 
+It is provided as a reference for contributing to Glean only.</p>
+</blockquote>
+<h2><a class="header" href="#json-schema" id="json-schema">JSON Schema</a></h2>
+<p>Glean's ping payloads have a formal JSON schema defined in the <a href="https://github.com/mozilla-services/mozilla-pipeline-schemas/">mozilla-pipeline-schemas</a> project.
+It is written as a set of <a href="https://github.com/mozilla-services/mozilla-pipeline-schemas/tree/HEAD/templates/include/glean">templates</a> that are expanded by the mozilla-pipeline-schemas build infrastructure into a <a href="https://github.com/mozilla-services/mozilla-pipeline-schemas/blob/HEAD/schemas/glean/baseline/baseline.1.schema.json">fully expanded schema</a>.</p>
+<h2><a class="header" href="#metric-types" id="metric-types">Metric types</a></h2>
+<h3><a class="header" href="#boolean" id="boolean">Boolean</a></h3>
+<p>A <a href="core/internal/../../../user/metrics/boolean.html">Boolean</a> is represented by its boolean value.</p>
+<h4><a class="header" href="#example" id="example">Example</a></h4>
+<pre><code class="language-json">true
+</code></pre>
+<h3><a class="header" href="#counter" id="counter">Counter</a></h3>
+<p>A <a href="core/internal/../../../user/metrics/counter.html">Counter</a> is represented by its integer value.</p>
+<h4><a class="header" href="#example-1" id="example-1">Example</a></h4>
+<pre><code class="language-json">17
+</code></pre>
+<h3><a class="header" href="#quantity" id="quantity">Quantity</a></h3>
+<p>A <a href="core/internal/../../../user/metrics/quantity.html">Quantity</a> is represented by its integer value.</p>
+<h4><a class="header" href="#example-2" id="example-2">Example</a></h4>
+<pre><code class="language-json">42
+</code></pre>
+<h3><a class="header" href="#string" id="string">String</a></h3>
+<p>A <a href="core/internal/../../../user/metrics/string.html">String</a> is represented by its string value.</p>
+<h4><a class="header" href="#example-3" id="example-3">Example</a></h4>
+<pre><code class="language-json">&quot;sample string&quot;
+</code></pre>
+<h3><a class="header" href="#jwe" id="jwe">JWE</a></h3>
+<p>A <a href="core/internal/../../../user/metrics/jwe.html">JWE</a> is represented by its <a href="https://tools.ietf.org/html/rfc7516#appendix-A.2.7">compact representation</a>.</p>
+<h4><a class="header" href="#example-4" id="example-4">Example</a></h4>
+<pre><code class="language-json">&quot;eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZHQ00ifQ..48V1_ALb6US04U3b.5eym8TW_c8SuK0ltJ3rpYIzOeDQz7TALvtu6UG9oMo4vpzs9tX_EFShS8iB7j6jiSdiwkIr3ajwQzaBtQD_A.XFBoMYUZodetZdvTiFvSkQ&quot;
+</code></pre>
+<h3><a class="header" href="#string-list" id="string-list">String list</a></h3>
+<p>A <a href="core/internal/../../../user/metrics/string_list.html">String List</a> is represented as an array of strings.</p>
+<pre><code class="language-json">[&quot;sample string&quot;, &quot;another one&quot;]
+</code></pre>
+<h3><a class="header" href="#timespan" id="timespan">Timespan</a></h3>
+<p>A <a href="core/internal/../../../user/metrics/timespan.html">Timespan</a> is represented as an object of their duration as an integer and the time unit.</p>
+<table><thead><tr><th>Field name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>value</code></td><td>Integer</td><td>The value in the marked time unit.</td></tr>
+<tr><td><code>time_unit</code></td><td>String</td><td>The time unit, see the <a href="core/internal/../../../user/metrics/timespan.html#configuration">timespan's configuration</a> for valid values.</td></tr>
+</tbody></table>
+<h4><a class="header" href="#example-5" id="example-5">Example</a></h4>
+<pre><code class="language-json">{
+    &quot;time_unit&quot;: &quot;milliseconds&quot;,
+    &quot;value&quot;: 10
+}
+</code></pre>
+<h3><a class="header" href="#timing-distribution" id="timing-distribution">Timing Distribution</a></h3>
+<p>A <a href="core/internal/../../../user/metrics/timing_distribution.html">Timing distribution</a> is represented as an object with the following fields.</p>
+<table><thead><tr><th>Field name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>sum</code></td><td>Integer</td><td>The sum of all recorded values.</td></tr>
+<tr><td><code>values</code></td><td>Map&lt;String, Integer&gt;</td><td>The values in each bucket. The key is the minimum value for the range of that bucket.</td></tr>
+</tbody></table>
+<p>A contiguous range of buckets is always sent, so that the server can aggregate and visualize distributions, without knowing anything about the specific bucketing function used.
+This range starts with the first bucket with a non-zero accumulation, and ends at one bucket beyond the last bucket with a non-zero accumulation (so that the upper bound on the last bucket is retained).</p>
+<p>For example, the following shows the recorded values vs. what is sent in the payload.</p>
+<pre><code>recorded:  1024: 2, 1116: 1,                   1448: 1,
+sent:      1024: 2, 1116: 1, 1217: 0, 1327: 0, 1448: 1, 1579: 0
+</code></pre>
+<h4><a class="header" href="#example-6" id="example-6">Example:</a></h4>
+<pre><code class="language-json">{
+    &quot;sum&quot;: 4612,
+    &quot;values&quot;: {
+        &quot;1024&quot;: 2,
+        &quot;1116&quot;: 1,
+        &quot;1217&quot;: 0,
+        &quot;1327&quot;: 0,
+        &quot;1448&quot;: 1,
+        &quot;1579&quot;: 0
+    }
+}
+</code></pre>
+<h3><a class="header" href="#memory-distribution" id="memory-distribution">Memory Distribution</a></h3>
+<p>A <a href="core/internal/../../../user/metrics/memory_distribution.html">Memory distribution</a> is represented as an object with the following fields.</p>
+<table><thead><tr><th>Field name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>sum</code></td><td>Integer</td><td>The sum of all recorded values.</td></tr>
+<tr><td><code>values</code></td><td>Map&lt;String, Integer&gt;</td><td>The values in each bucket. The key is the minimum value for the range of that bucket.</td></tr>
+</tbody></table>
+<p>A contiguous range of buckets is always sent.
+See <a href="core/internal/payload.html#timing-distribution">timing distribution</a> for more details.</p>
+<h4><a class="header" href="#example-7" id="example-7">Example:</a></h4>
+<pre><code class="language-json">{
+    &quot;sum&quot;: 3,
+    &quot;values&quot;: {
+        &quot;0&quot;: 1,
+        &quot;1&quot;: 3,
+    }
+}
+</code></pre>
+<h3><a class="header" href="#uuid" id="uuid">UUID</a></h3>
+<p>A <a href="core/internal/../../../user/metrics/uuid.html">UUID</a> is represented by the string representation of the UUID.</p>
+<h4><a class="header" href="#example-8" id="example-8">Example</a></h4>
+<pre><code class="language-json">&quot;29711dc8-a954-11e9-898a-eb4ea7e8fd3f&quot;
+</code></pre>
+<h3><a class="header" href="#datetime" id="datetime">Datetime</a></h3>
+<p>A <a href="core/internal/../../../user/metrics/datetime.html">Datetime</a> is represented by its ISO8601 string representation, truncated to the metric's time unit.
+It always includes the timezone offset.</p>
+<h4><a class="header" href="#example-9" id="example-9">Example</a></h4>
+<pre><code class="language-json">&quot;2019-07-18T14:06:00.000+02:00&quot;
+</code></pre>
+<h3><a class="header" href="#event" id="event">Event</a></h3>
+<p><a href="core/internal/../../../user/metrics/event.html">Events</a> are represented as an array of objects, with one object for each event.
+Each event object has the following keys:</p>
+<table><thead><tr><th>Field name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>timestamp</code></td><td>Integer</td><td>A monotonically increasing timestamp value, in milliseconds. To avoid leaking absolute times, the first timestamp in the array is always zero, and subsequent timestamps in the array are relative to that reference point.</td></tr>
+<tr><td><code>category</code></td><td>String</td><td>The event's category. This comes directly from the category under which the metric was defined in the <code>metrics.yaml</code> file.</td></tr>
+<tr><td><code>name</code></td><td>String</td><td>The event's name, as defined in the <code>metrics.yaml</code> file.</td></tr>
+<tr><td><code>extra</code></td><td>Object (optional)</td><td>Extra data associated with the event. Both the keys and values of this object are strings. The keys must be from the set defined for this event in the <code>metrics.yaml</code> file. The values have a maximum length of 50 bytes, when encoded as UTF-8.</td></tr>
+</tbody></table>
+<h4><a class="header" href="#example-10" id="example-10">Example</a></h4>
+<pre><code class="language-json">[
+  {
+    &quot;timestamp&quot;: 0,
+    &quot;category&quot;: &quot;app&quot;,
+    &quot;name&quot;: &quot;ss_menu_opened&quot;
+  },
+  {
+    &quot;timestamp&quot;: 124,
+    &quot;category&quot;: &quot;search&quot;,
+    &quot;name&quot;: &quot;performed_search&quot;,
+    &quot;extra&quot;: {
+      &quot;source&quot;: &quot;default.action&quot;
+    }
+  }
+]
+</code></pre>
+<p>Also see <a href="https://github.com/mozilla-services/mozilla-pipeline-schemas/blob/HEAD/templates/include/glean/event.1.schema.json">the JSON schema for events</a>.</p>
+<p>To avoid losing events when the application is killed by the operating system, events are queued on disk as they are recorded.
+When the application starts up again, there is no good way to determine if the device has rebooted since the last run and therefore any timestamps recorded in the new run could not be guaranteed to be consistent with those recorded in the previous run.
+To get around this, on application startup, any queued events are immediately collected into pings and then cleared.
+These &quot;startup-triggered pings&quot; are likely to have a very short duration, as recorded in <code>ping_info.start_time</code> and <code>ping_info.end_time</code> (see <a href="core/internal/../../../user/pings/index.html#the-ping_info-section">the <code>ping_info</code> section</a>).
+The maximum timestamp of the events in these pings are quite likely to exceed the duration of the ping, but this is to be expected.</p>
+<h3><a class="header" href="#custom-distribution" id="custom-distribution">Custom Distribution</a></h3>
+<p>A <a href="core/internal/../../../user/metrics/custom_distribution.html">Custom distribution</a> is represented as an object with the following fields.</p>
+<table><thead><tr><th>Field name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>sum</code></td><td>Integer</td><td>The sum of all recorded values.</td></tr>
+<tr><td><code>values</code></td><td>Map&lt;String, Integer&gt;</td><td>The values in each bucket. The key is the minimum value for the range of that bucket.</td></tr>
+</tbody></table>
+<p>A contiguous range of buckets is always sent, so that the server can aggregate and visualize distributions, without knowing anything about the specific bucketing function used.
+This range starts with the first bucket (as specified in the <code>range_min</code> parameter), and ends at one bucket beyond the last bucket with a non-zero accumulation (so that the upper bound on the last bucket is retained).</p>
+<p>For example, suppose you had a custom distribution defined by the following parameters:</p>
+<ul>
+<li><code>range_min</code>: 10</li>
+<li><code>range_max</code>: 200</li>
+<li><code>bucket_count</code>: 80</li>
+<li><code>histogram_type</code>: <code>'linear'</code></li>
+</ul>
+<p>The following shows the recorded values vs. what is sent in the payload.</p>
+<pre><code>recorded:        12: 2,                      22: 1
+sent:     10: 0, 12: 2, 14: 0, 17: 0, 19: 0, 22: 1, 24: 0
+</code></pre>
+<h4><a class="header" href="#example-11" id="example-11">Example:</a></h4>
+<pre><code class="language-json">{
+    &quot;sum&quot;: 3,
+    &quot;values&quot;: {
+        &quot;10&quot;: 0,
+        &quot;12&quot;: 2,
+        &quot;14&quot;: 0,
+        &quot;17&quot;: 0,
+        &quot;19&quot;: 0,
+        &quot;22&quot;: 1,
+        &quot;24&quot;: 0
+    }
+}
+</code></pre>
+<h3><a class="header" href="#labeled-metrics" id="labeled-metrics">Labeled metrics</a></h3>
+<p>Currently several labeled metrics are supported:</p>
+<ul>
+<li><a href="core/internal/../../../user/metrics/labeled_counters.html">Labeled Counters</a>.</li>
+<li><a href="core/internal/../../../user/metrics/labeled_strings.html">Labeled Strings</a>.</li>
+</ul>
+<p>All are on the top-level represented in the same way, as an object mapping the label to the metric's value.
+See the individual metric types for details on the value payload:</p>
+<ul>
+<li><a href="core/internal/payload.html#counter">Counter</a></li>
+<li><a href="core/internal/payload.html#string">String</a></li>
+</ul>
+<h4><a class="header" href="#example-for-labeled-counters" id="example-for-labeled-counters">Example for Labeled Counters</a></h4>
+<pre><code class="language-json">{
+    &quot;label1&quot;: 2,
+    &quot;label2&quot;: 17
+}
+</code></pre>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/core/internal/payload.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#directory-structure" id="directory-structure">Directory structure</a></h1>
+<p>This page describes the contents of the directories where Glean stores its data.</p>
+<p>All Glean data is inside a single root directory with the name <code>glean_data</code>.</p>
+<p>On Android, this directory lives inside the <a href="https://developer.android.com/reference/android/content/pm/ApplicationInfo.html#dataDir"><code>ApplicationInfo.dataDir</code></a> directory associated with the application.</p>
+<p>On iOS, this directory lives inside the <a href="https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/FileSystemProgrammingGuide/FileSystemOverview/FileSystemOverview.html"><code>Documents</code></a> directory associated with the application.</p>
+<p>For the Python bindings, if no directory is specified, it is stored in a temporary directory and cleared at exit.</p>
+<p>Within the <code>glean_data</code> directory are the following contents:</p>
+<ul>
+<li>
+<p><code>db</code>: Contains the <a href="https://github.com/mozilla/rkv">rkv</a> database used to persist ping and user lifetime metrics.</p>
+</li>
+<li>
+<p><code>events</code>: Contains flat files containing persisted events before they are collected into pings.</p>
+</li>
+<li>
+<p><code>pending_pings</code>: Pings are written here before they are picked up by the ping uploader to send to the submission endpoint.</p>
+</li>
+<li>
+<p><code>deletion_request</code>: The <code>deletion-request</code> ping is written here before it is picked up by the ping uploader. This directory is separate from the <code>pending_pings</code> directory above, in or for an uploader to pick up only <code>deletion-request</code> pings and send them after general upload is disabled.</p>
+</li>
+<li>
+<p><code>tmp</code>: Pings are written here and then moved to the <code>pending_pings</code> directory when finished to make sure that partially-written pings to not get queued for sending.<br />
+(The standard system temporary directory is not used for this because it is not guaranteed to be on the same volume as the <code>glean_data</code> directory on Android).</p>
+</li>
+</ul>
+<h1><a class="header" href="#file-format" id="file-format">File format</a></h1>
+<p>For persistence assembled ping payloads are stored as files on disk in the above directories.
+At initialization the Glean SDK reads any pending ping files and queues them for eventual upload.
+The files are not meant to be read by any outside consumers.
+Its format may change.
+The Glean SDK will be able to read previous formats if necessary.</p>
+<p>The current format has the following newline-delimited lines:</p>
+<pre><code>&lt;ping submission path&gt;\n
+&lt;json-encoded ping payload&gt;\n
+&lt;json-encoded metadata&gt;\n
+</code></pre>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/core/internal/directory-structure.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#debug-pings" id="debug-pings">Debug Pings</a></h1>
+<p>For debugging and testing purposes Glean allows to tag pings, which are then available in the <a href="https://debug-ping-preview.firebaseapp.com/">Debug Ping Viewer</a><sup class="footnote-reference"><a href="#1">1</a></sup>.</p>
+<p>Pings are sent to the same endpoint as all pings, with the addition of one HTTP header:</p>
+<pre><code>X-Debug-ID: &lt;tag&gt;
+</code></pre>
+<p><code>&lt;tag&gt;</code> is a alphanumeric string with a maximum length of 20 characters, used to identify pings in the Debug Ping Viewer.</p>
+<p>See <a href="core/internal/../../../user/debugging/index.html">Debugging products using the Glean SDK</a> for detailed information how to use this mechanism in applications.</p>
+<hr />
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>Requires a Mozilla login.</p>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/core/internal/debug-pings.md">Edit this file on GitHub.</a></footer></div>
+<h1><a class="header" href="#upload-mechanism" id="upload-mechanism">Upload mechanism</a></h1>
+<p>The <code>glean-core</code> Rust crate does not handle the ping upload directly.
+Network stacks vastly differ between platforms, applications and operating systems.
+The Glean SDK leverages the available platform capabilities to implement any network communication.</p>
+<p>Glean core controls all upload and coordinates the platform side with its own internals.
+All language bindings implement ping uploading around a common API and protocol.</p>
+<h2><a class="header" href="#the-upload-module-in-the-language-bindings" id="the-upload-module-in-the-language-bindings">The upload module in the language bindings</a></h2>
+<pre class="mermaid">classDiagram
+    class UploadResult {
+        ~ToFFI()* int
+    }
+
+    class HttpResponse {
+        int statusCode
+        ~ToFFI() int
+    }
+
+    class UnrecoverableFailure {
+        ~ToFFI() int
+    }
+
+    class RecoverableFailure {
+        ~ToFFI() int
+    }
+
+    class PingUploader {
+        &lt;&lt;interface&gt;&gt;
+        +Upload() UploadResult
+    }
+
+    class BaseUploader {
+        +BaseUploader(PingUploader)
+        ~TriggerUploads()
+        ~CancelUploads()
+    }
+
+    class HttpUploader {
+        +Upload() UploadResult
+    }
+
+    UploadResult &lt;|-- HttpResponse
+    UploadResult &lt;|-- UnrecoverableFailure
+    UploadResult &lt;|-- RecoverableFailure
+    PingUploader &lt;|-- HttpUploader
+    PingUploader o-- BaseUploader
+
+</pre>
+<h3><a class="header" href="#pinguploader" id="pinguploader"><code>PingUploader</code></a></h3>
+<p>The <code>PingUploader</code> interface describes the contract between the <code>BaseUploader</code> and the SDK or user-provided upload modules.</p>
+<h3><a class="header" href="#baseuploader" id="baseuploader"><code>BaseUploader</code></a></h3>
+<p>The <code>BaseUploader</code> component is responsible for interfacing with the lower level <code>get_upload_task</code> calls and dealing with the logic in a platform-coherent way.</p>
+<ul>
+<li>Every Glean instance will always have a single <code>BaseUploader</code> instance.</li>
+<li>The <code>BaseUploader</code> is fed, at Glean initialization, with an instance of an implementation of the <code>PingUploader</code> interface.</li>
+<li>Whenever <code>BaseUploader</code> thinks it should perform an upload, it will call the provided instance of the <code>PingUploader</code> interface and call <code>upload</code> with the data it's getting from the glean-core/FFI.</li>
+<li>Any throttling happens at this layer: the core will orchestrate the throttling, while this layer will be responsible to abide to what the core is telling it to do.</li>
+<li>Any logic for aborting uploads or triggering uploads is provided by this object.</li>
+</ul>
+<h3><a class="header" href="#httpclientuploader" id="httpclientuploader"><code>HttpClientUploader</code></a></h3>
+<p>The <code>HttpClientUploader</code> is the default SDK-provided HTTP uploader. It acts as an adapter between the platform-specific upload library and the Glean upload APIs.</p>
+<blockquote>
+<p>Note that most of the languages have now diverged, due to the many iterations, from this design. For example, in Kotlin, the <a href="https://searchfox.org/glean/source/glean-core/android/src/main/java/mozilla/telemetry/glean/net/BaseUploader.kt"><code>BaseUploader</code> is mostly empty</a> and its functionalities are spread in the <a href="https://searchfox.org/glean/source/glean-core/android/src/main/java/mozilla/telemetry/glean/scheduler/PingUploadWorker.kt"><code>PingUploadWorker</code></a>.</p>
+</blockquote>
+<h2><a class="header" href="#upload-task-api" id="upload-task-api">Upload task API</a></h2>
+<p>The following diagram visualizes the communication between Glean core (the Rust crate),
+a Glean language binding (e.g. the Kotlin or Swift implementation) and a Glean end point server.</p>
+<pre class="mermaid">sequenceDiagram
+    participant Glean core
+    participant Glean wrapper
+    participant Server
+
+    Glean wrapper-&gt;&gt;Glean core: get_upload_task()
+    Glean core-&gt;&gt;Glean wrapper: Task::Upload(PingRequest)
+    Glean wrapper--&gt;&gt;Server: POST /submit/{task.id}
+    Server--&gt;&gt;Glean wrapper: 200 OK
+    Glean wrapper-&gt;&gt;Glean core: upload_response(200)
+    Glean wrapper-&gt;&gt;Glean core: get_upload_task()
+    Glean core-&gt;&gt;Glean wrapper: Task::Done
+</pre>
+<p>Glean core will take care of file management, cleanup, rescheduling and rate limiting<sup class="footnote-reference"><a href="#1">1</a></sup>.</p>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>Rate limiting is achieved by limiting the amount of times a language binding is allowed to get a <code>Task::Upload(PingRequest)</code> from <code>get_upload_task</code> in a given time interval. Currently, the default limit is for a maximum of 15 upload tasks every 60 seconds and there are no exposed methods that allow changing this default (follow <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1647630">Bug 1647630</a> for updates). If the caller has reached the maximum tasks for the current interval, they will get a <code>Task::Wait</code> regardless if there are other <code>Task::Upload(PingRequest)</code>s queued.</p>
+</div>
+<h2><a class="header" href="#available-apis" id="available-apis">Available APIs</a></h2>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Rust" class="tab">
+<p>For direct Rust consumers the global <code>Glean</code> object provides these methods:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>/// Gets the next task for an uploader.
+fn get_upload_task(&amp;self) -&gt; PingUploadTask
+
+/// Processes the response from an attempt to upload a ping.
+fn process_ping_upload_response(&amp;self, uuid: &amp;str, status: UploadResult)
+<span class="boring">}
+</span></code></pre></pre>
+<p>See the documentation for further usage and explanation of the additional types:</p>
+<ul>
+<li><a href="core/internal/../../../../docs/glean_core/struct.Glean.html#method.get_upload_task"><code>get_upload_task</code></a></li>
+<li><a href="core/internal/../../../../docs/glean_core/struct.Glean.html#method.process_ping_upload_response"><code>process_ping_upload_response</code></a></li>
+<li><a href="core/internal/../../../../docs/glean_core/upload/enum.PingUploadTask.html"><code>PingUploadTask</code></a></li>
+<li><a href="core/internal/../../../../docs/glean_core/upload/enum.UploadResult.html"><code>UploadResult</code></a></li>
+</ul>
+</div>
+<div data-lang="FFI" class="tab">
+<p>For FFI consumers (e.g. Kotlin/Swift/Python implementations) these functions are available:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>/// Gets the next task for an uploader. Which can be either:
+extern &quot;C&quot; fn glean_get_upload_task(result: *mut FfiPingUploadTask)
+
+/// Processes the response from an attempt to upload a ping.
+extern &quot;C&quot; fn glean_process_ping_upload_response(task: *mut FfiPingUploadTask, status: u32)
+<span class="boring">}
+</span></code></pre></pre>
+<p>See the documentation for additional information about the types:</p>
+<ul>
+<li><a href="core/internal/../../../../docs/glean_ffi/upload/index.html"><code>glean_ffi::upload</code></a></li>
+</ul>
+</div>
+</div>
+</div>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/core/internal/upload.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#implementations" id="implementations">Implementations</a></h1>
+<table><thead><tr><th>Project Name</th><th>Language Bindings</th><th>Operating System</th><th>App Lifecycle Type</th><th>Environment Data source</th></tr></thead><tbody>
+<tr><td>glean-core</td><td>Rust</td><td>all</td><td>all</td><td>none</td></tr>
+<tr><td>glean-ffi</td><td>C</td><td>all</td><td>all</td><td>none</td></tr>
+<tr><td>glean</td><td>Rust</td><td>Windows/Mac/Linux</td><td>Desktop application</td><td>OS info build-time autodetected, app info passed in</td></tr>
+<tr><td>Glean Android</td><td>Kotlin, Java</td><td>Android</td><td>Mobile app</td><td>Autodetected from the Android environment</td></tr>
+<tr><td>Glean iOS</td><td>Swift</td><td>iOS</td><td>Mobile app</td><td>Autodetected from the iOS environment</td></tr>
+<tr><td>Glean.py</td><td>Python</td><td>Windows/Mac/Linux</td><td>all</td><td>Autodetected at runtime</td></tr>
+<tr><td>FOG<sup class="footnote-reference"><a href="#1">1</a></sup></td><td>Rust/C++/JavaScript</td><td>as Firefox supports</td><td>Desktop application</td><td>OS info build-time autodetected, app info passed in</td></tr>
+</tbody></table>
+<h2><a class="header" href="#features-matrix" id="features-matrix">Features matrix</a></h2>
+<table><thead><tr><th>Feature/Bindings</th><th>Kotlin</th><th>Swift</th><th>Python</th><th>Rust</th></tr></thead><tbody>
+<tr><td>Core metric types</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+<tr><td>Metrics Testing API</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+<tr><td><code>baseline</code> ping</td><td>✓</td><td>✓</td><td>X</td><td>X</td></tr>
+<tr><td><code>metrics</code></td><td>✓</td><td>✓</td><td>X</td><td>X</td></tr>
+<tr><td><code>events</code></td><td>✓</td><td>✓</td><td>✓</td><td>X</td></tr>
+<tr><td><code>deletion-request</code> ping</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+<tr><td>Custom pings</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+<tr><td>Custom pings testing API</td><td>✓</td><td>✓</td><td>✓</td><td>X</td></tr>
+<tr><td>Debug Ping View support</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+</tbody></table>
+<hr />
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p><a href="https://firefox-source-docs.mozilla.org/toolkit/components/glean/index.html">Firefox on Glean (FOG)</a> is the name of the layer that integrates the Glean SDK into Firefox Desktop. It uses the Glean Rust bindings and exposes the same Rust API inside Firefox and extends it with a C++ and JavaScript API.</p>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/core/internal/implementations.md">Edit this file on GitHub.</a></footer></div>
+<p>The following language-specific API docs are available:</p>
+<ul>
+<li><a href="api/../../javadoc/glean/index.html">Kotlin API docs</a></li>
+<li><a href="api/../../swift/index.html">Swift API docs</a></li>
+<li><a href="api/../../python/glean/index.html">Python API docs</a></li>
+<li><a href="api/../../docs/index.html">Rust core (internal) API docs</a></li>
+</ul>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/api/index.md">Edit this file on GitHub.</a></footer>
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="../shared/tabs.js"></script>
+        
+        <script type="text/javascript" src="../shared/mermaid.min.js"></script>
+        
+        <script type="text/javascript" src="../shared/mermaid-init.js"></script>
+        
+
+        
+        
+        <script type="text/javascript">
+        window.addEventListener('load', function() {
+            MathJax.Hub.Register.StartupHook('End', function() {
+                window.setTimeout(window.print, 100);
+            });
+        });
+        </script>
+        
+        
+
+    </body>
+</html>
