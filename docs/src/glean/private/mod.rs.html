@@ -38,6 +38,12 @@
 <span id="35">35</span>
 <span id="36">36</span>
 <span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -49,11 +55,14 @@
 <span class="kw">mod</span> <span class="ident">counter</span>;
 <span class="kw">mod</span> <span class="ident">custom_distribution</span>;
 <span class="kw">mod</span> <span class="ident">datetime</span>;
+<span class="kw">mod</span> <span class="ident">denominator</span>;
 <span class="kw">mod</span> <span class="ident">event</span>;
 <span class="kw">mod</span> <span class="ident">labeled</span>;
 <span class="kw">mod</span> <span class="ident">memory_distribution</span>;
+<span class="kw">mod</span> <span class="ident">numerator</span>;
 <span class="kw">mod</span> <span class="ident">ping</span>;
 <span class="kw">mod</span> <span class="ident">quantity</span>;
+<span class="kw">mod</span> <span class="ident">rate</span>;
 <span class="kw">mod</span> <span class="ident">recorded_experiment_data</span>;
 <span class="kw">mod</span> <span class="ident">string</span>;
 <span class="kw">mod</span> <span class="ident">string_list</span>;
@@ -66,11 +75,14 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">counter</span>::<span class="ident">CounterMetric</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">custom_distribution</span>::<span class="ident">CustomDistributionMetric</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">datetime</span>::{<span class="ident">Datetime</span>, <span class="ident">DatetimeMetric</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">denominator</span>::<span class="ident">DenominatorMetric</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">event</span>::<span class="ident">EventMetric</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">labeled</span>::{<span class="ident">AllowLabeled</span>, <span class="ident">LabeledMetric</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">memory_distribution</span>::<span class="ident">MemoryDistributionMetric</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">numerator</span>::<span class="ident">NumeratorMetric</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">ping</span>::<span class="ident">PingType</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">quantity</span>::<span class="ident">QuantityMetric</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">rate</span>::<span class="ident">RateMetric</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">recorded_experiment_data</span>::<span class="ident">RecordedExperimentData</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">string</span>::<span class="ident">StringMetric</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">string_list</span>::<span class="ident">StringListMetric</span>;

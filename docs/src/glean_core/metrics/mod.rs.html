@@ -188,6 +188,16 @@
 <span id="185">185</span>
 <span id="186">186</span>
 <span id="187">187</span>
+<span id="188">188</span>
+<span id="189">189</span>
+<span id="190">190</span>
+<span id="191">191</span>
+<span id="192">192</span>
+<span id="193">193</span>
+<span id="194">194</span>
+<span id="195">195</span>
+<span id="196">196</span>
+<span id="197">197</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -205,6 +215,7 @@
 <span class="kw">mod</span> <span class="ident">counter</span>;
 <span class="kw">mod</span> <span class="ident">custom_distribution</span>;
 <span class="kw">mod</span> <span class="ident">datetime</span>;
+<span class="kw">mod</span> <span class="ident">denominator</span>;
 <span class="kw">mod</span> <span class="ident">event</span>;
 <span class="kw">mod</span> <span class="ident">experiment</span>;
 <span class="kw">mod</span> <span class="ident">jwe</span>;
@@ -213,6 +224,7 @@
 <span class="kw">mod</span> <span class="ident">memory_unit</span>;
 <span class="kw">mod</span> <span class="ident">ping</span>;
 <span class="kw">mod</span> <span class="ident">quantity</span>;
+<span class="kw">mod</span> <span class="ident">rate</span>;
 <span class="kw">mod</span> <span class="ident">string</span>;
 <span class="kw">mod</span> <span class="ident">string_list</span>;
 <span class="kw">mod</span> <span class="ident">time_unit</span>;
@@ -231,6 +243,7 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">counter</span>::<span class="ident">CounterMetric</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">custom_distribution</span>::<span class="ident">CustomDistributionMetric</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">datetime</span>::<span class="ident">DatetimeMetric</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">denominator</span>::<span class="ident">DenominatorMetric</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">event</span>::<span class="ident">EventMetric</span>;
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use</span> <span class="self">self</span>::<span class="ident">experiment</span>::<span class="ident">ExperimentMetric</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">histogram</span>::<span class="ident">HistogramType</span>;
@@ -246,6 +259,7 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">memory_unit</span>::<span class="ident">MemoryUnit</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">ping</span>::<span class="ident">PingType</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">quantity</span>::<span class="ident">QuantityMetric</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">rate</span>::<span class="ident">RateMetric</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">string</span>::<span class="ident">StringMetric</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">string_list</span>::<span class="ident">StringListMetric</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">time_unit</span>::<span class="ident">TimeUnit</span>;
@@ -308,6 +322,8 @@
     <span class="ident">MemoryDistribution</span>(<span class="ident">Histogram</span><span class="op">&lt;</span><span class="ident">Functional</span><span class="op">&gt;</span>),
     <span class="doccomment">/// A JWE metric. See [`JweMetric`] for more information.</span>
     <span class="ident">Jwe</span>(<span class="ident">String</span>),
+    <span class="doccomment">/// A rate metric. See [`RateMetric`] for more information.</span>
+    <span class="ident">Rate</span>(<span class="ident">i32</span>, <span class="ident">i32</span>),
 }
 
 <span class="doccomment">/// A [`MetricType`] describes common behavior across all metrics.</span>
@@ -342,6 +358,7 @@
             <span class="ident">Metric</span>::<span class="ident">Datetime</span>(<span class="kw">_</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;datetime&quot;</span>,
             <span class="ident">Metric</span>::<span class="ident">Experiment</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Experiments should not be serialized through this&quot;</span>),
             <span class="ident">Metric</span>::<span class="ident">Quantity</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;quantity&quot;</span>,
+            <span class="ident">Metric</span>::<span class="ident">Rate</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;rate&quot;</span>,
             <span class="ident">Metric</span>::<span class="ident">String</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;string&quot;</span>,
             <span class="ident">Metric</span>::<span class="ident">StringList</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;string_list&quot;</span>,
             <span class="ident">Metric</span>::<span class="ident">Timespan</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;timespan&quot;</span>,
@@ -364,6 +381,9 @@
             <span class="ident">Metric</span>::<span class="ident">Datetime</span>(<span class="ident">d</span>, <span class="ident">time_unit</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">json</span><span class="macro">!</span>(<span class="ident">get_iso_time_string</span>(<span class="kw-2">*</span><span class="ident">d</span>, <span class="kw-2">*</span><span class="ident">time_unit</span>)),
             <span class="ident">Metric</span>::<span class="ident">Experiment</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">e</span>.<span class="ident">as_json</span>(),
             <span class="ident">Metric</span>::<span class="ident">Quantity</span>(<span class="ident">q</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">json</span><span class="macro">!</span>(<span class="ident">q</span>),
+            <span class="ident">Metric</span>::<span class="ident">Rate</span>(<span class="ident">num</span>, <span class="ident">den</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="macro">json</span><span class="macro">!</span>({<span class="string">&quot;numerator&quot;</span>: <span class="ident">num</span>, <span class="string">&quot;denominator&quot;</span>: <span class="ident">den</span>})
+            }
             <span class="ident">Metric</span>::<span class="ident">String</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">json</span><span class="macro">!</span>(<span class="ident">s</span>),
             <span class="ident">Metric</span>::<span class="ident">StringList</span>(<span class="ident">v</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">json</span><span class="macro">!</span>(<span class="ident">v</span>),
             <span class="ident">Metric</span>::<span class="ident">Timespan</span>(<span class="ident">time</span>, <span class="ident">time_unit</span>) <span class="op">=</span><span class="op">&gt;</span> {
