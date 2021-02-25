@@ -216,6 +216,40 @@ schedules a ping for eventual upload.</p>
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:5Glean4PingC20testBeforeNextSubmit2cbyyxSgKc_tF"></a>
+                    <a name="//apple_ref/swift/Method/testBeforeNextSubmit(cb:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:5Glean4PingC20testBeforeNextSubmit2cbyyxSgKc_tF">testBeforeNextSubmit(cb:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><strong>Test-only API</strong></p>
+
+<p>Attach a callback to be called right before a new ping is submitted.
+The provided function is called exactly once before submitting a ping.</p>
+
+<p>Note: The callback will be called on any call to submit.
+A ping might not be sent afterwards, e.g. if the ping is otherwise empty (and
+<code>send_if_empty</code> is <code>false</code>).</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">testBeforeNextSubmit</span><span class="p">(</span><span class="nv">cb</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">ReasonCodesEnum</span><span class="p">?)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:5Glean4PingC6submit6reasonyxSg_tF"></a>
                     <a name="//apple_ref/swift/Method/submit(reason:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:5Glean4PingC6submit6reasonyxSg_tF">submit(reason:<wbr>)</a>

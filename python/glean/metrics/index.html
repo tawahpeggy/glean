@@ -2445,6 +2445,7 @@ ping for eventual uploading.</p></div>
             _ffi.ffi_encode_vec_string(reason_codes),
             len(reason_codes),
         )
+        self._test_callback = None  # type: Optional[Callable[[Optional[str]], None]]
         Glean.register_ping_type(self)
 
     def __del__(self):
@@ -2457,6 +2458,20 @@ ping for eventual uploading.</p></div>
         Get the name of the ping.
         &#34;&#34;&#34;
         return self._name
+
+    def test_before_next_submit(self, cb: Callable[[Optional[str]], None]):
+        &#34;&#34;&#34;
+        **Test-only API**
+
+        Attach a callback to be called right before a new ping is submitted.
+        The provided function is called exactly once before submitting a ping.
+
+        Note: The callback will be called on any call to submit.
+        A ping might not be sent afterwards, e.g. if the ping is otherwise empty (and
+        `send_if_empty` is `False`).
+        &#34;&#34;&#34;
+        assert Dispatcher._testing_mode is True
+        self._test_callback = cb
 
     def submit(self, reason: Optional[int] = None) -&gt; None:
         &#34;&#34;&#34;
@@ -2472,6 +2487,11 @@ ping for eventual uploading.</p></div>
             reason_string = self._reason_codes[reason]
         else:
             reason_string = None
+
+        if self._test_callback is not None:
+            self._test_callback(reason_string)
+            self._test_callback = None
+
         Glean._submit_ping(self, reason_string)</code></pre>
 </details>
 <h3>Instance variables</h3>
@@ -2523,7 +2543,41 @@ def name(self) -&gt; str:
         reason_string = self._reason_codes[reason]
     else:
         reason_string = None
+
+    if self._test_callback is not None:
+        self._test_callback(reason_string)
+        self._test_callback = None
+
     Glean._submit_ping(self, reason_string)</code></pre>
+</details>
+</dd>
+<dt id="glean.metrics.PingType.test_before_next_submit"><code class="name flex">
+<span>def <span class="ident">test_before_next_submit</span></span>(<span>self, cb: Callable[[Union[str, NoneType]], NoneType])</span>
+</code></dt>
+<dd>
+<div class="desc"><p><strong>Test-only API</strong></p>
+<p>Attach a callback to be called right before a new ping is submitted.
+The provided function is called exactly once before submitting a ping.</p>
+<p>Note: The callback will be called on any call to submit.
+A ping might not be sent afterwards, e.g. if the ping is otherwise empty (and
+<code>send_if_empty</code> is <code>False</code>).</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def test_before_next_submit(self, cb: Callable[[Optional[str]], None]):
+    &#34;&#34;&#34;
+    **Test-only API**
+
+    Attach a callback to be called right before a new ping is submitted.
+    The provided function is called exactly once before submitting a ping.
+
+    Note: The callback will be called on any call to submit.
+    A ping might not be sent afterwards, e.g. if the ping is otherwise empty (and
+    `send_if_empty` is `False`).
+    &#34;&#34;&#34;
+    assert Dispatcher._testing_mode is True
+    self._test_callback = cb</code></pre>
 </details>
 </dd>
 </dl>
@@ -5285,6 +5339,7 @@ of the ping to retrieve the metric for.</dd>
 <ul class="">
 <li><code><a title="glean.metrics.PingType.name" href="#glean.metrics.PingType.name">name</a></code></li>
 <li><code><a title="glean.metrics.PingType.submit" href="#glean.metrics.PingType.submit">submit</a></code></li>
+<li><code><a title="glean.metrics.PingType.test_before_next_submit" href="#glean.metrics.PingType.test_before_next_submit">test_before_next_submit</a></code></li>
 </ul>
 </li>
 <li>
