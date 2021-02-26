@@ -189,7 +189,7 @@
 <p>The source code is available <a href="https://github.com/mozilla/glean/">on GitHub</a>.</p>
 <h2><a class="header" href="#using-this-book" id="using-this-book">Using this book</a></h2>
 <p>This book is specifically about <strong>contributing to and developing</strong> the <code>Glean SDK</code>.</p>
-<p>For documentation on <strong>using</strong> the <code>Glean SDK</code>, refer to <a href="../book">the Glean Book</a>.</p>
+<p>For documentation on <strong>using</strong> the <code>Glean SDK</code>, refer to <a href="../book/">the Glean Book</a>.</p>
 <p>For documentation about the broader end-to-end Glean project, refer to the <a href="https://docs.telemetry.mozilla.org/concepts/glean/glean.html">Mozilla Data Documentation</a>.</p>
 <p>This book is divided into 2 main parts:</p>
 <h3><a class="header" href="#a-hreftestinghtmldeveloping-the-glean-sdka" id="a-hreftestinghtmldeveloping-the-glean-sdka"><a href="testing.html">Developing the Glean SDK</a></a></h3>
@@ -339,7 +339,7 @@ When they finish you will find the generated files under <code>Artifacts</code> 
 <p>The Glean SDK consists of multiple libraries for different platforms and targets.
 The main supported libraries are released as one.
 Development happens on the main repository <a href="https://github.com/mozilla/glean">https://github.com/mozilla/glean</a>.
-See <a href="../contributing.html">Contributing</a> for how to contribute changes to the Glean SDK.</p>
+See <a href="contributing.html">Contributing</a> for how to contribute changes to the Glean SDK.</p>
 <p>The development &amp; release process roughly follows the <a href="https://nvie.com/posts/a-successful-git-branching-model/">GitFlow model</a>.</p>
 <blockquote>
 <p><strong>Note:</strong> The rest of this section assumes that <code>upstream</code> points to the <code>https://github.com/mozilla/glean</code> repository,
@@ -624,7 +624,7 @@ root of your checkout:</p>
 <pre><code>make test-rust
 </code></pre>
 <p>If you plan to work on the Android component bindings, you should also review
-the instructions for <a href="dev/android/setup-android-build-environment.html">setting up an Android build environment</a>.</p>
+the instructions for <a href="android/setup-android-build-environment.html">setting up an Android build environment</a>.</p>
 <p>To run all Kotlin tests:</p>
 <pre><code>make test-kotlin
 </code></pre>
@@ -677,7 +677,7 @@ Every pull request needs to be approved by at least one of these people before l
 <p>The submitter needs to decide on their own discretion whether the changes require a look from more than a single reviewer or any outside developer.
 Reviewers can also ask for additional approval from other reviewers.</p>
 <h2><a class="header" href="#release" id="release">Release</a></h2>
-<p>See the <a href="dev/cut-a-new-release.html">Release process</a> on how to release a new version of the Glean SDK.</p>
+<p>See the <a href="cut-a-new-release.html">Release process</a> on how to release a new version of the Glean SDK.</p>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/contributing.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#code-coverage" id="code-coverage">Code Coverage</a></h1>
 <blockquote>
 <p>In computer science, test coverage is a measure used to describe the degree to which the source code of a program is executed when a particular test suite runs.
@@ -823,7 +823,7 @@ It also includes integrations into the Android platform.</p>
 <h2><a class="header" href="#doing-a-local-build-of-the-glean-sdk" id="doing-a-local-build-of-the-glean-sdk">Doing a local build of the Glean SDK:</a></h2>
 <p>This document describes how to make local builds of the Android bindings in this repository.
 Most consumers of these bindings <em>do not</em> need to follow this process,
-but will instead <a href="android/../../user/adding-glean-to-your-project.html">use pre-built bindings</a>.</p>
+but will instead <a href="android/../../book/user/adding-glean-to-your-project.html">use pre-built bindings</a>.</p>
 <h2><a class="header" href="#prepare-your-build-environment" id="prepare-your-build-environment">Prepare your build environment</a></h2>
 <p>Typically, this process only needs to be run once, although periodically you
 may need to repeat some steps (e.g., Rust updates should be done periodically).</p>
@@ -1203,7 +1203,7 @@ The project directory can be imported and all the build details can be left to t
 It makes use of the underlying <a href="python/../core/index.html">Rust component</a> with a Python-specific API on top.</p>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/python/index.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#setup-the-python-build-environment" id="setup-the-python-build-environment">Setup the Python Build Environment</a></h1>
 <p>This document describes how to set up an environment for the development of the Glean Python bindings.</p>
-<p>Instructions for installing a copy of the Glean Python bindings into your own environment for use in your project are described in <a href="python/../../user/adding-glean-to-your-project.html">adding Glean to your project</a>.</p>
+<p>Instructions for installing a copy of the Glean Python bindings into your own environment for use in your project are described in <a href="python/../../book/user/adding-glean-to-your-project.html">adding Glean to your project</a>.</p>
 <h2><a class="header" href="#prerequisites" id="prerequisites">Prerequisites</a></h2>
 <p>Glean requires Python 3.6 or later.</p>
 <p>Make sure it is installed on your system and accessible on the <code>PATH</code> as <code>python3</code>.</p>
@@ -1306,7 +1306,7 @@ logging.basicConfig(level=logging.DEBUG)
 <pre><code class="language-bash">  $ make python-docs
 </code></pre>
 <h2><a class="header" href="#building-wheels-for-linux" id="building-wheels-for-linux">Building wheels for Linux</a></h2>
-<p>Building on Linux using the above instructions will create Linux binaries that dynamically link against the version of <code>libc</code> installed on your machine. 
+<p>Building on Linux using the above instructions will create Linux binaries that dynamically link against the version of <code>libc</code> installed on your machine.
 This generally will not be portable to other Linux distributions, and PyPI will not even allow it to be uploaded.
 In order to create wheels that can be installed on the broadest range of Linux distributions, the Python Packaging Authority's <a href="https://github.com/pypa/manylinux">manylinux</a> project maintains a Docker image for building compatible Linux wheels.</p>
 <p>The CircleCI configuration handles making these wheels from tagged releases.
@@ -1511,7 +1511,7 @@ Individual crate updates for version compatible with the requirement in <code>Ca
 </code></pre>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/core/dependency-management.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#adding-a-new-metric-type" id="adding-a-new-metric-type">Adding a new metric type</a></h1>
 <p>Data in the Glean SDK is stored in so-called metrics.
-You can find the full list of implemented metric types <a href="core/../../user/metrics/index.html">in the user overview</a>.</p>
+You can find the full list of implemented metric types <a href="core/../../book/user/metrics/index.html">in the user overview</a>.</p>
 <p>Adding a new metric type involves defining the metric type's API, its persisted and in-memory storage as well as its serialization into the ping payload.</p>
 <h2><a class="header" href="#glean_parser" id="glean_parser"><code>glean_parser</code></a></h2>
 <p>In order for your metric to be usable, you must add it to
@@ -1527,7 +1527,7 @@ and be stored in the object model.</li>
 <li>You must add tests.</li>
 </ul>
 <h2><a class="header" href="#the-metric-types-api" id="the-metric-types-api">The metric type's API</a></h2>
-<p>A metric type implementation is defined in its own file under <code>glean-core/src/metrics/</code>, e.g. <code>glean-core/src/metrics/counter.rs</code> for a <a href="core/../../user/metrics/counter.html">Counter</a>.</p>
+<p>A metric type implementation is defined in its own file under <code>glean-core/src/metrics/</code>, e.g. <code>glean-core/src/metrics/counter.rs</code> for a <a href="core/../../book/user/metrics/counter.html">Counter</a>.</p>
 <p>Start by defining a structure to hold the metric's metadata:</p>
 <pre><code class="language-rust noplaypen">#[derive(Clone, Debug)]
 pub struct CounterMetric {
@@ -2380,7 +2380,7 @@ The Glean SDK will be able to read previous formats if necessary.</p>
 <pre><code>X-Debug-ID: &lt;tag&gt;
 </code></pre>
 <p><code>&lt;tag&gt;</code> is a alphanumeric string with a maximum length of 20 characters, used to identify pings in the Debug Ping Viewer.</p>
-<p>See <a href="core/internal/../../../user/debugging/index.html">Debugging products using the Glean SDK</a> for detailed information how to use this mechanism in applications.</p>
+<p>See <a href="core/internal/../../../book/user/debugging/index.html">Debugging products using the Glean SDK</a> for detailed information how to use this mechanism in applications.</p>
 <hr />
 <div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
 <p>Requires a Mozilla login.</p>

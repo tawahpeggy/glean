@@ -176,7 +176,7 @@
                     <main>
                         <h1><a class="header" href="#setup-the-python-build-environment" id="setup-the-python-build-environment">Setup the Python Build Environment</a></h1>
 <p>This document describes how to set up an environment for the development of the Glean Python bindings.</p>
-<p>Instructions for installing a copy of the Glean Python bindings into your own environment for use in your project are described in <a href="../../user/adding-glean-to-your-project.html">adding Glean to your project</a>.</p>
+<p>Instructions for installing a copy of the Glean Python bindings into your own environment for use in your project are described in <a href="../../book/user/adding-glean-to-your-project.html">adding Glean to your project</a>.</p>
 <h2><a class="header" href="#prerequisites" id="prerequisites">Prerequisites</a></h2>
 <p>Glean requires Python 3.6 or later.</p>
 <p>Make sure it is installed on your system and accessible on the <code>PATH</code> as <code>python3</code>.</p>
@@ -279,7 +279,7 @@ logging.basicConfig(level=logging.DEBUG)
 <pre><code class="language-bash">  $ make python-docs
 </code></pre>
 <h2><a class="header" href="#building-wheels-for-linux" id="building-wheels-for-linux">Building wheels for Linux</a></h2>
-<p>Building on Linux using the above instructions will create Linux binaries that dynamically link against the version of <code>libc</code> installed on your machine. 
+<p>Building on Linux using the above instructions will create Linux binaries that dynamically link against the version of <code>libc</code> installed on your machine.
 This generally will not be portable to other Linux distributions, and PyPI will not even allow it to be uploaded.
 In order to create wheels that can be installed on the broadest range of Linux distributions, the Python Packaging Authority's <a href="https://github.com/pypa/manylinux">manylinux</a> project maintains a Docker image for building compatible Linux wheels.</p>
 <p>The CircleCI configuration handles making these wheels from tagged releases.

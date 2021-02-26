@@ -176,7 +176,7 @@
                     <main>
                         <h1><a class="header" href="#adding-a-new-metric-type" id="adding-a-new-metric-type">Adding a new metric type</a></h1>
 <p>Data in the Glean SDK is stored in so-called metrics.
-You can find the full list of implemented metric types <a href="../../user/metrics/index.html">in the user overview</a>.</p>
+You can find the full list of implemented metric types <a href="../../book/user/metrics/index.html">in the user overview</a>.</p>
 <p>Adding a new metric type involves defining the metric type's API, its persisted and in-memory storage as well as its serialization into the ping payload.</p>
 <h2><a class="header" href="#glean_parser" id="glean_parser"><code>glean_parser</code></a></h2>
 <p>In order for your metric to be usable, you must add it to
@@ -192,7 +192,7 @@ and be stored in the object model.</li>
 <li>You must add tests.</li>
 </ul>
 <h2><a class="header" href="#the-metric-types-api" id="the-metric-types-api">The metric type's API</a></h2>
-<p>A metric type implementation is defined in its own file under <code>glean-core/src/metrics/</code>, e.g. <code>glean-core/src/metrics/counter.rs</code> for a <a href="../../user/metrics/counter.html">Counter</a>.</p>
+<p>A metric type implementation is defined in its own file under <code>glean-core/src/metrics/</code>, e.g. <code>glean-core/src/metrics/counter.rs</code> for a <a href="../../book/user/metrics/counter.html">Counter</a>.</p>
 <p>Start by defining a structure to hold the metric's metadata:</p>
 <pre><code class="language-rust noplaypen">#[derive(Clone, Debug)]
 pub struct CounterMetric {
