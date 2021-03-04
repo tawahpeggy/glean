@@ -174,34 +174,67 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#glean-sdk" id="glean-sdk">Glean SDK</a></h1>
+                        <h1><a class="header" href="#introduction" id="introduction">Introduction</a></h1>
+<p>Glean is a modern approach for a telemetry library
+and is part of the <a href="https://docs.telemetry.mozilla.org/concepts/glean/glean.html">Glean project</a>.</p>
 <p><img src="glean.jpeg" alt="Glean logo" /></p>
-<p>The <code>Glean SDK</code> is a modern approach for a Telemetry library and is part of the <a href="https://docs.telemetry.mozilla.org/concepts/glean/glean.html">Glean project</a>.</p>
-<p>To contact us you can:</p>
+<p>There are two implementations of Glean, with support for 5 different programming languages in total.
+Both implementations strive to contain the same features with similar, but idiomatic APIs.</p>
+<p>Unless clearly stated otherwise, regard the text in this book as valid for both clients
+and all the supported programming languages and environments.</p>
+<h3><a class="header" href="#a-hrefhttpsgithubcommozillagleanthe-glean-sdka" id="a-hrefhttpsgithubcommozillagleanthe-glean-sdka"><a href="https://github.com/mozilla/glean">The Glean SDK</a></a></h3>
+<p>The Glean SDK is an implementation of Glean in Rust, with language bindings for <strong>Kotlin</strong>,
+<strong>Python</strong>, <strong>Rust</strong> and <strong>Swift</strong>.</p>
+<p>For development documentation on the <code>Glean SDK</code>,
+refer to <a href="https://mozilla.github.io/glean/">the Glean SDK development book</a>.</p>
+<p>To report issues or request changes on the Glean SDK,
+file a bug in <a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Data+Platform+and+Tools&amp;component=Glean%3A+SDK&amp;priority=P3&amp;status_whiteboard=%5Btelemetry%3Aglean-rs%3Am%3F%5D">Bugzilla in Data Platform &amp; Tools :: Glean: SDK</a>.</p>
+<h3><a class="header" href="#a-hrefhttpsgithubcommozillagleanjsgleanjsa" id="a-hrefhttpsgithubcommozillagleanjsgleanjsa"><a href="https://github.com/mozilla/glean.js">Glean.js</a></a></h3>
+<p>Glean.js is an implementation of Glean in <strong>Javascript</strong>. Currently, it only has support
+for usage in web extensions.</p>
+<p>For development documentation on <code>Glean.js</code>,
+refer to <a href="https://github.com/mozilla/glean.js/tree/main/docs">the Glean.js development documentation</a>.</p>
+<p>To report issues or request changes on Glean.js,
+file a bug in <a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Data+Platform+and+Tools&amp;component=Glean.js&amp;priority=P4&amp;status_whiteboard=%5Btelemetry%3Aglean-js%3Am%3F%5D">Bugzilla in Data Platform &amp; Tools :: Glean.js</a>.</p>
+<blockquote>
+<p><strong>Note</strong> Glean.js is still in development and does not provide all the features the Glean SDK does.
+Feature parity will be worked on after initial validation. Do not hesitate to <a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Data+Platform+and+Tools&amp;component=Glean.js&amp;priority=P4&amp;status_whiteboard=%5Btelemetry%3Aglean-js%3Am%3F%5D">file a bug</a>
+if you want to use Glean.js and is missing some key Glean feature.</p>
+</blockquote>
+<h2><a class="header" href="#sections" id="sections">Sections</a></h2>
+<h3><a class="header" href="#a-hrefuserindexhtmlusing-gleana" id="a-hrefuserindexhtmlusing-gleana"><a href="./user/index.html">Using Glean</a></a></h3>
+<p>In this section we describe how to use Glean in your own libraries and applications.
+It explains the first steps of integrating Glean into your project, choosing the right metric type for you,
+debugging products that use Glean and Glean's built-in error reporting mechanism.
+If you want to start using Glean to report data, this is the section you should read.</p>
+<h3><a class="header" href="#a-hrefusermetricsindexhtmlmetric-typesa" id="a-hrefusermetricsindexhtmlmetric-typesa"><a href="./user/metrics/index.html">Metric Types</a></a></h3>
+<p>This sections lists all the metric types provided by Glean, with examples on how to define them
+and record data using them. Before diving into Glean's metric types details, don't forget to
+read the <a href="https://mozilla.github.io/glean/book/user/adding-new-metrics.html#choosing-a-metric-type">Choosing a metric type</a> page.</p>
+<h3><a class="header" href="#a-hrefuserpingsindexhtmlpingsa" id="a-hrefuserpingsindexhtmlpingsa"><a href="./user/pings/index.html">Pings</a></a></h3>
+<p>This section goes through what is a ping and how to define custom pings. A Glean client may provide
+off-the-shelf pings, such as the <a href="https://mozilla.github.io/glean/book/user/pings/metrics.html"><code>metrics</code></a>
+or <a href="https://mozilla.github.io/glean/book/user/pings/baseline.html"><code>baseline</code></a> pings. In this section,
+you will also find the descriptions and the schedules of each of these pings.</p>
+<h3><a class="header" href="#appendix" id="appendix">Appendix</a></h3>
+<h4><a class="header" href="#a-hrefappendixglossaryhtmlglossarya" id="a-hrefappendixglossaryhtmlglossarya"><a href="./appendix/glossary.html">Glossary</a></a></h4>
+<p>In this book we use a lot of Glean specific terminology. In the glossary, we go through
+many of the terms used throughout this book and describe exactly what we mean when we use them.</p>
+<h4><a class="header" href="#a-hrefappendixchangeloghtmlchangeloga" id="a-hrefappendixchangeloghtmlchangeloga"><a href="./appendix/changelog.html">Changelog</a></a></h4>
+<p>This section contains detailed notes about changes in Glean, per release.</p>
+<h4><a class="header" href="#a-hrefappendixtwightmlthis-week-in-gleana" id="a-hrefappendixtwightmlthis-week-in-gleana"><a href="./appendix/twig.html">This Week in Glean</a></a></h4>
+<p>“This Week in Glean” is a series of blog posts that the Glean Team at Mozilla is using to try
+to communicate better about our work. They could be release notes, documentation, hopes, dreams,
+or whatever: so long as it is inspired by Glean.</p>
+<h2><a class="header" href="#contact" id="contact">Contact</a></h2>
+<p>To contact the Glean team you can:</p>
 <ul>
 <li>Find us in the <a href="https://chat.mozilla.org/#/room/#glean:mozilla.org">#glean channel on chat.mozilla.org</a>.</li>
-<li>To report issues or request changes, file a bug in <a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Data+Platform+and+Tools&amp;component=Glean%3A+SDK&amp;priority=P3&amp;status_whiteboard=%5Btelemetry%3Aglean-rs%3Am%3F%5D">Bugzilla in Data Platform &amp; Tools :: Glean: SDK</a>.</li>
 <li>Send an email to <em>glean-team@mozilla.com</em>.</li>
 <li>The Glean SDK team is: <em>:janerik</em>, <em>:dexter</em>, <em>:travis</em>, <em>:mdroettboom</em>, <em>:gfritzsche</em>, <em>:chutten</em>, <em>:brizental</em>.</li>
 </ul>
-<p>The source code is available <a href="https://github.com/mozilla/glean/">on GitHub</a>.</p>
-<h2><a class="header" href="#using-this-book" id="using-this-book">Using this book</a></h2>
-<p>This book is specifically about <strong>using</strong> the <code>Glean SDK</code>.</p>
-<p>For documentation on <strong>contributing to and developing</strong> the <code>Glean SDK</code>, refer to <a href="../dev/">the Glean SDK development book</a>.</p>
-<p>For documentation about the broader end-to-end Glean project, refer to the <a href="https://docs.telemetry.mozilla.org/concepts/glean/glean.html">Mozilla Data Documentation</a>.</p>
-<p>This book is divided into 3 main chapters:</p>
-<h3><a class="header" href="#a-hrefuserindexhtmlusing-the-glean-sdka" id="a-hrefuserindexhtmlusing-the-glean-sdka"><a href="user/index.html">Using the Glean SDK</a></a></h3>
-<p>If you want to use the Glean SDK to report data then this is the section you should read.
-It explains the first steps from integrating Glean into your project,
-contains details about all available metric types
-and how to do send your own custom pings.</p>
-<h3><a class="header" href="#a-hrefusercollected-metricsmetricshtmlmetrics-collected-by-the-glean-sdka" id="a-hrefusercollected-metricsmetricshtmlmetrics-collected-by-the-glean-sdka"><a href="user/collected-metrics/metrics.html">Metrics collected by the Glean SDK</a></a></h3>
-<p>This chapter lists all metrics collected by the Glean SDK itself.</p>
-<h3><a class="header" href="#a-hrefappendixtwightmlthis-week-in-gleana" id="a-hrefappendixtwightmlthis-week-in-gleana"><a href="appendix/twig.html">This Week in Glean</a></a></h3>
-<p>“This Week in Glean” is a series of blog posts that the Glean Team at Mozilla is using to try to communicate better about our work.
-They could be release notes, documentation, hopes, dreams, or whatever: so long as it is inspired by Glean.</p>
 <h2><a class="header" href="#license" id="license">License</a></h2>
-<p>The Glean SDK Source Code is subject to the terms of the Mozilla Public License v2.0.
+<p>Glean.js and the Glean SDK Source Code is subject to the terms of the Mozilla Public License v2.0.
 You can obtain a copy of the MPL at <a href="https://mozilla.org/MPL/2.0/">https://mozilla.org/MPL/2.0/</a>.</p>
 
                     </main>
