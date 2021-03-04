@@ -180,6 +180,7 @@ The intent is to make the Glean SDK easier to test 'out of the box' in any clien
 These functions expose a way to inspect and validate recorded metric values within the client application but are restricted to test code only through visibility annotations
 (<code>@VisibleForTesting(otherwise = VisibleForTesting.NONE)</code> for Kotlin, <code>internal</code> methods for Swift).
 (Outside of a testing context, Glean APIs are otherwise write-only so that it can enforce semantics and constraints about data).</p>
+<p>To encourage using the testing API, it is also possible to <a href="#generating-testing-coverage-reports">generate testing coverage reports</a> to show which metrics in your project are tested.</p>
 <h2><a class="header" href="#general-test-api-method-semantics" id="general-test-api-method-semantics">General test API method semantics</a></h2>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -371,6 +372,38 @@ assert 1 == metrics.url.visit.test_get_value()
 </div>
 </div>
 </div>
+<h2><a class="header" href="#generating-testing-coverage-reports" id="generating-testing-coverage-reports">Generating testing coverage reports</a></h2>
+<p>Glean can generate coverage reports to track which metrics are tested in your unit test suite.</p>
+<p>There are three steps to integrate it into your continuous integration workflow: recording coverage, post-processing the results, and uploading the results.</p>
+<h3><a class="header" href="#recording-coverage" id="recording-coverage">Recording coverage</a></h3>
+<p>Glean testing coverage is enabled by setting the <code>GLEAN_TEST_COVERAGE</code> environment variable to the name of a file to store results.
+It is good practice to set it to the absolute path to a file, since some testing harnesses (such as <code>cargo test</code>) may change the current working directory.</p>
+<pre><code class="language-bash">GLEAN_TEST_COVERAGE=$(realpath glean_coverage.txt) make test
+</code></pre>
+<h3><a class="header" href="#post-processing-the-results" id="post-processing-the-results">Post-processing the results</a></h3>
+<p>A post-processing step is required to convert the raw output in the file specified by <code>GLEAN_TEST_COVERAGE</code> into usable output for coverage reporting tools. Currently, the only coverage reporting tool supported is <a href="https://codecov.io">codecov.io</a>.</p>
+<p>This post-processor is available in the <code>coverage</code> subcommand in the <a href="https://github.com/mozilla/glean_parser"><code>glean_parser</code></a> tool.</p>
+<p>For some build systems, <code>glean_parser</code> is already installed for you by the build system integration at the following locations:</p>
+<ul>
+<li>On Android/Gradle, <code>$GRADLE_HOME/glean/bootstrap-4.5.11/Miniconda3/bin/glean_parser</code></li>
+<li>On iOS/Carthage, <code>$PROJECT_ROOT/.venv/bin/glean_parser</code></li>
+<li>For other systems, install <code>glean_parser</code> using <code>pip install glean_parser</code></li>
+</ul>
+<p>The <code>glean_parser coverage</code> command requires the following parameters:</p>
+<ul>
+<li><code>-f</code>: The output format to produce, for example <code>codecovio</code> to produce <a href="https://codecov.io">codecov.io</a>'s custom format.</li>
+<li><code>-o</code>: The path to the output file, for example <code>codecov.json</code>.</li>
+<li><code>-c</code>: The input raw coverage file. <code>glean_coverage.txt</code> in the example above.</li>
+<li>A list of the <code>metrics.yaml</code> files in your repository.</li>
+</ul>
+<p>For example, to produce output for <a href="https://codecov.io">codecov.io</a>:</p>
+<pre><code class="language-bash">glean_parser coverage -f codecovio -o glean_coverage.json -c glean_coverage.txt app/metrics.yaml
+</code></pre>
+<p>In this example, the <code>glean_coverage.json</code> file is now ready for uploading to codecov.io.</p>
+<h3><a class="header" href="#uploading-coverage" id="uploading-coverage">Uploading coverage</a></h3>
+<p>If using <code>codecov.io</code>, the uploader doesn't send coverage results for YAML files by default. Pass the <code>-X yaml</code> option to the uploader to make sure they are included:</p>
+<pre><code class="language-bash">bash &lt;(curl -s https://codecov.io/bash) -X yaml
+</code></pre>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/user/testing-metrics.md">Edit this file on GitHub.</a></footer>
                     </main>
 
