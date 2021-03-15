@@ -1143,7 +1143,7 @@ enforced.</p></div>
         if self._disabled:
             return
 
-        timestamp = _util.time_ms()
+        timestamp = _ffi.lib.glean_get_timestamp_ms()
 
         @Dispatcher.launch
         def record():
@@ -1269,7 +1269,7 @@ for values is 100.</p></div>
     if self._disabled:
         return
 
-    timestamp = _util.time_ms()
+    timestamp = _ffi.lib.glean_get_timestamp_ms()
 
     @Dispatcher.launch
     def record():

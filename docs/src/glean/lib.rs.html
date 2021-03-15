@@ -765,6 +765,11 @@
 <span id="762">762</span>
 <span id="763">763</span>
 <span id="764">764</span>
+<span id="765">765</span>
+<span id="766">766</span>
+<span id="767">767</span>
+<span id="768">768</span>
+<span id="769">769</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -1526,6 +1531,11 @@
         <span class="comment">// we don&#39;t validate the tags, thus this function always returns true.</span>
         <span class="bool-val">true</span>
     }
+}
+
+<span class="doccomment">/// Returns a timestamp corresponding to &quot;now&quot; with millisecond precision.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_timestamp_ms</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u64</span> {
+    <span class="ident">glean_core</span>::<span class="ident">get_timestamp_ms</span>()
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>

@@ -198,6 +198,18 @@
 <ul>
 <li>Added <code>rate</code> metric type (<a href="https://github.com/mozilla/glean/pull/1516">#1516</a>).</li>
 <li>Set <code>internal_metrics::os_version</code> for MacOS, Windows and Linux (<a href="https://github.com/mozilla/glean/pull/1538">#1538</a>)</li>
+<li>Expose a function <code>get_timestamp_ms</code> to get a timestamp from a monotonic clock on all supported operating systems, to be used for event timestamps.</li>
+</ul>
+</li>
+<li>iOS
+<ul>
+<li><strong>Breaking Change</strong>: Event timestamps are now correctly recorded in milliseconds.
+<ul>
+<li>Since the first release event timestamps were erroneously recorded with nanosecond precision.
+This is now fixed and event timestamps are in milliseconds.
+This is equivalent to how it works in all other language bindings.</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -213,7 +225,7 @@
 </li>
 <li>RLB
 <ul>
-<li><strong>Breaking change:</strong> <code>Configuration.data_path</code> is now a <code>std::path::PathBuf</code>(<a href="https://github.com/mozilla/glean/pull/1493">#1493</a>). </li>
+<li><strong>Breaking change:</strong> <code>Configuration.data_path</code> is now a <code>std::path::PathBuf</code>(<a href="https://github.com/mozilla/glean/pull/1493">#1493</a>).</li>
 </ul>
 </li>
 </ul>
