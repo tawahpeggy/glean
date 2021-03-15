@@ -173,6 +173,15 @@
 <span id="170">170</span>
 <span id="171">171</span>
 <span id="172">172</span>
+<span id="173">173</span>
+<span id="174">174</span>
+<span id="175">175</span>
+<span id="176">176</span>
+<span id="177">177</span>
+<span id="178">178</span>
+<span id="179">179</span>
+<span id="180">180</span>
+<span id="181">181</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -216,6 +225,15 @@
             <span class="ident">inner</span>,
             <span class="ident">extra_keys</span>: <span class="ident">PhantomData</span>,
         }
+    }
+
+    <span class="doccomment">/// Record a new event with a provided timestamp.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// It&#39;s the caller&#39;s responsibility to ensure the timestamp comes from the same clock source.</span>
+    <span class="doccomment">/// Use [`glean::get_timestamp_ms`](crate::get_timestamp_ms) to get a valid timestamp.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">record_with_time</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">timestamp</span>: <span class="ident">u64</span>, <span class="ident">extra</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">i32</span>, <span class="ident">String</span><span class="op">&gt;</span>) {
+        <span class="kw">let</span> <span class="ident">metric</span> <span class="op">=</span> <span class="ident">Arc</span>::<span class="ident">clone</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">inner</span>);
+        <span class="kw">crate</span>::<span class="ident">launch_with_glean</span>(<span class="kw">move</span> <span class="op">|</span><span class="ident">glean</span><span class="op">|</span> <span class="ident">metric</span>.<span class="ident">record</span>(<span class="ident">glean</span>, <span class="ident">timestamp</span>, <span class="prelude-val">Some</span>(<span class="ident">extra</span>)));
     }
 }
 
