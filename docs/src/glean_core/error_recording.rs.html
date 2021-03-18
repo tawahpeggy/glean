@@ -243,8 +243,8 @@
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Display</span>;
 
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">error</span>::{<span class="ident">Error</span>, <span class="ident">ErrorKind</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">metrics</span>::<span class="ident">labeled</span>::{<span class="ident">combine_base_identifier_and_label</span>, <span class="ident">strip_label</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">metrics</span>::<span class="ident">CounterMetric</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">metrics</span>::{<span class="ident">combine_base_identifier_and_label</span>, <span class="ident">strip_label</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">CommonMetricData</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">Glean</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">Lifetime</span>;

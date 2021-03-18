@@ -196,8 +196,6 @@
 <span id="193">193</span>
 <span id="194">194</span>
 <span id="195">195</span>
-<span id="196">196</span>
-<span id="197">197</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -219,7 +217,7 @@
 <span class="kw">mod</span> <span class="ident">event</span>;
 <span class="kw">mod</span> <span class="ident">experiment</span>;
 <span class="kw">mod</span> <span class="ident">jwe</span>;
-<span class="kw">mod</span> <span class="ident">labeled</span>;
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod</span> <span class="ident">labeled</span>;
 <span class="kw">mod</span> <span class="ident">memory_distribution</span>;
 <span class="kw">mod</span> <span class="ident">memory_unit</span>;
 <span class="kw">mod</span> <span class="ident">ping</span>;
@@ -252,9 +250,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use</span> <span class="self">self</span>::<span class="ident">experiment</span>::<span class="ident">RecordedExperimentData</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">jwe</span>::<span class="ident">JweMetric</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">labeled</span>::{
-    <span class="ident">combine_base_identifier_and_label</span>, <span class="ident">dynamic_label</span>, <span class="ident">strip_label</span>, <span class="ident">LabeledMetric</span>,
-};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">labeled</span>::<span class="ident">LabeledMetric</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">memory_distribution</span>::<span class="ident">MemoryDistributionMetric</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">memory_unit</span>::<span class="ident">MemoryUnit</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">ping</span>::<span class="ident">PingType</span>;
