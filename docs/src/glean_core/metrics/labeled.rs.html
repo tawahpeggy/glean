@@ -252,7 +252,6 @@
 <span id="249">249</span>
 <span id="250">250</span>
 <span id="251">251</span>
-<span id="252">252</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -267,18 +266,17 @@
 <span class="kw">const</span> <span class="ident">OTHER_LABEL</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;__other__&quot;</span>;
 <span class="kw">const</span> <span class="ident">MAX_LABEL_LENGTH</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">61</span>;
 
-<span class="doccomment">/// Checks whether the given value matches the label regex.</span>
+<span class="doccomment">/// Checks whether the given label is sane.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// This regex is used for matching against labels and should allow for dots,</span>
-<span class="doccomment">/// underscores, and/or hyphens. Labels are also limited to starting with either</span>
-<span class="doccomment">/// a letter or an underscore character.</span>
+<span class="doccomment">/// The check corresponds to the following regular expression:</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// The exact regex (from the pipeline schema [here](https://github.com/mozilla-services/mozilla-pipeline-schemas/blob/master/templates/include/glean/dot_separated_short_id.1.schema.json)) is:</span>
+<span class="doccomment">/// ```text</span>
+<span class="doccomment">/// ^[a-z_][a-z0-9_-]{0,29}(\\.[a-z_][a-z0-9_-]{0,29})*$</span>
+<span class="doccomment">/// ```</span>
 <span class="doccomment">///</span>
-<span class="doccomment">///    &quot;^[a-z_][a-z0-9_-]{0,29}(\\.[a-z_][a-z0-9_-]{0,29})*$&quot;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// The regex crate isn&#39;t used here because it adds to the binary size, and the</span>
-<span class="doccomment">/// Glean SDK doesn&#39;t use regular expressions anywhere else.</span>
+<span class="doccomment">/// We do a manul check here instead of using a regex,</span>
+<span class="doccomment">/// because the regex crate adds to the binary size significantly,</span>
+<span class="doccomment">/// and the Glean SDK doesn&#39;t use regular expressions anywhere else.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// Some examples of good and bad labels:</span>
 <span class="doccomment">///</span>
