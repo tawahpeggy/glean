@@ -176,6 +176,15 @@
                     <main>
                         <h1><a class="header" href="#unreleased-changes" id="unreleased-changes">Unreleased changes</a></h1>
 <p><a href="https://github.com/mozilla/glean/compare/v36.0.0...main">Full changelog</a></p>
+<ul>
+<li>Android
+<ul>
+<li>BUGFIX: <code>TimespanMetricType.measure</code> and <code>TimingDistributionMetricType.measure</code> won't get inlined anymore (<a href="https://github.com/mozilla/glean/pull/1560">#1560</a>).
+This avoids a potential bug where a <code>return</code> used inside the closure would end up not measuring the time.
+Use <code>return@measure &lt;val&gt;</code> for early returns.</li>
+</ul>
+</li>
+</ul>
 <h1><a class="header" href="#v3600-2021-03-16" id="v3600-2021-03-16">v36.0.0 (2021-03-16)</a></h1>
 <p><a href="https://github.com/mozilla/glean/compare/v35.0.0...v36.0.0">Full changelog</a></p>
 <ul>
