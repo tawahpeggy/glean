@@ -708,7 +708,7 @@
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">debug_assertions</span>))]</span>
         <span class="kw">let</span> <span class="ident">level</span> <span class="op">=</span> <span class="ident">log</span>::<span class="ident">LevelFilter</span>::<span class="ident">Info</span>;
 
-        <span class="kw">let</span> <span class="ident">logger</span> <span class="op">=</span> <span class="ident">oslog</span>::<span class="ident">OsLogger</span>::<span class="ident">new</span>(<span class="string">&quot;org.mozilla.glean&quot;</span>, <span class="string">&quot;glean_core&quot;</span>).<span class="ident">level_filter</span>(<span class="ident">level</span>);
+        <span class="kw">let</span> <span class="ident">logger</span> <span class="op">=</span> <span class="ident">oslog</span>::<span class="ident">OsLogger</span>::<span class="ident">new</span>(<span class="string">&quot;org.mozilla.glean&quot;</span>).<span class="ident">level_filter</span>(<span class="ident">level</span>);
 
         <span class="kw">match</span> <span class="ident">logger</span>.<span class="ident">init</span>() {
             <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">log</span>::<span class="macro">trace</span><span class="macro">!</span>(<span class="string">&quot;os_log should be hooked up!&quot;</span>),
