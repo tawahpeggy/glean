@@ -221,6 +221,11 @@ fun onLoginCancel() {
     // ...
 }
 </code></pre>
+<p>For convenience one can measure the time of a function or block of code:</p>
+<pre><code class="language-Kotlin">Auth.loginTime.measure {
+    // Process login flow
+}
+</code></pre>
 <p>The time reported in the telemetry ping will be timespan recorded during the lifetime of the ping.</p>
 <p>There are test APIs available too:</p>
 <pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Auth
@@ -282,6 +287,11 @@ func onLogin() {
 func onLoginCancel() {
     Auth.loginTime.cancel()
     // ...
+}
+</code></pre>
+<p>For convenience one can measure the time of a function or block of code:</p>
+<pre><code class="language-Kotlin">Auth.loginTime.measure {
+    // Process login flow
 }
 </code></pre>
 <p>The time reported in the telemetry ping will be timespan recorded during the lifetime of the ping.</p>

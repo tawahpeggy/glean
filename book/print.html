@@ -3323,6 +3323,11 @@ fun onLoginCancel() {
     // ...
 }
 </code></pre>
+<p>For convenience one can measure the time of a function or block of code:</p>
+<pre><code class="language-Kotlin">Auth.loginTime.measure {
+    // Process login flow
+}
+</code></pre>
 <p>The time reported in the telemetry ping will be timespan recorded during the lifetime of the ping.</p>
 <p>There are test APIs available too:</p>
 <pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Auth
@@ -3384,6 +3389,11 @@ func onLogin() {
 func onLoginCancel() {
     Auth.loginTime.cancel()
     // ...
+}
+</code></pre>
+<p>For convenience one can measure the time of a function or block of code:</p>
+<pre><code class="language-Kotlin">Auth.loginTime.measure {
+    // Process login flow
 }
 </code></pre>
 <p>The time reported in the telemetry ping will be timespan recorded during the lifetime of the ping.</p>
@@ -3673,6 +3683,11 @@ fun onPageLoaded(e: Event) {
     Pages.pageLoad.stopAndAccumulate(timerId)
 }
 </code></pre>
+<p>For convenience one can measure the time of a function or block of code:</p>
+<pre><code class="language-Kotlin">Pages.pageLoad.measure {
+    // Load a page
+}
+</code></pre>
 <p>There are test APIs available too.  For convenience, properties <code>sum</code> and <code>count</code> are exposed to facilitate validating that data was recorded correctly.</p>
 <p>Continuing the <code>pageLoad</code> example above, at this point the metric should have a <code>sum == 11</code> and a <code>count == 2</code>:</p>
 <pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Pages
@@ -3737,6 +3752,11 @@ func onPageStart() {
 
 func onPageLoaded() {
     Pages.pageLoad.stopAndAccumulate(timerId)
+}
+</code></pre>
+<p>For convenience one can measure the time of a function or block of code:</p>
+<pre><code class="language-Swift">Pages.pageLoad.measure {
+    // Load a page
 }
 </code></pre>
 <p>There are test APIs available too.  For convenience, properties <code>sum</code> and <code>count</code> are exposed to facilitate validating that data was recorded correctly.</p>
