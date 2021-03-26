@@ -189,6 +189,11 @@ This avoids a potential bug where a <code>return</code> used inside the closure 
 Use <code>return@measure &lt;val&gt;</code> for early returns.</li>
 </ul>
 </li>
+<li>Python
+<ul>
+<li>The Glean Python bindings now use rkv's safe mode backend. This should avoid intermittent segfaults in the LMDB backend.</li>
+</ul>
+</li>
 </ul>
 <h1><a class="header" href="#v3600-2021-03-16" id="v3600-2021-03-16">v36.0.0 (2021-03-16)</a></h1>
 <p><a href="https://github.com/mozilla/glean/compare/v35.0.0...v36.0.0">Full changelog</a></p>
