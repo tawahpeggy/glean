@@ -1,3 +1,3 @@
 (function() {var implementors = {};
-implementors["glean"] = [{"text":"impl Ping for PingType","synthetic":false,"types":[]}];
+implementors["glean"] = [{"text":"impl <a class=\"trait\" href=\"glean/traits/trait.Ping.html\" title=\"trait glean::traits::Ping\">Ping</a> for <a class=\"struct\" href=\"glean/private/struct.PingType.html\" title=\"struct glean::private::PingType\">PingType</a>","synthetic":false,"types":["glean::private::ping::PingType"]}];
 if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

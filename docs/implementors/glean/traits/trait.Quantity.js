@@ -1,3 +1,3 @@
 (function() {var implementors = {};
-implementors["glean"] = [{"text":"impl Quantity for QuantityMetric","synthetic":false,"types":[]}];
+implementors["glean"] = [{"text":"impl <a class=\"trait\" href=\"glean/traits/trait.Quantity.html\" title=\"trait glean::traits::Quantity\">Quantity</a> for <a class=\"struct\" href=\"glean/private/struct.QuantityMetric.html\" title=\"struct glean::private::QuantityMetric\">QuantityMetric</a>","synthetic":false,"types":["glean::private::quantity::QuantityMetric"]}];
 if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
