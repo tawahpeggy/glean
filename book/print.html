@@ -1726,6 +1726,7 @@ Assert.Equal(
 <blockquote>
 <p><strong>Not sure which metric type to use?</strong> These docs contain a <a href="user/metrics/../adding-new-metrics.html#choosing-a-metric-type">series of questions</a> that can help. Reference information about each metric type is linked below.</p>
 </blockquote>
+<p>The parameters available that apply to any metric type are in the <a href="user/metrics/../metric-parameters.html">metric parameters page</a>.</p>
 <p>There are different metrics to choose from, depending on what you want to achieve:</p>
 <ul>
 <li>
@@ -1795,7 +1796,7 @@ For example, the number of HTTP connections that experienced an error relative t
 <p>Labeled metrics come in two forms:</p>
 <ul>
 <li>
-<p><strong>Static labels</strong>: The labels are specified at build time in the <code>metrics.yaml</code> file.
+<p><strong>Static labels</strong>: The labels are specified at build time in the <code>metrics.yaml</code> file, in the <code>labels</code> parameter.
 If a label that isn't part of this set is used at run time, it is converted to the special label <code>__other__</code>.</p>
 </li>
 <li>
@@ -4040,6 +4041,13 @@ That is, the function from a value \( x \) to a bucket index is:</p>
 <p><strong>Note</strong> Check out how this bucketing algorithm would behave on the <a href="user/metrics/memory_distribution.html#simulator">Simulator</a></p>
 </blockquote>
 <h2><a class="header" href="#configuration-10" id="configuration-10">Configuration</a></h2>
+<p>Memory distributions have a required <code>memory_unit</code> parameter, which specifies
+the unit the incoming memory size values are recorded in. The units are the
+power-of-2 units, so &quot;kilobyte&quot; is more correctly a &quot;kibibyte&quot;.</p>
+<pre><code>- kilobyte == 2^10 ==         1,024 bytes
+- megabyte == 2^20 ==     1,048,576 bytes
+- gigabyte == 2^30 == 1,073,741,824 bytes
+</code></pre>
 <p>If you wanted to create a memory distribution to measure the amount of heap memory allocated, first you need to add an entry for it to the <code>metrics.yaml</code> file:</p>
 <pre><code class="language-YAML">memory:
   heap_allocated:
@@ -4732,6 +4740,13 @@ Glean.install.firstRun.set(value.getTime() * 1000);
       source_of_login:
         description: The source from which the login view was opened, e.g. &quot;toolbar&quot;.
 </code></pre>
+<p>The <code>extra_keys</code> parameter enumerates the acceptable keys on the event. This is
+an object mapping the key to an object containing metadata about the key. A
+maximum of 10 extra keys is allowed. This metadata object has the following
+keys:</p>
+<ul>
+<li><code>description</code>: <strong>Required.</strong> A description of the key.</li>
+</ul>
 <h2><a class="header" href="#api-14" id="api-14">API</a></h2>
 <div class="tabs">
 <div class="tabbar"></div>

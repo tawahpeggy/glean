@@ -184,6 +184,13 @@ That is, the function from a value \( x \) to a bucket index is:</p>
 <p><strong>Note</strong> Check out how this bucketing algorithm would behave on the <a href="#simulator">Simulator</a></p>
 </blockquote>
 <h2><a class="header" href="#configuration" id="configuration">Configuration</a></h2>
+<p>Memory distributions have a required <code>memory_unit</code> parameter, which specifies
+the unit the incoming memory size values are recorded in. The units are the
+power-of-2 units, so &quot;kilobyte&quot; is more correctly a &quot;kibibyte&quot;.</p>
+<pre><code>- kilobyte == 2^10 ==         1,024 bytes
+- megabyte == 2^20 ==     1,048,576 bytes
+- gigabyte == 2^30 == 1,073,741,824 bytes
+</code></pre>
 <p>If you wanted to create a memory distribution to measure the amount of heap memory allocated, first you need to add an entry for it to the <code>metrics.yaml</code> file:</p>
 <pre><code class="language-YAML">memory:
   heap_allocated:
