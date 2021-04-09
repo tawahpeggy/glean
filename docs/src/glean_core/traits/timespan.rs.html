@@ -62,12 +62,25 @@
 <span id="59">59</span>
 <span id="60">60</span>
 <span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
+<span id="70">70</span>
+<span id="71">71</span>
+<span id="72">72</span>
+<span id="73">73</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
 <span class="comment">// file, You can obtain one at https://mozilla.org/MPL/2.0/.</span>
 
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ErrorType</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">time</span>::<span class="ident">Duration</span>;
 
 <span class="doccomment">/// A description for the [`TimespanMetric`](crate::metrics::TimespanMetric) type.</span>
 <span class="doccomment">///</span>
@@ -92,6 +105,17 @@
     <span class="doccomment">/// Aborts a previous [`start`](Timespan::start) call. No error is recorded</span>
     <span class="doccomment">/// if no [`start`](Timespan::start) was called.</span>
     <span class="kw">fn</span> <span class="ident">cancel</span>(<span class="kw-2">&amp;</span><span class="self">self</span>);
+
+    <span class="doccomment">/// Explicitly sets the timespan value.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This API should only be used if your library or application requires recording</span>
+    <span class="doccomment">/// spans of time in a way that cannot make use of</span>
+    <span class="doccomment">/// [`start`](Timespan::start)/[`stop`](Timespan::stop)/[`cancel`](Timespan::cancel).</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Arguments</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// * `elapsed` - The elapsed time to record.</span>
+    <span class="kw">fn</span> <span class="ident">set_raw</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">elapsed</span>: <span class="ident">Duration</span>);
 
     <span class="doccomment">/// **Exported for test purposes.**</span>
     <span class="doccomment">///</span>
