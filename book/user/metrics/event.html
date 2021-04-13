@@ -182,6 +182,9 @@
 <li>The name of the event.</li>
 <li>A set of key-value pairs, where the keys are predefined in the <code>extra_keys</code> metric parameter, and the values are strings.</li>
 </ul>
+<blockquote>
+<p><strong>Important:</strong> events are the most expensive metric type to record, transmit, store and analyze, so they should be used sparingly, and only when none of the other metric types are sufficient for answering your question.</p>
+</blockquote>
 <h2><a class="header" href="#configuration" id="configuration">Configuration</a></h2>
 <p>Say you're adding a new event for when a view is shown. First you need to add an entry for the event to the <code>metrics.yaml</code> file:</p>
 <pre><code class="language-YAML">views:

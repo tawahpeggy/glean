@@ -388,11 +388,6 @@
 <span id="385">385</span>
 <span id="386">386</span>
 <span id="387">387</span>
-<span id="388">388</span>
-<span id="389">389</span>
-<span id="390">390</span>
-<span id="391">391</span>
-<span id="392">392</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -410,10 +405,25 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">common_metric_data</span>::{<span class="ident">CommonMetricData</span>, <span class="ident">Lifetime</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">metrics</span>::{<span class="ident">CounterMetric</span>, <span class="ident">DatetimeMetric</span>, <span class="ident">Metric</span>, <span class="ident">MetricType</span>, <span class="ident">PingType</span>, <span class="ident">TimeUnit</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">storage</span>::<span class="ident">StorageManager</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">upload</span>::<span class="ident">HeaderMap</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">util</span>::{<span class="ident">get_iso_time_string</span>, <span class="ident">local_now_with_offset</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">Glean</span>, <span class="prelude-ty">Result</span>, <span class="ident">DELETION_REQUEST_PINGS_DIRECTORY</span>, <span class="ident">INTERNAL_STORAGE</span>, <span class="ident">PENDING_PINGS_DIRECTORY</span>,
 };
+
+<span class="doccomment">/// Holds everything you need to store or send a ping.</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Ping</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// The unique document id.</span>
+    <span class="kw">pub</span> <span class="ident">doc_id</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>,
+    <span class="doccomment">/// The ping&#39;s name.</span>
+    <span class="kw">pub</span> <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>,
+    <span class="doccomment">/// The path on the server to use when uplaoding this ping.</span>
+    <span class="kw">pub</span> <span class="ident">url_path</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>,
+    <span class="doccomment">/// The payload, including `*_info` fields.</span>
+    <span class="kw">pub</span> <span class="ident">content</span>: <span class="ident">JsonValue</span>,
+    <span class="doccomment">/// The headers to upload with the payload.</span>
+    <span class="kw">pub</span> <span class="ident">headers</span>: <span class="ident">HeaderMap</span>,
+}
 
 <span class="doccomment">/// Collect a ping&#39;s data, assemble it into its full payload and store it on disk.</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PingMaker</span>;
@@ -556,58 +566,31 @@
         <span class="macro">json</span><span class="macro">!</span>(<span class="ident">map</span>)
     }
 
-    <span class="doccomment">/// Build the metadata JSON to be persisted with a ping.</span>
+    <span class="doccomment">/// Build the headers to be persisted and sent with a ping.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// Currently the only type of metadata we need to persist is the value of the `X-Debug-ID` header.</span>
+    <span class="doccomment">/// Currently the only headers we persist are `X-Debug-ID` and `X-Source-Tags`.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Arguments</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// * `glean` - the [`Glean`] instance to collect metadata from.</span>
+    <span class="doccomment">/// * `glean` - the [`Glean`] instance to collect headers from.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Returns</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// A JSON object representing the metadata that needs to be persisted with this ping.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The structure of the metadata json is:</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```json</span>
-    <span class="doccomment">/// {</span>
-    <span class="doccomment">///     &quot;headers&quot;: {</span>
-    <span class="doccomment">///         &quot;X-Debug-ID&quot;: &quot;test-tag&quot;</span>
-    <span class="doccomment">///     }</span>
-    <span class="doccomment">/// }</span>
+    <span class="doccomment">/// A map of header names to header values.</span>
+    <span class="doccomment">/// Might be empty if there are no extra headers to send.</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">fn</span> <span class="ident">get_metadata</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">glean</span>: <span class="kw-2">&amp;</span><span class="ident">Glean</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">JsonValue</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">headers_map</span> <span class="op">=</span> <span class="macro">json</span><span class="macro">!</span>({});
+    <span class="kw">fn</span> <span class="ident">get_headers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">glean</span>: <span class="kw-2">&amp;</span><span class="ident">Glean</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">HeaderMap</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">headers_map</span> <span class="op">=</span> <span class="ident">HeaderMap</span>::<span class="ident">new</span>();
 
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">debug_view_tag</span>) <span class="op">=</span> <span class="ident">glean</span>.<span class="ident">debug_view_tag</span>() {
-            <span class="ident">headers_map</span>
-                .<span class="ident">as_object_mut</span>()
-                .<span class="ident">unwrap</span>() <span class="comment">// safe unwrap, we created the object above</span>
-                .<span class="ident">insert</span>(
-                    <span class="string">&quot;X-Debug-ID&quot;</span>.<span class="ident">to_string</span>(),
-                    <span class="ident">JsonValue</span>::<span class="ident">String</span>(<span class="ident">debug_view_tag</span>.<span class="ident">to_string</span>()),
-                );
+            <span class="ident">headers_map</span>.<span class="ident">insert</span>(<span class="string">&quot;X-Debug-ID&quot;</span>.<span class="ident">to_string</span>(), <span class="ident">debug_view_tag</span>.<span class="ident">to_string</span>());
         }
 
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">source_tags</span>) <span class="op">=</span> <span class="ident">glean</span>.<span class="ident">source_tags</span>() {
-            <span class="ident">headers_map</span>
-                .<span class="ident">as_object_mut</span>()
-                .<span class="ident">unwrap</span>() <span class="comment">// safe unwrap, we created the object above</span>
-                .<span class="ident">insert</span>(
-                    <span class="string">&quot;X-Source-Tags&quot;</span>.<span class="ident">to_string</span>(),
-                    <span class="ident">JsonValue</span>::<span class="ident">String</span>(<span class="ident">source_tags</span>.<span class="ident">join</span>(<span class="string">&quot;,&quot;</span>)),
-                );
+            <span class="ident">headers_map</span>.<span class="ident">insert</span>(<span class="string">&quot;X-Source-Tags&quot;</span>.<span class="ident">to_string</span>(), <span class="ident">source_tags</span>.<span class="ident">join</span>(<span class="string">&quot;,&quot;</span>));
         }
 
-        <span class="comment">// safe unwrap, we created the object above</span>
-        <span class="kw">if</span> <span class="op">!</span><span class="ident">headers_map</span>.<span class="ident">as_object</span>().<span class="ident">unwrap</span>().<span class="ident">is_empty</span>() {
-            <span class="prelude-val">Some</span>(<span class="macro">json</span><span class="macro">!</span>({
-                <span class="string">&quot;headers&quot;</span>: <span class="ident">headers_map</span>,
-            }))
-        } <span class="kw">else</span> {
-            <span class="prelude-val">None</span>
-        }
+        <span class="ident">headers_map</span>
     }
 
     <span class="doccomment">/// Collects a snapshot for the given ping from storage and attach required meta information.</span>
@@ -617,17 +600,21 @@
     <span class="doccomment">/// * `glean` - the [`Glean`] instance to collect data from.</span>
     <span class="doccomment">/// * `ping` - the ping to collect for.</span>
     <span class="doccomment">/// * `reason` - an optional reason code to include in the ping.</span>
+    <span class="doccomment">/// * `doc_id` - the ping&#39;s unique document identifier.</span>
+    <span class="doccomment">/// * `url_path` - the path on the server to upload this ping to.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Returns</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// A fully assembled JSON representation of the ping payload.</span>
+    <span class="doccomment">/// A fully assembled representation of the ping payload and associated metadata.</span>
     <span class="doccomment">/// If there is no data stored for the ping, `None` is returned.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">collect</span>(
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">collect</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">glean</span>: <span class="kw-2">&amp;</span><span class="ident">Glean</span>,
-        <span class="ident">ping</span>: <span class="kw-2">&amp;</span><span class="ident">PingType</span>,
+        <span class="ident">ping</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">PingType</span>,
         <span class="ident">reason</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">JsonValue</span><span class="op">&gt;</span> {
+        <span class="ident">doc_id</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>,
+        <span class="ident">url_path</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>,
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Ping</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="macro">info</span><span class="macro">!</span>(<span class="string">&quot;Collecting {}&quot;</span>, <span class="ident">ping</span>.<span class="ident">name</span>);
 
         <span class="kw">let</span> <span class="ident">metrics_data</span> <span class="op">=</span> <span class="ident">StorageManager</span>.<span class="ident">snapshot_as_json</span>(<span class="ident">glean</span>.<span class="ident">storage</span>(), <span class="kw-2">&amp;</span><span class="ident">ping</span>.<span class="ident">name</span>, <span class="bool-val">true</span>);
@@ -656,7 +643,13 @@
             <span class="ident">json_obj</span>.<span class="ident">insert</span>(<span class="string">&quot;events&quot;</span>.<span class="ident">to_string</span>(), <span class="ident">events_data</span>);
         }
 
-        <span class="prelude-val">Some</span>(<span class="ident">json</span>)
+        <span class="prelude-val">Some</span>(<span class="ident">Ping</span> {
+            <span class="ident">content</span>: <span class="ident">json</span>,
+            <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">ping</span>.<span class="ident">name</span>,
+            <span class="ident">doc_id</span>,
+            <span class="ident">url_path</span>,
+            <span class="ident">headers</span>: <span class="self">self</span>.<span class="ident">get_headers</span>(<span class="ident">glean</span>),
+        })
     }
 
     <span class="doccomment">/// Collects a snapshot for the given ping from storage and attach required meta information.</span>
@@ -677,8 +670,8 @@
         <span class="ident">ping</span>: <span class="kw-2">&amp;</span><span class="ident">PingType</span>,
         <span class="ident">reason</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">collect</span>(<span class="ident">glean</span>, <span class="ident">ping</span>, <span class="ident">reason</span>)
-            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">ping</span><span class="op">|</span> ::<span class="ident">serde_json</span>::<span class="ident">to_string_pretty</span>(<span class="kw-2">&amp;</span><span class="ident">ping</span>).<span class="ident">unwrap</span>())
+        <span class="self">self</span>.<span class="ident">collect</span>(<span class="ident">glean</span>, <span class="ident">ping</span>, <span class="ident">reason</span>, <span class="string">&quot;&quot;</span>, <span class="string">&quot;&quot;</span>)
+            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">ping</span><span class="op">|</span> ::<span class="ident">serde_json</span>::<span class="ident">to_string_pretty</span>(<span class="kw-2">&amp;</span><span class="ident">ping</span>.<span class="ident">content</span>).<span class="ident">unwrap</span>())
     }
 
     <span class="doccomment">/// Gets the path to a directory for ping storage.</span>
@@ -709,33 +702,30 @@
     }
 
     <span class="doccomment">/// Stores a ping to disk in the pings directory.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">store_ping</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">glean</span>: <span class="kw-2">&amp;</span><span class="ident">Glean</span>,
-        <span class="ident">doc_id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-        <span class="ident">ping_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-        <span class="ident">data_path</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>,
-        <span class="ident">url_path</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-        <span class="ident">ping_content</span>: <span class="kw-2">&amp;</span><span class="ident">JsonValue</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">pings_dir</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_pings_dir</span>(<span class="ident">data_path</span>, <span class="prelude-val">Some</span>(<span class="ident">ping_name</span>))<span class="question-mark">?</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">store_ping</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">data_path</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>, <span class="ident">ping</span>: <span class="kw-2">&amp;</span><span class="ident">Ping</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">pings_dir</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_pings_dir</span>(<span class="ident">data_path</span>, <span class="prelude-val">Some</span>(<span class="ident">ping</span>.<span class="ident">name</span>))<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">temp_dir</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_tmp_dir</span>(<span class="ident">data_path</span>)<span class="question-mark">?</span>;
 
         <span class="comment">// Write to a temporary location and then move when done,</span>
         <span class="comment">// for transactional writes.</span>
-        <span class="kw">let</span> <span class="ident">temp_ping_path</span> <span class="op">=</span> <span class="ident">temp_dir</span>.<span class="ident">join</span>(<span class="ident">doc_id</span>);
-        <span class="kw">let</span> <span class="ident">ping_path</span> <span class="op">=</span> <span class="ident">pings_dir</span>.<span class="ident">join</span>(<span class="ident">doc_id</span>);
+        <span class="kw">let</span> <span class="ident">temp_ping_path</span> <span class="op">=</span> <span class="ident">temp_dir</span>.<span class="ident">join</span>(<span class="ident">ping</span>.<span class="ident">doc_id</span>);
+        <span class="kw">let</span> <span class="ident">ping_path</span> <span class="op">=</span> <span class="ident">pings_dir</span>.<span class="ident">join</span>(<span class="ident">ping</span>.<span class="ident">doc_id</span>);
 
-        <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;Storing ping &#39;{}&#39; at &#39;{}&#39;&quot;</span>, <span class="ident">doc_id</span>, <span class="ident">ping_path</span>.<span class="ident">display</span>());
+        <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(
+            <span class="string">&quot;Storing ping &#39;{}&#39; at &#39;{}&#39;&quot;</span>,
+            <span class="ident">ping</span>.<span class="ident">doc_id</span>,
+            <span class="ident">ping_path</span>.<span class="ident">display</span>()
+        );
 
         {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">File</span>::<span class="ident">create</span>(<span class="kw-2">&amp;</span><span class="ident">temp_ping_path</span>)<span class="question-mark">?</span>;
-            <span class="ident">file</span>.<span class="ident">write_all</span>(<span class="ident">url_path</span>.<span class="ident">as_bytes</span>())<span class="question-mark">?</span>;
+            <span class="ident">file</span>.<span class="ident">write_all</span>(<span class="ident">ping</span>.<span class="ident">url_path</span>.<span class="ident">as_bytes</span>())<span class="question-mark">?</span>;
             <span class="ident">file</span>.<span class="ident">write_all</span>(<span class="string">b&quot;\n&quot;</span>)<span class="question-mark">?</span>;
-            <span class="ident">file</span>.<span class="ident">write_all</span>(::<span class="ident">serde_json</span>::<span class="ident">to_string</span>(<span class="ident">ping_content</span>)<span class="question-mark">?</span>.<span class="ident">as_bytes</span>())<span class="question-mark">?</span>;
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">metadata</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_metadata</span>(<span class="ident">glean</span>) {
-                <span class="ident">file</span>.<span class="ident">write_all</span>(<span class="string">b&quot;\n&quot;</span>)<span class="question-mark">?</span>;
-                <span class="ident">file</span>.<span class="ident">write_all</span>(::<span class="ident">serde_json</span>::<span class="ident">to_string</span>(<span class="kw-2">&amp;</span><span class="ident">metadata</span>)<span class="question-mark">?</span>.<span class="ident">as_bytes</span>())<span class="question-mark">?</span>;
+            <span class="ident">file</span>.<span class="ident">write_all</span>(::<span class="ident">serde_json</span>::<span class="ident">to_string</span>(<span class="kw-2">&amp;</span><span class="ident">ping</span>.<span class="ident">content</span>)<span class="question-mark">?</span>.<span class="ident">as_bytes</span>())<span class="question-mark">?</span>;
+            <span class="kw">if</span> <span class="op">!</span><span class="ident">ping</span>.<span class="ident">headers</span>.<span class="ident">is_empty</span>() {
+                <span class="ident">file</span>.<span class="ident">write_all</span>(<span class="string">b&quot;\n{\&quot;headers\&quot;:&quot;</span>)<span class="question-mark">?</span>;
+                <span class="ident">file</span>.<span class="ident">write_all</span>(::<span class="ident">serde_json</span>::<span class="ident">to_string</span>(<span class="kw-2">&amp;</span><span class="ident">ping</span>.<span class="ident">headers</span>)<span class="question-mark">?</span>.<span class="ident">as_bytes</span>())<span class="question-mark">?</span>;
+                <span class="ident">file</span>.<span class="ident">write_all</span>(<span class="string">b&quot;}&quot;</span>)<span class="question-mark">?</span>;
             }
         }
 

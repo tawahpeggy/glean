@@ -738,7 +738,7 @@
         <span class="kw">for</span> <span class="ident">store_name</span> <span class="kw">in</span> <span class="ident">stores_to_submit</span> {
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span> <span class="ident">glean</span>.<span class="ident">submit_ping_by_name</span>(<span class="ident">store_name</span>, <span class="prelude-val">Some</span>(<span class="string">&quot;max_capacity&quot;</span>)) {
                 <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(
-                    <span class="string">&quot;Got more than {} events, but could not send {} ping: {}&quot;</span>,
+                    <span class="string">&quot;Got more than {} events, but could not persist {} ping: {}&quot;</span>,
                     <span class="ident">glean</span>.<span class="ident">get_max_events</span>(),
                     <span class="ident">store_name</span>,
                     <span class="ident">err</span>

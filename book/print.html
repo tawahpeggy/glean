@@ -4728,6 +4728,9 @@ Glean.install.firstRun.set(value.getTime() * 1000);
 <li>The name of the event.</li>
 <li>A set of key-value pairs, where the keys are predefined in the <code>extra_keys</code> metric parameter, and the values are strings.</li>
 </ul>
+<blockquote>
+<p><strong>Important:</strong> events are the most expensive metric type to record, transmit, store and analyze, so they should be used sparingly, and only when none of the other metric types are sufficient for answering your question.</p>
+</blockquote>
 <h2><a class="header" href="#configuration-13" id="configuration-13">Configuration</a></h2>
 <p>Say you're adding a new event for when a view is shown. First you need to add an entry for the event to the <code>metrics.yaml</code> file:</p>
 <pre><code class="language-YAML">views:
@@ -6813,6 +6816,11 @@ Use <code>return@measure &lt;val&gt;</code> for early returns.</li>
 <li>Python
 <ul>
 <li>The Glean Python bindings now use rkv's safe mode backend. This should avoid intermittent segfaults in the LMDB backend.</li>
+</ul>
+</li>
+<li>General
+<ul>
+<li>Attempt to upload a ping even in the face of IO Errors (<a href="https://github.com/mozilla/glean/pull/1576">#1576</a>).</li>
 </ul>
 </li>
 </ul>
