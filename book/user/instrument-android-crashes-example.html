@@ -201,7 +201,7 @@ description, events let us do that easily (with <a href="metrics/event.html#limi
 root application folder of the Android Studio project create a new file named <code>metrics.yaml</code>.  After adding the schema
 definition and event metric definition, the <code>metrics.yaml</code> should look like this:</p>
 <pre><code class="language-YAML"># Required to indicate this is a `metrics.yaml` file
-$schema: moz://mozilla.org/schemas/glean/metrics/1-0-0
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
 
 crash:
   exception:
@@ -235,7 +235,7 @@ and <code>message</code>.  This allows for sending additional information along 
 the <code>metrics.yaml</code> file.  For more information about adding custom pings, see the section on <a href="pings/custom.html">custom pings</a>.<br />
 The name of the ping will be <code>crash</code>, so the <code>pings.yaml</code> file should look like this:</p>
 <pre><code class="language-YAML"># Required to indicate this is a `pings.yaml` file
-$schema: moz://mozilla.org/schemas/glean/pings/1-0-0
+$schema: moz://mozilla.org/schemas/glean/pings/2-0-0
 
 crash:
   description: &gt;

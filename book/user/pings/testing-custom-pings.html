@@ -181,7 +181,7 @@
 <p>One possible strategy could be to wrap the Glean SDK API call to send the ping in a function that can be mocked in the unit test. This would allow for checking the status and the values of the metrics contained in the ping at the time in which the application would have sent it.</p>
 <h2><a class="header" href="#example-testing-of-a-custom-ping" id="example-testing-of-a-custom-ping">Example testing of a custom ping</a></h2>
 <p>Let us start by defining a custom ping with a sample metric in it. Here is the <code>pings.yaml</code> file:</p>
-<pre><code class="language-yaml">$schema: moz://mozilla.org/schemas/glean/pings/1-0-0
+<pre><code class="language-yaml">$schema: moz://mozilla.org/schemas/glean/pings/2-0-0
 
 my-custom-ping:
   description: &gt;
@@ -197,7 +197,7 @@ my-custom-ping:
 
 </code></pre>
 <p>And here is the <code>metrics.yaml</code></p>
-<pre><code class="language-yaml">$schema: moz://mozilla.org/schemas/glean/metrics/1-0-0
+<pre><code class="language-yaml">$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
 
 custom_ping_data:
   sample_string:

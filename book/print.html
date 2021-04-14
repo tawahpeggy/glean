@@ -949,7 +949,7 @@ dashboard when that's ready
 They are organized into categories.
 The overall organization is:</p>
 <pre><code class="language-YAML"># Required to indicate this is a `metrics.yaml` file
-$schema: moz://mozilla.org/schemas/glean/metrics/1-0-0
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
 
 toolbar:
   click:
@@ -5961,7 +5961,7 @@ and hyphens and a maximum of 30 characters.</p>
 <p>In addition to these parameters, pings also support the parameters related to data review and expiration defined in <a href="user/pings/../metric-parameters.html">common metric parameters</a>: <code>description</code>, <code>notification_emails</code>, <code>bugs</code>, and <code>data_reviews</code>.</p>
 <p>For example, to define a custom ping called <code>search</code> specifically for search information:</p>
 <pre><code class="language-YAML"># Required to indicate this is a `pings.yaml` file
-$schema: moz://mozilla.org/schemas/glean/pings/1-0-0
+$schema: moz://mozilla.org/schemas/glean/pings/2-0-0
 
 search:
   description: &gt;
@@ -6118,7 +6118,7 @@ pings::search.submit(pings::SearchReasonCodes::Performed);
 <p>One possible strategy could be to wrap the Glean SDK API call to send the ping in a function that can be mocked in the unit test. This would allow for checking the status and the values of the metrics contained in the ping at the time in which the application would have sent it.</p>
 <h2><a class="header" href="#example-testing-of-a-custom-ping" id="example-testing-of-a-custom-ping">Example testing of a custom ping</a></h2>
 <p>Let us start by defining a custom ping with a sample metric in it. Here is the <code>pings.yaml</code> file:</p>
-<pre><code class="language-yaml">$schema: moz://mozilla.org/schemas/glean/pings/1-0-0
+<pre><code class="language-yaml">$schema: moz://mozilla.org/schemas/glean/pings/2-0-0
 
 my-custom-ping:
   description: &gt;
@@ -6134,7 +6134,7 @@ my-custom-ping:
 
 </code></pre>
 <p>And here is the <code>metrics.yaml</code></p>
-<pre><code class="language-yaml">$schema: moz://mozilla.org/schemas/glean/metrics/1-0-0
+<pre><code class="language-yaml">$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
 
 custom_ping_data:
   sample_string:
@@ -6505,7 +6505,7 @@ description, events let us do that easily (with <a href="user/metrics/event.html
 root application folder of the Android Studio project create a new file named <code>metrics.yaml</code>.  After adding the schema
 definition and event metric definition, the <code>metrics.yaml</code> should look like this:</p>
 <pre><code class="language-YAML"># Required to indicate this is a `metrics.yaml` file
-$schema: moz://mozilla.org/schemas/glean/metrics/1-0-0
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
 
 crash:
   exception:
@@ -6539,7 +6539,7 @@ and <code>message</code>.  This allows for sending additional information along 
 the <code>metrics.yaml</code> file.  For more information about adding custom pings, see the section on <a href="user/pings/custom.html">custom pings</a>.<br />
 The name of the ping will be <code>crash</code>, so the <code>pings.yaml</code> file should look like this:</p>
 <pre><code class="language-YAML"># Required to indicate this is a `pings.yaml` file
-$schema: moz://mozilla.org/schemas/glean/pings/1-0-0
+$schema: moz://mozilla.org/schemas/glean/pings/2-0-0
 
 crash:
   description: &gt;
