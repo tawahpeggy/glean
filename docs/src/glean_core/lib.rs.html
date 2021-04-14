@@ -987,6 +987,18 @@
 <span id="984">984</span>
 <span id="985">985</span>
 <span id="986">986</span>
+<span id="987">987</span>
+<span id="988">988</span>
+<span id="989">989</span>
+<span id="990">990</span>
+<span id="991">991</span>
+<span id="992">992</span>
+<span id="993">993</span>
+<span id="994">994</span>
+<span id="995">995</span>
+<span id="996">996</span>
+<span id="997">997</span>
+<span id="998">998</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -1041,7 +1053,7 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">error_recording</span>::{<span class="ident">test_get_num_recorded_errors</span>, <span class="ident">ErrorType</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">event_database</span>::<span class="ident">EventDatabase</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">histogram</span>::<span class="ident">HistogramType</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">internal_metrics</span>::{<span class="ident">CoreMetrics</span>, <span class="ident">DatabaseMetrics</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">internal_metrics</span>::{<span class="ident">AdditionalMetrics</span>, <span class="ident">CoreMetrics</span>, <span class="ident">DatabaseMetrics</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">internal_pings</span>::<span class="ident">InternalPings</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">metrics</span>::{<span class="ident">Metric</span>, <span class="ident">MetricType</span>, <span class="ident">PingType</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ping</span>::<span class="ident">PingMaker</span>;
@@ -1164,6 +1176,7 @@
     <span class="ident">data_store</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Database</span><span class="op">&gt;</span>,
     <span class="ident">event_data_store</span>: <span class="ident">EventDatabase</span>,
     <span class="ident">core_metrics</span>: <span class="ident">CoreMetrics</span>,
+    <span class="ident">additional_metrics</span>: <span class="ident">AdditionalMetrics</span>,
     <span class="ident">database_metrics</span>: <span class="ident">DatabaseMetrics</span>,
     <span class="ident">internal_pings</span>: <span class="ident">InternalPings</span>,
     <span class="ident">data_path</span>: <span class="ident">PathBuf</span>,
@@ -1203,24 +1216,35 @@
             <span class="kw">let</span> <span class="ident">_scanning_thread</span> <span class="op">=</span> <span class="ident">upload_manager</span>.<span class="ident">scan_pending_pings_directories</span>();
         }
 
-        <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
+        <span class="kw">let</span> (<span class="ident">start_time</span>, <span class="ident">start_time_is_corrected</span>) <span class="op">=</span> <span class="ident">local_now_with_offset</span>();
+        <span class="kw">let</span> <span class="ident">this</span> <span class="op">=</span> <span class="self">Self</span> {
             <span class="ident">upload_enabled</span>: <span class="ident">cfg</span>.<span class="ident">upload_enabled</span>,
             <span class="comment">// In the subprocess, we want to avoid accessing the database entirely.</span>
             <span class="comment">// The easiest way to ensure that is to just not initialize it.</span>
             <span class="ident">data_store</span>: <span class="prelude-val">None</span>,
             <span class="ident">event_data_store</span>,
             <span class="ident">core_metrics</span>: <span class="ident">CoreMetrics</span>::<span class="ident">new</span>(),
+            <span class="ident">additional_metrics</span>: <span class="ident">AdditionalMetrics</span>::<span class="ident">new</span>(),
             <span class="ident">database_metrics</span>: <span class="ident">DatabaseMetrics</span>::<span class="ident">new</span>(),
             <span class="ident">internal_pings</span>: <span class="ident">InternalPings</span>::<span class="ident">new</span>(),
             <span class="ident">upload_manager</span>,
             <span class="ident">data_path</span>: <span class="ident">PathBuf</span>::<span class="ident">from</span>(<span class="kw-2">&amp;</span><span class="ident">cfg</span>.<span class="ident">data_path</span>),
             <span class="ident">application_id</span>,
             <span class="ident">ping_registry</span>: <span class="ident">HashMap</span>::<span class="ident">new</span>(),
-            <span class="ident">start_time</span>: <span class="ident">local_now_with_offset</span>(),
+            <span class="ident">start_time</span>,
             <span class="ident">max_events</span>: <span class="ident">cfg</span>.<span class="ident">max_events</span>.<span class="ident">unwrap_or</span>(<span class="ident">DEFAULT_MAX_EVENTS</span>),
             <span class="ident">is_first_run</span>: <span class="bool-val">false</span>,
             <span class="ident">debug</span>: <span class="ident">DebugOptions</span>::<span class="ident">new</span>(),
-        })
+        };
+
+        <span class="comment">// Can&#39;t use `local_now_with_offset_and_record` above, because we needed a valid `Glean` first.</span>
+        <span class="kw">if</span> <span class="ident">start_time_is_corrected</span> {
+            <span class="ident">this</span>.<span class="ident">additional_metrics</span>
+                .<span class="ident">invalid_timezone_offset</span>
+                .<span class="ident">add</span>(<span class="kw-2">&amp;</span><span class="ident">this</span>, <span class="number">1</span>);
+        }
+
+        <span class="prelude-val">Ok</span>(<span class="ident">this</span>)
     }
 
     <span class="doccomment">/// Creates and initializes a new Glean object.</span>
@@ -1621,14 +1645,14 @@
                 <span class="comment">// that is the only way to know *if* it will be submitted). The</span>
                 <span class="comment">// implication of this is that the count for a metrics ping will</span>
                 <span class="comment">// be included in the *next* metrics ping.</span>
-                <span class="self">self</span>.<span class="ident">core_metrics</span>
+                <span class="self">self</span>.<span class="ident">additional_metrics</span>
                     .<span class="ident">pings_submitted</span>
                     .<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">ping</span>.<span class="ident">name</span>)
                     .<span class="ident">add</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="number">1</span>);
 
                 <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="ident">ping_maker</span>.<span class="ident">store_ping</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">get_data_path</span>(), <span class="kw-2">&amp;</span><span class="ident">ping</span>) {
                     <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(<span class="string">&quot;IO error while writing ping to file: {}. Enqueuing upload of what we have in memory.&quot;</span>, <span class="ident">e</span>);
-                    <span class="self">self</span>.<span class="ident">core_metrics</span>.<span class="ident">io_errors</span>.<span class="ident">add</span>(<span class="self">self</span>, <span class="number">1</span>);
+                    <span class="self">self</span>.<span class="ident">additional_metrics</span>.<span class="ident">io_errors</span>.<span class="ident">add</span>(<span class="self">self</span>, <span class="number">1</span>);
                     <span class="kw">let</span> <span class="ident">content</span> <span class="op">=</span> ::<span class="ident">serde_json</span>::<span class="ident">to_string</span>(<span class="kw-2">&amp;</span><span class="ident">ping</span>.<span class="ident">content</span>)<span class="question-mark">?</span>;
                     <span class="self">self</span>.<span class="ident">upload_manager</span>.<span class="ident">enqueue_ping</span>(
                         <span class="self">self</span>,
