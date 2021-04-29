@@ -1,0 +1,332 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>YAML Format - Glean - Cross-platform Telemetry library</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="../../favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="../../favicon.png">
+        
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+        <link rel="stylesheet" href="../../../shared/glean.css">
+        
+        <link rel="stylesheet" href="../../../shared/mermaid.css">
+        
+
+        
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../index.html">Glean</a></li><li class="chapter-item expanded affix "><li class="part-title">User Guides</li><li class="chapter-item expanded "><a href="../../user/adding-glean-to-your-project.html"><strong aria-hidden="true">1.</strong> Adding Glean to your project</a></li><li class="chapter-item expanded "><a href="../../user/metrics/adding-new-metrics.html"><strong aria-hidden="true">2.</strong> Metrics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../user/metrics/adding-new-metrics.html"><strong aria-hidden="true">2.1.</strong> Adding new metrics</a></li><li class="chapter-item expanded "><a href="../../user/metrics/testing-metrics.html"><strong aria-hidden="true">2.2.</strong> Testing metrics</a></li><li class="chapter-item expanded "><a href="../../user/metrics/error-reporting.html"><strong aria-hidden="true">2.3.</strong> Error reporting</a></li><li class="chapter-item expanded "><a href="../../user/collected-metrics/metrics.html"><strong aria-hidden="true">2.4.</strong> Metrics collected by the Glean SDK</a></li></ol></li><li class="chapter-item expanded "><a href="../../user/pings/index.html"><strong aria-hidden="true">3.</strong> Pings</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../user/pings/ping-schedules-and-timings.html"><strong aria-hidden="true">3.1.</strong> Ping schedules and timings overview</a></li><li class="chapter-item expanded "><a href="../../user/pings/baseline.html"><strong aria-hidden="true">3.2.</strong> Baseline Ping</a></li><li class="chapter-item expanded "><a href="../../user/pings/deletion_request.html"><strong aria-hidden="true">3.3.</strong> Deletion Request Ping</a></li><li class="chapter-item expanded "><a href="../../user/pings/metrics.html"><strong aria-hidden="true">3.4.</strong> Metrics Ping</a></li><li class="chapter-item expanded "><a href="../../user/pings/events.html"><strong aria-hidden="true">3.5.</strong> Events Ping</a></li><li class="chapter-item expanded "><a href="../../user/pings/custom.html"><strong aria-hidden="true">3.6.</strong> Custom Pings</a></li><li class="chapter-item expanded "><a href="../../user/pings/testing-custom-pings.html"><strong aria-hidden="true">3.7.</strong> Testing custom pings</a></li></ol></li><li class="chapter-item expanded "><a href="../../user/experiments-api.html"><strong aria-hidden="true">4.</strong> Using the experiments API</a></li><li class="chapter-item expanded "><a href="../../user/debugging/index.html"><strong aria-hidden="true">5.</strong> Debugging products using Glean</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../user/debugging/debug-ping-view.html"><strong aria-hidden="true">5.1.</strong> Glean Debug Ping View</a></li><li class="chapter-item expanded "><a href="../../user/debugging/android.html"><strong aria-hidden="true">5.2.</strong> Android</a></li><li class="chapter-item expanded "><a href="../../user/debugging/ios.html"><strong aria-hidden="true">5.3.</strong> iOS</a></li><li class="chapter-item expanded "><a href="../../user/debugging/python.html"><strong aria-hidden="true">5.4.</strong> Python</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">API Reference</li><li class="chapter-item expanded "><a href="../../reference/yaml/index.html" class="active"><strong aria-hidden="true">6.</strong> YAML Format</a></li><li class="chapter-item expanded "><a href="../../reference/general/index.html"><strong aria-hidden="true">7.</strong> General</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/index.html"><strong aria-hidden="true">8.</strong> Metric types</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../reference/metrics/boolean.html"><strong aria-hidden="true">8.1.</strong> Boolean</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/labeled_booleans.html"><strong aria-hidden="true">8.2.</strong> Labeled Booleans</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/counter.html"><strong aria-hidden="true">8.3.</strong> Counter</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/labeled_counters.html"><strong aria-hidden="true">8.4.</strong> Labeled Counters</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/string.html"><strong aria-hidden="true">8.5.</strong> String</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/labeled_strings.html"><strong aria-hidden="true">8.6.</strong> Labeled Strings</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/string_list.html"><strong aria-hidden="true">8.7.</strong> String List</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/timespan.html"><strong aria-hidden="true">8.8.</strong> Timespan</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/timing_distribution.html"><strong aria-hidden="true">8.9.</strong> Timing Distribution</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/memory_distribution.html"><strong aria-hidden="true">8.10.</strong> Memory Distribution</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/uuid.html"><strong aria-hidden="true">8.11.</strong> UUID</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/datetime.html"><strong aria-hidden="true">8.12.</strong> Datetime</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/event.html"><strong aria-hidden="true">8.13.</strong> Event</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/custom_distribution.html"><strong aria-hidden="true">8.14.</strong> Custom Distribution</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/quantity.html"><strong aria-hidden="true">8.15.</strong> Quantity</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/rate.html"><strong aria-hidden="true">8.16.</strong> Rate</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Language Bindings Information</li><li class="chapter-item expanded "><a href="../../language-bindings/android/index.html"><strong aria-hidden="true">9.</strong> Android</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../language-bindings/android/android-build-configuration-options.html"><strong aria-hidden="true">9.1.</strong> Android build configuration options</a></li><li class="chapter-item expanded "><a href="../../language-bindings/android/android-offline-builds.html"><strong aria-hidden="true">9.2.</strong> Android offline builds</a></li><li class="chapter-item expanded "><a href="../../language-bindings/android/instrument-android-crashes-example.html"><strong aria-hidden="true">9.3.</strong> Instrumenting Android crashes with the Glean SDK</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Appendix</li><li class="chapter-item expanded "><a href="../../appendix/glossary.html"><strong aria-hidden="true">10.</strong> Glossary</a></li><li class="chapter-item expanded "><a href="../../appendix/changelog.html"><strong aria-hidden="true">11.</strong> Changelog</a></li><li class="chapter-item expanded "><a href="../../appendix/twig.html"><strong aria-hidden="true">12.</strong> This Week in Glean</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Glean - Cross-platform Telemetry library</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                        <a href="https://github.com/mozilla/glean" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#metric-parameters" id="metric-parameters">Metric parameters</a></h1>
+<h2><a class="header" href="#required-metric-parameters" id="required-metric-parameters">Required metric parameters</a></h2>
+<ul>
+<li><code>type</code>: <strong>Required.</strong>  Specifies the type of a metric, like &quot;counter&quot; or &quot;event&quot;. This defines which operations are valid for the metric, how it is stored and how data analysis tooling displays it. See the list of <a href="../metrics/index.html">supported metric types</a>.</li>
+</ul>
+<blockquote>
+<p><strong>Important</strong>: Once a metric is released in a product, its <code>type</code> should not be changed. If any data was collected locally with the older <code>type</code>, and hasn't yet been sent in a ping, recording data with the new <code>type</code> may cause any old persisted data to be lost for that metric. See <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1621757#c1">this comment</a> for an extended explanation of the different scenarios.</p>
+</blockquote>
+<ul>
+<li>
+<p><code>description</code>: <strong>Required.</strong> A textual description of the metric for humans. It should describe what the metric does, what it means for analysts, and its edge cases or any other helpful information.</p>
+<p>The description field may contain <a href="https://www.markdownguide.org/basic-syntax/">markdown syntax</a>.</p>
+</li>
+<li>
+<p><code>notification_emails</code>: <strong>Required.</strong> A list of email addresses to notify for important events with the metric or when people with context or ownership for the metric need to be contacted.
+For example when a metric's expiration is within in 14 days, emails will be sent from <code>telemetry-alerts@mozilla.com</code> to the <code>notification_emails</code> addresses associated with the metric.
+Consider adding both a group email address and an individual who is responsible for this metric.</p>
+</li>
+<li>
+<p><code>bugs</code>: <strong>Required.</strong> A list of bugs (e.g. Bugzilla or GitHub) that are relevant to this metric. For example, bugs that track its original implementation or later changes to it.</p>
+<p>Each entry should be the full URL to the bug in an issue tracker. The use of numbers alone is deprecated and will be an error in the future.</p>
+</li>
+<li>
+<p><code>data_reviews</code>: <strong>Required.</strong> A list of URIs to any data collection reviews <em>responses</em> relevant to the metric.</p>
+</li>
+<li>
+<p><code>expires</code>: <strong>Required.</strong> When the metric is set to expire. After a metric expires, an application will no longer collect or send data related to it. May be one of the following values:</p>
+<ul>
+<li><code>&lt;build date&gt;</code>: An ISO date <code>yyyy-mm-dd</code> in UTC on which the metric expires. For example, <code>2019-03-13</code>. This date is checked at build time. Except in special cases, this form should be used so that the metric automatically &quot;sunsets&quot; after a period of time.
+Emails will be sent to the <code>notification_emails</code> addresses when the metric is about to expire.
+Generally, when a metric is no longer needed, it should simply be removed. This does not affect the availability of data already collected by the pipeline.</li>
+<li><code>never</code>: This metric never expires.</li>
+<li><code>expired</code>: This metric is manually expired.</li>
+</ul>
+</li>
+</ul>
+<h2><a class="header" href="#optional-metric-parameters" id="optional-metric-parameters">Optional metric parameters</a></h2>
+<ul>
+<li>
+<p><code>lifetime</code>: Defines the lifetime of the metric. Different lifetimes affect when the metrics value is reset.</p>
+<ul>
+<li><code>ping</code> (default): The metric is cleared each time it is submitted in the ping. This is the most common case, and should be used for metrics that are highly dynamic, such as things computed in response to the user's interaction with the application.</li>
+<li><code>application</code>: The metric is related to an application run, and is cleared after the application restarts and any Glean-owned ping, due at startup, is submitted. This should be used for things that are constant during the run of an application, such as the operating system version. In practice, these metrics are generally set during application startup. A common mistake---using the ping lifetime for these type of metrics---means that they will only be included in the first ping sent during a particular run of the application.</li>
+<li><code>user</code>: <strong>Reach out to the Glean team before using this.</strong>. The metric is part of the user's profile and will live as long as the profile lives. This is often not the best choice unless the metric records a value that <em>really</em> needs to be persisted for the full lifetime of the user profile, e.g. an identifier like the <code>client_id</code>, the day the product was first executed. It is rare to use this lifetime outside of some metrics that are built in to the Glean SDK.</li>
+</ul>
+</li>
+<li>
+<p><code>send_in_pings</code>: Defines which pings the metric should be sent on. If not specified, the metric is sent on the &quot;default ping&quot;, which is the <code>events</code> ping for events and the <code>metrics</code> ping for everything else. Most metrics don't need to specify this unless they are sent on <a href="../../user/pings/custom.html">custom pings</a>.</p>
+</li>
+<li>
+<p><code>disabled</code>: (default: <code>false</code>) Data collection for this metric is disabled.
+This is useful when you want to temporarily disable the collection for a specific metric without removing references to it in your source code.
+Generally, when a metric is no longer needed, it should simply be removed. This does not affect the availability of data already collected by the pipeline.</p>
+</li>
+<li>
+<p><code>version</code>: (default: 0) The version of the metric. A monotonically increasing integer value. This should be bumped if the metric changes in a backward-incompatible way.</p>
+</li>
+<li>
+<p><code>data_sensitivity</code>: (default: []) A list of data sensitivity categories that the metric falls under. There are four data collection categories related to data sensitivity <a href="https://wiki.mozilla.org/Firefox/Data_Collection">defined in Mozilla's data collection review process</a>:</p>
+<ul>
+<li>
+<p><strong>Category 1: Technical Data:</strong> (<code>technical</code>) Information about the machine or Firefox itself. Examples include OS, available memory, crashes and errors, outcome of automated processes like updates, safe browsing, activation, version #s, and build id. This also includes compatibility information about features and APIs used by websites, add-ons, and other 3rd-party software that interact with Firefox during usage.</p>
+</li>
+<li>
+<p><strong>Category 2: Interaction Data:</strong> (<code>interaction</code>) Information about the user’s direct engagement with Firefox. Examples include how many tabs, add-ons, or windows a user has open; uses of specific Firefox features; session length, scrolls and clicks; and the status of discrete user preferences.</p>
+</li>
+<li>
+<p><strong>Category 3: Web activity data:</strong> (<code>web_activity</code>) Information about user web browsing that could be considered sensitive. Examples include users’ specific web browsing history; general information about their web browsing history (such as TLDs or categories of webpages visited over time); and potentially certain types of interaction data about specific webpages visited.</p>
+</li>
+<li>
+<p><strong>Category 4: Highly sensitive data:</strong> (<code>highly_sensitive</code>) Information that directly identifies a person, or if combined with other data could identify a person. Examples include e-mail, usernames, identifiers such as google ad id, apple id, Firefox account, city or country (unless small ones are explicitly filtered out), or certain cookies. It may be embedded within specific website content, such as memory contents, dumps, captures of screen data, or DOM data.</p>
+</li>
+</ul>
+</li>
+</ul>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/yaml/index.md">Edit this file on GitHub.</a></footer>
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../../user/debugging/python.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../../reference/general/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="../../user/debugging/python.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="../../reference/general/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="../../../shared/tabs.js"></script>
+        
+        <script type="text/javascript" src="../../../shared/mermaid.min.js"></script>
+        
+        <script type="text/javascript" src="../../../shared/mermaid-init.js"></script>
+        
+        <script type="text/javascript" src="../../chart.min.js"></script>
+        
+        <script type="text/javascript" src="../../chart-distributions.js"></script>
+        
+        <script type="text/javascript" src="../../chart-distributions-ui.js"></script>
+        
+
+        
+
+    </body>
+</html>

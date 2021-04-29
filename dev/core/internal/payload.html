@@ -187,34 +187,34 @@ It is provided as a reference for contributing to Glean only.</p>
 It is written as a set of <a href="https://github.com/mozilla-services/mozilla-pipeline-schemas/tree/HEAD/templates/include/glean">templates</a> that are expanded by the mozilla-pipeline-schemas build infrastructure into a <a href="https://github.com/mozilla-services/mozilla-pipeline-schemas/blob/HEAD/schemas/glean/baseline/baseline.1.schema.json">fully expanded schema</a>.</p>
 <h2><a class="header" href="#metric-types" id="metric-types">Metric types</a></h2>
 <h3><a class="header" href="#boolean" id="boolean">Boolean</a></h3>
-<p>A <a href="../../../book/user/metrics/boolean.html">Boolean</a> is represented by its boolean value.</p>
+<p>A <a href="../../../book/reference/metrics/boolean.html">Boolean</a> is represented by its boolean value.</p>
 <h4><a class="header" href="#example" id="example">Example</a></h4>
 <pre><code class="language-json">true
 </code></pre>
 <h3><a class="header" href="#counter" id="counter">Counter</a></h3>
-<p>A <a href="../../../book/user/metrics/counter.html">Counter</a> is represented by its integer value.</p>
+<p>A <a href="../../../book/reference/metrics/counter.html">Counter</a> is represented by its integer value.</p>
 <h4><a class="header" href="#example-1" id="example-1">Example</a></h4>
 <pre><code class="language-json">17
 </code></pre>
 <h3><a class="header" href="#quantity" id="quantity">Quantity</a></h3>
-<p>A <a href="../../../book/user/metrics/quantity.html">Quantity</a> is represented by its integer value.</p>
+<p>A <a href="../../../book/reference/metrics/quantity.html">Quantity</a> is represented by its integer value.</p>
 <h4><a class="header" href="#example-2" id="example-2">Example</a></h4>
 <pre><code class="language-json">42
 </code></pre>
 <h3><a class="header" href="#string" id="string">String</a></h3>
-<p>A <a href="../../../book/user/metrics/string.html">String</a> is represented by its string value.</p>
+<p>A <a href="../../../book/reference/metrics/string.html">String</a> is represented by its string value.</p>
 <h4><a class="header" href="#example-3" id="example-3">Example</a></h4>
 <pre><code class="language-json">&quot;sample string&quot;
 </code></pre>
 <h3><a class="header" href="#string-list" id="string-list">String list</a></h3>
-<p>A <a href="../../../book/user/metrics/string_list.html">String List</a> is represented as an array of strings.</p>
+<p>A <a href="../../../book/reference/metrics/string_list.html">String List</a> is represented as an array of strings.</p>
 <pre><code class="language-json">[&quot;sample string&quot;, &quot;another one&quot;]
 </code></pre>
 <h3><a class="header" href="#timespan" id="timespan">Timespan</a></h3>
-<p>A <a href="../../../book/user/metrics/timespan.html">Timespan</a> is represented as an object of their duration as an integer and the time unit.</p>
+<p>A <a href="../../../book/reference/metrics/timespan.html">Timespan</a> is represented as an object of their duration as an integer and the time unit.</p>
 <table><thead><tr><th>Field name</th><th>Type</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>value</code></td><td>Integer</td><td>The value in the marked time unit.</td></tr>
-<tr><td><code>time_unit</code></td><td>String</td><td>The time unit, see the <a href="../../../book/user/metrics/timespan.html#configuration">timespan's configuration</a> for valid values.</td></tr>
+<tr><td><code>time_unit</code></td><td>String</td><td>The time unit, see the <a href="../../../book/reference/metrics/timespan.html#configuration">timespan's configuration</a> for valid values.</td></tr>
 </tbody></table>
 <h4><a class="header" href="#example-4" id="example-4">Example</a></h4>
 <pre><code class="language-json">{
@@ -223,7 +223,7 @@ It is written as a set of <a href="https://github.com/mozilla-services/mozilla-p
 }
 </code></pre>
 <h3><a class="header" href="#timing-distribution" id="timing-distribution">Timing Distribution</a></h3>
-<p>A <a href="../../../book/user/metrics/timing_distribution.html">Timing distribution</a> is represented as an object with the following fields.</p>
+<p>A <a href="../../../book/reference/metrics/timing_distribution.html">Timing distribution</a> is represented as an object with the following fields.</p>
 <table><thead><tr><th>Field name</th><th>Type</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>sum</code></td><td>Integer</td><td>The sum of all recorded values.</td></tr>
 <tr><td><code>values</code></td><td>Map&lt;String, Integer&gt;</td><td>The values in each bucket. The key is the minimum value for the range of that bucket.</td></tr>
@@ -248,7 +248,7 @@ sent:      1024: 2, 1116: 1, 1217: 0, 1327: 0, 1448: 1, 1579: 0
 }
 </code></pre>
 <h3><a class="header" href="#memory-distribution" id="memory-distribution">Memory Distribution</a></h3>
-<p>A <a href="../../../book/user/metrics/memory_distribution.html">Memory distribution</a> is represented as an object with the following fields.</p>
+<p>A <a href="../../../book/reference/metrics/memory_distribution.html">Memory distribution</a> is represented as an object with the following fields.</p>
 <table><thead><tr><th>Field name</th><th>Type</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>sum</code></td><td>Integer</td><td>The sum of all recorded values.</td></tr>
 <tr><td><code>values</code></td><td>Map&lt;String, Integer&gt;</td><td>The values in each bucket. The key is the minimum value for the range of that bucket.</td></tr>
@@ -265,18 +265,18 @@ See <a href="#timing-distribution">timing distribution</a> for more details.</p>
 }
 </code></pre>
 <h3><a class="header" href="#uuid" id="uuid">UUID</a></h3>
-<p>A <a href="../../../book/user/metrics/uuid.html">UUID</a> is represented by the string representation of the UUID.</p>
+<p>A <a href="../../../book/reference/metrics/uuid.html">UUID</a> is represented by the string representation of the UUID.</p>
 <h4><a class="header" href="#example-7" id="example-7">Example</a></h4>
 <pre><code class="language-json">&quot;29711dc8-a954-11e9-898a-eb4ea7e8fd3f&quot;
 </code></pre>
 <h3><a class="header" href="#datetime" id="datetime">Datetime</a></h3>
-<p>A <a href="../../../book/user/metrics/datetime.html">Datetime</a> is represented by its ISO8601 string representation, truncated to the metric's time unit.
+<p>A <a href="../../../book/reference/metrics/datetime.html">Datetime</a> is represented by its ISO8601 string representation, truncated to the metric's time unit.
 It always includes the timezone offset.</p>
 <h4><a class="header" href="#example-8" id="example-8">Example</a></h4>
 <pre><code class="language-json">&quot;2019-07-18T14:06:00.000+02:00&quot;
 </code></pre>
 <h3><a class="header" href="#event" id="event">Event</a></h3>
-<p><a href="../../../book/user/metrics/event.html">Events</a> are represented as an array of objects, with one object for each event.
+<p><a href="../../../book/reference/metrics/event.html">Events</a> are represented as an array of objects, with one object for each event.
 Each event object has the following keys:</p>
 <table><thead><tr><th>Field name</th><th>Type</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>timestamp</code></td><td>Integer</td><td>A monotonically increasing timestamp value, in milliseconds. To avoid leaking absolute times, the first timestamp in the array is always zero, and subsequent timestamps in the array are relative to that reference point.</td></tr>
@@ -308,7 +308,7 @@ To get around this, on application startup, any queued events are immediately co
 These &quot;startup-triggered pings&quot; are likely to have a very short duration, as recorded in <code>ping_info.start_time</code> and <code>ping_info.end_time</code> (see <a href="../../../book/user/pings/index.html#the-ping_info-section">the <code>ping_info</code> section</a>).
 The maximum timestamp of the events in these pings are quite likely to exceed the duration of the ping, but this is to be expected.</p>
 <h3><a class="header" href="#custom-distribution" id="custom-distribution">Custom Distribution</a></h3>
-<p>A <a href="../../../book/user/metrics/custom_distribution.html">Custom distribution</a> is represented as an object with the following fields.</p>
+<p>A <a href="../../../book/reference/metrics/custom_distribution.html">Custom distribution</a> is represented as an object with the following fields.</p>
 <table><thead><tr><th>Field name</th><th>Type</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>sum</code></td><td>Integer</td><td>The sum of all recorded values.</td></tr>
 <tr><td><code>values</code></td><td>Map&lt;String, Integer&gt;</td><td>The values in each bucket. The key is the minimum value for the range of that bucket.</td></tr>
@@ -343,8 +343,8 @@ sent:     10: 0, 12: 2, 14: 0, 17: 0, 19: 0, 22: 1, 24: 0
 <h3><a class="header" href="#labeled-metrics" id="labeled-metrics">Labeled metrics</a></h3>
 <p>Currently several labeled metrics are supported:</p>
 <ul>
-<li><a href="../../../book/user/metrics/labeled_counters.html">Labeled Counters</a>.</li>
-<li><a href="../../../book/user/metrics/labeled_strings.html">Labeled Strings</a>.</li>
+<li><a href="../../../book/reference/metrics/labeled_counters.html">Labeled Counters</a>.</li>
+<li><a href="../../../book/reference/metrics/labeled_strings.html">Labeled Strings</a>.</li>
 </ul>
 <p>All are on the top-level represented in the same way, as an object mapping the label to the metric's value.
 See the individual metric types for details on the value payload:</p>
@@ -359,7 +359,7 @@ See the individual metric types for details on the value payload:</p>
 }
 </code></pre>
 <h3><a class="header" href="#rate" id="rate">Rate</a></h3>
-<p>A <a href="../../../book/user/metrics/rate.html">Rate</a> is represented by its <code>numerator</code> and <code>denominator</code>.</p>
+<p>A <a href="../../../book/reference/metrics/rate.html">Rate</a> is represented by its <code>numerator</code> and <code>denominator</code>.</p>
 <h4><a class="header" href="#example-11" id="example-11">Example</a></h4>
 <pre><code class="language-json">{
     &quot;numerator&quot;: 22,

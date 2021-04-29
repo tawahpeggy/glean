@@ -1,0 +1,408 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Boolean - Glean - Cross-platform Telemetry library</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="../../favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="../../favicon.png">
+        
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+        <link rel="stylesheet" href="../../../shared/glean.css">
+        
+        <link rel="stylesheet" href="../../../shared/mermaid.css">
+        
+
+        
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../index.html">Glean</a></li><li class="chapter-item expanded affix "><li class="part-title">User Guides</li><li class="chapter-item expanded "><a href="../../user/adding-glean-to-your-project.html"><strong aria-hidden="true">1.</strong> Adding Glean to your project</a></li><li class="chapter-item expanded "><a href="../../user/metrics/adding-new-metrics.html"><strong aria-hidden="true">2.</strong> Metrics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../user/metrics/adding-new-metrics.html"><strong aria-hidden="true">2.1.</strong> Adding new metrics</a></li><li class="chapter-item expanded "><a href="../../user/metrics/testing-metrics.html"><strong aria-hidden="true">2.2.</strong> Testing metrics</a></li><li class="chapter-item expanded "><a href="../../user/metrics/error-reporting.html"><strong aria-hidden="true">2.3.</strong> Error reporting</a></li><li class="chapter-item expanded "><a href="../../user/collected-metrics/metrics.html"><strong aria-hidden="true">2.4.</strong> Metrics collected by the Glean SDK</a></li></ol></li><li class="chapter-item expanded "><a href="../../user/pings/index.html"><strong aria-hidden="true">3.</strong> Pings</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../user/pings/ping-schedules-and-timings.html"><strong aria-hidden="true">3.1.</strong> Ping schedules and timings overview</a></li><li class="chapter-item expanded "><a href="../../user/pings/baseline.html"><strong aria-hidden="true">3.2.</strong> Baseline Ping</a></li><li class="chapter-item expanded "><a href="../../user/pings/deletion_request.html"><strong aria-hidden="true">3.3.</strong> Deletion Request Ping</a></li><li class="chapter-item expanded "><a href="../../user/pings/metrics.html"><strong aria-hidden="true">3.4.</strong> Metrics Ping</a></li><li class="chapter-item expanded "><a href="../../user/pings/events.html"><strong aria-hidden="true">3.5.</strong> Events Ping</a></li><li class="chapter-item expanded "><a href="../../user/pings/custom.html"><strong aria-hidden="true">3.6.</strong> Custom Pings</a></li><li class="chapter-item expanded "><a href="../../user/pings/testing-custom-pings.html"><strong aria-hidden="true">3.7.</strong> Testing custom pings</a></li></ol></li><li class="chapter-item expanded "><a href="../../user/experiments-api.html"><strong aria-hidden="true">4.</strong> Using the experiments API</a></li><li class="chapter-item expanded "><a href="../../user/debugging/index.html"><strong aria-hidden="true">5.</strong> Debugging products using Glean</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../user/debugging/debug-ping-view.html"><strong aria-hidden="true">5.1.</strong> Glean Debug Ping View</a></li><li class="chapter-item expanded "><a href="../../user/debugging/android.html"><strong aria-hidden="true">5.2.</strong> Android</a></li><li class="chapter-item expanded "><a href="../../user/debugging/ios.html"><strong aria-hidden="true">5.3.</strong> iOS</a></li><li class="chapter-item expanded "><a href="../../user/debugging/python.html"><strong aria-hidden="true">5.4.</strong> Python</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">API Reference</li><li class="chapter-item expanded "><a href="../../reference/yaml/index.html"><strong aria-hidden="true">6.</strong> YAML Format</a></li><li class="chapter-item expanded "><a href="../../reference/general/index.html"><strong aria-hidden="true">7.</strong> General</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/index.html"><strong aria-hidden="true">8.</strong> Metric types</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../reference/metrics/boolean.html" class="active"><strong aria-hidden="true">8.1.</strong> Boolean</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/labeled_booleans.html"><strong aria-hidden="true">8.2.</strong> Labeled Booleans</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/counter.html"><strong aria-hidden="true">8.3.</strong> Counter</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/labeled_counters.html"><strong aria-hidden="true">8.4.</strong> Labeled Counters</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/string.html"><strong aria-hidden="true">8.5.</strong> String</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/labeled_strings.html"><strong aria-hidden="true">8.6.</strong> Labeled Strings</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/string_list.html"><strong aria-hidden="true">8.7.</strong> String List</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/timespan.html"><strong aria-hidden="true">8.8.</strong> Timespan</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/timing_distribution.html"><strong aria-hidden="true">8.9.</strong> Timing Distribution</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/memory_distribution.html"><strong aria-hidden="true">8.10.</strong> Memory Distribution</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/uuid.html"><strong aria-hidden="true">8.11.</strong> UUID</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/datetime.html"><strong aria-hidden="true">8.12.</strong> Datetime</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/event.html"><strong aria-hidden="true">8.13.</strong> Event</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/custom_distribution.html"><strong aria-hidden="true">8.14.</strong> Custom Distribution</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/quantity.html"><strong aria-hidden="true">8.15.</strong> Quantity</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/rate.html"><strong aria-hidden="true">8.16.</strong> Rate</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Language Bindings Information</li><li class="chapter-item expanded "><a href="../../language-bindings/android/index.html"><strong aria-hidden="true">9.</strong> Android</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../language-bindings/android/android-build-configuration-options.html"><strong aria-hidden="true">9.1.</strong> Android build configuration options</a></li><li class="chapter-item expanded "><a href="../../language-bindings/android/android-offline-builds.html"><strong aria-hidden="true">9.2.</strong> Android offline builds</a></li><li class="chapter-item expanded "><a href="../../language-bindings/android/instrument-android-crashes-example.html"><strong aria-hidden="true">9.3.</strong> Instrumenting Android crashes with the Glean SDK</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Appendix</li><li class="chapter-item expanded "><a href="../../appendix/glossary.html"><strong aria-hidden="true">10.</strong> Glossary</a></li><li class="chapter-item expanded "><a href="../../appendix/changelog.html"><strong aria-hidden="true">11.</strong> Changelog</a></li><li class="chapter-item expanded "><a href="../../appendix/twig.html"><strong aria-hidden="true">12.</strong> This Week in Glean</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Glean - Cross-platform Telemetry library</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                        <a href="https://github.com/mozilla/glean" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#boolean" id="boolean">Boolean</a></h1>
+<p>Booleans are used for simple flags, for example &quot;is a11y enabled&quot;?.</p>
+<h2><a class="header" href="#configuration" id="configuration">Configuration</a></h2>
+<p>Say you're adding a boolean to record whether a11y is enabled on the device. First you need to add an entry for the boolean to the <code>metrics.yaml</code> file:</p>
+<pre><code class="language-YAML">flags:
+  a11y_enabled:
+    type: boolean
+    description: &gt;
+      Records whether a11y is enabled on the device.
+    lifetime: application
+    ...
+</code></pre>
+<h2><a class="header" href="#api" id="api">API</a></h2>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Flags
+
+Flags.a11yEnabled.set(System.isAccesibilityEnabled())
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Flags
+
+// Was anything recorded?
+assertTrue(Flags.a11yEnabled.testHasValue())
+// Does it have the expected value?
+assertTrue(Flags.a11yEnabled.testGetValue())
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Flags;
+
+Flags.INSTANCE.a11yEnabled.set(System.isAccessibilityEnabled());
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Flags;
+
+// Was anything recorded?
+assertTrue(Flags.INSTANCE.a11yEnabled.testHasValue());
+// Does it have the expected value?
+assertTrue(Flags.INSTANCE.a11yEnabled.testGetValue());
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">Flags.a11yEnabled.set(self.isAccessibilityEnabled)
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-Swift">@testable import Glean
+
+// Was anything recorded?
+XCTAssertTrue(Flags.a11yEnabled.testHasValue())
+// Does the counter have the expected value?
+XCTAssertTrue(try Flags.a11yEnabled.testGetValue())
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+metrics.flags.a11y_enabled.set(is_accessibility_enabled())
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-Python"># Was anything recorded?
+assert metrics.flags.a11y_enabled.test_has_value()
+# Does it have the expected value?
+assert True is metrics.flags.a11y_enabled.test_get_value()
+</code></pre>
+</div>
+<div data-lang="C#" class="tab">
+<pre><code class="language-C#">using static Mozilla.YourApplication.GleanMetrics.FlagsOuter;
+
+Flags.a11yEnabled.Set(System.IsAccessibilityEnabled());
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-C#">using static Mozilla.YourApplication.GleanMetrics.FlagsOuter;
+
+// Was anything recorded?
+Assert.True(Flags.a11yEnabled.TestHasValue());
+// Does it have the expected value?
+Assert.True(Flags.a11yEnabled.TestGetValue());
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean_metrics;
+
+flags::a11y_enabled.set(system.is_accessibility_enabled());
+<span class="boring">}
+</span></code></pre></pre>
+<p>There are test APIs available too:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean_metrics;
+
+// Was anything recorded?
+assert!(flags::a11y_enabled.test_get_value(None).is_some());
+// Does it have the expected value?
+assert!(flags::a11y_enabled.test_get_value(None).unwrap());
+<span class="boring">}
+</span></code></pre></pre>
+</div>
+<div data-lang="C++" class="tab">
+<blockquote>
+<p><strong>Note</strong>: C++ APIs are only available in Firefox Desktop.</p>
+</blockquote>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+mozilla::glean::flags::a11y_enabled.Set(false);
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+ASSERT_EQ(false, mozilla::glean::flags::a11y_enabled.TestGetValue().value());
+</code></pre>
+</div>
+<div data-lang="JS" class="tab">
+<blockquote>
+<p><strong>Note</strong>: JS APIs are currently only available in Firefox Desktop.
+General JavaScript support is coming soon via <a href="https://github.com/mozilla/glean.js/">the Glean.js project</a>.</p>
+</blockquote>
+<pre><code class="language-js">Glean.flags.a11yEnabled.set(false);
+</code></pre>
+<p>There are test APIs available too:</p>
+<pre><code class="language-js">Assert.equal(false, Glean.flags.a11yEnabled.testGetValue());
+</code></pre>
+</div>
+</div>
+</div>
+<h2><a class="header" href="#limits" id="limits">Limits</a></h2>
+<ul>
+<li>None.</li>
+</ul>
+<h2><a class="header" href="#examples" id="examples">Examples</a></h2>
+<ul>
+<li>Is a11y enabled?</li>
+</ul>
+<h2><a class="header" href="#recorded-errors" id="recorded-errors">Recorded errors</a></h2>
+<ul>
+<li>None.</li>
+</ul>
+<h2><a class="header" href="#reference" id="reference">Reference</a></h2>
+<ul>
+<li><a href="../../../javadoc/glean/mozilla.telemetry.glean.private/-boolean-metric-type/index.html">Kotlin API docs</a></li>
+<li><a href="../../../swift/Classes/BooleanMetricType.html">Swift API docs</a></li>
+<li><a href="../../../python/glean/metrics/boolean.html">Python API docs</a></li>
+<li><a href="../../../docs/glean/private/boolean/struct.BooleanMetric.html">Rust API docs</a></li>
+</ul>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/metrics/boolean.md">Edit this file on GitHub.</a></footer>
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../../reference/metrics/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../../reference/metrics/labeled_booleans.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="../../reference/metrics/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="../../reference/metrics/labeled_booleans.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="../../../shared/tabs.js"></script>
+        
+        <script type="text/javascript" src="../../../shared/mermaid.min.js"></script>
+        
+        <script type="text/javascript" src="../../../shared/mermaid-init.js"></script>
+        
+        <script type="text/javascript" src="../../chart.min.js"></script>
+        
+        <script type="text/javascript" src="../../chart-distributions.js"></script>
+        
+        <script type="text/javascript" src="../../chart-distributions-ui.js"></script>
+        
+
+        
+
+    </body>
+</html>

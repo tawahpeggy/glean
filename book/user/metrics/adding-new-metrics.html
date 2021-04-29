@@ -1,0 +1,491 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Adding new metrics - Glean - Cross-platform Telemetry library</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="../../favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="../../favicon.png">
+        
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+        <link rel="stylesheet" href="../../../shared/glean.css">
+        
+        <link rel="stylesheet" href="../../../shared/mermaid.css">
+        
+
+        
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../index.html">Glean</a></li><li class="chapter-item expanded affix "><li class="part-title">User Guides</li><li class="chapter-item expanded "><a href="../../user/adding-glean-to-your-project.html"><strong aria-hidden="true">1.</strong> Adding Glean to your project</a></li><li class="chapter-item expanded "><a href="../../user/metrics/adding-new-metrics.html" class="active"><strong aria-hidden="true">2.</strong> Metrics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../user/metrics/adding-new-metrics.html" class="active"><strong aria-hidden="true">2.1.</strong> Adding new metrics</a></li><li class="chapter-item expanded "><a href="../../user/metrics/testing-metrics.html"><strong aria-hidden="true">2.2.</strong> Testing metrics</a></li><li class="chapter-item expanded "><a href="../../user/metrics/error-reporting.html"><strong aria-hidden="true">2.3.</strong> Error reporting</a></li><li class="chapter-item expanded "><a href="../../user/collected-metrics/metrics.html"><strong aria-hidden="true">2.4.</strong> Metrics collected by the Glean SDK</a></li></ol></li><li class="chapter-item expanded "><a href="../../user/pings/index.html"><strong aria-hidden="true">3.</strong> Pings</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../user/pings/ping-schedules-and-timings.html"><strong aria-hidden="true">3.1.</strong> Ping schedules and timings overview</a></li><li class="chapter-item expanded "><a href="../../user/pings/baseline.html"><strong aria-hidden="true">3.2.</strong> Baseline Ping</a></li><li class="chapter-item expanded "><a href="../../user/pings/deletion_request.html"><strong aria-hidden="true">3.3.</strong> Deletion Request Ping</a></li><li class="chapter-item expanded "><a href="../../user/pings/metrics.html"><strong aria-hidden="true">3.4.</strong> Metrics Ping</a></li><li class="chapter-item expanded "><a href="../../user/pings/events.html"><strong aria-hidden="true">3.5.</strong> Events Ping</a></li><li class="chapter-item expanded "><a href="../../user/pings/custom.html"><strong aria-hidden="true">3.6.</strong> Custom Pings</a></li><li class="chapter-item expanded "><a href="../../user/pings/testing-custom-pings.html"><strong aria-hidden="true">3.7.</strong> Testing custom pings</a></li></ol></li><li class="chapter-item expanded "><a href="../../user/experiments-api.html"><strong aria-hidden="true">4.</strong> Using the experiments API</a></li><li class="chapter-item expanded "><a href="../../user/debugging/index.html"><strong aria-hidden="true">5.</strong> Debugging products using Glean</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../user/debugging/debug-ping-view.html"><strong aria-hidden="true">5.1.</strong> Glean Debug Ping View</a></li><li class="chapter-item expanded "><a href="../../user/debugging/android.html"><strong aria-hidden="true">5.2.</strong> Android</a></li><li class="chapter-item expanded "><a href="../../user/debugging/ios.html"><strong aria-hidden="true">5.3.</strong> iOS</a></li><li class="chapter-item expanded "><a href="../../user/debugging/python.html"><strong aria-hidden="true">5.4.</strong> Python</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">API Reference</li><li class="chapter-item expanded "><a href="../../reference/yaml/index.html"><strong aria-hidden="true">6.</strong> YAML Format</a></li><li class="chapter-item expanded "><a href="../../reference/general/index.html"><strong aria-hidden="true">7.</strong> General</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/index.html"><strong aria-hidden="true">8.</strong> Metric types</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../reference/metrics/boolean.html"><strong aria-hidden="true">8.1.</strong> Boolean</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/labeled_booleans.html"><strong aria-hidden="true">8.2.</strong> Labeled Booleans</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/counter.html"><strong aria-hidden="true">8.3.</strong> Counter</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/labeled_counters.html"><strong aria-hidden="true">8.4.</strong> Labeled Counters</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/string.html"><strong aria-hidden="true">8.5.</strong> String</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/labeled_strings.html"><strong aria-hidden="true">8.6.</strong> Labeled Strings</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/string_list.html"><strong aria-hidden="true">8.7.</strong> String List</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/timespan.html"><strong aria-hidden="true">8.8.</strong> Timespan</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/timing_distribution.html"><strong aria-hidden="true">8.9.</strong> Timing Distribution</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/memory_distribution.html"><strong aria-hidden="true">8.10.</strong> Memory Distribution</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/uuid.html"><strong aria-hidden="true">8.11.</strong> UUID</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/datetime.html"><strong aria-hidden="true">8.12.</strong> Datetime</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/event.html"><strong aria-hidden="true">8.13.</strong> Event</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/custom_distribution.html"><strong aria-hidden="true">8.14.</strong> Custom Distribution</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/quantity.html"><strong aria-hidden="true">8.15.</strong> Quantity</a></li><li class="chapter-item expanded "><a href="../../reference/metrics/rate.html"><strong aria-hidden="true">8.16.</strong> Rate</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Language Bindings Information</li><li class="chapter-item expanded "><a href="../../language-bindings/android/index.html"><strong aria-hidden="true">9.</strong> Android</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../language-bindings/android/android-build-configuration-options.html"><strong aria-hidden="true">9.1.</strong> Android build configuration options</a></li><li class="chapter-item expanded "><a href="../../language-bindings/android/android-offline-builds.html"><strong aria-hidden="true">9.2.</strong> Android offline builds</a></li><li class="chapter-item expanded "><a href="../../language-bindings/android/instrument-android-crashes-example.html"><strong aria-hidden="true">9.3.</strong> Instrumenting Android crashes with the Glean SDK</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Appendix</li><li class="chapter-item expanded "><a href="../../appendix/glossary.html"><strong aria-hidden="true">10.</strong> Glossary</a></li><li class="chapter-item expanded "><a href="../../appendix/changelog.html"><strong aria-hidden="true">11.</strong> Changelog</a></li><li class="chapter-item expanded "><a href="../../appendix/twig.html"><strong aria-hidden="true">12.</strong> This Week in Glean</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Glean - Cross-platform Telemetry library</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                        <a href="https://github.com/mozilla/glean" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#adding-new-metrics" id="adding-new-metrics">Adding new metrics</a></h1>
+<h2><a class="header" href="#table-of-contents" id="table-of-contents">Table of Contents</a></h2>
+<ul>
+<li><a href="#process-overview">Process overview</a></li>
+<li><a href="#choosing-a-metric-type">Choosing a metric type</a>
+<ul>
+<li><a href="#is-it-a-single-measurement">Is it a single measurement?</a></li>
+<li><a href="#are-you-counting-things">Are you counting things?</a></li>
+<li><a href="#are-you-measuring-time">Are you measuring time?</a></li>
+<li><a href="#do-you-need-to-know-the-order-of-events-relative-to-other-events">Do you need to know the order of events relative to other events?</a></li>
+</ul>
+</li>
+<li><a href="#for-how-long-do-you-need-to-collect-this-data">For how long do you need to collect this data?</a></li>
+<li><a href="#when-should-the-glean-sdk-automatically-clear-the-measurement">When should the Glean SDK automatically clear the measurement?</a>
+<ul>
+<li><a href="#a-lifetime-example">A lifetime example</a></li>
+<li><a href="#what-if-none-of-these-lifetimes-are-appropriate">What if none of these lifetimes are appropriate?</a></li>
+</ul>
+</li>
+<li><a href="#what-should-this-new-metric-be-called">What should this new metric be called?</a>
+<ul>
+<li><a href="#reuse-names-from-other-applications">Reuse names from other applications</a></li>
+<li><a href="#make-names-unique-within-an-application">Make names unique within an application</a></li>
+<li><a href="#be-as-specific-as-possible">Be as specific as possible</a></li>
+</ul>
+</li>
+<li><a href="#what-if-none-of-these-metric-types-is-the-right-fit">What if none of these metric types is the right fit?</a></li>
+<li><a href="#how-do-i-make-sure-my-metric-is-working">How do I make sure my metric is working?</a></li>
+<li><a href="#adding-the-metric-to-the-metricsyaml-file">Adding the metric to the <code>metrics.yaml</code> file</a></li>
+<li><a href="#using-the-metric-from-your-code">Using the metric from your code</a>
+<ul>
+<li><a href="#capitalization">Capitalization</a></li>
+</ul>
+</li>
+</ul>
+<h2><a class="header" href="#process-overview" id="process-overview">Process overview</a></h2>
+<p>When adding a new metric, the process is:</p>
+<ul>
+<li>Consider the question you are trying to answer with this data, and choose the <a href="../../reference/metrics/index.html">metric type</a> and parameters to use.</li>
+<li>Add a new entry to <a href="#adding-the-metric-to-the-metricsyaml-file"><code>metrics.yaml</code></a>.</li>
+<li>Add code to your project to record into the metric by calling the Glean SDK.</li>
+</ul>
+<blockquote>
+<p><strong>Important</strong>: Any new data collection requires documentation and <a href="https://wiki.mozilla.org/Firefox/Data_Collection">data-review</a>. This is also required for any new metric automatically collected by the Glean SDK.</p>
+</blockquote>
+<h2><a class="header" href="#choosing-a-metric-type" id="choosing-a-metric-type">Choosing a metric type</a></h2>
+<p>The following is a set of questions to ask about the data being collected to help better determine which metric type to use.</p>
+<h3><a class="header" href="#is-it-a-single-measurement" id="is-it-a-single-measurement">Is it a single measurement?</a></h3>
+<p>If the value is true or false, use a <a href="../../reference/metrics/boolean.html">boolean metric</a>.</p>
+<p>If the value is a string, use a <a href="../../reference/metrics/string.html">string metric</a>. For example, to record the name of the default search engine.</p>
+<blockquote>
+<p><strong>Beware:</strong> string metrics are exceedingly general, and you are probably best served by selecting the most specific metric for the job, since you'll get better error checking and richer analysis tools for free. For example, avoid storing a number in a string metric --- you probably want a [counter metric]../..(/reference/metrics/counter.html) instead.</p>
+</blockquote>
+<p>If you need to store multiple string values in a metric, use a <a href="../../reference/metrics/string_list.html">string list metric</a>. For example, you may want to record the list of other Mozilla products installed on the device.</p>
+<!-- TODO: If you do know the list of values you might store and you just want to record their presence, consider using a [labeled boolean](../../reference/metrics/labeled_boolean.html) instead. -->
+<!-- If you have a related set of metrics that you want to record strings for, and you don't know the things the strings relate to at build time, use a [labeled string metric](../../reference/metrics/labeled_strings.html). -->
+<p>For all of the metric types in this section that measure single values, it is especially important to consider how the lifetime of the value relates to the ping it is being sent in. Since these metrics don't perform any aggregation on the client side, when a ping containing the metric is submitted, it will contain only the &quot;last known&quot; value for the metric, potentially resulting in <strong>data loss</strong>.  There is further discussion of <a href="#when-should-the-glean-sdk-automatically-clear-the-measurement">metric lifetimes</a> below.</p>
+<h3><a class="header" href="#are-you-counting-things" id="are-you-counting-things">Are you counting things?</a></h3>
+<p>If you want to know how many times something happened, use a <a href="../../reference/metrics/counter.html">counter metric</a>.  If you are counting a group of related things, or you don't know what all of the things to count are at build time, use a <a href="../../reference/metrics/labeled_counters.html">labeled counter metric</a>.</p>
+<p>If you need to know how many times something happened relative to the number of times something else happened,
+use a <a href="../../reference/metrics/rate.html">rate metric</a>.</p>
+<p>If you need to know when the things being counted happened relative to other things, consider using an <a href="../../reference/metrics/event.html">event</a>.</p>
+<h3><a class="header" href="#are-you-measuring-time" id="are-you-measuring-time">Are you measuring time?</a></h3>
+<p>If you need to record an absolute time, use a <a href="../../reference/metrics/datetime.html">datetime metric</a>. Datetimes are recorded in the user's local time, according to their device's real time clock, along with a timezone offset from UTC. Datetime metrics allow specifying the resolution they are collected at, and to stay <a href="https://www.mozilla.org/en-US/about/policy/lean-data/stay-lean/">lean</a>, they should only be collected at the minimum resolution required to answer your question.</p>
+<p>If you need to record how long something takes you have a few options.</p>
+<p>If you need to measure the total time spent doing a particular task, look to the <a href="../../reference/metrics/timespan.html">timespan metric</a>. Timespan metrics allow specifying the resolution they are collected at, and to stay <a href="https://www.mozilla.org/en-US/about/policy/lean-data/stay-lean/">lean</a>, they should only be collected at the minimum resolution required to answer your question.
+Note that this metric should only be used to measure time on a single thread. If multiple overlapping timespans are measured for the same metric, an invalid state error is recorded.</p>
+<p>If you need to measure the relative occurrences of many timings, use a <a href="../../reference/metrics/timing_distribution.html">timing distribution</a>. It builds a histogram of timing measurements, and is safe to record multiple concurrent timespans on different threads.</p>
+<p>If you need to know the time between multiple distinct actions that aren't a simple &quot;begin&quot; and &quot;end&quot; pair, consider using an <a href="../../reference/metrics/event.html">event</a>.</p>
+<h3><a class="header" href="#do-you-need-to-know-the-order-of-events-relative-to-other-events" id="do-you-need-to-know-the-order-of-events-relative-to-other-events">Do you need to know the order of events relative to other events?</a></h3>
+<p>If you need to know the order of actions relative to other actions, such as, the user performed tasks A, B, and then C, and this is meaningfully different from the user performing tasks A, C and then B, (in other words, the order is meaningful beyond just the <em>fact</em> that a set of tasks were performed), use an <a href="../../reference/metrics/event.html">event metric</a>.</p>
+<blockquote>
+<p><strong>Important:</strong> events are the most expensive metric type to record, transmit, store and analyze, so they should be used sparingly, and only when none of the other metric types are sufficient for answering your question.</p>
+</blockquote>
+<h2><a class="header" href="#for-how-long-do-you-need-to-collect-this-data" id="for-how-long-do-you-need-to-collect-this-data">For how long do you need to collect this data?</a></h2>
+<p>Think carefully about how long the metric will be needed, and set the <code>expires</code> parameter to disable the metric at the earliest possible time.
+This is an important component of Mozilla's <a href="https://www.mozilla.org/en-US/about/policy/lean-data/stay-lean/">lean data practices</a>.</p>
+<p>When the metric passes its expiration date (determined at build time), it will automatically stop collecting data.</p>
+<p>When a metric's expiration is within in 14 days, emails will be sent from <code>telemetry-alerts@mozilla.com</code> to the <code>notification_emails</code> addresses associated with the metric.
+At that time, the metric should be removed, which involves removing it from the <code>metrics.yaml</code> file and removing uses of it in the source code.
+Removing a metric does not affect the availability of data already collected by the pipeline.</p>
+<p>If the metric is still needed after its expiration date, it should go back for <a href="https://wiki.mozilla.org/Firefox/Data_Collection">another round of data review</a> to have its expiration date extended.</p>
+<blockquote>
+<p><strong>Important:</strong> Ensure that telemetry alerts are received and are reviewed in a timely manner. Expired metrics don't record any data, extending or removing a metric should be done in time. Consider adding both a group email address and an individual who is responsible for this metric to the <code>notification_emails</code> list.</p>
+</blockquote>
+<h2><a class="header" href="#when-should-the-glean-sdk-automatically-clear-the-measurement" id="when-should-the-glean-sdk-automatically-clear-the-measurement">When should the Glean SDK automatically clear the measurement?</a></h2>
+<p>The <code>lifetime</code> parameter of a metric defines when its value will be cleared. There are three lifetime options available:</p>
+<ul>
+<li><code>ping</code> (default): The metric is cleared each time it is submitted in the ping. This is the most common case, and should be used for metrics that are highly dynamic, such as things computed in response to the user's interaction with the application.</li>
+<li><code>application</code>: The metric is related to an application run, and is cleared after the application restarts and any Glean-owned ping, due at startup, is submitted. This should be used for things that are constant during the run of an application, such as the operating system version. In practice, these metrics are generally set during application startup. A common mistake---using the ping lifetime for these type of metrics---means that they will only be included in the first ping sent during a particular run of the application.</li>
+<li><code>user</code>: <strong>Reach out to the Glean team before using this.</strong>. The metric is part of the user's profile and will live as long as the profile lives. This is often not the best choice unless the metric records a value that <em>really</em> needs to be persisted for the full lifetime of the user profile, e.g. an identifier like the <code>client_id</code>, the day the product was first executed. It is rare to use this lifetime outside of some metrics that are built in to the Glean SDK.</li>
+</ul>
+<p>While lifetimes are important to understand for all metric types, they are particularly important for the metric types that record single values and don't aggregate on the client (<code>boolean</code>, <code>string</code>, <code>labeled_string</code>, <code>string_list</code>, <code>datetime</code> and <code>uuid</code>), since these metrics will send the &quot;last known&quot; value and missing the earlier values could be a form of unintended data loss.</p>
+<h3><a class="header" href="#a-lifetime-example" id="a-lifetime-example">A lifetime example</a></h3>
+<p>Let's work through an example to see how these lifetimes play out in practice. Let's suppose we have a user preference, &quot;turbo mode&quot;, which defaults to <code>false</code>, but the user can turn it to <code>true</code> at any time.  We want to know when this flag is <code>true</code> so we can measure its affect on other metrics in the same ping.  In the following diagram, we look at a time period that sends 4 pings across two separate runs of the application. We assume here, that like the Glean SDK's built-in <a href="../pings/metrics.html">metrics ping</a>, the developer writing the metric isn't in control of when the ping is submitted.</p>
+<p>In this diagram, the ping measurement windows are represented as rectangles, but the moment the ping is &quot;submitted&quot; is represented by its right edge. The user changes the &quot;turbo mode&quot; setting from <code>false</code> to <code>true</code> in the first run, and then toggles it again twice in the second run.</p>
+<p><img src="metric-lifetime-timeline.svg" alt="Metric lifetime timeline" /></p>
+<ul>
+<li>
+<p><strong>A. Ping lifetime, set on change</strong>: The value isn't included in Ping 1, because Glean doesn't know about it yet.  It is included in the first ping after being recorded (Ping 2), which causes it to be cleared.</p>
+</li>
+<li>
+<p><strong>B. Ping lifetime, set on init and change</strong>: The default value is included in Ping 1, and the changed value is included in Ping 2, which causes it to be cleared.  It therefore misses Ping 3, but when the application is started, it is recorded again and it is included in Ping 4.  However, this causes it to be cleared again and it is not in Ping 5.</p>
+</li>
+<li>
+<p><strong>C. Application lifetime, set on change</strong>: The value isn't included in Ping 1, because Glean doesn't know about it yet. After the value is changed, it is included in Pings 2 and 3, but then due to application restart it is cleared, so it is not included until the value is manually toggled again.</p>
+</li>
+<li>
+<p><strong>D. Application, set on init and change</strong>: The default value is included in Ping 1, and the changed value is included in Pings 2 and 3. Even though the application startup causes it to be cleared, it is set again, and all subsequent pings also have the value.</p>
+</li>
+<li>
+<p><strong>E. User, set on change</strong>: The default value is missing from Ping 1, but since <code>user</code> lifetime metrics aren't cleared unless the user profile is reset (e.g. on Android, when the product is uninstalled), it is included in all subsequent pings.</p>
+</li>
+<li>
+<p><strong>F. User, set on init and change</strong>: Since <code>user</code> lifetime metrics aren't cleared unless the user profile is reset, it is included in all subsequent pings.  This would be true even if the &quot;turbo mode&quot; preference were never changed again.</p>
+</li>
+</ul>
+<p>Note that for all of the metric configurations, the toggle of the preference off and on during Ping 4 is completely missed.  If you need to create a ping containing one, and only one, value for this metric, consider using a <a href="../pings/custom.html">custom ping</a> to create a ping whose lifetime matches the lifetime of the value.</p>
+<h3><a class="header" href="#what-if-none-of-these-lifetimes-are-appropriate" id="what-if-none-of-these-lifetimes-are-appropriate">What if none of these lifetimes are appropriate?</a></h3>
+<p>If the timing at which the metric is sent in the ping needs to closely match the timing of the metrics value, the best option is to use a <a href="../pings/custom.html">custom ping</a> to manually control when pings are sent.</p>
+<p>This is especially useful when metrics need to be tightly related to one another, for example when you need to measure the distribution of frame paint times when a particular rendering backend is in use.  If these metrics were in different pings, with different measurement windows, it is much harder to do that kind of reasoning with much certainty.</p>
+<h2><a class="header" href="#what-should-this-new-metric-be-called" id="what-should-this-new-metric-be-called">What should this new metric be called?</a></h2>
+<p>Metric names have a maximum length of 30 characters.</p>
+<h3><a class="header" href="#reuse-names-from-other-applications" id="reuse-names-from-other-applications">Reuse names from other applications</a></h3>
+<p>There's a lot of value using the same name for analogous metrics collected across different products. For example, BigQuery makes it simple to join columns with the same name across multiple tables. Therefore, we encourage you to investigate if a similar metric is already being collected by another product. If it is, there may be an opportunity for code reuse across these products, and if all the projects are using the Glean SDK, it's easy for libraries to send their own metrics. If sharing the code doesn't make sense, at a minimum we recommend using the same metric name for similar actions and concepts whenever possible.</p>
+<h3><a class="header" href="#make-names-unique-within-an-application" id="make-names-unique-within-an-application">Make names unique within an application</a></h3>
+<p>Metric identifiers (the combination of a metric's category and name) must be unique across all metrics that are sent by a single application.
+This includes not only the metrics defined in the app's <code>metrics.yaml</code>, but the <code>metrics.yaml</code> of any Glean SDK-using library that the application uses, including the Glean SDK itself.
+Therefore, care should be taken to name things specifically enough so as to avoid namespace collisions.
+In practice, this generally involves thinking carefully about the <code>category</code> of the metric, more than the <code>name</code>.</p>
+<blockquote>
+<p><strong>Note:</strong> Duplicate metric identifiers are not currently detected at build time. See <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1578383">bug 1578383</a> for progress on that.
+However, the <a href="https://github.com/mozilla/probe-scraper">probe_scraper</a> process, which runs nightly, will detect duplicate metrics and e-mail the <code>notification_emails</code> associated with the given metrics.</p>
+</blockquote>
+<h3><a class="header" href="#be-as-specific-as-possible" id="be-as-specific-as-possible">Be as specific as possible</a></h3>
+<p>More broadly, you should choose the names of metrics to be as specific as possible.
+It is not necessary to put the type of the metric in the category or name, since this information is retained in other ways through the entire end-to-end system.</p>
+<p>For example, if defining a set of events related to search, put them in a category called <code>search</code>, rather than just <code>events</code> or <code>search_events</code>. The <code>events</code> word here would be redundant.</p>
+<h2><a class="header" href="#what-if-none-of-these-metric-types-is-the-right-fit" id="what-if-none-of-these-metric-types-is-the-right-fit">What if none of these metric types is the right fit?</a></h2>
+<p>The current set of metrics the Glean SDK supports is based on known common use cases, but new use cases are discovered all the time.</p>
+<p>Please reach out to us on <a href="https://chat.mozilla.org/#/room/#glean:mozilla.org">#glean:mozilla.org</a>. If you think you need a new metric type, we <a href="../../reference/metrics/index.html#adding-or-changing-metric-types">have a process for that</a>.</p>
+<h2><a class="header" href="#how-do-i-make-sure-my-metric-is-working" id="how-do-i-make-sure-my-metric-is-working">How do I make sure my metric is working?</a></h2>
+<p>The Glean SDK has rich support for writing unit tests involving metrics. Writing a good unit test is a large topic, but in general, you should write unit tests for all new telemetry that does the following:</p>
+<ul>
+<li>
+<p>Performs the operation being measured.</p>
+</li>
+<li>
+<p>Asserts that metrics contain the expected data, using the <code>testGetValue</code> API on the metric.</p>
+</li>
+<li>
+<p>Where applicable, asserts that no errors are recorded, such as when values are out of range, using the <code>testGetNumRecordedErrors</code> API.</p>
+</li>
+</ul>
+<p>In addition to unit tests, it is good practice to validate the incoming data for the new metric on a pre-release channel to make sure things are working as expected.</p>
+<!--
+TODO: This will be a good place to talk about the product telemetry health
+dashboard when that's ready
+-->
+<h2><a class="header" href="#adding-the-metric-to-the-metricsyaml-file" id="adding-the-metric-to-the-metricsyaml-file">Adding the metric to the <code>metrics.yaml</code> file</a></h2>
+<p>The <a href="https://mozilla.github.io/glean_parser/metrics-yaml.html"><code>metrics.yaml</code> file</a> defines the metrics your application or library will send.
+They are organized into categories.
+The overall organization is:</p>
+<pre><code class="language-YAML"># Required to indicate this is a `metrics.yaml` file
+$schema: moz://mozilla.org/schemas/glean/../../reference/metrics/2-0-0
+
+toolbar:
+  click:
+    type: event
+    description: |
+      Event to record toolbar clicks.
+    notification_emails:
+      - CHANGE-ME@example.com
+    bugs:
+      - https://bugzilla.mozilla.org/123456789/
+    data_reviews:
+      - http://example.com/path/to/data-review
+    expires: 2019-06-01  # &lt;-- Update to a date in the future
+
+  double_click:
+    ...
+</code></pre>
+<p>Categories can have <code>.</code> characters to provide extra structure, for example <code>category.subcategory</code>, as long as the total length doesn't exceed 40 characters.</p>
+<p>Metric names have a maximum length of 30 characters.</p>
+<p>The details of the metric parameters are described in <a href="../../reference/yaml/index.html">metric parameters</a>.</p>
+<p>The <code>metrics.yaml</code> file is used to generate code in the target language (e.g. Kotlin, Swift, ...) that becomes the public API to access your application's metrics.</p>
+<h2><a class="header" href="#using-the-metric-from-your-code" id="using-the-metric-from-your-code">Using the metric from your code</a></h2>
+<p>The <a href="../../reference/metrics/index.html">reference documentation for each metric type</a> goes into detail about using each metric type from your code.</p>
+<p>Note that all Glean metrics are write-only. Outside of unit tests, it is impossible to retrieve a value from the Glean SDK's database.
+While this may seem limiting, this is required to:</p>
+<ul>
+<li>enforce the semantics of certain metric types (e.g. that Counters can only be incremented).</li>
+<li>ensure the lifetime of the metric (when it is cleared or reset) is correctly handled.</li>
+</ul>
+<h3><a class="header" href="#capitalization" id="capitalization">Capitalization</a></h3>
+<p>One thing to note is that we try to adhere to the coding conventions of each language wherever possible, to the metric name in the <code>metrics.yaml</code> (which is in <code>snake_case</code>) may be changed to some other case convention, such as <code>camelCase</code>, when used from code.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<p>Category and metric names in the <code>metrics.yaml</code> are in <code>snake_case</code>,
+but given the Kotlin coding standards defined by <a href="https://github.com/pinterest/ktlint">ktlint</a>,
+these identifiers must be <code>camelCase</code> in Kotlin.
+For example, the metric defined in the <code>metrics.yaml</code> as:</p>
+<pre><code class="language-YAML">views:
+  login_opened:
+    ...
+</code></pre>
+<p>is accessible in Kotlin as:</p>
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Views
+GleanMetrics.Views.loginOpened...
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<p>Category and metric names in the <code>metrics.yaml</code> are in <code>snake_case</code>,
+but given the Swift coding standards defined by <a href="https://github.com/realm/SwiftLint">swiftlint</a>,
+these identifiers must be <code>camelCase</code> in Swift.
+For example, the metric defined in the <code>metrics.yaml</code> as:</p>
+<pre><code class="language-YAML">views:
+  login_opened:
+    ...
+</code></pre>
+<p>is accessible in Kotlin as:</p>
+<pre><code class="language-Swift">GleanMetrics.Views.loginOpened...
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<p>Category and metric names in the <code>metrics.yaml</code> are in <code>snake_case</code>, which matches the <a href="https://www.python.org/dev/peps/pep-0008/">PEP8</a> standard, so no translation is needed for Python.</p>
+</div>
+<div data-lang="C#" class="tab">
+<p>TODO. To be implemented in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1643568">this bug</a>.</p>
+</div>
+</div>
+</div>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/user/metrics/adding-new-metrics.md">Edit this file on GitHub.</a></footer>
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../../user/adding-glean-to-your-project.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../../user/metrics/adding-new-metrics.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="../../user/adding-glean-to-your-project.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="../../user/metrics/adding-new-metrics.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="../../../shared/tabs.js"></script>
+        
+        <script type="text/javascript" src="../../../shared/mermaid.min.js"></script>
+        
+        <script type="text/javascript" src="../../../shared/mermaid-init.js"></script>
+        
+        <script type="text/javascript" src="../../chart.min.js"></script>
+        
+        <script type="text/javascript" src="../../chart-distributions.js"></script>
+        
+        <script type="text/javascript" src="../../chart-distributions-ui.js"></script>
+        
+
+        
+
+    </body>
+</html>
