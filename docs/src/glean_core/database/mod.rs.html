@@ -1650,6 +1650,90 @@
 <span id="1647">1647</span>
 <span id="1648">1648</span>
 <span id="1649">1649</span>
+<span id="1650">1650</span>
+<span id="1651">1651</span>
+<span id="1652">1652</span>
+<span id="1653">1653</span>
+<span id="1654">1654</span>
+<span id="1655">1655</span>
+<span id="1656">1656</span>
+<span id="1657">1657</span>
+<span id="1658">1658</span>
+<span id="1659">1659</span>
+<span id="1660">1660</span>
+<span id="1661">1661</span>
+<span id="1662">1662</span>
+<span id="1663">1663</span>
+<span id="1664">1664</span>
+<span id="1665">1665</span>
+<span id="1666">1666</span>
+<span id="1667">1667</span>
+<span id="1668">1668</span>
+<span id="1669">1669</span>
+<span id="1670">1670</span>
+<span id="1671">1671</span>
+<span id="1672">1672</span>
+<span id="1673">1673</span>
+<span id="1674">1674</span>
+<span id="1675">1675</span>
+<span id="1676">1676</span>
+<span id="1677">1677</span>
+<span id="1678">1678</span>
+<span id="1679">1679</span>
+<span id="1680">1680</span>
+<span id="1681">1681</span>
+<span id="1682">1682</span>
+<span id="1683">1683</span>
+<span id="1684">1684</span>
+<span id="1685">1685</span>
+<span id="1686">1686</span>
+<span id="1687">1687</span>
+<span id="1688">1688</span>
+<span id="1689">1689</span>
+<span id="1690">1690</span>
+<span id="1691">1691</span>
+<span id="1692">1692</span>
+<span id="1693">1693</span>
+<span id="1694">1694</span>
+<span id="1695">1695</span>
+<span id="1696">1696</span>
+<span id="1697">1697</span>
+<span id="1698">1698</span>
+<span id="1699">1699</span>
+<span id="1700">1700</span>
+<span id="1701">1701</span>
+<span id="1702">1702</span>
+<span id="1703">1703</span>
+<span id="1704">1704</span>
+<span id="1705">1705</span>
+<span id="1706">1706</span>
+<span id="1707">1707</span>
+<span id="1708">1708</span>
+<span id="1709">1709</span>
+<span id="1710">1710</span>
+<span id="1711">1711</span>
+<span id="1712">1712</span>
+<span id="1713">1713</span>
+<span id="1714">1714</span>
+<span id="1715">1715</span>
+<span id="1716">1716</span>
+<span id="1717">1717</span>
+<span id="1718">1718</span>
+<span id="1719">1719</span>
+<span id="1720">1720</span>
+<span id="1721">1721</span>
+<span id="1722">1722</span>
+<span id="1723">1723</span>
+<span id="1724">1724</span>
+<span id="1725">1725</span>
+<span id="1726">1726</span>
+<span id="1727">1727</span>
+<span id="1728">1728</span>
+<span id="1729">1729</span>
+<span id="1730">1730</span>
+<span id="1731">1731</span>
+<span id="1732">1732</span>
+<span id="1733">1733</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -1887,8 +1971,23 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// It also loads any Lifetime::Ping data that might be</span>
     <span class="doccomment">/// persisted, in case `delay_ping_lifetime_io` is set.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">data_path</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">delay_ping_lifetime_io</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">Path</span>::<span class="ident">new</span>(<span class="ident">data_path</span>).<span class="ident">join</span>(<span class="string">&quot;db&quot;</span>);
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">data_path</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>, <span class="ident">delay_ping_lifetime_io</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">windows</span>, <span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rkv-safe-mode&quot;</span>)))]</span>
+        {
+            <span class="comment">// The underlying lmdb wrapper implementation</span>
+            <span class="comment">// cannot actually handle non-UTF8 paths on Windows.</span>
+            <span class="comment">// It will unconditionally panic if passed one.</span>
+            <span class="comment">// See</span>
+            <span class="comment">// https://github.com/mozilla/lmdb-rs/blob/df1c2f56e3088f097c719c57b9925ab51e26f3f4/src/environment.rs#L43-L53</span>
+            <span class="comment">//</span>
+            <span class="comment">// To avoid this, in case we&#39;re using LMDB on Windows (that&#39;s just testing now though),</span>
+            <span class="comment">// we simply error out earlier.</span>
+            <span class="kw">if</span> <span class="ident">data_path</span>.<span class="ident">to_str</span>().<span class="ident">is_none</span>() {
+                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="kw">crate</span>::<span class="ident">Error</span>::<span class="ident">utf8_error</span>());
+            }
+        }
+
+        <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">data_path</span>.<span class="ident">join</span>(<span class="string">&quot;db&quot;</span>);
         <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;Database path: {:?}&quot;</span>, <span class="ident">path</span>.<span class="ident">display</span>());
         <span class="kw">let</span> <span class="ident">file_size</span> <span class="op">=</span> <span class="ident">database_size</span>(<span class="kw-2">&amp;</span><span class="ident">path</span>);
 
@@ -2436,19 +2535,103 @@
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">tests</span>::<span class="ident">new_glean</span>;
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">CommonMetricData</span>;
     <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::<span class="ident">HashMap</span>;
+    <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">path</span>::<span class="ident">Path</span>;
     <span class="kw">use</span> <span class="ident">tempfile</span>::<span class="ident">tempdir</span>;
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_panicks_if_fails_dir_creation</span>() {
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">Database</span>::<span class="ident">new</span>(<span class="string">&quot;/!#\&quot;&#39;@#°ç&quot;</span>, <span class="bool-val">false</span>).<span class="ident">is_err</span>());
+        <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">Path</span>::<span class="ident">new</span>(<span class="string">&quot;/!#\&quot;&#39;@#°ç&quot;</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">Database</span>::<span class="ident">new</span>(<span class="ident">path</span>, <span class="bool-val">false</span>).<span class="ident">is_err</span>());
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
+    <span class="kw">fn</span> <span class="ident">windows_invalid_utf16_panicfree</span>() {
+        <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ffi</span>::<span class="ident">OsString</span>;
+        <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">windows</span>::<span class="ident">prelude</span>::<span class="kw-2">*</span>;
+
+        <span class="comment">// Here the values 0x0066 and 0x006f correspond to &#39;f&#39; and &#39;o&#39;</span>
+        <span class="comment">// respectively. The value 0xD800 is a lone surrogate half, invalid</span>
+        <span class="comment">// in a UTF-16 sequence.</span>
+        <span class="kw">let</span> <span class="ident">source</span> <span class="op">=</span> [<span class="number">0x0066</span>, <span class="number">0x006f</span>, <span class="number">0xD800</span>, <span class="number">0x006f</span>];
+        <span class="kw">let</span> <span class="ident">os_string</span> <span class="op">=</span> <span class="ident">OsString</span>::<span class="ident">from_wide</span>(<span class="kw-2">&amp;</span><span class="ident">source</span>[..]);
+        <span class="kw">let</span> <span class="ident">os_str</span> <span class="op">=</span> <span class="ident">os_string</span>.<span class="ident">as_os_str</span>();
+        <span class="kw">let</span> <span class="ident">dir</span> <span class="op">=</span> <span class="ident">tempdir</span>().<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">join</span>(<span class="ident">os_str</span>);
+
+        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">Database</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">path</span>, <span class="bool-val">false</span>);
+
+        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rkv-safe-mode&quot;</span>)]</span>
+        {
+            <span class="macro">assert</span><span class="macro">!</span>(
+                <span class="ident">res</span>.<span class="ident">is_ok</span>(),
+                <span class="string">&quot;Database should succeed at {}: {:?}&quot;</span>,
+                <span class="ident">path</span>.<span class="ident">display</span>(),
+                <span class="ident">res</span>
+            );
+        }
+
+        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rkv-safe-mode&quot;</span>))]</span>
+        {
+            <span class="macro">assert</span><span class="macro">!</span>(
+                <span class="ident">res</span>.<span class="ident">is_err</span>(),
+                <span class="string">&quot;Database should fail at {}: {:?}&quot;</span>,
+                <span class="ident">path</span>.<span class="ident">display</span>(),
+                <span class="ident">res</span>
+            );
+        }
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;linux&quot;</span>)]</span>
+    <span class="kw">fn</span> <span class="ident">linux_invalid_utf8_panicfree</span>() {
+        <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ffi</span>::<span class="ident">OsStr</span>;
+        <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">unix</span>::<span class="ident">ffi</span>::<span class="ident">OsStrExt</span>;
+
+        <span class="comment">// Here, the values 0x66 and 0x6f correspond to &#39;f&#39; and &#39;o&#39;</span>
+        <span class="comment">// respectively. The value 0x80 is a lone continuation byte, invalid</span>
+        <span class="comment">// in a UTF-8 sequence.</span>
+        <span class="kw">let</span> <span class="ident">source</span> <span class="op">=</span> [<span class="number">0x66</span>, <span class="number">0x6f</span>, <span class="number">0x80</span>, <span class="number">0x6f</span>];
+        <span class="kw">let</span> <span class="ident">os_str</span> <span class="op">=</span> <span class="ident">OsStr</span>::<span class="ident">from_bytes</span>(<span class="kw-2">&amp;</span><span class="ident">source</span>[..]);
+        <span class="kw">let</span> <span class="ident">dir</span> <span class="op">=</span> <span class="ident">tempdir</span>().<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">join</span>(<span class="ident">os_str</span>);
+
+        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">Database</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">path</span>, <span class="bool-val">false</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(
+            <span class="ident">res</span>.<span class="ident">is_ok</span>(),
+            <span class="string">&quot;Database should not fail at {}: {:?}&quot;</span>,
+            <span class="ident">path</span>.<span class="ident">display</span>(),
+            <span class="ident">res</span>
+        );
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;macos&quot;</span>)]</span>
+    <span class="kw">fn</span> <span class="ident">macos_invalid_utf8_panicfree</span>() {
+        <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ffi</span>::<span class="ident">OsStr</span>;
+        <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">unix</span>::<span class="ident">ffi</span>::<span class="ident">OsStrExt</span>;
+
+        <span class="comment">// Here, the values 0x66 and 0x6f correspond to &#39;f&#39; and &#39;o&#39;</span>
+        <span class="comment">// respectively. The value 0x80 is a lone continuation byte, invalid</span>
+        <span class="comment">// in a UTF-8 sequence.</span>
+        <span class="kw">let</span> <span class="ident">source</span> <span class="op">=</span> [<span class="number">0x66</span>, <span class="number">0x6f</span>, <span class="number">0x80</span>, <span class="number">0x6f</span>];
+        <span class="kw">let</span> <span class="ident">os_str</span> <span class="op">=</span> <span class="ident">OsStr</span>::<span class="ident">from_bytes</span>(<span class="kw-2">&amp;</span><span class="ident">source</span>[..]);
+        <span class="kw">let</span> <span class="ident">dir</span> <span class="op">=</span> <span class="ident">tempdir</span>().<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">join</span>(<span class="ident">os_str</span>);
+
+        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">Database</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">path</span>, <span class="bool-val">false</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(
+            <span class="ident">res</span>.<span class="ident">is_err</span>(),
+            <span class="string">&quot;Database should not fail at {}: {:?}&quot;</span>,
+            <span class="ident">path</span>.<span class="ident">display</span>(),
+            <span class="ident">res</span>
+        );
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_data_dir_rkv_inits</span>() {
         <span class="kw">let</span> <span class="ident">dir</span> <span class="op">=</span> <span class="ident">tempdir</span>().<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">str_dir</span> <span class="op">=</span> <span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">display</span>().<span class="ident">to_string</span>();
-
-        <span class="ident">Database</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">str_dir</span>, <span class="bool-val">false</span>).<span class="ident">unwrap</span>();
+        <span class="ident">Database</span>::<span class="ident">new</span>(<span class="ident">dir</span>.<span class="ident">path</span>(), <span class="bool-val">false</span>).<span class="ident">unwrap</span>();
 
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">exists</span>());
     }
@@ -2457,8 +2640,7 @@
     <span class="kw">fn</span> <span class="ident">test_ping_lifetime_metric_recorded</span>() {
         <span class="comment">// Init the database in a temporary directory.</span>
         <span class="kw">let</span> <span class="ident">dir</span> <span class="op">=</span> <span class="ident">tempdir</span>().<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">str_dir</span> <span class="op">=</span> <span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">display</span>().<span class="ident">to_string</span>();
-        <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">Database</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">str_dir</span>, <span class="bool-val">false</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">Database</span>::<span class="ident">new</span>(<span class="ident">dir</span>.<span class="ident">path</span>(), <span class="bool-val">false</span>).<span class="ident">unwrap</span>();
 
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">db</span>.<span class="ident">ping_lifetime_data</span>.<span class="ident">is_none</span>());
 
@@ -2494,8 +2676,7 @@
     <span class="kw">fn</span> <span class="ident">test_application_lifetime_metric_recorded</span>() {
         <span class="comment">// Init the database in a temporary directory.</span>
         <span class="kw">let</span> <span class="ident">dir</span> <span class="op">=</span> <span class="ident">tempdir</span>().<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">str_dir</span> <span class="op">=</span> <span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">display</span>().<span class="ident">to_string</span>();
-        <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">Database</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">str_dir</span>, <span class="bool-val">false</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">Database</span>::<span class="ident">new</span>(<span class="ident">dir</span>.<span class="ident">path</span>(), <span class="bool-val">false</span>).<span class="ident">unwrap</span>();
 
         <span class="comment">// Attempt to record a known value.</span>
         <span class="kw">let</span> <span class="ident">test_value</span> <span class="op">=</span> <span class="string">&quot;test-value&quot;</span>;
@@ -2532,8 +2713,7 @@
     <span class="kw">fn</span> <span class="ident">test_user_lifetime_metric_recorded</span>() {
         <span class="comment">// Init the database in a temporary directory.</span>
         <span class="kw">let</span> <span class="ident">dir</span> <span class="op">=</span> <span class="ident">tempdir</span>().<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">str_dir</span> <span class="op">=</span> <span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">display</span>().<span class="ident">to_string</span>();
-        <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">Database</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">str_dir</span>, <span class="bool-val">false</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">Database</span>::<span class="ident">new</span>(<span class="ident">dir</span>.<span class="ident">path</span>(), <span class="bool-val">false</span>).<span class="ident">unwrap</span>();
 
         <span class="comment">// Attempt to record a known value.</span>
         <span class="kw">let</span> <span class="ident">test_value</span> <span class="op">=</span> <span class="string">&quot;test-value&quot;</span>;
@@ -2567,8 +2747,7 @@
     <span class="kw">fn</span> <span class="ident">test_clear_ping_storage</span>() {
         <span class="comment">// Init the database in a temporary directory.</span>
         <span class="kw">let</span> <span class="ident">dir</span> <span class="op">=</span> <span class="ident">tempdir</span>().<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">str_dir</span> <span class="op">=</span> <span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">display</span>().<span class="ident">to_string</span>();
-        <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">Database</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">str_dir</span>, <span class="bool-val">false</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">Database</span>::<span class="ident">new</span>(<span class="ident">dir</span>.<span class="ident">path</span>(), <span class="bool-val">false</span>).<span class="ident">unwrap</span>();
 
         <span class="comment">// Attempt to record a known value for every single lifetime.</span>
         <span class="kw">let</span> <span class="ident">test_storage</span> <span class="op">=</span> <span class="string">&quot;test-storage&quot;</span>;
@@ -2643,8 +2822,7 @@
     <span class="kw">fn</span> <span class="ident">test_remove_single_metric</span>() {
         <span class="comment">// Init the database in a temporary directory.</span>
         <span class="kw">let</span> <span class="ident">dir</span> <span class="op">=</span> <span class="ident">tempdir</span>().<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">str_dir</span> <span class="op">=</span> <span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">display</span>().<span class="ident">to_string</span>();
-        <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">Database</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">str_dir</span>, <span class="bool-val">false</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">Database</span>::<span class="ident">new</span>(<span class="ident">dir</span>.<span class="ident">path</span>(), <span class="bool-val">false</span>).<span class="ident">unwrap</span>();
 
         <span class="kw">let</span> <span class="ident">test_storage</span> <span class="op">=</span> <span class="string">&quot;test-storage-single-lifetime&quot;</span>;
         <span class="kw">let</span> <span class="ident">metric_id_pattern</span> <span class="op">=</span> <span class="string">&quot;telemetry_test.single_metric&quot;</span>;
@@ -2700,8 +2878,7 @@
     <span class="kw">fn</span> <span class="ident">test_delayed_ping_lifetime_persistence</span>() {
         <span class="comment">// Init the database in a temporary directory.</span>
         <span class="kw">let</span> <span class="ident">dir</span> <span class="op">=</span> <span class="ident">tempdir</span>().<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">str_dir</span> <span class="op">=</span> <span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">display</span>().<span class="ident">to_string</span>();
-        <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">Database</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">str_dir</span>, <span class="bool-val">true</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">Database</span>::<span class="ident">new</span>(<span class="ident">dir</span>.<span class="ident">path</span>(), <span class="bool-val">true</span>).<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">test_storage</span> <span class="op">=</span> <span class="string">&quot;test-storage&quot;</span>;
 
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">db</span>.<span class="ident">ping_lifetime_data</span>.<span class="ident">is_some</span>());
@@ -2811,14 +2988,13 @@
     <span class="kw">fn</span> <span class="ident">test_load_ping_lifetime_data_from_memory</span>() {
         <span class="comment">// Init the database in a temporary directory.</span>
         <span class="kw">let</span> <span class="ident">dir</span> <span class="op">=</span> <span class="ident">tempdir</span>().<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">str_dir</span> <span class="op">=</span> <span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">display</span>().<span class="ident">to_string</span>();
 
         <span class="kw">let</span> <span class="ident">test_storage</span> <span class="op">=</span> <span class="string">&quot;test-storage&quot;</span>;
         <span class="kw">let</span> <span class="ident">test_value</span> <span class="op">=</span> <span class="string">&quot;test-value&quot;</span>;
         <span class="kw">let</span> <span class="ident">test_metric_id</span> <span class="op">=</span> <span class="string">&quot;telemetry_test.test_name&quot;</span>;
 
         {
-            <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">Database</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">str_dir</span>, <span class="bool-val">true</span>).<span class="ident">unwrap</span>();
+            <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">Database</span>::<span class="ident">new</span>(<span class="ident">dir</span>.<span class="ident">path</span>(), <span class="bool-val">true</span>).<span class="ident">unwrap</span>();
 
             <span class="comment">// Attempt to record a known value.</span>
             <span class="ident">db</span>.<span class="ident">record_per_lifetime</span>(
@@ -2857,7 +3033,7 @@
         <span class="comment">// Now create a new instace of the db and check if data was</span>
         <span class="comment">// correctly loaded from rkv to memory.</span>
         {
-            <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">Database</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">str_dir</span>, <span class="bool-val">true</span>).<span class="ident">unwrap</span>();
+            <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">Database</span>::<span class="ident">new</span>(<span class="ident">dir</span>.<span class="ident">path</span>(), <span class="bool-val">true</span>).<span class="ident">unwrap</span>();
 
             <span class="comment">// Verify that test_value is in memory.</span>
             <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">db</span>.<span class="ident">ping_lifetime_data</span> {
@@ -2887,7 +3063,6 @@
         <span class="kw">let</span> (<span class="kw-2">mut</span> <span class="ident">glean</span>, <span class="ident">dir</span>) <span class="op">=</span> <span class="ident">new_glean</span>(<span class="prelude-val">None</span>);
 
         <span class="comment">// Init the database in a temporary directory.</span>
-        <span class="kw">let</span> <span class="ident">str_dir</span> <span class="op">=</span> <span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">display</span>().<span class="ident">to_string</span>();
 
         <span class="kw">let</span> <span class="ident">test_storage</span> <span class="op">=</span> <span class="string">&quot;test-storage&quot;</span>;
         <span class="kw">let</span> <span class="ident">test_data</span> <span class="op">=</span> <span class="ident">CommonMetricData</span>::<span class="ident">new</span>(<span class="string">&quot;category&quot;</span>, <span class="string">&quot;name&quot;</span>, <span class="ident">test_storage</span>);
@@ -2895,7 +3070,7 @@
 
         <span class="comment">// Attempt to record metric with the record and record_with functions,</span>
         <span class="comment">// this should work since upload is enabled.</span>
-        <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">Database</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">str_dir</span>, <span class="bool-val">true</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">Database</span>::<span class="ident">new</span>(<span class="ident">dir</span>.<span class="ident">path</span>(), <span class="bool-val">true</span>).<span class="ident">unwrap</span>();
         <span class="ident">db</span>.<span class="ident">record</span>(<span class="kw-2">&amp;</span><span class="ident">glean</span>, <span class="kw-2">&amp;</span><span class="ident">test_data</span>, <span class="kw-2">&amp;</span><span class="ident">Metric</span>::<span class="ident">String</span>(<span class="string">&quot;record&quot;</span>.<span class="ident">to_owned</span>()));
         <span class="ident">db</span>.<span class="ident">iter_store_from</span>(
             <span class="ident">Lifetime</span>::<span class="ident">Ping</span>,
@@ -2978,7 +3153,6 @@
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">empty_data_file</span>() {
         <span class="kw">let</span> <span class="ident">dir</span> <span class="op">=</span> <span class="ident">tempdir</span>().<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">str_dir</span> <span class="op">=</span> <span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">display</span>().<span class="ident">to_string</span>();
 
         <span class="comment">// Create database directory structure.</span>
         <span class="kw">let</span> <span class="ident">database_dir</span> <span class="op">=</span> <span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">join</span>(<span class="string">&quot;db&quot;</span>);
@@ -2989,7 +3163,7 @@
         <span class="kw">let</span> <span class="ident">f</span> <span class="op">=</span> <span class="ident">fs</span>::<span class="ident">File</span>::<span class="ident">create</span>(<span class="ident">datamdb</span>).<span class="ident">expect</span>(<span class="string">&quot;create database file&quot;</span>);
         <span class="ident">drop</span>(<span class="ident">f</span>);
 
-        <span class="ident">Database</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">str_dir</span>, <span class="bool-val">false</span>).<span class="ident">unwrap</span>();
+        <span class="ident">Database</span>::<span class="ident">new</span>(<span class="ident">dir</span>.<span class="ident">path</span>(), <span class="bool-val">false</span>).<span class="ident">unwrap</span>();
 
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">exists</span>());
     }
@@ -3004,7 +3178,6 @@
         <span class="attribute">#[<span class="ident">test</span>]</span>
         <span class="kw">fn</span> <span class="ident">empty_data_file</span>() {
             <span class="kw">let</span> <span class="ident">dir</span> <span class="op">=</span> <span class="ident">tempdir</span>().<span class="ident">unwrap</span>();
-            <span class="kw">let</span> <span class="ident">str_dir</span> <span class="op">=</span> <span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">display</span>().<span class="ident">to_string</span>();
 
             <span class="comment">// Create database directory structure.</span>
             <span class="kw">let</span> <span class="ident">database_dir</span> <span class="op">=</span> <span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">join</span>(<span class="string">&quot;db&quot;</span>);
@@ -3015,7 +3188,7 @@
             <span class="kw">let</span> <span class="ident">f</span> <span class="op">=</span> <span class="ident">File</span>::<span class="ident">create</span>(<span class="ident">safebin</span>).<span class="ident">expect</span>(<span class="string">&quot;create database file&quot;</span>);
             <span class="ident">drop</span>(<span class="ident">f</span>);
 
-            <span class="ident">Database</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">str_dir</span>, <span class="bool-val">false</span>).<span class="ident">unwrap</span>();
+            <span class="ident">Database</span>::<span class="ident">new</span>(<span class="ident">dir</span>.<span class="ident">path</span>(), <span class="bool-val">false</span>).<span class="ident">unwrap</span>();
 
             <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">exists</span>());
         }
@@ -3023,7 +3196,6 @@
         <span class="attribute">#[<span class="ident">test</span>]</span>
         <span class="kw">fn</span> <span class="ident">corrupted_data_file</span>() {
             <span class="kw">let</span> <span class="ident">dir</span> <span class="op">=</span> <span class="ident">tempdir</span>().<span class="ident">unwrap</span>();
-            <span class="kw">let</span> <span class="ident">str_dir</span> <span class="op">=</span> <span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">display</span>().<span class="ident">to_string</span>();
 
             <span class="comment">// Create database directory structure.</span>
             <span class="kw">let</span> <span class="ident">database_dir</span> <span class="op">=</span> <span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">join</span>(<span class="string">&quot;db&quot;</span>);
@@ -3033,7 +3205,7 @@
             <span class="kw">let</span> <span class="ident">safebin</span> <span class="op">=</span> <span class="ident">database_dir</span>.<span class="ident">join</span>(<span class="string">&quot;data.safe.bin&quot;</span>);
             <span class="ident">fs</span>::<span class="ident">write</span>(<span class="ident">safebin</span>, <span class="string">&quot;&lt;broken&gt;&quot;</span>).<span class="ident">expect</span>(<span class="string">&quot;write to database file&quot;</span>);
 
-            <span class="ident">Database</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">str_dir</span>, <span class="bool-val">false</span>).<span class="ident">unwrap</span>();
+            <span class="ident">Database</span>::<span class="ident">new</span>(<span class="ident">dir</span>.<span class="ident">path</span>(), <span class="bool-val">false</span>).<span class="ident">unwrap</span>();
 
             <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">exists</span>());
         }
@@ -3041,7 +3213,6 @@
         <span class="attribute">#[<span class="ident">test</span>]</span>
         <span class="kw">fn</span> <span class="ident">migration_works_on_startup</span>() {
             <span class="kw">let</span> <span class="ident">dir</span> <span class="op">=</span> <span class="ident">tempdir</span>().<span class="ident">unwrap</span>();
-            <span class="kw">let</span> <span class="ident">str_dir</span> <span class="op">=</span> <span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">display</span>().<span class="ident">to_string</span>();
 
             <span class="kw">let</span> <span class="ident">database_dir</span> <span class="op">=</span> <span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">join</span>(<span class="string">&quot;db&quot;</span>);
             <span class="kw">let</span> <span class="ident">datamdb</span> <span class="op">=</span> <span class="ident">database_dir</span>.<span class="ident">join</span>(<span class="string">&quot;data.mdb&quot;</span>);
@@ -3079,7 +3250,7 @@
 
             <span class="comment">// First open should migrate the data.</span>
             {
-                <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">Database</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">str_dir</span>, <span class="bool-val">false</span>).<span class="ident">unwrap</span>();
+                <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">Database</span>::<span class="ident">new</span>(<span class="ident">dir</span>.<span class="ident">path</span>(), <span class="bool-val">false</span>).<span class="ident">unwrap</span>();
                 <span class="kw">let</span> <span class="ident">safebin</span> <span class="op">=</span> <span class="ident">database_dir</span>.<span class="ident">join</span>(<span class="string">&quot;data.safe.bin&quot;</span>);
                 <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">safebin</span>.<span class="ident">exists</span>(), <span class="string">&quot;safe-mode file should exist&quot;</span>);
                 <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">datamdb</span>.<span class="ident">exists</span>(), <span class="string">&quot;LMDB data should be deleted&quot;</span>);
@@ -3099,7 +3270,7 @@
 
             <span class="comment">// Next open should not re-create the LMDB files.</span>
             {
-                <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">Database</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">str_dir</span>, <span class="bool-val">false</span>).<span class="ident">unwrap</span>();
+                <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">Database</span>::<span class="ident">new</span>(<span class="ident">dir</span>.<span class="ident">path</span>(), <span class="bool-val">false</span>).<span class="ident">unwrap</span>();
                 <span class="kw">let</span> <span class="ident">safebin</span> <span class="op">=</span> <span class="ident">database_dir</span>.<span class="ident">join</span>(<span class="string">&quot;data.safe.bin&quot;</span>);
                 <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">safebin</span>.<span class="ident">exists</span>(), <span class="string">&quot;safe-mode file exists&quot;</span>);
                 <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">datamdb</span>.<span class="ident">exists</span>(), <span class="string">&quot;LMDB data should not be recreated&quot;</span>);
@@ -3121,7 +3292,6 @@
         <span class="attribute">#[<span class="ident">test</span>]</span>
         <span class="kw">fn</span> <span class="ident">migration_doesnt_overwrite</span>() {
             <span class="kw">let</span> <span class="ident">dir</span> <span class="op">=</span> <span class="ident">tempdir</span>().<span class="ident">unwrap</span>();
-            <span class="kw">let</span> <span class="ident">str_dir</span> <span class="op">=</span> <span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">display</span>().<span class="ident">to_string</span>();
 
             <span class="kw">let</span> <span class="ident">database_dir</span> <span class="op">=</span> <span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">join</span>(<span class="string">&quot;db&quot;</span>);
             <span class="kw">let</span> <span class="ident">datamdb</span> <span class="op">=</span> <span class="ident">database_dir</span>.<span class="ident">join</span>(<span class="string">&quot;data.mdb&quot;</span>);
@@ -3179,7 +3349,7 @@
             <span class="comment">// First open should try migration and ignore it, because destination is not empty.</span>
             <span class="comment">// It also deletes the leftover LMDB database.</span>
             {
-                <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">Database</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">str_dir</span>, <span class="bool-val">false</span>).<span class="ident">unwrap</span>();
+                <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">Database</span>::<span class="ident">new</span>(<span class="ident">dir</span>.<span class="ident">path</span>(), <span class="bool-val">false</span>).<span class="ident">unwrap</span>();
                 <span class="kw">let</span> <span class="ident">safebin</span> <span class="op">=</span> <span class="ident">database_dir</span>.<span class="ident">join</span>(<span class="string">&quot;data.safe.bin&quot;</span>);
                 <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">safebin</span>.<span class="ident">exists</span>(), <span class="string">&quot;safe-mode file should exist&quot;</span>);
                 <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">datamdb</span>.<span class="ident">exists</span>(), <span class="string">&quot;LMDB data should be deleted&quot;</span>);
@@ -3201,7 +3371,6 @@
         <span class="attribute">#[<span class="ident">test</span>]</span>
         <span class="kw">fn</span> <span class="ident">migration_ignores_broken_database</span>() {
             <span class="kw">let</span> <span class="ident">dir</span> <span class="op">=</span> <span class="ident">tempdir</span>().<span class="ident">unwrap</span>();
-            <span class="kw">let</span> <span class="ident">str_dir</span> <span class="op">=</span> <span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">display</span>().<span class="ident">to_string</span>();
 
             <span class="kw">let</span> <span class="ident">database_dir</span> <span class="op">=</span> <span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">join</span>(<span class="string">&quot;db&quot;</span>);
             <span class="kw">let</span> <span class="ident">datamdb</span> <span class="op">=</span> <span class="ident">database_dir</span>.<span class="ident">join</span>(<span class="string">&quot;data.mdb&quot;</span>);
@@ -3245,7 +3414,7 @@
             <span class="comment">// First open should try migration and ignore it, because destination is not empty.</span>
             <span class="comment">// It also deletes the leftover LMDB database.</span>
             {
-                <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">Database</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">str_dir</span>, <span class="bool-val">false</span>).<span class="ident">unwrap</span>();
+                <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">Database</span>::<span class="ident">new</span>(<span class="ident">dir</span>.<span class="ident">path</span>(), <span class="bool-val">false</span>).<span class="ident">unwrap</span>();
                 <span class="kw">let</span> <span class="ident">safebin</span> <span class="op">=</span> <span class="ident">database_dir</span>.<span class="ident">join</span>(<span class="string">&quot;data.safe.bin&quot;</span>);
                 <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">safebin</span>.<span class="ident">exists</span>(), <span class="string">&quot;safe-mode file should exist&quot;</span>);
                 <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">datamdb</span>.<span class="ident">exists</span>(), <span class="string">&quot;LMDB data should be deleted&quot;</span>);
@@ -3267,7 +3436,6 @@
         <span class="attribute">#[<span class="ident">test</span>]</span>
         <span class="kw">fn</span> <span class="ident">migration_ignores_empty_database</span>() {
             <span class="kw">let</span> <span class="ident">dir</span> <span class="op">=</span> <span class="ident">tempdir</span>().<span class="ident">unwrap</span>();
-            <span class="kw">let</span> <span class="ident">str_dir</span> <span class="op">=</span> <span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">display</span>().<span class="ident">to_string</span>();
 
             <span class="kw">let</span> <span class="ident">database_dir</span> <span class="op">=</span> <span class="ident">dir</span>.<span class="ident">path</span>().<span class="ident">join</span>(<span class="string">&quot;db&quot;</span>);
             <span class="kw">let</span> <span class="ident">datamdb</span> <span class="op">=</span> <span class="ident">database_dir</span>.<span class="ident">join</span>(<span class="string">&quot;data.mdb&quot;</span>);
@@ -3291,7 +3459,7 @@
             <span class="comment">// safe-mode does not write an empty database to disk.</span>
             <span class="comment">// It also deletes the leftover LMDB database.</span>
             {
-                <span class="kw">let</span> <span class="ident">_db</span> <span class="op">=</span> <span class="ident">Database</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">str_dir</span>, <span class="bool-val">false</span>).<span class="ident">unwrap</span>();
+                <span class="kw">let</span> <span class="ident">_db</span> <span class="op">=</span> <span class="ident">Database</span>::<span class="ident">new</span>(<span class="ident">dir</span>.<span class="ident">path</span>(), <span class="bool-val">false</span>).<span class="ident">unwrap</span>();
                 <span class="kw">let</span> <span class="ident">safebin</span> <span class="op">=</span> <span class="ident">database_dir</span>.<span class="ident">join</span>(<span class="string">&quot;data.safe.bin&quot;</span>);
                 <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">safebin</span>.<span class="ident">exists</span>(), <span class="string">&quot;safe-mode file should exist&quot;</span>);
                 <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">datamdb</span>.<span class="ident">exists</span>(), <span class="string">&quot;LMDB data should be deleted&quot;</span>);
