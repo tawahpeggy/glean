@@ -3188,18 +3188,10 @@ Only the first 16 labels seen by the Glean SDK will be tracked. After that, any 
 <li>Once the decision process is completed, the bug is closed with a comment outlining the decision that was made.</li>
 </ol>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/metrics/index.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#boolean" id="boolean">Boolean</a></h1>
-<p>Booleans are used for simple flags, for example &quot;is a11y enabled&quot;?.</p>
-<h2><a class="header" href="#configuration" id="configuration">Configuration</a></h2>
-<p>Say you're adding a boolean to record whether a11y is enabled on the device. First you need to add an entry for the boolean to the <code>metrics.yaml</code> file:</p>
-<pre><code class="language-YAML">flags:
-  a11y_enabled:
-    type: boolean
-    description: &gt;
-      Records whether a11y is enabled on the device.
-    lifetime: application
-    ...
-</code></pre>
-<h2><a class="header" href="#api-1" id="api-1">API</a></h2>
+<p>Boolean metrics are used for reporting simple flags.</p>
+<h2><a class="header" href="#recording-api" id="recording-api">Recording API</a></h2>
+<h3><a class="header" href="#set" id="set"><code>set</code></a></h3>
+<p>Sets a boolean metric to a specific value.</p>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
@@ -3208,39 +3200,15 @@ Only the first 16 labels seen by the Glean SDK will be tracked. After that, any 
 
 Flags.a11yEnabled.set(System.isAccesibilityEnabled())
 </code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Flags
-
-// Was anything recorded?
-assertTrue(Flags.a11yEnabled.testHasValue())
-// Does it have the expected value?
-assertTrue(Flags.a11yEnabled.testGetValue())
-</code></pre>
 </div>
 <div data-lang="Java" class="tab">
 <pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Flags;
 
 Flags.INSTANCE.a11yEnabled.set(System.isAccessibilityEnabled());
 </code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Flags;
-
-// Was anything recorded?
-assertTrue(Flags.INSTANCE.a11yEnabled.testHasValue());
-// Does it have the expected value?
-assertTrue(Flags.INSTANCE.a11yEnabled.testGetValue());
-</code></pre>
 </div>
 <div data-lang="Swift" class="tab">
 <pre><code class="language-Swift">Flags.a11yEnabled.set(self.isAccessibilityEnabled)
-</code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Swift">@testable import Glean
-
-// Was anything recorded?
-XCTAssertTrue(Flags.a11yEnabled.testHasValue())
-// Does the counter have the expected value?
-XCTAssertTrue(try Flags.a11yEnabled.testGetValue())
 </code></pre>
 </div>
 <div data-lang="Python" class="tab">
@@ -3249,87 +3217,145 @@ metrics = load_metrics(&quot;metrics.yaml&quot;)
 
 metrics.flags.a11y_enabled.set(is_accessibility_enabled())
 </code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Python"># Was anything recorded?
-assert metrics.flags.a11y_enabled.test_has_value()
-# Does it have the expected value?
-assert True is metrics.flags.a11y_enabled.test_get_value()
-</code></pre>
-</div>
-<div data-lang="C#" class="tab">
-<pre><code class="language-C#">using static Mozilla.YourApplication.GleanMetrics.FlagsOuter;
-
-Flags.a11yEnabled.Set(System.IsAccessibilityEnabled());
-</code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-C#">using static Mozilla.YourApplication.GleanMetrics.FlagsOuter;
-
-// Was anything recorded?
-Assert.True(Flags.a11yEnabled.TestHasValue());
-// Does it have the expected value?
-Assert.True(Flags.a11yEnabled.TestGetValue());
-</code></pre>
 </div>
 <div data-lang="Rust" class="tab">
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>use glean_metrics;
+<pre><code>use glean_metrics;
 
 flags::a11y_enabled.set(system.is_accessibility_enabled());
-<span class="boring">}
-</span></code></pre></pre>
-<p>There are test APIs available too:</p>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>use glean_metrics;
-
-// Was anything recorded?
-assert!(flags::a11y_enabled.test_get_value(None).is_some());
-// Does it have the expected value?
-assert!(flags::a11y_enabled.test_get_value(None).unwrap());
-<span class="boring">}
-</span></code></pre></pre>
+</code></pre>
 </div>
-<div data-lang="C++" class="tab">
-<blockquote>
-<p><strong>Note</strong>: C++ APIs are only available in Firefox Desktop.</p>
-</blockquote>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<div data-lang="Javascript" class="tab">
+<pre><code class="language-js">import * as flags from &quot;./path/to/generated/files/flags.js&quot;;
+
+flags.a11yEnabled.set(this.isAccessibilityEnabled());
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
 
 mozilla::glean::flags::a11y_enabled.Set(false);
 </code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<p><strong>Javascript</strong></p>
+<pre><code class="language-js">Glean.flags.a11yEnabled.set(false);
+</code></pre>
+</div>
+</div>
+</div>
+<h4><a class="header" href="#recorded-errors" id="recorded-errors">Recorded errors</a></h4>
+<p>N/A</p>
+<h2><a class="header" href="#testing-api" id="testing-api">Testing API</a></h2>
+<h3><a class="header" href="#testgetvalue" id="testgetvalue"><code>testGetValue</code></a></h3>
+<p>Gets the recorded value for a given boolean metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Flags
+
+assertTrue(Flags.a11yEnabled.testGetValue())
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Flags;
+
+assertTrue(Flags.INSTANCE.a11yEnabled.testGetValue());
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+XCTAssertTrue(try Flags.a11yEnabled.testGetValue())
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+assert True is metrics.flags.a11y_enabled.test_get_value()
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><code>use glean_metrics;
+
+assert!(flags::a11y_enabled.test_get_value(None).unwrap());
+</code></pre>
+</div>
+<div data-lang="Javascript" class="tab">
+<pre><code class="language-js">import * as flags from &quot;./path/to/generated/files/flags.js&quot;;
+
+assert(await flags.a11yEnabled.testGetValue());
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
 
 ASSERT_EQ(false, mozilla::glean::flags::a11y_enabled.TestGetValue().value());
 </code></pre>
-</div>
-<div data-lang="JS" class="tab">
-<blockquote>
-<p><strong>Note</strong>: JS APIs are currently only available in Firefox Desktop.
-General JavaScript support is coming soon via <a href="https://github.com/mozilla/glean.js/">the Glean.js project</a>.</p>
-</blockquote>
-<pre><code class="language-js">Glean.flags.a11yEnabled.set(false);
-</code></pre>
-<p>There are test APIs available too:</p>
+<p><strong>Javascript</strong></p>
 <pre><code class="language-js">Assert.equal(false, Glean.flags.a11yEnabled.testGetValue());
 </code></pre>
 </div>
 </div>
 </div>
-<h2><a class="header" href="#limits-1" id="limits-1">Limits</a></h2>
+<h3><a class="header" href="#testhasvalue" id="testhasvalue"><code>testHasValue</code></a></h3>
+<p>Whether or not <strong>any</strong> value was recorded for a given boolean metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Flags
+
+assertTrue(Flags.a11yEnabled.testHasValue())
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Flags;
+
+assertTrue(Flags.INSTANCE.a11yEnabled.testHasValue());
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+XCTAssertTrue(try Flags.a11yEnabled.testHasValue())
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+assert True is metrics.flags.a11y_enabled.test_has_value()
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab"></div>
+<div data-lang="Javascript" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h2><a class="header" href="#metric-parameters-1" id="metric-parameters-1">Metric parameters</a></h2>
+<p>Example boolean metric definition:</p>
+<pre><code class="language-yaml">flags:
+  a11y_enabled:
+    type: boolean
+    description: &gt;
+      Records whether a11y is enabled on the device.
+    bugs:
+      - https://bugzilla.mozilla.org/000000
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=000000#c3
+    notification_emails:
+      - me@mozilla.com
+    expires: 2020-10-01
+</code></pre>
+<p>For a full reference on metrics parameters common to all metric types,
+refer to the metrics <a href="reference/metrics/../yaml/index.html">YAML format</a> reference page.</p>
+<h3><a class="header" href="#extra-metric-parameters" id="extra-metric-parameters">Extra metric parameters</a></h3>
+<p>N/A</p>
+<h2><a class="header" href="#data-questions" id="data-questions">Data questions</a></h2>
 <ul>
-<li>None.</li>
-</ul>
-<h2><a class="header" href="#examples" id="examples">Examples</a></h2>
-<ul>
-<li>Is a11y enabled?</li>
-</ul>
-<h2><a class="header" href="#recorded-errors" id="recorded-errors">Recorded errors</a></h2>
-<ul>
-<li>None.</li>
+<li>Is accessibility enabled?</li>
 </ul>
 <h2><a class="header" href="#reference-1" id="reference-1">Reference</a></h2>
 <ul>
@@ -3340,7 +3366,7 @@ General JavaScript support is coming soon via <a href="https://github.com/mozill
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/metrics/boolean.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#labeled-booleans" id="labeled-booleans">Labeled Booleans</a></h1>
 <p>Labeled booleans are used to record different related boolean flags.</p>
-<h2><a class="header" href="#configuration-1" id="configuration-1">Configuration</a></h2>
+<h2><a class="header" href="#configuration" id="configuration">Configuration</a></h2>
 <p>For example, you may want to record a set of flags related to accessibility (a11y).</p>
 <pre><code class="language-YAML">accessibility:
   features:
@@ -3355,7 +3381,7 @@ General JavaScript support is coming soon via <a href="https://github.com/mozill
 <blockquote>
 <p><strong>Note:</strong> removing or changing labels, including their order in the registry file, is permitted. Avoid reusing labels that were removed in the past. It is best practice to add documentation about removed labels to the description field so that analysts will know of their existence and meaning in historical data. Special care must be taken when changing GeckoView metrics sent through the Glean SDK, as the index of the labels is used to report Gecko data through the Glean SDK.</p>
 </blockquote>
-<h2><a class="header" href="#api-2" id="api-2">API</a></h2>
+<h2><a class="header" href="#api-1" id="api-1">API</a></h2>
 <p>Now you can use the labeled boolean from the application's code:</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -3472,7 +3498,7 @@ assert_eq!(
 </div>
 </div>
 </div>
-<h2><a class="header" href="#limits-2" id="limits-2">Limits</a></h2>
+<h2><a class="header" href="#limits-1" id="limits-1">Limits</a></h2>
 <ul>
 <li>
 <p>Labels must conform to the <a href="reference/metrics/index.html#label-format">label formatting regular expression</a>.</p>
@@ -3493,7 +3519,7 @@ assert_eq!(
 <p>If the labels aren't specified in the <code>metrics.yaml</code>, only 16 different dynamic labels may be used, after which the special value <code>__other__</code> will be used.</p>
 </li>
 </ul>
-<h2><a class="header" href="#examples-1" id="examples-1">Examples</a></h2>
+<h2><a class="header" href="#examples" id="examples">Examples</a></h2>
 <ul>
 <li>Record a related set of boolean flags.</li>
 </ul>
@@ -3517,20 +3543,19 @@ assert_eq!(
 A counter always starts from <code>0</code>.
 Each time you record to a counter, its value is incremented.
 Unless incremented by a positive value, a counter will not be reported in pings.</p>
+<p>If you find that you need to control the actual value sent in the ping, you may be measuring something,
+not just counting something, and a <a href="reference/metrics/quantity.html">Quantity metric</a> may be a better choice.</p>
+<div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
+<h2><a class="header" href="#let-the-glean-metric-do-the-counting" id="let-the-glean-metric-do-the-counting">Let the Glean metric do the counting</a></h2>
 <blockquote>
-<p><strong>IMPORTANT:</strong> When using a counter metric, it is important to let the Glean metric do the counting. Using your own variable for counting and setting the counter yourself could be problematic because it will be difficult to reset the value at the exact moment that the value is sent in a ping. Instead, just use <code>counter.add</code> to increment the value and let Glean handle resetting the counter.</p>
+<p>When using a counter metric, it is important to let the Glean metric do the counting.
+Using your own variable for counting and setting the counter yourself could be problematic because
+it will be difficult to reset the value at the exact moment that the value is sent in a ping.
+Instead, just use <code>counter.add</code> to increment the value and let Glean handle resetting the counter.</p>
 </blockquote>
-<p>If you find that you need to control the actual value sent in the ping, you may be measuring something, not just counting something, and a <a href="reference/metrics/quantity.html">Quantity metric</a> may be a better choice.</p>
-<h2><a class="header" href="#configuration-2" id="configuration-2">Configuration</a></h2>
-<p>Say you're adding a new counter for how often the refresh button is pressed. First you need to add an entry for the counter to the <code>metrics.yaml</code> file:</p>
-<pre><code class="language-YAML">controls:
-  refresh_pressed:
-    type: counter
-    description: &gt;
-      Counts how often the refresh button is pressed.
-    ...
-</code></pre>
-<h2><a class="header" href="#api-3" id="api-3">API</a></h2>
+<h2><a class="header" href="#recording-api-1" id="recording-api-1">Recording API</a></h2>
+<h3><a class="header" href="#add" id="add"><code>add</code></a></h3>
+<p>Increases the counter by a certain amount. If no amount is passed it defaults to <code>1</code>.</p>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
@@ -3540,18 +3565,6 @@ Unless incremented by a positive value, a counter will not be reported in pings.
 Controls.refreshPressed.add() // Adds 1 to the counter.
 Controls.refreshPressed.add(5) // Adds 5 to the counter.
 </code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Controls
-
-// Was anything recorded?
-assertTrue(Controls.refreshPressed.testHasValue())
-// Does the counter have the expected value?
-assertEquals(6, Controls.refreshPressed.testGetValue())
-// Did the counter record a negative value?
-assertEquals(
-    1, Controls.refreshPressed.testGetNumRecordedErrors(ErrorType.InvalidValue)
-)
-</code></pre>
 </div>
 <div data-lang="Java" class="tab">
 <pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Controls;
@@ -3559,32 +3572,10 @@ assertEquals(
 Controls.INSTANCE.refreshPressed.add(); // Adds 1 to the counter.
 Controls.INSTANCE.refreshPressed.add(5); // Adds 5 to the counter.
 </code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Controls;
-
-// Was anything recorded?
-assertTrue(Controls.INSTANCE.refreshPressed.testHasValue());
-// Does the counter have the expected value?
-assertEquals(6, Controls.INSTANCE.refreshPressed.testGetValue());
-// Did the counter record a negative value?
-assertEquals(
-    1, Controls.INSTANCE.refreshPressed.testGetNumRecordedErrors(ErrorType.InvalidValue)
-);
-</code></pre>
 </div>
 <div data-lang="Swift" class="tab">
 <pre><code class="language-Swift">Controls.refreshPressed.add() // Adds 1 to the counter.
 Controls.refreshPressed.add(5) // Adds 5 to the counter.
-</code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Swift">@testable import Glean
-
-// Was anything recorded?
-XCTAssert(Controls.refreshPressed.testHasValue())
-// Does the counter have the expected value?
-XCTAssertEqual(6, try Controls.refreshPressed.testGetValue())
-// Did the counter record a negative value?
-XCTAssertEqual(1, Controls.refreshPressed.testGetNumRecordedErrors(.invalidValue))
 </code></pre>
 </div>
 <div data-lang="Python" class="tab">
@@ -3594,35 +3585,73 @@ metrics = load_metrics(&quot;metrics.yaml&quot;)
 metrics.controls.refresh_pressed.add()  # Adds 1 to the counter.
 metrics.controls.refresh_pressed.add(5) # Adds 5 to the counter.
 </code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Python"># Was anything recorded?
-assert metrics.controls.refresh_pressed.test_has_value()
-# Does the counter have the expected value?
-assert 6 == metrics.controls.refresh_pressed.test_get_value()
-# Did the counter record a negative value?
-from glean.testing import ErrorType
-assert 1 == metrics.controls.refresh_pressed.test_get_num_recorded_errors(
-    ErrorType.INVALID_VALUE
-)
+</div>
+<div data-lang="Rust" class="tab">
+<pre><code class="language-Rust">use glean_metrics;
+
+controls::refresh_pressed.add(1); // Adds 1 to the counter.
+controls::refresh_pressed.add(5); // Adds 5 to the counter.
 </code></pre>
 </div>
-<div data-lang="C#" class="tab">
-<pre><code class="language-C#">using static Mozilla.YourApplication.GleanMetrics.Controls;
+<div data-lang="Javascript" class="tab">
+<pre><code class="language-js">import * as controls from &quot;./path/to/generated/files/controls.js&quot;;
 
-Controls.refreshPressed.Add(); // Adds 1 to the counter.
-Controls.refreshPressed.Add(5); // Adds 5 to the counter.
+controls.refreshPressed.add(1); // Adds 1 to the counter.
+controls.refreshPressed.add(5); // Adds 5 to the counter.
 </code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-C#">using static Mozilla.YourApplication.GleanMetrics.Controls;
+</div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
 
-// Was anything recorded?
-Assert.True(Controls.refreshPressed.TestHasValue());
-// Does the counter have the expected value?
-Assert.Equal(6, Controls.refreshPressed.TestGetValue());
-// Did the counter record a negative value?
-Assert.Equal(
-    1, Controls.refreshPressed.TestGetNumRecordedErrors(ErrorType.InvalidValue)
-);
+mozila::glean::controls::refresh_pressed.Add(1);
+mozilla::glean::controls::refresh_pressed.Add(5);
+</code></pre>
+<p><strong>Javascript</strong></p>
+<pre><code class="language-js">Glean.controls.refreshPressed.add(1);
+Glean.controls.refreshPressed.add(5);
+</code></pre>
+</div>
+</div>
+</div>
+<h4><a class="header" href="#recorded-errors-2" id="recorded-errors-2">Recorded errors</a></h4>
+<ul>
+<li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: If the counter is incremented by <code>0</code> or a negative value.</li>
+</ul>
+<h4><a class="header" href="#limits-2" id="limits-2">Limits</a></h4>
+<ul>
+<li>Only increments;</li>
+<li>Saturates at the largest value that can be represented as a 32-bit signed integer (<code>2147483647</code>).</li>
+</ul>
+<h2><a class="header" href="#testing-api-1" id="testing-api-1">Testing API</a></h2>
+<h3><a class="header" href="#testgetvalue-1" id="testgetvalue-1"><code>testGetValue</code></a></h3>
+<p>Gets the recorded value for a given counter metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Controls
+
+assertEquals(6, Controls.refreshPressed.testGetValue())
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Controls;
+
+assertEquals(6, Controls.INSTANCE.refreshPressed.testGetValue());
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+XCTAssertEqual(6, try Controls.refreshPressed.testGetValue())
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+assert 6 == metrics.controls.refresh_pressed.test_get_value()
 </code></pre>
 </div>
 <div data-lang="Rust" class="tab">
@@ -3631,11 +3660,100 @@ Assert.Equal(
 </span><span class="boring">fn main() {
 </span>use glean_metrics;
 
-controls::refresh_pressed.add(1); // Adds 1 to the counter.
-controls::refresh_pressed.add(5); // Adds 5 to the counter.
+assert_eq!(6, controls::refresh_pressed.test_get_value(None).unwrap());
 <span class="boring">}
 </span></code></pre></pre>
-<p>There are test APIs available too:</p>
+</div>
+<div data-lang="Javascript" class="tab">
+<pre><code class="language-js">import * as controls from &quot;./path/to/generated/files/controls.js&quot;;
+
+assert.strictEqual(6, await controls.refreshPressed.testGetValue());
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+ASSERT_EQ(6, mozilla::glean::controls::refresh_pressed.TestGetValue().value());
+</code></pre>
+<p><strong>Javascript</strong></p>
+<pre><code class="language-js">Assert.equal(6, Glean.controls.refreshPressed.testGetValue());
+</code></pre>
+</div>
+</div>
+</div>
+<h3><a class="header" href="#testhasvalue-1" id="testhasvalue-1"><code>testHasValue</code></a></h3>
+<p>Whether or not <strong>any</strong> value was recorded for a given counter metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Controls
+
+assertTrue(Controls.refreshPressed.testHasValue())
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Controls;
+
+assertTrue(Controls.INSTANCE.refreshPressed.testHasValue());
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+XCTAssert(Controls.refreshPressed.testHasValue())
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+assert metrics.controls.refresh_pressed.test_has_value()
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab"></div>
+<div data-lang="Javascript" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h3><a class="header" href="#testgetnumrecordederrors" id="testgetnumrecordederrors"><code>testGetNumRecordedErrors</code></a></h3>
+<p>Gets number of errors recorded for a given counter metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Controls
+
+assertEquals(
+    1, Controls.refreshPressed.testGetNumRecordedErrors(ErrorType.InvalidValue)
+)
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Controls;
+
+assertEquals(
+    1, Controls.INSTANCE.refreshPressed.testGetNumRecordedErrors(ErrorType.InvalidValue)
+);
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">XCTAssertEqual(1, Controls.refreshPressed.testGetNumRecordedErrors(.invalidValue))
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+from glean.testing import ErrorType
+
+assert 1 == metrics.controls.refresh_pressed.test_get_num_recorded_errors(
+    ErrorType.INVALID_VALUE
+)
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -3643,11 +3761,6 @@ controls::refresh_pressed.add(5); // Adds 5 to the counter.
 
 use glean_metrics;
 
-// Was anything recorded?
-assert!(controls::refresh_pressed.test_get_value(None).is_some());
-// Does the counter have the expected value?
-assert_eq!(6, controls::refresh_pressed.test_get_value(None).unwrap());
-// Did the counter record an negative value?
 assert_eq!(
   1,
   controls::refresh_pressed.test_get_num_recorded_errors(
@@ -3657,49 +3770,32 @@ assert_eq!(
 <span class="boring">}
 </span></code></pre></pre>
 </div>
-<div data-lang="C++" class="tab">
-<blockquote>
-<p><strong>Note</strong>: C++ APIs are only available in Firefox Desktop.</p>
-</blockquote>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
-
-mozilla::glean::controls::refresh_pressed.Add(1);
-mozilla::glean::controls::refresh_pressed.Add(5);
-</code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
-
-// Does the counter have the expected value?
-ASSERT_EQ(6, mozilla::glean::controls::refresh_pressed.TestGetValue().value());
-// Did it run across any errors?
-// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
-</code></pre>
-</div>
-<div data-lang="JS" class="tab">
-<blockquote>
-<p><strong>Note</strong>: JS APIs are currently only available in Firefox Desktop.
-General JavaScript support is coming soon via <a href="https://github.com/mozilla/glean.js/">the Glean.js project</a>.</p>
-</blockquote>
-<pre><code class="language-js">Glean.controls.refreshPressed.add(1);
-Glean.controls.refreshPressed.add(5);
-</code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-js">Assert.equal(6, Glean.controls.refreshPressed.testGetValue());
-</code></pre>
+<div data-lang="Javascript" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab" data-bug="1683171"></div>
 </div>
 </div>
-</div>
-<h2><a class="header" href="#limits-3" id="limits-3">Limits</a></h2>
+<h2><a class="header" href="#metric-parameters-2" id="metric-parameters-2">Metric parameters</a></h2>
+<p>Example counter metric definition:</p>
+<pre><code class="language-yaml">controls:
+  refresh_pressed:
+    type: counter
+    description: &gt;
+      Counts how often the refresh button is pressed.
+    bugs:
+      - https://bugzilla.mozilla.org/000000
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=000000#c3
+    notification_emails:
+      - me@mozilla.com
+    expires: 2020-10-01
+</code></pre>
+<p>For a full reference on metrics parameters common to all metric types,
+refer to the metrics <a href="reference/metrics/../yaml/index.html">YAML format</a> reference page.</p>
+<h3><a class="header" href="#extra-metric-parameters-1" id="extra-metric-parameters-1">Extra metric parameters</a></h3>
+<p>N/A</p>
+<h2><a class="header" href="#data-questions-1" id="data-questions-1">Data questions</a></h2>
 <ul>
-<li>Only increments, saturates at the largest value that can be represented as a 32-bit signed integer (<code>2147483647</code>).</li>
-</ul>
-<h2><a class="header" href="#examples-2" id="examples-2">Examples</a></h2>
-<ul>
-<li>How often was a certain button was pressed?</li>
-</ul>
-<h2><a class="header" href="#recorded-errors-2" id="recorded-errors-2">Recorded errors</a></h2>
-<ul>
-<li><code>invalid_value</code>: If the counter is incremented by <code>0</code> or a negative value.</li>
+<li>How often was a certain button pressed?</li>
 </ul>
 <h2><a class="header" href="#reference-3" id="reference-3">Reference</a></h2>
 <ul>
@@ -3710,7 +3806,7 @@ Glean.controls.refreshPressed.add(5);
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/metrics/counter.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#labeled-counters" id="labeled-counters">Labeled Counters</a></h1>
 <p>Labeled counters are used to record different related counts that should sum up to a total.</p>
-<h2><a class="header" href="#configuration-3" id="configuration-3">Configuration</a></h2>
+<h2><a class="header" href="#configuration-1" id="configuration-1">Configuration</a></h2>
 <p>For example, you may want to record a count of different types of crashes for your Android application, such as native code crashes and uncaught exceptions:</p>
 <pre><code class="language-YAML">stability:
   crash_count:
@@ -3725,7 +3821,7 @@ Glean.controls.refreshPressed.add(5);
 <blockquote>
 <p><strong>Note:</strong> removing or changing labels, including their order in the registry file, is permitted. Avoid reusing labels that were removed in the past. It is best practice to add documentation about removed labels to the description field so that analysts will know of their existence and meaning in historical data. Special care must be taken when changing GeckoView metrics sent through the Glean SDK, as the index of the labels is used to report Gecko data through the Glean SDK.</p>
 </blockquote>
-<h2><a class="header" href="#api-4" id="api-4">API</a></h2>
+<h2><a class="header" href="#api-2" id="api-2">API</a></h2>
 <p>Now you can use the labeled counter from the application's code:</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -3838,7 +3934,7 @@ assert_eq!(
 </div>
 </div>
 </div>
-<h2><a class="header" href="#limits-4" id="limits-4">Limits</a></h2>
+<h2><a class="header" href="#limits-3" id="limits-3">Limits</a></h2>
 <ul>
 <li>
 <p>Labels must conform to the <a href="reference/metrics/index.html#label-format">label formatting regular expression</a>.</p>
@@ -3859,7 +3955,7 @@ assert_eq!(
 <p>If the labels aren't specified in the <code>metrics.yaml</code>, only 16 different dynamic labels may be used, after which the special value <code>__other__</code> will be used.</p>
 </li>
 </ul>
-<h2><a class="header" href="#examples-3" id="examples-3">Examples</a></h2>
+<h2><a class="header" href="#examples-1" id="examples-1">Examples</a></h2>
 <ul>
 <li>Record the number of times different kinds of crashes occurred.</li>
 </ul>
@@ -3886,7 +3982,7 @@ assert_eq!(
 <blockquote>
 <p><strong>Note</strong>: This is does not support recording JSON blobs - please get in contact with the Telemetry team if you're missing a type.</p>
 </blockquote>
-<h2><a class="header" href="#configuration-4" id="configuration-4">Configuration</a></h2>
+<h2><a class="header" href="#configuration-2" id="configuration-2">Configuration</a></h2>
 <p>Say you're adding a metric to find out what the default search in a browser is. First you need to add an entry for the metric to the <code>metrics.yaml</code> file:</p>
 <pre><code class="language-YAML">search.default:
   name:
@@ -3896,7 +3992,7 @@ assert_eq!(
     lifetime: application
     ...
 </code></pre>
-<h2><a class="header" href="#api-5" id="api-5">API</a></h2>
+<h2><a class="header" href="#api-3" id="api-3">API</a></h2>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
@@ -4044,11 +4140,11 @@ General JavaScript support is coming soon via <a href="https://github.com/mozill
 </div>
 </div>
 </div>
-<h2><a class="header" href="#limits-5" id="limits-5">Limits</a></h2>
+<h2><a class="header" href="#limits-4" id="limits-4">Limits</a></h2>
 <ul>
 <li>Fixed maximum string length: 100. Longer strings are truncated. This is measured in the number of bytes when the string is encoded in UTF-8.</li>
 </ul>
-<h2><a class="header" href="#examples-4" id="examples-4">Examples</a></h2>
+<h2><a class="header" href="#examples-2" id="examples-2">Examples</a></h2>
 <ul>
 <li>
 <p>Record the operating system name with a value of <code>&quot;android&quot;</code>.</p>
@@ -4069,7 +4165,7 @@ General JavaScript support is coming soon via <a href="https://github.com/mozill
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/metrics/string.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#labeled-strings" id="labeled-strings">Labeled Strings</a></h1>
 <p>Labeled strings record multiple Unicode string values, each under a different label.</p>
-<h2><a class="header" href="#configuration-5" id="configuration-5">Configuration</a></h2>
+<h2><a class="header" href="#configuration-3" id="configuration-3">Configuration</a></h2>
 <p>For example to record which kind of error occurred in different stages of a login process - <code>&quot;RuntimeException&quot;</code> in the <code>&quot;server_auth&quot;</code> stage or <code>&quot;invalid_string&quot;</code> in the <code>&quot;enter_email&quot;</code> stage:</p>
 <pre><code class="language-YAML">login:
   errors_by_stage:
@@ -4080,7 +4176,7 @@ General JavaScript support is coming soon via <a href="https://github.com/mozill
       - enter_email
     ...
 </code></pre>
-<h2><a class="header" href="#api-6" id="api-6">API</a></h2>
+<h2><a class="header" href="#api-4" id="api-4">API</a></h2>
 <p>Now you can use the labeled string from the application's code:</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -4176,7 +4272,7 @@ assert_eq!(
 </div>
 </div>
 </div>
-<h2><a class="header" href="#limits-6" id="limits-6">Limits</a></h2>
+<h2><a class="header" href="#limits-5" id="limits-5">Limits</a></h2>
 <ul>
 <li>
 <p>Labels must conform to the <a href="reference/metrics/index.html#label-format">label formatting regular expression</a>.</p>
@@ -4197,7 +4293,7 @@ assert_eq!(
 <p>If the labels aren't specified in the <code>metrics.yaml</code>, only 16 different dynamic labels may be used, after which the special value <code>__other__</code> will be used.</p>
 </li>
 </ul>
-<h2><a class="header" href="#examples-5" id="examples-5">Examples</a></h2>
+<h2><a class="header" href="#examples-3" id="examples-3">Examples</a></h2>
 <ul>
 <li>What kind of errors occurred at each step in the login process?</li>
 </ul>
@@ -4221,7 +4317,7 @@ assert_eq!(
 <hr />
 <p><em>Note:</em> Be careful using arbitrary strings and make sure they can't accidentally contain identifying data (like directory paths or user input).</p>
 <hr />
-<h2><a class="header" href="#configuration-6" id="configuration-6">Configuration</a></h2>
+<h2><a class="header" href="#configuration-4" id="configuration-4">Configuration</a></h2>
 <p>First you need to add an entry for the counter to the <code>metrics.yaml</code> file:</p>
 <pre><code class="language-YAML">search:
   engines:
@@ -4231,7 +4327,7 @@ assert_eq!(
     lifetime: application
     ...
 </code></pre>
-<h2><a class="header" href="#api-7" id="api-7">API</a></h2>
+<h2><a class="header" href="#api-5" id="api-5">API</a></h2>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
@@ -4399,7 +4495,7 @@ Assert.ok(engines.includes(&quot;duck duck go&quot;));
 </div>
 </div>
 </div>
-<h2><a class="header" href="#limits-7" id="limits-7">Limits</a></h2>
+<h2><a class="header" href="#limits-6" id="limits-6">Limits</a></h2>
 <ul>
 <li>
 <p>Fixed maximum string length: 50. Longer strings are truncated. This is measured in the number of bytes when the string is encoded in UTF-8.</p>
@@ -4408,7 +4504,7 @@ Assert.ok(engines.includes(&quot;duck duck go&quot;));
 <p>Fixed maximum list length: 20 items. Additional strings are dropped.</p>
 </li>
 </ul>
-<h2><a class="header" href="#examples-6" id="examples-6">Examples</a></h2>
+<h2><a class="header" href="#examples-4" id="examples-4">Examples</a></h2>
 <ul>
 <li>The names of the enabled search engines.</li>
 </ul>
@@ -4431,7 +4527,7 @@ Assert.ok(engines.includes(&quot;duck duck go&quot;));
 <p>Timespans are used to make a measurement of how much time is spent in a particular task.</p>
 <p>To measure the distribution of multiple timespans, see <a href="reference/metrics/timing_distribution.html">Timing Distributions</a>. To record absolute times, see <a href="reference/metrics/datetime.html">Datetimes</a>.</p>
 <p>It is not recommended to use timespans in multiple threads, since calling <code>start</code> or <code>stop</code> out of order will be recorded as an <code>invalid_state</code> error.</p>
-<h2><a class="header" href="#configuration-7" id="configuration-7">Configuration</a></h2>
+<h2><a class="header" href="#configuration-5" id="configuration-5">Configuration</a></h2>
 <p>Timespans have a required <code>time_unit</code> parameter to specify the smallest unit of resolution that the timespan will record. The allowed values for <code>time_unit</code> are:</p>
 <ul>
 <li><code>nanosecond</code></li>
@@ -4452,7 +4548,7 @@ Assert.ok(engines.includes(&quot;duck duck go&quot;));
     time_unit: millisecond
     ...
 </code></pre>
-<h2><a class="header" href="#api-8" id="api-8">API</a></h2>
+<h2><a class="header" href="#api-6" id="api-6">API</a></h2>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
@@ -4732,7 +4828,7 @@ HistorySync.setRawNanos(duration)
 </div>
 </div>
 </div>
-<h2><a class="header" href="#limits-8" id="limits-8">Limits</a></h2>
+<h2><a class="header" href="#limits-7" id="limits-7">Limits</a></h2>
 <ul>
 <li>
 <p>Timings are recorded in nanoseconds.</p>
@@ -4754,7 +4850,7 @@ The time measurement does not include time spent in sleep.</p>
 </ul>
 </li>
 </ul>
-<h2><a class="header" href="#examples-7" id="examples-7">Examples</a></h2>
+<h2><a class="header" href="#examples-5" id="examples-5">Examples</a></h2>
 <ul>
 <li>How much time is spent rendering the UI?</li>
 </ul>
@@ -4803,7 +4899,7 @@ controls the minimum and maximum values that will recorded:</p>
 </ul>
 <p>Overflowing this range is considered an error and is reported through the error reporting mechanism. Underflowing this range is not an error and the value is silently truncated to the minimum value.</p>
 <p>Additionally, when a metric comes from GeckoView (the <code>geckoview_datapoint</code> parameter is present), the <code>time_unit</code> parameter specifies the unit that the samples are in when passed to Glean. Glean will convert all of the incoming samples to nanoseconds internally.</p>
-<h2><a class="header" href="#configuration-8" id="configuration-8">Configuration</a></h2>
+<h2><a class="header" href="#configuration-6" id="configuration-6">Configuration</a></h2>
 <p>If you wanted to create a timing distribution to measure page load times, first you need to add an entry for it to the <code>metrics.yaml</code> file:</p>
 <pre><code class="language-YAML">pages:
   page_load:
@@ -4812,7 +4908,7 @@ controls the minimum and maximum values that will recorded:</p>
       Counts how long each page takes to load
     ...
 </code></pre>
-<h2><a class="header" href="#api-9" id="api-9">API</a></h2>
+<h2><a class="header" href="#api-7" id="api-7">API</a></h2>
 <p>Now you can use the timing distribution from the application's code.
 Starting a timer returns a timer ID that needs to be used to stop or cancel the timer at a later point.
 Multiple intervals can be measured concurrently.
@@ -5067,7 +5163,7 @@ Glean.pages.pageLoad.stopAndAccumulate(timerId);
 </div>
 </div>
 </div>
-<h2><a class="header" href="#limits-9" id="limits-9">Limits</a></h2>
+<h2><a class="header" href="#limits-8" id="limits-8">Limits</a></h2>
 <ul>
 <li>
 <p>Timings are recorded in nanoseconds.</p>
@@ -5100,7 +5196,7 @@ Longer times will be truncated to the maximum value and an error will be recorde
 </ul>
 </li>
 </ul>
-<h2><a class="header" href="#examples-8" id="examples-8">Examples</a></h2>
+<h2><a class="header" href="#examples-6" id="examples-6">Examples</a></h2>
 <ul>
 <li>How long does it take a page to load?</li>
 </ul>
@@ -5190,7 +5286,7 @@ That is, the function from a value \( x \) to a bucket index is:</p>
 <blockquote>
 <p><strong>Note</strong> Check out how this bucketing algorithm would behave on the <a href="reference/metrics/memory_distribution.html#simulator">Simulator</a></p>
 </blockquote>
-<h2><a class="header" href="#configuration-9" id="configuration-9">Configuration</a></h2>
+<h2><a class="header" href="#configuration-7" id="configuration-7">Configuration</a></h2>
 <p>Memory distributions have a required <code>memory_unit</code> parameter, which specifies
 the unit the incoming memory size values are recorded in. The units are the
 power-of-2 units, so &quot;kilobyte&quot; is more correctly a &quot;kibibyte&quot;.</p>
@@ -5207,7 +5303,7 @@ power-of-2 units, so &quot;kilobyte&quot; is more correctly a &quot;kibibyte&quo
     memory_unit: kilobyte
     ...
 </code></pre>
-<h2><a class="header" href="#api-10" id="api-10">API</a></h2>
+<h2><a class="header" href="#api-8" id="api-8">API</a></h2>
 <p>Now you can use the memory distribution from the application's code.</p>
 <blockquote>
 <p><strong>Note</strong> The data <em>provided</em> to the <code>accumulate</code> method is in the configured memory unit specified in the <code>metrics.yaml</code> file. The data <em>recorded</em>, on the other hand, is always in <strong>bytes</strong>.</p>
@@ -5392,11 +5488,11 @@ Assert.equal(1, Object.entries(data.values).reduce(([bucket, count], sum) =&gt; 
 </div>
 </div>
 </div>
-<h2><a class="header" href="#limits-10" id="limits-10">Limits</a></h2>
+<h2><a class="header" href="#limits-9" id="limits-9">Limits</a></h2>
 <ul>
 <li>The maximum memory size that can be recorded is 1 Terabyte (2<sup>40</sup> bytes). Larger sizes will be truncated to 1 Terabyte.</li>
 </ul>
-<h2><a class="header" href="#examples-9" id="examples-9">Examples</a></h2>
+<h2><a class="header" href="#examples-7" id="examples-7">Examples</a></h2>
 <ul>
 <li>What is the distribution of the size of heap allocations?</li>
 </ul>
@@ -5480,7 +5576,7 @@ This means that, if the configured memory unit is not <code>byte</code>, the dat
 </blockquote>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/metrics/memory_distribution.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#uuid" id="uuid">UUID</a></h1>
 <p>UUIDs are used to record values that uniquely identify some entity, such as a client id.</p>
-<h2><a class="header" href="#configuration-10" id="configuration-10">Configuration</a></h2>
+<h2><a class="header" href="#configuration-8" id="configuration-8">Configuration</a></h2>
 <p>You first need to add an entry for it to the <code>metrics.yaml</code> file:</p>
 <pre><code class="language-YAML">user:
   client_id:
@@ -5490,7 +5586,7 @@ This means that, if the configured memory unit is not <code>byte</code>, the dat
     lifetime: user
     ...
 </code></pre>
-<h2><a class="header" href="#api-11" id="api-11">API</a></h2>
+<h2><a class="header" href="#api-9" id="api-9">API</a></h2>
 <p>Now that the UUID is defined in <code>metrics.yaml</code>, you can use the metric to record values in the application's code.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -5637,11 +5733,11 @@ Glean.user.clientId.set(uuid);
 </div>
 </div>
 </div>
-<h2><a class="header" href="#limits-11" id="limits-11">Limits</a></h2>
+<h2><a class="header" href="#limits-10" id="limits-10">Limits</a></h2>
 <ul>
 <li>None.</li>
 </ul>
-<h2><a class="header" href="#examples-10" id="examples-10">Examples</a></h2>
+<h2><a class="header" href="#examples-8" id="examples-8">Examples</a></h2>
 <ul>
 <li>A unique identifier for the client.</li>
 </ul>
@@ -5660,7 +5756,7 @@ Glean.user.clientId.set(uuid);
 <p>Datetimes are used to record an absolute date and time, for example the date and time that the application was first run.</p>
 <p>The device's offset from UTC is recorded and sent with the Datetime value in the ping.</p>
 <p>To record a single elapsed time, see <a href="reference/metrics/timespan.html">Timespan</a>. To measure the distribution of multiple timespans, see <a href="reference/metrics/timing_distribution.html">Timing Distributions</a>.</p>
-<h2><a class="header" href="#configuration-11" id="configuration-11">Configuration</a></h2>
+<h2><a class="header" href="#configuration-9" id="configuration-9">Configuration</a></h2>
 <p>Datetimes have a required <code>time_unit</code> parameter to specify the smallest unit of resolution that the metric will record. The allowed values for <code>time_unit</code> are:</p>
 <ul>
 <li><code>nanosecond</code></li>
@@ -5682,7 +5778,7 @@ Glean.user.clientId.set(uuid);
     lifetime: user
     ...
 </code></pre>
-<h2><a class="header" href="#api-12" id="api-12">API</a></h2>
+<h2><a class="header" href="#api-10" id="api-10">API</a></h2>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
@@ -5851,11 +5947,11 @@ Glean.install.firstRun.set(value.getTime() * 1000);
 </div>
 </div>
 </div>
-<h2><a class="header" href="#limits-12" id="limits-12">Limits</a></h2>
+<h2><a class="header" href="#limits-11" id="limits-11">Limits</a></h2>
 <ul>
 <li>None.</li>
 </ul>
-<h2><a class="header" href="#examples-11" id="examples-11">Examples</a></h2>
+<h2><a class="header" href="#examples-9" id="examples-9">Examples</a></h2>
 <ul>
 <li>When did the user first run the application?</li>
 </ul>
@@ -5881,7 +5977,7 @@ Glean.install.firstRun.set(value.getTime() * 1000);
 <blockquote>
 <p><strong>Important:</strong> events are the most expensive metric type to record, transmit, store and analyze, so they should be used sparingly, and only when none of the other metric types are sufficient for answering your question.</p>
 </blockquote>
-<h2><a class="header" href="#configuration-12" id="configuration-12">Configuration</a></h2>
+<h2><a class="header" href="#configuration-10" id="configuration-10">Configuration</a></h2>
 <p>Say you're adding a new event for when a view is shown. First you need to add an entry for the event to the <code>metrics.yaml</code> file:</p>
 <pre><code class="language-YAML">views:
   login_opened:
@@ -5900,7 +5996,7 @@ keys:</p>
 <ul>
 <li><code>description</code>: <strong>Required.</strong> A description of the key.</li>
 </ul>
-<h2><a class="header" href="#api-13" id="api-13">API</a></h2>
+<h2><a class="header" href="#api-11" id="api-11">API</a></h2>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
@@ -6064,7 +6160,7 @@ Glean.views.loginOpened.record(extra);
 </div>
 </div>
 </div>
-<h2><a class="header" href="#limits-13" id="limits-13">Limits</a></h2>
+<h2><a class="header" href="#limits-12" id="limits-12">Limits</a></h2>
 <ul>
 <li>
 <p>When 500 events are queued on the client an events ping is immediately sent.</p>
@@ -6079,7 +6175,7 @@ Glean.views.loginOpened.record(extra);
 <p>The values in the <code>extras</code> object have a maximum length of 50 in UTF-8.</p>
 </li>
 </ul>
-<h2><a class="header" href="#examples-12" id="examples-12">Examples</a></h2>
+<h2><a class="header" href="#examples-10" id="examples-10">Examples</a></h2>
 <ul>
 <li>Every time a new tab is opened.</li>
 </ul>
@@ -6105,7 +6201,7 @@ Otherwise, look at the standard distribution metric types:</p>
 <blockquote>
 <p><strong>Note</strong>: Custom distributions are currently only allowed for GeckoView metrics (the <code>gecko_datapoint</code> parameter is present) and thus have only a Kotlin API.</p>
 </blockquote>
-<h2><a class="header" href="#configuration-13" id="configuration-13">Configuration</a></h2>
+<h2><a class="header" href="#configuration-11" id="configuration-11">Configuration</a></h2>
 <p>Custom distributions have the following required parameters:</p>
 <ul>
 <li><code>range_min</code>: (Integer) The minimum value of the first bucket</li>
@@ -6139,7 +6235,7 @@ Otherwise, look at the standard distribution metric types:</p>
     gecko_datapoint: CHECKERBOARD_PEAK
     ...
 </code></pre>
-<h2><a class="header" href="#api-14" id="api-14">API</a></h2>
+<h2><a class="header" href="#api-12" id="api-12">API</a></h2>
 <p>Now you can use the custom distribution from the application's code.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -6198,7 +6294,7 @@ assert_eq!(
 </div>
 </div>
 </div>
-<h2><a class="header" href="#limits-14" id="limits-14">Limits</a></h2>
+<h2><a class="header" href="#limits-13" id="limits-13">Limits</a></h2>
 <ul>
 <li>
 <p>The maximum value of <code>bucket_count</code> is 100.</p>
@@ -6275,7 +6371,7 @@ For example, the width of the display in pixels.</p>
 <blockquote>
 <p><strong>IMPORTANT</strong> If you need to <em>count</em> something (e.g. number of tabs open or number of times a button is pressed) prefer using the <a href="reference/metrics/./counter.html">Counter</a> metric type, which has a specific API for counting things and also takes care of resetting the count at the correct time.</p>
 </blockquote>
-<h2><a class="header" href="#configuration-14" id="configuration-14">Configuration</a></h2>
+<h2><a class="header" href="#configuration-12" id="configuration-12">Configuration</a></h2>
 <p>Say you're adding a new quantity for the width of the display in pixels. First you need to add an entry for the quantity to the <code>metrics.yaml</code> file:</p>
 <pre><code class="language-YAML">display:
   width:
@@ -6286,7 +6382,7 @@ For example, the width of the display in pixels.</p>
     ...
 </code></pre>
 <p>Note that quantities have a required <code>unit</code> parameter, which is a free-form string for documentation purposes.</p>
-<h2><a class="header" href="#api-15" id="api-15">API</a></h2>
+<h2><a class="header" href="#api-13" id="api-13">API</a></h2>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
@@ -6398,11 +6494,11 @@ assert_eq!(width, display::width.test_get_value(None).unwrap());
 </div>
 </div>
 </div>
-<h2><a class="header" href="#limits-15" id="limits-15">Limits</a></h2>
+<h2><a class="header" href="#limits-14" id="limits-14">Limits</a></h2>
 <ul>
 <li>Quantities must be non-negative integers or 0.</li>
 </ul>
-<h2><a class="header" href="#examples-13" id="examples-13">Examples</a></h2>
+<h2><a class="header" href="#examples-11" id="examples-11">Examples</a></h2>
 <ul>
 <li>What is the width of the display, in pixels?</li>
 </ul>
@@ -6431,7 +6527,7 @@ Using your own variable for counting and setting the metric yourself could be pr
 ping scheduling will make it difficult to ensure the metric is at the correct value at the correct time.
 Instead, count to the numerator and denominator as you go.</p>
 </blockquote>
-<h2><a class="header" href="#configuration-15" id="configuration-15">Configuration</a></h2>
+<h2><a class="header" href="#configuration-13" id="configuration-13">Configuration</a></h2>
 <p>Say you're adding a new rate for how often HTTP connections have errors.
 First you need to add an entry for the rate to the <code>metrics.yaml</code> file:</p>
 <pre><code class="language-YAML">network:
@@ -6467,7 +6563,7 @@ then the denominator should be defined as a <code>counter</code> and shared betw
     denominator_metric: network.http_connections
     ...
 </code></pre>
-<h2><a class="header" href="#api-16" id="api-16">API</a></h2>
+<h2><a class="header" href="#api-14" id="api-14">API</a></h2>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
@@ -6530,12 +6626,12 @@ assert_eq!(
 </div>
 </div>
 </div>
-<h2><a class="header" href="#limits-16" id="limits-16">Limits</a></h2>
+<h2><a class="header" href="#limits-15" id="limits-15">Limits</a></h2>
 <ul>
 <li>Numerator and Denominator only increment.</li>
 <li>Numerator and Denominator saturate at the largest value that can be represented as a 32-bit signed integer (<code>2147483647</code>).</li>
 </ul>
-<h2><a class="header" href="#examples-14" id="examples-14">Examples</a></h2>
+<h2><a class="header" href="#examples-12" id="examples-12">Examples</a></h2>
 <ul>
 <li>How often did an HTTP connection error?</li>
 <li>How many documents used a given CSS Property?</li>
@@ -6822,7 +6918,9 @@ Each ping has its own schedule to gather all its locally saved metrics and creat
 <h2><a class="header" href="#this-week-in-glean-twig" id="this-week-in-glean-twig">This Week in Glean (TWiG)</a></h2>
 <p><a href="appendix/twig.html">This Week in Glean</a> is a series of blog posts that the Glean Team at Mozilla is using to try to communicate better about our work.</p>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/appendix/glossary.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#unreleased-changes" id="unreleased-changes">Unreleased changes</a></h1>
-<p><a href="https://github.com/mozilla/glean/compare/v36.0.1...main">Full changelog</a></p>
+<p><a href="https://github.com/mozilla/glean/compare/v37.0.0...main">Full changelog</a></p>
+<h1><a class="header" href="#v3700-2021-04-30" id="v3700-2021-04-30">v37.0.0 (2021-04-30)</a></h1>
+<p><a href="https://github.com/mozilla/glean/compare/v36.0.1...v37.0.0">Full changelog</a></p>
 <ul>
 <li>General
 <ul>

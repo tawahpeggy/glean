@@ -175,18 +175,10 @@
                 <div id="content" class="content">
                     <main>
                         <h1><a class="header" href="#boolean" id="boolean">Boolean</a></h1>
-<p>Booleans are used for simple flags, for example &quot;is a11y enabled&quot;?.</p>
-<h2><a class="header" href="#configuration" id="configuration">Configuration</a></h2>
-<p>Say you're adding a boolean to record whether a11y is enabled on the device. First you need to add an entry for the boolean to the <code>metrics.yaml</code> file:</p>
-<pre><code class="language-YAML">flags:
-  a11y_enabled:
-    type: boolean
-    description: &gt;
-      Records whether a11y is enabled on the device.
-    lifetime: application
-    ...
-</code></pre>
-<h2><a class="header" href="#api" id="api">API</a></h2>
+<p>Boolean metrics are used for reporting simple flags.</p>
+<h2><a class="header" href="#recording-api" id="recording-api">Recording API</a></h2>
+<h3><a class="header" href="#set" id="set"><code>set</code></a></h3>
+<p>Sets a boolean metric to a specific value.</p>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
@@ -195,39 +187,15 @@
 
 Flags.a11yEnabled.set(System.isAccesibilityEnabled())
 </code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Flags
-
-// Was anything recorded?
-assertTrue(Flags.a11yEnabled.testHasValue())
-// Does it have the expected value?
-assertTrue(Flags.a11yEnabled.testGetValue())
-</code></pre>
 </div>
 <div data-lang="Java" class="tab">
 <pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Flags;
 
 Flags.INSTANCE.a11yEnabled.set(System.isAccessibilityEnabled());
 </code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Flags;
-
-// Was anything recorded?
-assertTrue(Flags.INSTANCE.a11yEnabled.testHasValue());
-// Does it have the expected value?
-assertTrue(Flags.INSTANCE.a11yEnabled.testGetValue());
-</code></pre>
 </div>
 <div data-lang="Swift" class="tab">
 <pre><code class="language-Swift">Flags.a11yEnabled.set(self.isAccessibilityEnabled)
-</code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Swift">@testable import Glean
-
-// Was anything recorded?
-XCTAssertTrue(Flags.a11yEnabled.testHasValue())
-// Does the counter have the expected value?
-XCTAssertTrue(try Flags.a11yEnabled.testGetValue())
 </code></pre>
 </div>
 <div data-lang="Python" class="tab">
@@ -236,87 +204,145 @@ metrics = load_metrics(&quot;metrics.yaml&quot;)
 
 metrics.flags.a11y_enabled.set(is_accessibility_enabled())
 </code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Python"># Was anything recorded?
-assert metrics.flags.a11y_enabled.test_has_value()
-# Does it have the expected value?
-assert True is metrics.flags.a11y_enabled.test_get_value()
-</code></pre>
-</div>
-<div data-lang="C#" class="tab">
-<pre><code class="language-C#">using static Mozilla.YourApplication.GleanMetrics.FlagsOuter;
-
-Flags.a11yEnabled.Set(System.IsAccessibilityEnabled());
-</code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-C#">using static Mozilla.YourApplication.GleanMetrics.FlagsOuter;
-
-// Was anything recorded?
-Assert.True(Flags.a11yEnabled.TestHasValue());
-// Does it have the expected value?
-Assert.True(Flags.a11yEnabled.TestGetValue());
-</code></pre>
 </div>
 <div data-lang="Rust" class="tab">
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>use glean_metrics;
+<pre><code>use glean_metrics;
 
 flags::a11y_enabled.set(system.is_accessibility_enabled());
-<span class="boring">}
-</span></code></pre></pre>
-<p>There are test APIs available too:</p>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>use glean_metrics;
-
-// Was anything recorded?
-assert!(flags::a11y_enabled.test_get_value(None).is_some());
-// Does it have the expected value?
-assert!(flags::a11y_enabled.test_get_value(None).unwrap());
-<span class="boring">}
-</span></code></pre></pre>
+</code></pre>
 </div>
-<div data-lang="C++" class="tab">
-<blockquote>
-<p><strong>Note</strong>: C++ APIs are only available in Firefox Desktop.</p>
-</blockquote>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<div data-lang="Javascript" class="tab">
+<pre><code class="language-js">import * as flags from &quot;./path/to/generated/files/flags.js&quot;;
+
+flags.a11yEnabled.set(this.isAccessibilityEnabled());
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
 
 mozilla::glean::flags::a11y_enabled.Set(false);
 </code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<p><strong>Javascript</strong></p>
+<pre><code class="language-js">Glean.flags.a11yEnabled.set(false);
+</code></pre>
+</div>
+</div>
+</div>
+<h4><a class="header" href="#recorded-errors" id="recorded-errors">Recorded errors</a></h4>
+<p>N/A</p>
+<h2><a class="header" href="#testing-api" id="testing-api">Testing API</a></h2>
+<h3><a class="header" href="#testgetvalue" id="testgetvalue"><code>testGetValue</code></a></h3>
+<p>Gets the recorded value for a given boolean metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Flags
+
+assertTrue(Flags.a11yEnabled.testGetValue())
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Flags;
+
+assertTrue(Flags.INSTANCE.a11yEnabled.testGetValue());
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+XCTAssertTrue(try Flags.a11yEnabled.testGetValue())
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+assert True is metrics.flags.a11y_enabled.test_get_value()
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><code>use glean_metrics;
+
+assert!(flags::a11y_enabled.test_get_value(None).unwrap());
+</code></pre>
+</div>
+<div data-lang="Javascript" class="tab">
+<pre><code class="language-js">import * as flags from &quot;./path/to/generated/files/flags.js&quot;;
+
+assert(await flags.a11yEnabled.testGetValue());
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
 
 ASSERT_EQ(false, mozilla::glean::flags::a11y_enabled.TestGetValue().value());
 </code></pre>
-</div>
-<div data-lang="JS" class="tab">
-<blockquote>
-<p><strong>Note</strong>: JS APIs are currently only available in Firefox Desktop.
-General JavaScript support is coming soon via <a href="https://github.com/mozilla/glean.js/">the Glean.js project</a>.</p>
-</blockquote>
-<pre><code class="language-js">Glean.flags.a11yEnabled.set(false);
-</code></pre>
-<p>There are test APIs available too:</p>
+<p><strong>Javascript</strong></p>
 <pre><code class="language-js">Assert.equal(false, Glean.flags.a11yEnabled.testGetValue());
 </code></pre>
 </div>
 </div>
 </div>
-<h2><a class="header" href="#limits" id="limits">Limits</a></h2>
+<h3><a class="header" href="#testhasvalue" id="testhasvalue"><code>testHasValue</code></a></h3>
+<p>Whether or not <strong>any</strong> value was recorded for a given boolean metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Flags
+
+assertTrue(Flags.a11yEnabled.testHasValue())
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Flags;
+
+assertTrue(Flags.INSTANCE.a11yEnabled.testHasValue());
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+XCTAssertTrue(try Flags.a11yEnabled.testHasValue())
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+assert True is metrics.flags.a11y_enabled.test_has_value()
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab"></div>
+<div data-lang="Javascript" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h2><a class="header" href="#metric-parameters" id="metric-parameters">Metric parameters</a></h2>
+<p>Example boolean metric definition:</p>
+<pre><code class="language-yaml">flags:
+  a11y_enabled:
+    type: boolean
+    description: &gt;
+      Records whether a11y is enabled on the device.
+    bugs:
+      - https://bugzilla.mozilla.org/000000
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=000000#c3
+    notification_emails:
+      - me@mozilla.com
+    expires: 2020-10-01
+</code></pre>
+<p>For a full reference on metrics parameters common to all metric types,
+refer to the metrics <a href="../yaml/index.html">YAML format</a> reference page.</p>
+<h3><a class="header" href="#extra-metric-parameters" id="extra-metric-parameters">Extra metric parameters</a></h3>
+<p>N/A</p>
+<h2><a class="header" href="#data-questions" id="data-questions">Data questions</a></h2>
 <ul>
-<li>None.</li>
-</ul>
-<h2><a class="header" href="#examples" id="examples">Examples</a></h2>
-<ul>
-<li>Is a11y enabled?</li>
-</ul>
-<h2><a class="header" href="#recorded-errors" id="recorded-errors">Recorded errors</a></h2>
-<ul>
-<li>None.</li>
+<li>Is accessibility enabled?</li>
 </ul>
 <h2><a class="header" href="#reference" id="reference">Reference</a></h2>
 <ul>

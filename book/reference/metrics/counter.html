@@ -179,20 +179,19 @@
 A counter always starts from <code>0</code>.
 Each time you record to a counter, its value is incremented.
 Unless incremented by a positive value, a counter will not be reported in pings.</p>
+<p>If you find that you need to control the actual value sent in the ping, you may be measuring something,
+not just counting something, and a <a href="quantity.html">Quantity metric</a> may be a better choice.</p>
+<div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
+<h2><a class="header" href="#let-the-glean-metric-do-the-counting" id="let-the-glean-metric-do-the-counting">Let the Glean metric do the counting</a></h2>
 <blockquote>
-<p><strong>IMPORTANT:</strong> When using a counter metric, it is important to let the Glean metric do the counting. Using your own variable for counting and setting the counter yourself could be problematic because it will be difficult to reset the value at the exact moment that the value is sent in a ping. Instead, just use <code>counter.add</code> to increment the value and let Glean handle resetting the counter.</p>
+<p>When using a counter metric, it is important to let the Glean metric do the counting.
+Using your own variable for counting and setting the counter yourself could be problematic because
+it will be difficult to reset the value at the exact moment that the value is sent in a ping.
+Instead, just use <code>counter.add</code> to increment the value and let Glean handle resetting the counter.</p>
 </blockquote>
-<p>If you find that you need to control the actual value sent in the ping, you may be measuring something, not just counting something, and a <a href="quantity.html">Quantity metric</a> may be a better choice.</p>
-<h2><a class="header" href="#configuration" id="configuration">Configuration</a></h2>
-<p>Say you're adding a new counter for how often the refresh button is pressed. First you need to add an entry for the counter to the <code>metrics.yaml</code> file:</p>
-<pre><code class="language-YAML">controls:
-  refresh_pressed:
-    type: counter
-    description: &gt;
-      Counts how often the refresh button is pressed.
-    ...
-</code></pre>
-<h2><a class="header" href="#api" id="api">API</a></h2>
+<h2><a class="header" href="#recording-api" id="recording-api">Recording API</a></h2>
+<h3><a class="header" href="#add" id="add"><code>add</code></a></h3>
+<p>Increases the counter by a certain amount. If no amount is passed it defaults to <code>1</code>.</p>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
@@ -202,18 +201,6 @@ Unless incremented by a positive value, a counter will not be reported in pings.
 Controls.refreshPressed.add() // Adds 1 to the counter.
 Controls.refreshPressed.add(5) // Adds 5 to the counter.
 </code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Controls
-
-// Was anything recorded?
-assertTrue(Controls.refreshPressed.testHasValue())
-// Does the counter have the expected value?
-assertEquals(6, Controls.refreshPressed.testGetValue())
-// Did the counter record a negative value?
-assertEquals(
-    1, Controls.refreshPressed.testGetNumRecordedErrors(ErrorType.InvalidValue)
-)
-</code></pre>
 </div>
 <div data-lang="Java" class="tab">
 <pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Controls;
@@ -221,32 +208,10 @@ assertEquals(
 Controls.INSTANCE.refreshPressed.add(); // Adds 1 to the counter.
 Controls.INSTANCE.refreshPressed.add(5); // Adds 5 to the counter.
 </code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Controls;
-
-// Was anything recorded?
-assertTrue(Controls.INSTANCE.refreshPressed.testHasValue());
-// Does the counter have the expected value?
-assertEquals(6, Controls.INSTANCE.refreshPressed.testGetValue());
-// Did the counter record a negative value?
-assertEquals(
-    1, Controls.INSTANCE.refreshPressed.testGetNumRecordedErrors(ErrorType.InvalidValue)
-);
-</code></pre>
 </div>
 <div data-lang="Swift" class="tab">
 <pre><code class="language-Swift">Controls.refreshPressed.add() // Adds 1 to the counter.
 Controls.refreshPressed.add(5) // Adds 5 to the counter.
-</code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Swift">@testable import Glean
-
-// Was anything recorded?
-XCTAssert(Controls.refreshPressed.testHasValue())
-// Does the counter have the expected value?
-XCTAssertEqual(6, try Controls.refreshPressed.testGetValue())
-// Did the counter record a negative value?
-XCTAssertEqual(1, Controls.refreshPressed.testGetNumRecordedErrors(.invalidValue))
 </code></pre>
 </div>
 <div data-lang="Python" class="tab">
@@ -256,35 +221,73 @@ metrics = load_metrics(&quot;metrics.yaml&quot;)
 metrics.controls.refresh_pressed.add()  # Adds 1 to the counter.
 metrics.controls.refresh_pressed.add(5) # Adds 5 to the counter.
 </code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Python"># Was anything recorded?
-assert metrics.controls.refresh_pressed.test_has_value()
-# Does the counter have the expected value?
-assert 6 == metrics.controls.refresh_pressed.test_get_value()
-# Did the counter record a negative value?
-from glean.testing import ErrorType
-assert 1 == metrics.controls.refresh_pressed.test_get_num_recorded_errors(
-    ErrorType.INVALID_VALUE
-)
+</div>
+<div data-lang="Rust" class="tab">
+<pre><code class="language-Rust">use glean_metrics;
+
+controls::refresh_pressed.add(1); // Adds 1 to the counter.
+controls::refresh_pressed.add(5); // Adds 5 to the counter.
 </code></pre>
 </div>
-<div data-lang="C#" class="tab">
-<pre><code class="language-C#">using static Mozilla.YourApplication.GleanMetrics.Controls;
+<div data-lang="Javascript" class="tab">
+<pre><code class="language-js">import * as controls from &quot;./path/to/generated/files/controls.js&quot;;
 
-Controls.refreshPressed.Add(); // Adds 1 to the counter.
-Controls.refreshPressed.Add(5); // Adds 5 to the counter.
+controls.refreshPressed.add(1); // Adds 1 to the counter.
+controls.refreshPressed.add(5); // Adds 5 to the counter.
 </code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-C#">using static Mozilla.YourApplication.GleanMetrics.Controls;
+</div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
 
-// Was anything recorded?
-Assert.True(Controls.refreshPressed.TestHasValue());
-// Does the counter have the expected value?
-Assert.Equal(6, Controls.refreshPressed.TestGetValue());
-// Did the counter record a negative value?
-Assert.Equal(
-    1, Controls.refreshPressed.TestGetNumRecordedErrors(ErrorType.InvalidValue)
-);
+mozila::glean::controls::refresh_pressed.Add(1);
+mozilla::glean::controls::refresh_pressed.Add(5);
+</code></pre>
+<p><strong>Javascript</strong></p>
+<pre><code class="language-js">Glean.controls.refreshPressed.add(1);
+Glean.controls.refreshPressed.add(5);
+</code></pre>
+</div>
+</div>
+</div>
+<h4><a class="header" href="#recorded-errors" id="recorded-errors">Recorded errors</a></h4>
+<ul>
+<li><a href="../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: If the counter is incremented by <code>0</code> or a negative value.</li>
+</ul>
+<h4><a class="header" href="#limits" id="limits">Limits</a></h4>
+<ul>
+<li>Only increments;</li>
+<li>Saturates at the largest value that can be represented as a 32-bit signed integer (<code>2147483647</code>).</li>
+</ul>
+<h2><a class="header" href="#testing-api" id="testing-api">Testing API</a></h2>
+<h3><a class="header" href="#testgetvalue" id="testgetvalue"><code>testGetValue</code></a></h3>
+<p>Gets the recorded value for a given counter metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Controls
+
+assertEquals(6, Controls.refreshPressed.testGetValue())
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Controls;
+
+assertEquals(6, Controls.INSTANCE.refreshPressed.testGetValue());
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+XCTAssertEqual(6, try Controls.refreshPressed.testGetValue())
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+assert 6 == metrics.controls.refresh_pressed.test_get_value()
 </code></pre>
 </div>
 <div data-lang="Rust" class="tab">
@@ -293,11 +296,100 @@ Assert.Equal(
 </span><span class="boring">fn main() {
 </span>use glean_metrics;
 
-controls::refresh_pressed.add(1); // Adds 1 to the counter.
-controls::refresh_pressed.add(5); // Adds 5 to the counter.
+assert_eq!(6, controls::refresh_pressed.test_get_value(None).unwrap());
 <span class="boring">}
 </span></code></pre></pre>
-<p>There are test APIs available too:</p>
+</div>
+<div data-lang="Javascript" class="tab">
+<pre><code class="language-js">import * as controls from &quot;./path/to/generated/files/controls.js&quot;;
+
+assert.strictEqual(6, await controls.refreshPressed.testGetValue());
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+ASSERT_EQ(6, mozilla::glean::controls::refresh_pressed.TestGetValue().value());
+</code></pre>
+<p><strong>Javascript</strong></p>
+<pre><code class="language-js">Assert.equal(6, Glean.controls.refreshPressed.testGetValue());
+</code></pre>
+</div>
+</div>
+</div>
+<h3><a class="header" href="#testhasvalue" id="testhasvalue"><code>testHasValue</code></a></h3>
+<p>Whether or not <strong>any</strong> value was recorded for a given counter metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Controls
+
+assertTrue(Controls.refreshPressed.testHasValue())
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Controls;
+
+assertTrue(Controls.INSTANCE.refreshPressed.testHasValue());
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+XCTAssert(Controls.refreshPressed.testHasValue())
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+assert metrics.controls.refresh_pressed.test_has_value()
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab"></div>
+<div data-lang="Javascript" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h3><a class="header" href="#testgetnumrecordederrors" id="testgetnumrecordederrors"><code>testGetNumRecordedErrors</code></a></h3>
+<p>Gets number of errors recorded for a given counter metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Controls
+
+assertEquals(
+    1, Controls.refreshPressed.testGetNumRecordedErrors(ErrorType.InvalidValue)
+)
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Controls;
+
+assertEquals(
+    1, Controls.INSTANCE.refreshPressed.testGetNumRecordedErrors(ErrorType.InvalidValue)
+);
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">XCTAssertEqual(1, Controls.refreshPressed.testGetNumRecordedErrors(.invalidValue))
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+from glean.testing import ErrorType
+
+assert 1 == metrics.controls.refresh_pressed.test_get_num_recorded_errors(
+    ErrorType.INVALID_VALUE
+)
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -305,11 +397,6 @@ controls::refresh_pressed.add(5); // Adds 5 to the counter.
 
 use glean_metrics;
 
-// Was anything recorded?
-assert!(controls::refresh_pressed.test_get_value(None).is_some());
-// Does the counter have the expected value?
-assert_eq!(6, controls::refresh_pressed.test_get_value(None).unwrap());
-// Did the counter record an negative value?
 assert_eq!(
   1,
   controls::refresh_pressed.test_get_num_recorded_errors(
@@ -319,49 +406,32 @@ assert_eq!(
 <span class="boring">}
 </span></code></pre></pre>
 </div>
-<div data-lang="C++" class="tab">
-<blockquote>
-<p><strong>Note</strong>: C++ APIs are only available in Firefox Desktop.</p>
-</blockquote>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
-
-mozilla::glean::controls::refresh_pressed.Add(1);
-mozilla::glean::controls::refresh_pressed.Add(5);
-</code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
-
-// Does the counter have the expected value?
-ASSERT_EQ(6, mozilla::glean::controls::refresh_pressed.TestGetValue().value());
-// Did it run across any errors?
-// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
-</code></pre>
-</div>
-<div data-lang="JS" class="tab">
-<blockquote>
-<p><strong>Note</strong>: JS APIs are currently only available in Firefox Desktop.
-General JavaScript support is coming soon via <a href="https://github.com/mozilla/glean.js/">the Glean.js project</a>.</p>
-</blockquote>
-<pre><code class="language-js">Glean.controls.refreshPressed.add(1);
-Glean.controls.refreshPressed.add(5);
-</code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-js">Assert.equal(6, Glean.controls.refreshPressed.testGetValue());
-</code></pre>
+<div data-lang="Javascript" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab" data-bug="1683171"></div>
 </div>
 </div>
-</div>
-<h2><a class="header" href="#limits" id="limits">Limits</a></h2>
+<h2><a class="header" href="#metric-parameters" id="metric-parameters">Metric parameters</a></h2>
+<p>Example counter metric definition:</p>
+<pre><code class="language-yaml">controls:
+  refresh_pressed:
+    type: counter
+    description: &gt;
+      Counts how often the refresh button is pressed.
+    bugs:
+      - https://bugzilla.mozilla.org/000000
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=000000#c3
+    notification_emails:
+      - me@mozilla.com
+    expires: 2020-10-01
+</code></pre>
+<p>For a full reference on metrics parameters common to all metric types,
+refer to the metrics <a href="../yaml/index.html">YAML format</a> reference page.</p>
+<h3><a class="header" href="#extra-metric-parameters" id="extra-metric-parameters">Extra metric parameters</a></h3>
+<p>N/A</p>
+<h2><a class="header" href="#data-questions" id="data-questions">Data questions</a></h2>
 <ul>
-<li>Only increments, saturates at the largest value that can be represented as a 32-bit signed integer (<code>2147483647</code>).</li>
-</ul>
-<h2><a class="header" href="#examples" id="examples">Examples</a></h2>
-<ul>
-<li>How often was a certain button was pressed?</li>
-</ul>
-<h2><a class="header" href="#recorded-errors" id="recorded-errors">Recorded errors</a></h2>
-<ul>
-<li><code>invalid_value</code>: If the counter is incremented by <code>0</code> or a negative value.</li>
+<li>How often was a certain button pressed?</li>
 </ul>
 <h2><a class="header" href="#reference" id="reference">Reference</a></h2>
 <ul>
