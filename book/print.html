@@ -1378,10 +1378,25 @@ was called <code>background</code>.</p>
 <p><strong>Data reviews for this ping:</strong></p>
 <ul>
 <li><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1587095#c6">https://bugzilla.mozilla.org/show_bug.cgi?id=1587095#c6</a></li>
+<li><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1702622#REPLACEME">https://bugzilla.mozilla.org/show_bug.cgi?id=1702622#REPLACEME</a></li>
 </ul>
 <p><strong>Bugs related to this ping:</strong></p>
 <ul>
 <li><a href="https://bugzilla.mozilla.org/1587095">https://bugzilla.mozilla.org/1587095</a></li>
+<li><a href="https://bugzilla.mozilla.org/1702622">https://bugzilla.mozilla.org/1702622</a></li>
+</ul>
+<p><strong>Reasons this ping may be sent:</strong></p>
+<ul>
+<li>
+<p><code>at_init</code>: The ping was submitted at startup.
+Glean discovered that between the last time it was run and this time,
+upload of data has been disabled.</p>
+</li>
+<li>
+<p><code>set_upload_enabled</code>: The ping was submitted between Glean init and Glean shutdown.
+Glean was told after init but before shutdown that upload has changed
+from enabled to disabled.</p>
+</li>
 </ul>
 <p>All Glean pings contain built-in metrics in the <a href="https://mozilla.github.io/glean/book/user/pings/index.html#the-ping_info-section"><code>ping_info</code></a> and <a href="https://mozilla.github.io/glean/book/user/pings/index.html#the-client_info-section"><code>client_info</code></a> sections.</p>
 <p>This ping contains no metrics.</p>
@@ -6808,6 +6823,13 @@ Each ping has its own schedule to gather all its locally saved metrics and creat
 <p><a href="appendix/twig.html">This Week in Glean</a> is a series of blog posts that the Glean Team at Mozilla is using to try to communicate better about our work.</p>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/appendix/glossary.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#unreleased-changes" id="unreleased-changes">Unreleased changes</a></h1>
 <p><a href="https://github.com/mozilla/glean/compare/v36.0.1...main">Full changelog</a></p>
+<ul>
+<li>General
+<ul>
+<li><strong>Breaking Change</strong>: &quot;deletion-request&quot; pings now include the reason upload was disabled: <code>at_init</code> (Glean detected a change between runs) or <code>set_upload_enabled</code> (Glean was told of a change as it happened). (<a href="https://github.com/mozilla/glean/pull/1593">#1593</a>).</li>
+</ul>
+</li>
+</ul>
 <h1><a class="header" href="#v3601-2021-04-09" id="v3601-2021-04-09">v36.0.1 (2021-04-09)</a></h1>
 <p><a href="https://github.com/mozilla/glean/compare/v36.0.0...v36.0.1">Full changelog</a></p>
 <ul>
