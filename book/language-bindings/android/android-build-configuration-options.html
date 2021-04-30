@@ -193,7 +193,7 @@ That is, API wrappers accessible from your library will be generated for those m
 <p>The Glean SDK can automatically generate Markdown documentation for metrics and pings defined in the registry files, in addition to the metrics API code.</p>
 <pre><code class="language-groovy">ext.gleanGenerateMarkdownDocs = true
 </code></pre>
-<p>Flipping the feature to <code>true</code> will generate a <code>metrics.md</code> file in <code>$projectDir/docs</code> at build-time.</p>
+<p>Flipping the feature to <code>true</code> will generate a <code>metrics.md</code> file in <code>$projectDir/docs</code> at build-time. In general this is not necessary for projects using Mozilla's data ingestion infrastructure: in those cases human-readable documentation will automatically be viewable via the <a href="https://dictionary.telemetry.mozilla.org">Glean Dictionary</a>.</p>
 <h2><a class="header" href="#gleandocsdirectory" id="gleandocsdirectory"><code>gleanDocsDirectory</code></a></h2>
 <p>The <code>gleanDocsDirectory</code> can be used to customize the path of the documentation output directory.
 If <code>gleanGenerateMarkdownDocs</code> is disabled, it does nothing.

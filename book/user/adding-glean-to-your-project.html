@@ -175,6 +175,38 @@
                 <div id="content" class="content">
                     <main>
                         <h1><a class="header" href="#adding-glean-to-your-project" id="adding-glean-to-your-project">Adding Glean to your project</a></h1>
+<ul>
+<li><a href="#glean-integration-checklist">Glean integration checklist</a></li>
+<li><a href="#usage">Usage</a>
+<ul>
+<li><a href="#integrating-with-your-project">Integrating with your project</a>
+<ul>
+<li><a href="#setting-up-the-dependency">Setting up the dependency</a></li>
+<li><a href="#requirements">Requirements</a></li>
+<li><a href="#setting-up-the-dependency">Setting up the dependency</a></li>
+<li><a href="#integrating-with-the-build-system">Integrating with the build system</a></li>
+<li><a href="#combined-usage-with-application-services">Combined usage with application-services</a></li>
+</ul>
+</li>
+<li><a href="#adding-new-metrics">Adding new metrics</a></li>
+<li><a href="#automation-steps">Automation steps</a>
+<ul>
+<li><a href="#documentation">Documentation</a></li>
+<li><a href="#metrics-linting">Metrics linting</a></li>
+</ul>
+</li>
+<li><a href="#adding-custom-pings">Adding custom pings</a></li>
+<li><a href="#parallelism">Parallelism</a>
+<ul>
+<li><a href="#default-behavior">Default behavior</a></li>
+<li><a href="#cases-where-subprocesses-arent-possible">Cases where subprocesses aren't possible</a></li>
+<li><a href="#using-the-multiprocessing-module">Using the <code>multiprocessing</code> module</a></li>
+</ul>
+</li>
+<li><a href="#testing-metrics">Testing metrics</a></li>
+</ul>
+</li>
+</ul>
 <h2><a class="header" href="#glean-integration-checklist" id="glean-integration-checklist">Glean integration checklist</a></h2>
 <p>The Glean integration checklist can help to ensure your Glean SDK-using product is meeting all of the recommended guidelines.</p>
 <p>Products (applications or libraries) using the Glean SDK to collect telemetry <strong>must</strong>:</p>
@@ -183,20 +215,17 @@
 <p><a href="#integrating-with-your-project">Integrate the Glean SDK into the build system</a>. Since the Glean SDK does some code generation for your metrics at build time, this requires a few more steps than just adding a library.</p>
 </li>
 <li>
-<p>Include the markdown-formatted documentation generated from the <code>metrics.yaml</code> and <code>pings.yaml</code> files in the project's documentation.</p>
-</li>
-<li>
 <p>Go through <a href="https://wiki.mozilla.org/Firefox/Data_Collection">data review process</a> for all newly collected data.</p>
 </li>
 <li>
 <p>Ensure that telemetry coming from automated testing or continuous integration is either not sent to the telemetry server or <a href="debugging/index.html#available-debugging-features">tagged with the <code>automation</code> tag using the <code>sourceTag</code> feature</a>.</p>
 </li>
 <li>
-<p><a href="https://bugzilla.mozilla.org/enter_bug.cgi?assigned_to=nobody%40mozilla.org&amp;bug_ignored=0&amp;bug_severity=--&amp;bug_status=NEW&amp;bug_type=task&amp;cf_fx_iteration=---&amp;cf_fx_points=---&amp;comment=Application%20friendly%20name%3A%20my_app_name%0D%0AApplication%20ID%3A%20org.mozilla.my_app_id%0D%0ADescription%3A%20Brief%20description%20of%20your%20application%0D%0AGit%20Repository%20URL%3A%20https%3A%2F%2Fgithub.com%2Fmozilla%2Fmy_app_name%0D%0ALocations%20of%20%60metrics.yaml%60%20files%20%28can%20be%20many%29%3A%0D%0A%20%20-%20src%2Fmetrics.yaml%0D%0ALocations%20of%20%60pings.yaml%60%20files%20%28can%20be%20many%29%3A%0D%0A%20-%20src%2Fpings.yaml%0D%0ADependencies%2A%3A%0D%0A%20-%20org.mozilla.components%3Aservice-glean%0D%0ARetention%20Days%3A%20N%2A%2A%0D%0A%0D%0A%0D%0A%2A%20Dependencies%20can%20be%20found%20%5Bin%20the%20Glean%20repositories%5D%28https%3A%2F%2Fprobeinfo.telemetry.mozilla.org%2Fglean%2Frepositories%29.%20Each%20dependency%20must%20be%20listed%20explicitly.%20For%20example%2C%20the%20default%20Glean%20probes%20will%20only%20be%20included%20if%20glean%20itself%20is%20a%20dependency.%0D%0A%0D%0A%2A%2A%20Number%20of%20days%20that%20raw%20data%20will%20be%20retained.%20A%20good%20default%20is%20180.%0D%0A%0D%0AIf%20you%20need%20new%20dependencies%2C%20please%20file%20new%20bugs%20for%20them%2C%20separately%20from%20this%20one.%20For%20any%20questions%2C%20ask%20in%20the%20%23glean%20channel.&amp;component=General&amp;contenttypemethod=list&amp;contenttypeselection=text%2Fplain&amp;defined_groups=1&amp;filed_via=standard_form&amp;flag_type-4=X&amp;flag_type-607=X&amp;flag_type-800=X&amp;flag_type-803=X&amp;flag_type-936=X&amp;form_name=enter_bug&amp;maketemplate=Remember%20values%20as%20bookmarkable%20template&amp;needinfo_from=fbertsch%40mozilla.com%2C%20&amp;op_sys=Unspecified&amp;priority=--&amp;product=Data%20Platform%20and%20Tools&amp;rep_platform=Unspecified&amp;short_desc=Enable%20new%20Glean%20App%20my_app_name&amp;target_milestone=---&amp;version=unspecified">File a data engineering bug</a> to enable your product's application id.</p>
+<p><a href="https://bugzilla.mozilla.org/enter_bug.cgi?assigned_to=nobody%40mozilla.org&amp;bug_ignored=0&amp;bug_severity=--&amp;bug_status=NEW&amp;bug_type=task&amp;cf_fx_iteration=---&amp;cf_fx_points=---&amp;comment=Application%20friendly%20name%3A%20my_app_name%0D%0AApplication%20ID%3A%20org.mozilla.my_app_id%0D%0ADescription%3A%20Brief%20description%20of%20your%20application%0D%0AGit%20Repository%20URL%3A%20https%3A%2F%2Fgithub.com%2Fmozilla%2Fmy_app_name%0D%0ALocations%20of%20%60metrics.yaml%60%20files%20%28can%20be%20many%29%3A%0D%0A%20%20-%20src%2Fmetrics.yaml%0D%0ALocations%20of%20%60pings.yaml%60%20files%20%28can%20be%20many%29%3A%0D%0A%20-%20src%2Fpings.yaml%0D%0ADependencies%2A%3A%0D%0A%20-%20org.mozilla.components%3Aservice-glean%0D%0ARetention%20Days%3A%20N%2A%2A%0D%0A%0D%0A%0D%0A%2A%20Dependencies%20can%20be%20found%20%5Bin%20the%20Glean%20repositories%5D%28https%3A%2F%2Fprobeinfo.telemetry.mozilla.org%2Fglean%2Frepositories%29.%20Each%20dependency%20must%20be%20listed%20explicitly.%20For%20example%2C%20the%20default%20Glean%20probes%20will%20only%20be%20included%20if%20glean%20itself%20is%20a%20dependency.%0D%0A%0D%0A%2A%2A%20Number%20of%20days%20that%20raw%20data%20will%20be%20retained.%20A%20good%20default%20is%20180.%0D%0A%0D%0AIf%20you%20need%20new%20dependencies%2C%20please%20file%20new%20bugs%20for%20them%2C%20separately%20from%20this%20one.%20For%20any%20questions%2C%20ask%20in%20the%20%23glean%20channel.&amp;component=General&amp;contenttypemethod=list&amp;contenttypeselection=text%2Fplain&amp;defined_groups=1&amp;filed_via=standard_form&amp;flag_type-4=X&amp;flag_type-607=X&amp;flag_type-800=X&amp;flag_type-803=X&amp;flag_type-936=X&amp;form_name=enter_bug&amp;maketemplate=Remember%20values%20as%20bookmarkable%20template&amp;needinfo_from=fbertsch%40mozilla.com%2C%20&amp;op_sys=Unspecified&amp;priority=--&amp;product=Data%20Platform%20and%20Tools&amp;rep_platform=Unspecified&amp;short_desc=Enable%20new%20Glean%20App%20my_app_name&amp;target_milestone=---&amp;version=unspecified">File a data engineering bug</a> to enable your product's application id and have your metrics be indexed by the <a href="https://dictionary.telemetry.mozilla.org">Glean Dictionary</a>.</p>
 </li>
 </ol>
 <p>Additionally, applications (but not libraries) <strong>must</strong>:</p>
-<ol start="6">
+<ol start="5">
 <li>Provide a way for users to turn data collection off (e.g. providing settings to control <code>Glean.setUploadEnabled()</code>). The exact method used is application-specific.</li>
 </ol>
 <h2><a class="header" href="#usage" id="usage">Usage</a></h2>
