@@ -180,6 +180,18 @@
 <li>General
 <ul>
 <li><strong>Breaking Change</strong>: &quot;deletion-request&quot; pings now include the reason upload was disabled: <code>at_init</code> (Glean detected a change between runs) or <code>set_upload_enabled</code> (Glean was told of a change as it happened). (<a href="https://github.com/mozilla/glean/pull/1593">#1593</a>).</li>
+<li>Attempt to upload a ping even in the face of IO Errors (<a href="https://github.com/mozilla/glean/pull/1576">#1576</a>).</li>
+<li>Implement an additional check to avoid crash due to faulty timezone offset (<a href="https://github.com/mozilla/glean/pull/1581">#1581</a>)
+<ul>
+<li>This now records a new metric <code>glean.time.invalid_timezone_offset</code>, counting how often we failed to get a valid timezone offset.</li>
+</ul>
+</li>
+<li>Use proper paths throughout to hopefully handle non-UTF-8 paths more gracefully (<a href="https://github.com/mozilla/glean/pull/1596">#1596</a>)</li>
+</ul>
+</li>
+<li>iOS
+<ul>
+<li>Code generator: Ensure at least pip 20.3 is available in iOS build (<a href="https://github.com/mozilla/glean/pull/1590">#1590</a>)</li>
 </ul>
 </li>
 </ul>
@@ -202,11 +214,6 @@ Use <code>return@measure &lt;val&gt;</code> for early returns.</li>
 <li>Python
 <ul>
 <li>The Glean Python bindings now use rkv's safe mode backend. This should avoid intermittent segfaults in the LMDB backend.</li>
-</ul>
-</li>
-<li>General
-<ul>
-<li>Attempt to upload a ping even in the face of IO Errors (<a href="https://github.com/mozilla/glean/pull/1576">#1576</a>).</li>
 </ul>
 </li>
 </ul>
