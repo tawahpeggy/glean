@@ -766,12 +766,6 @@
 <span id="763">763</span>
 <span id="764">764</span>
 <span id="765">765</span>
-<span id="766">766</span>
-<span id="767">767</span>
-<span id="768">768</span>
-<span id="769">769</span>
-<span id="770">770</span>
-<span id="771">771</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -1518,22 +1512,16 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// * `tags` - A vector of at most 5 valid HTTP header values. Individual</span>
 <span class="doccomment">///   tags must match the regex: &quot;[a-zA-Z0-9-]{1,20}&quot;.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Returns</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// This will return `false` in case `value` contains invalid tags and `true`</span>
-<span class="doccomment">/// otherwise or if the tag is set before Glean is initialized.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_source_tags</span>(<span class="ident">tags</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_source_tags</span>(<span class="ident">tags</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>) {
     <span class="kw">if</span> <span class="ident">was_initialize_called</span>() {
-        <span class="ident">with_glean_mut</span>(<span class="op">|</span><span class="ident">glean</span><span class="op">|</span> <span class="ident">glean</span>.<span class="ident">set_source_tags</span>(<span class="ident">tags</span>))
+        <span class="kw">crate</span>::<span class="ident">launch_with_glean_mut</span>(<span class="op">|</span><span class="ident">glean</span><span class="op">|</span> {
+            <span class="ident">glean</span>.<span class="ident">set_source_tags</span>(<span class="ident">tags</span>);
+        });
     } <span class="kw">else</span> {
         <span class="comment">// Glean has not been initialized yet. Cache the provided source tags.</span>
         <span class="kw">let</span> <span class="ident">m</span> <span class="op">=</span> <span class="ident">PRE_INIT_SOURCE_TAGS</span>.<span class="ident">get_or_init</span>(<span class="ident">Default</span>::<span class="ident">default</span>);
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">lock</span> <span class="op">=</span> <span class="ident">m</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>();
         <span class="kw-2">*</span><span class="ident">lock</span> <span class="op">=</span> <span class="ident">tags</span>;
-        <span class="comment">// When setting the source tags before initialization,</span>
-        <span class="comment">// we don&#39;t validate the tags, thus this function always returns true.</span>
-        <span class="bool-val">true</span>
     }
 }
 
