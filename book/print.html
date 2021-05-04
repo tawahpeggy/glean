@@ -2850,6 +2850,16 @@ logging.basicConfig(level=logging.DEBUG)
 <li>
 <p><code>description</code>: <strong>Required.</strong> A textual description of the metric for humans. It should describe what the metric does, what it means for analysts, and its edge cases or any other helpful information.</p>
 <p>The description field may contain <a href="https://www.markdownguide.org/basic-syntax/">markdown syntax</a>.</p>
+<blockquote>
+<p><em>Note</em>: The Glean linter uses a line length limit of 80 characters.
+If your description is longer, e.g. because it includes longer links,
+you can disable <code>yamllint</code> using the following annotations (and make sure to enable <code>yamllint</code> again as well):</p>
+<pre><code># yamllint disable
+description: |
+  Your extra long description, that's longer than 80 characters by far.
+# yamllint enable
+</code></pre>
+</blockquote>
 </li>
 <li>
 <p><code>notification_emails</code>: <strong>Required.</strong> A list of email addresses to notify for important events with the metric or when people with context or ownership for the metric need to be contacted.
