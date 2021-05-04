@@ -3581,7 +3581,8 @@ assert_eq!(
 <p>Used to count how often something happens, say how often a certain button was pressed.
 A counter always starts from <code>0</code>.
 Each time you record to a counter, its value is incremented.
-Unless incremented by a positive value, a counter will not be reported in pings.</p>
+Unless incremented by a positive value, a counter will not be reported in pings,
+that means: the value <code>0</code> is never sent in a ping.</p>
 <p>If you find that you need to control the actual value sent in the ping, you may be measuring something,
 not just counting something, and a <a href="reference/metrics/quantity.html">Quantity metric</a> may be a better choice.</p>
 <div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
@@ -3844,7 +3845,11 @@ refer to the metrics <a href="reference/metrics/../yaml/index.html">YAML format<
 <li><a href="reference/metrics/../../../docs/glean/private/counter/struct.CounterMetric.html">Rust API docs</a></li>
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/metrics/counter.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#labeled-counters" id="labeled-counters">Labeled Counters</a></h1>
-<p>Labeled counters are used to record different related counts that should sum up to a total.</p>
+<p>Labeled counters are used to record different related counts that should sum up to a total.
+Each counter always starts from <code>0</code>.
+Each time you record to a labeled counter, its value is incremented.
+Unless incremented by a positive value, a counter will not be reported in pings,
+that means: the value <code>0</code> is never sent in a ping.</p>
 <h2><a class="header" href="#configuration-1" id="configuration-1">Configuration</a></h2>
 <p>For example, you may want to record a count of different types of crashes for your Android application, such as native code crashes and uncaught exceptions:</p>
 <pre><code class="language-YAML">stability:

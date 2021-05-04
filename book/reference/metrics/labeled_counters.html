@@ -175,7 +175,11 @@
                 <div id="content" class="content">
                     <main>
                         <h1><a class="header" href="#labeled-counters" id="labeled-counters">Labeled Counters</a></h1>
-<p>Labeled counters are used to record different related counts that should sum up to a total.</p>
+<p>Labeled counters are used to record different related counts that should sum up to a total.
+Each counter always starts from <code>0</code>.
+Each time you record to a labeled counter, its value is incremented.
+Unless incremented by a positive value, a counter will not be reported in pings,
+that means: the value <code>0</code> is never sent in a ping.</p>
 <h2><a class="header" href="#configuration" id="configuration">Configuration</a></h2>
 <p>For example, you may want to record a count of different types of crashes for your Android application, such as native code crashes and uncaught exceptions:</p>
 <pre><code class="language-YAML">stability:

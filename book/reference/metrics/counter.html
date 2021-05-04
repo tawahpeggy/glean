@@ -178,7 +178,8 @@
 <p>Used to count how often something happens, say how often a certain button was pressed.
 A counter always starts from <code>0</code>.
 Each time you record to a counter, its value is incremented.
-Unless incremented by a positive value, a counter will not be reported in pings.</p>
+Unless incremented by a positive value, a counter will not be reported in pings,
+that means: the value <code>0</code> is never sent in a ping.</p>
 <p>If you find that you need to control the actual value sent in the ping, you may be measuring something,
 not just counting something, and a <a href="quantity.html">Quantity metric</a> may be a better choice.</p>
 <div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
