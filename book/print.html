@@ -292,7 +292,12 @@ You can obtain a copy of the MPL at <a href="https://mozilla.org/MPL/2.0/">https
 </ol>
 <p>Additionally, applications (but not libraries) <strong>must</strong>:</p>
 <ol start="5">
-<li>Provide a way for users to turn data collection off (e.g. providing settings to control <code>Glean.setUploadEnabled()</code>). The exact method used is application-specific.</li>
+<li>
+<p><a href="user/../reference/general/index.html#initializing-the-glean-sdk">Initialize Glean</a> as early as possible at application startup.</p>
+</li>
+<li>
+<p>Provide a way for users to turn data collection off (e.g. providing settings to control <code>Glean.setUploadEnabled()</code>). The exact method used is application-specific.</p>
+</li>
 </ol>
 <h2><a class="header" href="#usage" id="usage">Usage</a></h2>
 <h3><a class="header" href="#integrating-with-your-project" id="integrating-with-your-project">Integrating with your project</a></h3>
@@ -2942,13 +2947,23 @@ This API allows one to enable and disable upload, register <a href="reference/ge
 </tbody></table>
 <h2><a class="header" href="#initializing-the-glean-sdk" id="initializing-the-glean-sdk">Initializing the Glean SDK</a></h2>
 <p>The following steps are required for applications using the Glean SDK, but not libraries.</p>
+<div class="special-quote special-quote-info fa fa-info-circle"></div>
+<h5><a class="header" href="#note" id="note">Note</a></h5>
 <blockquote>
-<p><strong>Note</strong>: The <code>initialize</code> function <em>must</em> be called, even if telemetry upload is disabled.
+<p>The <code>initialize</code> function <em>must</em> be called, even if telemetry upload is disabled.
 Glean needs to perform maintenance tasks even when telemetry is disabled, and because Glean
 does this as part of its initialization, it is <em>required</em> to always call the <code>initialize</code>
 function. Otherwise, Glean won't be able to clean up collected data, disable queuing of pre-init
 tasks, or perform other required operations.</p>
 <p>This does not apply to special builds where telemetry is disabled at build time. In that case, it is acceptable to not call <code>initialize</code> at all.</p>
+</blockquote>
+<div class="special-quote special-quote-stop fa fa-ban"></div>
+<h5><a class="header" href="#initialize-clean-with-the-correct-value-for-uploadenabled" id="initialize-clean-with-the-correct-value-for-uploadenabled">Initialize clean with the correct value for <code>uploadEnabled</code>!</a></h5>
+<blockquote>
+<p><code>Glean.initialize</code> must <strong>always</strong> be called with real values.
+Always pass the user preference, e.g. <code>Glean.initialize(upload=userSettings.telemetry_enabled)</code> or the equivalent for your application.
+Never call <code>Glean.initialize(upload=true)</code> if <code>true</code> is a placeholder value that later gets reset by <code>Glean.setUploadEnabled(false)</code>.
+Depending on the provided placeholder value, this might trigger the generation of new client ids or the submission of bogus <a href="reference/general/../../user/pings/deletion_request.html"><code>deletion-request</code> pings</a>.</p>
 </blockquote>
 <div class="tabs">
 <div class="tabbar"></div>

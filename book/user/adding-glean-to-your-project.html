@@ -226,7 +226,12 @@
 </ol>
 <p>Additionally, applications (but not libraries) <strong>must</strong>:</p>
 <ol start="5">
-<li>Provide a way for users to turn data collection off (e.g. providing settings to control <code>Glean.setUploadEnabled()</code>). The exact method used is application-specific.</li>
+<li>
+<p><a href="../reference/general/index.html#initializing-the-glean-sdk">Initialize Glean</a> as early as possible at application startup.</p>
+</li>
+<li>
+<p>Provide a way for users to turn data collection off (e.g. providing settings to control <code>Glean.setUploadEnabled()</code>). The exact method used is application-specific.</p>
+</li>
 </ol>
 <h2><a class="header" href="#usage" id="usage">Usage</a></h2>
 <h3><a class="header" href="#integrating-with-your-project" id="integrating-with-your-project">Integrating with your project</a></h3>
