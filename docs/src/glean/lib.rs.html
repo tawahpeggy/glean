@@ -763,6 +763,7 @@
 <span id="760">760</span>
 <span id="761">761</span>
 <span id="762">762</span>
+<span id="763">763</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -794,6 +795,7 @@
 <span class="doccomment">//!     channel: None,</span>
 <span class="doccomment">//!     server_endpoint: None,</span>
 <span class="doccomment">//!     uploader: None,</span>
+<span class="doccomment">//!     use_core_mps: false,</span>
 <span class="doccomment">//! };</span>
 <span class="doccomment">//! glean::initialize(cfg, ClientInfoMetrics::unknown());</span>
 <span class="doccomment">//!</span>
@@ -953,6 +955,8 @@
                 <span class="ident">language_binding_name</span>: <span class="ident">LANGUAGE_BINDING_NAME</span>.<span class="ident">into</span>(),
                 <span class="ident">max_events</span>: <span class="ident">cfg</span>.<span class="ident">max_events</span>,
                 <span class="ident">delay_ping_lifetime_io</span>: <span class="ident">cfg</span>.<span class="ident">delay_ping_lifetime_io</span>,
+                <span class="ident">app_build</span>: <span class="ident">client_info</span>.<span class="ident">app_build</span>.<span class="ident">clone</span>(),
+                <span class="ident">use_core_mps</span>: <span class="ident">cfg</span>.<span class="ident">use_core_mps</span>,
             };
 
             <span class="kw">let</span> <span class="ident">glean</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">Glean</span>::<span class="ident">new</span>(<span class="ident">core_cfg</span>) {
@@ -1068,7 +1072,7 @@
                 <span class="comment">// Set up information and scheduling for Glean owned pings. Ideally, the &quot;metrics&quot;</span>
                 <span class="comment">// ping startup check should be performed before any other ping, since it relies</span>
                 <span class="comment">// on being dispatched to the API context before any other metric.</span>
-                <span class="comment">// TODO: start the metrics ping scheduler, will happen in bug 1672951.</span>
+                <span class="ident">glean</span>.<span class="ident">start_metrics_ping_scheduler</span>();
 
                 <span class="comment">// Check if the &quot;dirty flag&quot; is set. That means the product was probably</span>
                 <span class="comment">// force-closed. If that&#39;s the case, submit a &#39;baseline&#39; ping with the</span>
@@ -1127,6 +1131,7 @@
     }
 
     <span class="kw">crate</span>::<span class="ident">launch_with_glean_mut</span>(<span class="op">|</span><span class="ident">glean</span><span class="op">|</span> {
+        <span class="ident">glean</span>.<span class="ident">cancel_metrics_ping_scheduler</span>();
         <span class="ident">glean</span>.<span class="ident">set_dirty_flag</span>(<span class="bool-val">false</span>);
     });
 
@@ -1227,16 +1232,15 @@
         <span class="kw">let</span> <span class="ident">old_enabled</span> <span class="op">=</span> <span class="ident">glean</span>.<span class="ident">is_upload_enabled</span>();
         <span class="ident">glean</span>.<span class="ident">set_upload_enabled</span>(<span class="ident">enabled</span>);
 
-        <span class="comment">// TODO: Cancel upload and any outstanding metrics ping scheduler</span>
-        <span class="comment">// task. Will happen on bug 1672951.</span>
-
         <span class="kw">if</span> <span class="op">!</span><span class="ident">old_enabled</span> <span class="op">&amp;&amp;</span> <span class="ident">enabled</span> {
+            <span class="ident">glean</span>.<span class="ident">start_metrics_ping_scheduler</span>();
             <span class="comment">// If uploading is being re-enabled, we have to restore the</span>
             <span class="comment">// application-lifetime metrics.</span>
             <span class="ident">initialize_core_metrics</span>(<span class="kw-2">&amp;</span><span class="ident">glean</span>, <span class="kw-2">&amp;</span><span class="ident">state</span>.<span class="ident">client_info</span>, <span class="ident">state</span>.<span class="ident">channel</span>.<span class="ident">clone</span>());
         }
 
         <span class="kw">if</span> <span class="ident">old_enabled</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="ident">enabled</span> {
+            <span class="ident">glean</span>.<span class="ident">cancel_metrics_ping_scheduler</span>();
             <span class="comment">// If uploading is disabled, we need to send the deletion-request ping:</span>
             <span class="comment">// note that glean-core takes care of generating it.</span>
             <span class="ident">state</span>.<span class="ident">upload_manager</span>.<span class="ident">trigger_upload</span>();
@@ -1447,8 +1451,6 @@
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_reset_glean</span>(<span class="ident">cfg</span>: <span class="ident">Configuration</span>, <span class="ident">client_info</span>: <span class="ident">ClientInfoMetrics</span>, <span class="ident">clear_stores</span>: <span class="ident">bool</span>) {
     <span class="ident">destroy_glean</span>(<span class="ident">clear_stores</span>);
 
-    <span class="comment">// Always log pings for tests</span>
-    <span class="comment">//Glean.setLogPings(true)</span>
     <span class="ident">initialize</span>(<span class="ident">cfg</span>, <span class="ident">client_info</span>);
 }
 

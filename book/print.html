@@ -7013,6 +7013,7 @@ Each ping has its own schedule to gather all its locally saved metrics and creat
 <li>Rust
 <ul>
 <li>Don't return a result from <code>submit_ping</code>. The boolean return value indicates whether a ping was submitted (<a href="https://github.com/mozilla/glean/pull/1613">#1613</a>)</li>
+<li><strong>Breaking Change</strong>: Glean now schedules &quot;metrics&quot; pings, accepting a new Configuration parameter. (<a href="https://github.com/mozilla/glean/pull/1599">#1599</a>)</li>
 </ul>
 </li>
 </ul>
