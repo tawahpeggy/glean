@@ -461,7 +461,8 @@ metrics.your_category.your_metric.set(&quot;value&quot;)
 </code></pre>
 <h3><a class="header" href="#automation-steps" id="automation-steps">Automation steps</a></h3>
 <h4><a class="header" href="#documentation" id="documentation">Documentation</a></h4>
-<p>The documentation for your application or library's metrics and pings are written in <code>metrics.yaml</code> and <code>pings.yaml</code>. However, you should also provide human-readable markdown files based on this information, and this is a requirement for Mozilla projects using the Glean SDK. For other languages and platforms, this transformation is done automatically as part of the build. However, for Python the integration to automatically generate docs is an additional step.</p>
+<p>The documentation for your application or library's metrics and pings are written in <code>metrics.yaml</code> and <code>pings.yaml</code>. </p>
+<p>For Mozilla projects, this SDK documentation is automatically published on the <a href="https://dictionary.telemetry.mozilla.org">Glean Dictionary</a>. For non-Mozilla products, it is recommended to generate markdown-based documentation of your metrics and pings into the repository. For most languages and platforms, this transformation can be done automatically as part of the build. However, for some language bindings the integration to automatically generate docs is an additional step.</p>
 <p>The Glean SDK provides a commandline tool for automatically generating markdown documentation from your <code>metrics.yaml</code> and <code>pings.yaml</code> files. To perform that translation, run <code>glean_parser</code>'s <code>translate</code> command:</p>
 <pre><code class="language-sh">python3 -m glean_parser translate -f markdown -o docs metrics.yaml pings.yaml
 </code></pre>
