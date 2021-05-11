@@ -764,6 +764,33 @@
 <span id="761">761</span>
 <span id="762">762</span>
 <span id="763">763</span>
+<span id="764">764</span>
+<span id="765">765</span>
+<span id="766">766</span>
+<span id="767">767</span>
+<span id="768">768</span>
+<span id="769">769</span>
+<span id="770">770</span>
+<span id="771">771</span>
+<span id="772">772</span>
+<span id="773">773</span>
+<span id="774">774</span>
+<span id="775">775</span>
+<span id="776">776</span>
+<span id="777">777</span>
+<span id="778">778</span>
+<span id="779">779</span>
+<span id="780">780</span>
+<span id="781">781</span>
+<span id="782">782</span>
+<span id="783">783</span>
+<span id="784">784</span>
+<span id="785">785</span>
+<span id="786">786</span>
+<span id="787">787</span>
+<span id="788">788</span>
+<span id="789">789</span>
+<span id="790">790</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -940,12 +967,19 @@
 <span class="doccomment">/// * `client_info` - the [`ClientInfoMetrics`] values used to set Glean</span>
 <span class="doccomment">///   core metrics.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">initialize</span>(<span class="ident">cfg</span>: <span class="ident">Configuration</span>, <span class="ident">client_info</span>: <span class="ident">ClientInfoMetrics</span>) {
+    <span class="ident">initialize_internal</span>(<span class="ident">cfg</span>, <span class="ident">client_info</span>);
+}
+
+<span class="kw">fn</span> <span class="ident">initialize_internal</span>(
+    <span class="ident">cfg</span>: <span class="ident">Configuration</span>,
+    <span class="ident">client_info</span>: <span class="ident">ClientInfoMetrics</span>,
+) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">std</span>::<span class="ident">thread</span>::<span class="ident">JoinHandle</span><span class="op">&lt;</span>()<span class="op">&gt;</span><span class="op">&gt;</span> {
     <span class="kw">if</span> <span class="ident">was_initialize_called</span>() {
         <span class="ident">log</span>::<span class="macro">error</span><span class="macro">!</span>(<span class="string">&quot;Glean should not be initialized multiple times&quot;</span>);
-        <span class="kw">return</span>;
+        <span class="kw">return</span> <span class="prelude-val">None</span>;
     }
 
-    <span class="ident">std</span>::<span class="ident">thread</span>::<span class="ident">Builder</span>::<span class="ident">new</span>()
+    <span class="kw">let</span> <span class="ident">init_handle</span> <span class="op">=</span> <span class="ident">std</span>::<span class="ident">thread</span>::<span class="ident">Builder</span>::<span class="ident">new</span>()
         .<span class="ident">name</span>(<span class="string">&quot;glean.init&quot;</span>.<span class="ident">into</span>())
         .<span class="ident">spawn</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
             <span class="kw">let</span> <span class="ident">core_cfg</span> <span class="op">=</span> <span class="ident">glean_core</span>::<span class="ident">Configuration</span> {
@@ -1114,6 +1148,7 @@
     <span class="comment">// Mark the initialization as called: this needs to happen outside of the</span>
     <span class="comment">// dispatched block!</span>
     <span class="ident">INITIALIZE_CALLED</span>.<span class="ident">store</span>(<span class="bool-val">true</span>, <span class="ident">Ordering</span>::<span class="ident">SeqCst</span>);
+    <span class="prelude-val">Some</span>(<span class="ident">init_handle</span>)
 }
 
 <span class="doccomment">/// Shuts down Glean.</span>
@@ -1427,6 +1462,19 @@
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">destroy_glean</span>(<span class="ident">clear_stores</span>: <span class="ident">bool</span>) {
     <span class="comment">// Destroy the existing glean instance from glean-core.</span>
     <span class="kw">if</span> <span class="ident">was_initialize_called</span>() {
+        <span class="comment">// Reset the dispatcher first (it might still run tasks against the database)</span>
+        <span class="ident">dispatcher</span>::<span class="ident">reset_dispatcher</span>();
+
+        <span class="comment">// Wait for any background uploader thread to finish.</span>
+        <span class="comment">// This needs to be done before the check below,</span>
+        <span class="comment">// as the uploader will also try to acquire a lock on the global Glean.</span>
+        <span class="comment">//</span>
+        <span class="comment">// Note: requires the block here, so we drop the lock again.</span>
+        {
+            <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="ident">global_state</span>().<span class="ident">lock</span>().<span class="ident">unwrap</span>();
+            <span class="ident">state</span>.<span class="ident">upload_manager</span>.<span class="ident">test_wait_for_upload</span>();
+        }
+
         <span class="comment">// We need to check if the Glean object (from glean-core) is</span>
         <span class="comment">// initialized, otherwise this will crash on the first test</span>
         <span class="comment">// due to bug 1675215 (this check can be removed once that</span>
@@ -1441,8 +1489,12 @@
         }
         <span class="comment">// Allow us to go through initialization again.</span>
         <span class="ident">INITIALIZE_CALLED</span>.<span class="ident">store</span>(<span class="bool-val">false</span>, <span class="ident">Ordering</span>::<span class="ident">SeqCst</span>);
-        <span class="comment">// Reset the dispatcher.</span>
-        <span class="ident">dispatcher</span>::<span class="ident">reset_dispatcher</span>();
+
+        <span class="comment">// If Glean initialization previously didn&#39;t finish,</span>
+        <span class="comment">// then the global state might not have been reset</span>
+        <span class="comment">// and thus needs to be cleared here.</span>
+        <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="ident">global_state</span>().<span class="ident">lock</span>().<span class="ident">unwrap</span>();
+        <span class="ident">state</span>.<span class="ident">upload_manager</span>.<span class="ident">test_clear_upload_thread</span>();
     }
 }
 
@@ -1451,7 +1503,9 @@
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_reset_glean</span>(<span class="ident">cfg</span>: <span class="ident">Configuration</span>, <span class="ident">client_info</span>: <span class="ident">ClientInfoMetrics</span>, <span class="ident">clear_stores</span>: <span class="ident">bool</span>) {
     <span class="ident">destroy_glean</span>(<span class="ident">clear_stores</span>);
 
-    <span class="ident">initialize</span>(<span class="ident">cfg</span>, <span class="ident">client_info</span>);
+    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">handle</span>) <span class="op">=</span> <span class="ident">initialize_internal</span>(<span class="ident">cfg</span>, <span class="ident">client_info</span>) {
+        <span class="ident">handle</span>.<span class="ident">join</span>().<span class="ident">unwrap</span>();
+    }
 }
 
 <span class="doccomment">/// Sets a debug view tag.</span>

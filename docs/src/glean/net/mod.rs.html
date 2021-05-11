@@ -115,6 +115,32 @@
 <span id="112">112</span>
 <span id="113">113</span>
 <span id="114">114</span>
+<span id="115">115</span>
+<span id="116">116</span>
+<span id="117">117</span>
+<span id="118">118</span>
+<span id="119">119</span>
+<span id="120">120</span>
+<span id="121">121</span>
+<span id="122">122</span>
+<span id="123">123</span>
+<span id="124">124</span>
+<span id="125">125</span>
+<span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
+<span id="130">130</span>
+<span id="131">131</span>
+<span id="132">132</span>
+<span id="133">133</span>
+<span id="134">134</span>
+<span id="135">135</span>
+<span id="136">136</span>
+<span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -187,10 +213,38 @@
         }
     }
 
+    <span class="doccomment">/// Wait for the last upload thread to end and ensure no new one is started.</span>
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">test_wait_for_upload</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+        <span class="comment">// Spin-waiting is fine, this is for tests only.</span>
+        <span class="kw">while</span> <span class="self">self</span>
+            .<span class="ident">inner</span>
+            .<span class="ident">thread_running</span>
+            .<span class="ident">compare_exchange</span>(<span class="bool-val">false</span>, <span class="bool-val">true</span>, <span class="ident">Ordering</span>::<span class="ident">SeqCst</span>, <span class="ident">Ordering</span>::<span class="ident">SeqCst</span>)
+            .<span class="ident">is_err</span>()
+        {
+            <span class="ident">thread</span>::<span class="ident">yield_now</span>();
+        }
+    }
+
+    <span class="doccomment">/// Clear the flag of a running thread.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This should only be called after `test_wait_for_upload` returned</span>
+    <span class="doccomment">/// and the global Glean object is fully destroyed.</span>
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">test_clear_upload_thread</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+        <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">thread_running</span>.<span class="ident">store</span>(<span class="bool-val">false</span>, <span class="ident">Ordering</span>::<span class="ident">SeqCst</span>);
+    }
+
     <span class="doccomment">/// Signals Glean to upload pings at the next best opportunity.</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">trigger_upload</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">thread_running</span>.<span class="ident">load</span>(<span class="ident">Ordering</span>::<span class="ident">SeqCst</span>) {
-            <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;The upload task is already running.&quot;</span>);
+        <span class="comment">// If no other upload proces is running, we&#39;re the one starting it.</span>
+        <span class="comment">// Need atomic compare/exchange to avoid any further races</span>
+        <span class="comment">// or we can end up with 2+ uploader threads.</span>
+        <span class="kw">if</span> <span class="self">self</span>
+            .<span class="ident">inner</span>
+            .<span class="ident">thread_running</span>
+            .<span class="ident">compare_exchange</span>(<span class="bool-val">false</span>, <span class="bool-val">true</span>, <span class="ident">Ordering</span>::<span class="ident">SeqCst</span>, <span class="ident">Ordering</span>::<span class="ident">SeqCst</span>)
+            .<span class="ident">is_err</span>()
+        {
             <span class="kw">return</span>;
         }
 
@@ -199,12 +253,10 @@
         <span class="ident">thread</span>::<span class="ident">Builder</span>::<span class="ident">new</span>()
             .<span class="ident">name</span>(<span class="string">&quot;glean.upload&quot;</span>.<span class="ident">into</span>())
             .<span class="ident">spawn</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
-                <span class="comment">// Mark the uploader as running.</span>
-                <span class="ident">inner</span>.<span class="ident">thread_running</span>.<span class="ident">store</span>(<span class="bool-val">true</span>, <span class="ident">Ordering</span>::<span class="ident">SeqCst</span>);
-
                 <span class="kw">loop</span> {
                     <span class="kw">let</span> <span class="ident">incoming_task</span> <span class="op">=</span> <span class="ident">with_glean</span>(<span class="op">|</span><span class="ident">glean</span><span class="op">|</span> <span class="ident">glean</span>.<span class="ident">get_upload_task</span>());
 
+                    <span class="ident">log</span>::<span class="macro">trace</span><span class="macro">!</span>(<span class="string">&quot;Received upload task: {:?}&quot;</span>, <span class="ident">incoming_task</span>);
                     <span class="kw">match</span> <span class="ident">incoming_task</span> {
                         <span class="ident">PingUploadTask</span>::<span class="ident">Upload</span>(<span class="ident">request</span>) <span class="op">=</span><span class="op">&gt;</span> {
                             <span class="kw">let</span> <span class="ident">doc_id</span> <span class="op">=</span> <span class="ident">request</span>.<span class="ident">document_id</span>.<span class="ident">clone</span>();
