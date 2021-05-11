@@ -1008,8 +1008,8 @@
 
         <span class="comment">// We&#39;re actually going to submit a ping from the scheduler, which requires a global glean.</span>
         <span class="kw">let</span> (<span class="ident">glean</span>, <span class="ident">_t</span>) <span class="op">=</span> <span class="ident">new_glean</span>(<span class="prelude-val">None</span>);
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
-            <span class="bool-val">false</span>, <span class="ident">glean</span>.<span class="ident">schedule_metrics_pings</span>,
+        <span class="macro">assert</span><span class="macro">!</span>(
+            <span class="op">!</span><span class="ident">glean</span>.<span class="ident">schedule_metrics_pings</span>,
             <span class="string">&quot;Real schedulers not allowed in tests!&quot;</span>
         );
         <span class="macro">assert</span><span class="macro">!</span>(<span class="kw">crate</span>::<span class="ident">setup_glean</span>(<span class="ident">glean</span>).<span class="ident">is_ok</span>());

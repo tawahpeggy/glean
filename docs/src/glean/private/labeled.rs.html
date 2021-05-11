@@ -705,7 +705,7 @@
 
         <span class="kw">let</span> <span class="ident">invalid_label</span> <span class="op">=</span> <span class="string">&quot;!#I&#39;m invalid#--_&quot;</span>;
         <span class="ident">metric</span>.<span class="ident">get</span>(<span class="ident">invalid_label</span>).<span class="ident">set</span>(<span class="bool-val">true</span>);
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="bool-val">true</span>, <span class="ident">metric</span>.<span class="ident">get</span>(<span class="string">&quot;__other__&quot;</span>).<span class="ident">test_get_value</span>(<span class="prelude-val">None</span>).<span class="ident">unwrap</span>());
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">metric</span>.<span class="ident">get</span>(<span class="string">&quot;__other__&quot;</span>).<span class="ident">test_get_value</span>(<span class="prelude-val">None</span>).<span class="ident">unwrap</span>());
         <span class="macro">assert_eq</span><span class="macro">!</span>(
             <span class="number">1</span>,
             <span class="ident">metric</span>.<span class="ident">test_get_num_recorded_errors</span>(<span class="ident">ErrorType</span>::<span class="ident">InvalidLabel</span>, <span class="prelude-val">None</span>)
