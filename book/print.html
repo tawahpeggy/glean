@@ -6027,36 +6027,23 @@ Glean.install.firstRun.set(value.getTime() * 1000);
 <li><a href="reference/metrics/../../../docs/glean/private/struct.DatetimeMetric.html">Rust API docs</a></li>
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/metrics/datetime.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#events" id="events">Events</a></h1>
-<p>Events allow recording of e.g. individual occurrences of user actions, say every time a view was open and from where.</p>
+<p>Events allow recording of e.g. individual occurrences of user actions,
+say every time a view was open and from where.</p>
 <p>Each event contains the following data:</p>
 <ul>
 <li>A timestamp, in milliseconds. The first event in any ping always has a value of <code>0</code>, and subsequent event timestamps are relative to it.</li>
 <li>The name of the event.</li>
 <li>A set of key-value pairs, where the keys are predefined in the <code>extra_keys</code> metric parameter, and the values are strings.</li>
 </ul>
+<div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
+<h5><a class="header" href="#important" id="important">Important</a></h5>
 <blockquote>
-<p><strong>Important:</strong> events are the most expensive metric type to record, transmit, store and analyze, so they should be used sparingly, and only when none of the other metric types are sufficient for answering your question.</p>
+<p>Events are the most expensive metric type to record, transmit, store and analyze,
+so they should be used sparingly, and only when none of the other metric types are sufficient for answering your question.</p>
 </blockquote>
-<h2><a class="header" href="#configuration-10" id="configuration-10">Configuration</a></h2>
-<p>Say you're adding a new event for when a view is shown. First you need to add an entry for the event to the <code>metrics.yaml</code> file:</p>
-<pre><code class="language-YAML">views:
-  login_opened:
-    type: event
-    description: &gt;
-      Recorded when the login view is opened.
-    ...
-    extra_keys:
-      source_of_login:
-        description: The source from which the login view was opened, e.g. &quot;toolbar&quot;.
-</code></pre>
-<p>The <code>extra_keys</code> parameter enumerates the acceptable keys on the event. This is
-an object mapping the key to an object containing metadata about the key. A
-maximum of 10 extra keys is allowed. This metadata object has the following
-keys:</p>
-<ul>
-<li><code>description</code>: <strong>Required.</strong> A description of the key.</li>
-</ul>
-<h2><a class="header" href="#api-11" id="api-11">API</a></h2>
+<h2><a class="header" href="#recording-api-2" id="recording-api-2">Recording API</a></h2>
+<h3><a class="header" href="#record" id="record"><code>record</code></a></h3>
+<p>Record a new event, with optional extra values.</p>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
@@ -6066,38 +6053,16 @@ keys:</p>
 
 Views.loginOpened.record(mapOf(Views.loginOpenedKeys.sourceOfLogin to &quot;toolbar&quot;))
 </code></pre>
-<p>There are test APIs available too, for example:</p>
-<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Views
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Views;
 
-// Was any event recorded?
-assertTrue(Views.loginOpened.testHasValue())
-// Get a List of the recorded events.
-val snapshot = Views.loginOpened.testGetValue()
-// Check that two events were recorded.
-assertEquals(2, snapshot.size)
-val first = snapshot.single()
-assertEquals(&quot;login_opened&quot;, first.name)
-// Check that no errors were recorded
-assertEquals(0, Views.loginOpened.testGetNumRecordedErrors(ErrorType.InvalidOverflow))
+Views.INSTANCE.loginOpened.record();
 </code></pre>
 </div>
 <div data-lang="Swift" class="tab">
 <p>Note that an <code>enum</code> has been generated for handling the <code>extra_keys</code>: it has the same name as the event metric, with <code>Keys</code> added.</p>
 <pre><code class="language-Swift">Views.loginOpened.record(extra: [.sourceOfLogin: &quot;toolbar&quot;])
-</code></pre>
-<p>There are test APIs available too, for example:</p>
-<pre><code class="language-Kotlin">@testable import Glean
-
-// Was any event recorded?
-XCTAssert(Views.loginOpened.testHasValue())
-// Get a List of the recorded events.
-val snapshot = try! Views.loginOpened.testGetValue()
-// Check that two events were recorded.
-XCTAssertEqual(2, snapshot.size)
-val first = snapshot[0]
-XCTAssertEqual(&quot;login_opened&quot;, first.name)
-// Check that no errors were recorded
-XCTAssertEqual(0, Views.loginOpened.testGetNumRecordedErrors(.invalidOverflow))
 </code></pre>
 </div>
 <div data-lang="Python" class="tab">
@@ -6111,79 +6076,24 @@ metrics.views.login_opened.record(
     }
 )
 </code></pre>
-<p>There are test APIs available too, for example:</p>
-<pre><code class="language-Python"># Was any event recorded?
-assert metrics.views.login_opened.test_has_value()
-# Get a List of the recorded events.
-snapshot = metrics.views.login_opened.test_get_value()
-# Check that two events were recorded.
-assert 2 == len(snapshot)
-first = snapshot[0]
-assert &quot;login_opened&quot; == first.name
-# Check that no errors were recorded
-assert 0 == metrics.views.login_opened.test_get_num_recorded_errors(
-    ErrorType.INVALID_OVERFLOW
-)
-</code></pre>
-</div>
-<div data-lang="C#" class="tab">
-<p>Note that an <code>enum</code> has been generated for handling the <code>extra_keys</code>: it has the same name as the event metric, with <code>Keys</code> added.</p>
-<pre><code class="language-C#">using static Mozilla.YourApplication.GleanMetrics.Views;
-
-Views.loginOpened.Record(new Dictionary&lt;clickKeys, string&gt; {
-    { Views.loginOpenedKeys.sourceOfLogin, &quot;toolbar&quot; }
-});
-</code></pre>
-<p>There are test APIs available too, for example:</p>
-<pre><code class="language-C#">using static Mozilla.YourApplication.GleanMetrics.Views;
-
-// Was any event recorded?
-Assert.True(Views.loginOpened.TestHasValue());
-// Get a List of the recorded events.
-var snapshot = Views.loginOpened.TestGetValue();
-// Check that two events were recorded.
-Assert.Equal(2, snapshot.Length);
-var first = snapshot.First();
-Assert.Equal(&quot;login_opened&quot;, first.Name);
-// Check that no errors were recorded
-Assert.Equal(0, Views.loginOpened.TestGetNumRecordedErrors(ErrorType.InvalidOverflow));
-</code></pre>
 </div>
 <div data-lang="Rust" class="tab">
 <p>Note that an <code>enum</code> has been generated for handling the <code>extra_keys</code>: it has the same name as the event metric, with <code>Keys</code> added.</p>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>use metrics::views;
+<pre><code class="language-Rust">use metrics::views;
 
 let mut extra = HashMap::new();
 extra.insert(views::LoginOpenedKeys::SourceOfLogin, &quot;toolbar&quot;.into());
 views::login_opened.record(extra);
-<span class="boring">}
-</span></code></pre></pre>
-<p>There are test APIs available too, for example:</p>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>use metrics::views;
-
-// Was any event recorded?
-assert!(views::login_opened.test_get_value(None).is_some());
-// Get a List of the recorded events.
-var snapshot = views::login_opened.test_get_value(None).unwrap();
-// Check that two events were recorded.
-assert_eq!(2, snapshot.len());
-let first = &amp;snapshot[0];
-assert_eq!(&quot;login_opened&quot;, first.name);
-// Check that no errors were recorded
-assert_eq!(0, views::login_opened.test_get_num_recorded_errors(ErrorType::InvalidOverflow, None));
-<span class="boring">}
-</span></code></pre></pre>
+</code></pre>
 </div>
-<div data-lang="C++" class="tab">
-<blockquote>
-<p><strong>Note</strong>: C++ APIs are only available in Firefox Desktop.</p>
-</blockquote>
+<div data-lang="JavaScript" class="tab">
+<pre><code class="language-js">import * as views from &quot;./path/to/generated/files/views.js&quot;;
+
+views.loginOpened.record({ sourceOfLogin: &quot;toolbar&quot; });
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
 <pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
 
 using mozilla::glean::views::LoginOpenedKeys;
@@ -6193,55 +6103,214 @@ extra.AppendElement(MakeTuple(LoginOpenedKeys::SourceOfLogin, source));
 
 mozilla::glean::views::login_opened.Record(std::move(extra))
 </code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
-
-// Does it have a value?
-ASSERT_TRUE(mozilla::glean::views::login_opened.TestGetValue().isSome());
-// Does it have the expected value?
-// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1678567
-// Did it run across any errors?
-// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
-</code></pre>
-</div>
-<div data-lang="JS" class="tab">
-<blockquote>
-<p><strong>Note</strong>: JS APIs are only available in Firefox Desktop.</p>
-</blockquote>
-<pre><code class="language-js">let extra = { sourceOfLogin: &quot;toolbar&quot; };
+<p><strong>JavaScript</strong></p>
+<pre><code class="language-js">const extra = { sourceOfLogin: &quot;toolbar&quot; };
 Glean.views.loginOpened.record(extra);
 </code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-js">// Does it have the expected value?
-// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1678567
-// Did it run across any errors?
-// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
+</div>
+</div>
+</div>
+<h4><a class="header" href="#recorded-errors-12" id="recorded-errors-12">Recorded errors</a></h4>
+<ul>
+<li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_overflow</code></a>: if any of the values in the <code>extras</code> object are greater than 50 bytes in length.  (Prior to Glean 31.5.0, this recorded an <code>invalid_value</code>).</li>
+</ul>
+<h2><a class="header" href="#testing-api-2" id="testing-api-2">Testing API</a></h2>
+<h3><a class="header" href="#testgetvalue-2" id="testgetvalue-2"><code>testGetValue</code></a></h3>
+<p>Get the list of recorded events.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Views
+
+val snapshot = Views.loginOpened.testGetValue()
+assertEquals(2, snapshot.size)
+val first = snapshot.single()
+assertEquals(&quot;login_opened&quot;, first.name)
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Views
+
+assertEquals(Views.INSTANCE.loginOpened.testGetValue().size)
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-swift">@testable import Glean
+
+val snapshot = try! Views.loginOpened.testGetValue()
+XCTAssertEqual(2, snapshot.size)
+val first = snapshot[0]
+XCTAssertEqual(&quot;login_opened&quot;, first.name)
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+snapshot = metrics.views.login_opened.test_get_value()
+assert 2 == len(snapshot)
+first = snapshot[0]
+assert &quot;login_opened&quot; == first.name
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><code class="language-Rust">use metrics::views;
+
+var snapshot = views::login_opened.test_get_value(None).unwrap();
+assert_eq!(2, snapshot.len());
+let first = &amp;snapshot[0];
+assert_eq!(&quot;login_opened&quot;, first.name);
+</code></pre>
+</div>
+<div data-lang="JavaScript" class="tab">
+<pre><code class="language-js">import * as views from &quot;./path/to/generated/files/views.js&quot;;
+
+const snapshot = await views.loginOpened.testGetValue();
+assert.strictEqual(2, snapshot.length);
+const first = snapshot[0]
+assert.strictEqual(&quot;login_opened&quot;, first.name)
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+auto optEvents = mozilla::glean::views::login_opened.TestGetValue();
+auto events = optEvents.extract();
+ASSERT_EQ(2UL, events.Length());
+ASSERT_STREQ(&quot;login_opened&quot;, events[0].mName.get());
+</code></pre>
+<p><strong>JavaScript</strong></p>
+<pre><code class="language-js">var events = Glean.views.loginOpened.testGetValue();
+Assert.equal(2, events.length);
+Assert.equal(&quot;login_opened&quot;, events[0].name);
 </code></pre>
 </div>
 </div>
 </div>
+<h3><a class="header" href="#testhasvalue-2" id="testhasvalue-2"><code>testHasValue</code></a></h3>
+<p>Whether or not any event was recorded for a given event metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Views
+
+assertTrue(Views.loginOpened.testHasValue())
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Views
+
+assertTrue(Views.INSTANCE.loginOpened.testHasValue())
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-swift">@testable import Glean
+
+XCTAssert(Views.loginOpened.testHasValue())
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+assert metrics.views.login_opened.test_has_value()
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab"></div>
+<div data-lang="JavaScript" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h3><a class="header" href="#testgetnumrecordederrors-1" id="testgetnumrecordederrors-1"><code>testGetNumRecordedErrors</code></a></h3>
+<p>Get the number of errors recorded for a given event metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import mozilla.telemetry.glean.testing.ErrorType
+import org.mozilla.yourApplication.GleanMetrics.Views
+
+assertEquals(0, Views.loginOpened.testGetNumRecordedErrors(ErrorType.InvalidOverflow))
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Kotlin">import mozilla.telemetry.glean.testing.ErrorType
+import org.mozilla.yourApplication.GleanMetrics.Views
+
+assertEquals(0, Views.INSTANCE.loginOpened.testGetNumRecordedErrors(ErrorType.InvalidOverflow))
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-swift">@testable import Glean
+
+XCTAssertEqual(0, Views.loginOpened.testGetNumRecordedErrors(.invalidOverflow))
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+from glean.testing import ErrorType
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+assert 0 == metrics.views.login_opened.test_get_num_recorded_errors(
+    ErrorType.INVALID_OVERFLOW
+)
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><code class="language-Rust">use glean::ErrorType;
+use metrics::views;
+
+assert_eq!(
+    0,
+    views::login_opened.test_get_num_recorded_errors(ErrorType::InvalidOverflow, None)
+);
+</code></pre>
+</div>
+<div data-lang="JavaScript" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h2><a class="header" href="#metric-parameters-3" id="metric-parameters-3">Metric parameters</a></h2>
+<p>Example event metric definition:</p>
+<pre><code class="language-yaml">views:
+  login_opened:
+    type: event
+    description: |
+      Recorded when the login view is opened.
+    bugs:
+      - https://bugzilla.mozilla.org/000000
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=000000#c3
+    notification_emails:
+      - me@mozilla.com
+    expires: 2020-10-01
+    extra_keys:
+      source_of_login:
+        description: The source from which the login view was opened, e.g. &quot;toolbar&quot;.
+</code></pre>
+<p>For a full reference on metrics parameters common to all metric types,
+refer to the metrics <a href="reference/metrics/../yaml/index.html">YAML format</a> reference page.</p>
+<h3><a class="header" href="#extra-metric-parameters-2" id="extra-metric-parameters-2">Extra metric parameters</a></h3>
+<h4><a class="header" href="#extra_keys" id="extra_keys"><code>extra_keys</code></a></h4>
+<p>The acceptable keys on the &quot;extra&quot; object sent with events.
+A maximum of 10 extra keys is allowed.</p>
+<p>Each extra key contains additional metadata:</p>
+<ul>
+<li><code>description</code>: <strong>Required.</strong> A description of the key.</li>
+</ul>
+<h2><a class="header" href="#data-questions-2" id="data-questions-2">Data questions</a></h2>
+<ul>
+<li>When and from where was the login view opened?</li>
+</ul>
 <h2><a class="header" href="#limits-12" id="limits-12">Limits</a></h2>
 <ul>
-<li>
-<p>When 500 events are queued on the client an events ping is immediately sent.</p>
-</li>
-<li>
-<p>The <code>extra_keys</code> allows for a maximum of 10 keys.</p>
-</li>
-<li>
-<p>The keys in the <code>extra_keys</code> list must be in dotted snake case, with a maximum length of 40 bytes in UTF-8.</p>
-</li>
-<li>
-<p>The values in the <code>extras</code> object have a maximum length of 50 in UTF-8.</p>
-</li>
-</ul>
-<h2><a class="header" href="#examples-10" id="examples-10">Examples</a></h2>
-<ul>
-<li>Every time a new tab is opened.</li>
-</ul>
-<h2><a class="header" href="#recorded-errors-12" id="recorded-errors-12">Recorded errors</a></h2>
-<ul>
-<li><code>invalid_overflow</code>: if any of the values in the <code>extras</code> object are greater than 50 bytes in length.  (Prior to Glean 31.5.0, this recorded an <code>invalid_value</code>).</li>
+<li>When 500 events are queued on the client an events ping is immediately sent.</li>
+<li>The <code>extra_keys</code> allows for a maximum of 10 keys.</li>
+<li>The keys in the <code>extra_keys</code> list must be in dotted snake case, with a maximum length of 40 bytes, when encoded as UTF-8.</li>
+<li>The values in the <code>extras</code> object have a maximum of 50 bytes, when encoded as UTF-8.</li>
 </ul>
 <h2><a class="header" href="#reference-13" id="reference-13">Reference</a></h2>
 <ul>
@@ -6261,7 +6330,7 @@ Otherwise, look at the standard distribution metric types:</p>
 <blockquote>
 <p><strong>Note</strong>: Custom distributions are currently only allowed for GeckoView metrics (the <code>gecko_datapoint</code> parameter is present) and thus have only a Kotlin API.</p>
 </blockquote>
-<h2><a class="header" href="#configuration-11" id="configuration-11">Configuration</a></h2>
+<h2><a class="header" href="#configuration-10" id="configuration-10">Configuration</a></h2>
 <p>Custom distributions have the following required parameters:</p>
 <ul>
 <li><code>range_min</code>: (Integer) The minimum value of the first bucket</li>
@@ -6295,7 +6364,7 @@ Otherwise, look at the standard distribution metric types:</p>
     gecko_datapoint: CHECKERBOARD_PEAK
     ...
 </code></pre>
-<h2><a class="header" href="#api-12" id="api-12">API</a></h2>
+<h2><a class="header" href="#api-11" id="api-11">API</a></h2>
 <p>Now you can use the custom distribution from the application's code.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -6431,7 +6500,7 @@ For example, the width of the display in pixels.</p>
 <blockquote>
 <p><strong>IMPORTANT</strong> If you need to <em>count</em> something (e.g. number of tabs open or number of times a button is pressed) prefer using the <a href="reference/metrics/./counter.html">Counter</a> metric type, which has a specific API for counting things and also takes care of resetting the count at the correct time.</p>
 </blockquote>
-<h2><a class="header" href="#configuration-12" id="configuration-12">Configuration</a></h2>
+<h2><a class="header" href="#configuration-11" id="configuration-11">Configuration</a></h2>
 <p>Say you're adding a new quantity for the width of the display in pixels. First you need to add an entry for the quantity to the <code>metrics.yaml</code> file:</p>
 <pre><code class="language-YAML">display:
   width:
@@ -6442,7 +6511,7 @@ For example, the width of the display in pixels.</p>
     ...
 </code></pre>
 <p>Note that quantities have a required <code>unit</code> parameter, which is a free-form string for documentation purposes.</p>
-<h2><a class="header" href="#api-13" id="api-13">API</a></h2>
+<h2><a class="header" href="#api-12" id="api-12">API</a></h2>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
@@ -6558,7 +6627,7 @@ assert_eq!(width, display::width.test_get_value(None).unwrap());
 <ul>
 <li>Quantities must be non-negative integers or 0.</li>
 </ul>
-<h2><a class="header" href="#examples-11" id="examples-11">Examples</a></h2>
+<h2><a class="header" href="#examples-10" id="examples-10">Examples</a></h2>
 <ul>
 <li>What is the width of the display, in pixels?</li>
 </ul>
@@ -6587,7 +6656,7 @@ Using your own variable for counting and setting the metric yourself could be pr
 ping scheduling will make it difficult to ensure the metric is at the correct value at the correct time.
 Instead, count to the numerator and denominator as you go.</p>
 </blockquote>
-<h2><a class="header" href="#configuration-13" id="configuration-13">Configuration</a></h2>
+<h2><a class="header" href="#configuration-12" id="configuration-12">Configuration</a></h2>
 <p>Say you're adding a new rate for how often HTTP connections have errors.
 First you need to add an entry for the rate to the <code>metrics.yaml</code> file:</p>
 <pre><code class="language-YAML">network:
@@ -6623,7 +6692,7 @@ then the denominator should be defined as a <code>counter</code> and shared betw
     denominator_metric: network.http_connections
     ...
 </code></pre>
-<h2><a class="header" href="#api-14" id="api-14">API</a></h2>
+<h2><a class="header" href="#api-13" id="api-13">API</a></h2>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
@@ -6691,7 +6760,7 @@ assert_eq!(
 <li>Numerator and Denominator only increment.</li>
 <li>Numerator and Denominator saturate at the largest value that can be represented as a 32-bit signed integer (<code>2147483647</code>).</li>
 </ul>
-<h2><a class="header" href="#examples-12" id="examples-12">Examples</a></h2>
+<h2><a class="header" href="#examples-11" id="examples-11">Examples</a></h2>
 <ul>
 <li>How often did an HTTP connection error?</li>
 <li>How many documents used a given CSS Property?</li>
