@@ -175,10 +175,303 @@
                 <div id="content" class="content">
                     <main>
                         <h1><a class="header" href="#datetime" id="datetime">Datetime</a></h1>
-<p>Datetimes are used to record an absolute date and time, for example the date and time that the application was first run.</p>
+<p>Datetimes are used to record an absolute date and time,
+for example the date and time that the application was first run.</p>
 <p>The device's offset from UTC is recorded and sent with the Datetime value in the ping.</p>
-<p>To record a single elapsed time, see <a href="timespan.html">Timespan</a>. To measure the distribution of multiple timespans, see <a href="timing_distribution.html">Timing Distributions</a>.</p>
-<h2><a class="header" href="#configuration" id="configuration">Configuration</a></h2>
+<p>To record a single elapsed time, see <a href="timespan.html">Timespan</a>.
+To measure the distribution of multiple timespans, see <a href="timing_distribution.html">Timing Distributions</a>.</p>
+<h2><a class="header" href="#recording-api" id="recording-api">Recording API</a></h2>
+<h3><a class="header" href="#set" id="set"><code>set</code></a></h3>
+<p>Sets a datetime metric to a specific date value. Defaults to now.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Install
+
+Install.firstRun.set() // Records &quot;now&quot;
+Install.firstRun.set(Calendar(2019, 3, 25)) // Records a custom datetime
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Install;
+
+Install.INSTANCE.firstRun.set(); // Records &quot;now&quot;
+Install.INSTANCE.firstRun.set(Calendar(2019, 3, 25)); // Records a custom datetime
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">Install.firstRun.set() // Records &quot;now&quot;
+let dateComponents = DateComponents(
+                        calendar: Calendar.current,
+                        year: 2004, month: 12, day: 9, hour: 8, minute: 3, second: 29
+                     )
+Install.firstRun.set(dateComponents.date!) // Records a custom datetime
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">import datetime
+
+from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+metrics.install.first_run.set() # Records &quot;now&quot;
+metrics.install.first_run.set(datetime.datetime(2019, 3, 25)) # Records a custom datetime
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><code class="language-Rust">use glean_metrics;
+
+use chrono::{FixedOffset, TimeZone};
+
+install::first_run.set(None); // Records &quot;now&quot;
+let custom_date = FixedOffset::east(0).ymd(2019, 3, 25).and_hms(0, 0, 0);
+install::first_run.set(Some(custom_date)); // Records a custom datetime
+</code></pre>
+</div>
+<div data-lang="Javascript" class="tab">
+<pre><code class="language-js">import * as install from &quot;./path/to/generated/files/install.js&quot;;
+
+install.firstRun.set(); // Records &quot;now&quot;
+install.firstRun.set(new Date(&quot;March 25, 2019 00:00:00&quot;)); // Records a custom datetime
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+PRExplodedTime date = {0, 35, 10, 12, 6, 10, 2020, 0, 0, {5 * 60 * 60, 0}};
+mozilla::glean::install::first_run.Set(&amp;date);
+</code></pre>
+<p><strong>Javascript</strong></p>
+<pre><code class="language-js">const value = new Date(&quot;2020-06-11T12:00:00&quot;);
+Glean.install.firstRun.set(value.getTime() * 1000);
+</code></pre>
+</div>
+</div>
+</div>
+<h4><a class="header" href="#recorded-errors" id="recorded-errors">Recorded errors</a></h4>
+<ul>
+<li><a href="../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: Setting the date time to an invalid value.</li>
+</ul>
+<h2><a class="header" href="#testing-api" id="testing-api">Testing API</a></h2>
+<h3><a class="header" href="#testgetvalue" id="testgetvalue"><code>testGetValue</code></a></h3>
+<p>Get the recorded value for a given datetime metric as a language-specific Date object.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Install
+
+assertEquals(Install.firstRun.testGetValue(), Date(2019, 3, 25))
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Install;
+
+assertEquals(Install.INSTANCE.firstRun.testGetValue(), Date(2019, 3, 25));
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+let expectedDate = DateComponents(
+                      calendar: Calendar.current,
+                      year: 2004, month: 12, day: 9, hour: 8, minute: 3, second: 29
+                   )
+XCTAssertEqual(expectedDate.date!, try Install.firstRun.testGetValue())
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">import datetime
+
+from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+value = datetime.datetime(1993, 2, 23, 5, 43, tzinfo=datetime.timezone.utc)
+assert value == metrics.install.first_run.test_get_value()
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><code class="language-Rust">use glean_metrics;
+
+use chrono::{FixedOffset, TimeZone};
+
+let expected_date = FixedOffset::east(0).ymd(2019, 3, 25).and_hms(0, 0, 0);
+assert_eq!(expected_date, metrics.install.first_run.test_get_value(None));
+</code></pre>
+</div>
+<div data-lang="Javascript" class="tab">
+<pre><code class="language-js">import * as install from &quot;./path/to/generated/files/install.js&quot;;
+
+const expectedDate = new Date(&quot;March 25, 2019 00:00:00&quot;);
+assert.deepStrictEqual(expectedDate, await install.firstRun.testGetValue());
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+ASSERT_STREQ(
+  mozilla::glean::install::first_run.TestGetValue().value(),
+  &quot;2020-11-06T12:10:35+05:00&quot;_ns
+);
+</code></pre>
+<p><strong>Javascript</strong></p>
+<pre><code class="language-js">Assert.ok(Glean.install.firstRun.testGetValue().startsWith(&quot;2020-06-11T12:00:00&quot;));
+</code></pre>
+</div>
+</div>
+</div>
+<h3><a class="header" href="#testgetvalueasstring" id="testgetvalueasstring"><code>testGetValueAsString</code></a></h3>
+<p>Get the recorded value for a given datetime metric as an <a href="https://en.wikipedia.org/wiki/ISO_8601#Dates">ISO Date String</a>.</p>
+<p>The returned string will be truncated to the metric's <a href="#time_unit">time unit</a>
+and will include the timezone offset from UTC, e.g. <code>2019-03-25-05:00</code>
+(in this example, <code>time_unit</code> is <code>day</code>).</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Install
+
+assertEquals(&quot;2019-03-25-05:00&quot;, Install.firstRun.testGetValueAsString())
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Install;
+
+assertEquals(&quot;2019-03-25-05:00&quot;, Install.INSTANCE.firstRun.testGetValueAsString());
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+assertEquals(&quot;2019-03-25-05:00&quot;, try Install.firstRun.testGetValueAsString())
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+assert &quot;2019-03-25-05:00&quot; == metrics.install.first_run.test_get_value_as_str()
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab"></div>
+<div data-lang="Javascript" class="tab">
+<pre><code class="language-js">import * as install from &quot;./path/to/generated/files/install.js&quot;;
+
+assert.strictEqual(&quot;2019-03-25-05:00&quot;, await install.firstRun.testGetValueAsString());
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h3><a class="header" href="#testhasvalue" id="testhasvalue"><code>testHasValue</code></a></h3>
+<p>Whether or not <strong>any</strong> value was recorded for a given datetime metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Install
+
+assertTrue(Install.firstRun.testHasValue())
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Install;
+
+assertTrue(Install.INSTANCE.firstRun.testHasValue());
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+XCTAssert(Install.firstRun.testHasValue())
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+assert metrics.install.first_run.test_has_value()
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab"></div>
+<div data-lang="Javascript" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h3><a class="header" href="#testgetnumrecordederrors" id="testgetnumrecordederrors"><code>testGetNumRecordedErrors</code></a></h3>
+<p>Get number of errors recorded for a given datetime metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import mozilla.telemetry.glean.testing.ErrorType
+import org.mozilla.yourApplication.GleanMetrics.Install
+
+assertEquals(0, Install.firstRun.testGetNumRecordedErrors(ErrorType.InvalidValue))
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import mozilla.telemetry.glean.testing.ErrorType
+import org.mozilla.yourApplication.GleanMetrics.Install;
+
+assertEquals(0, Install.INSTANCE.firstRun.testGetNumRecordedErrors(ErrorType.InvalidValue));
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+XCTAssertEqual(0, Install.firstRun.getNumRecordedErrors(.invalidValue))
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+assert 0 == metrics.install.test_get_num_recorded_errors(
+    ErrorType.INVALID_VALUE
+)
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean::ErrorType;
+use glean_metrics;
+
+assert_eq!(0, install::first_run.test_get_num_recorded_errors(
+    ErrorType::InvalidValue
+));
+<span class="boring">}
+</span></code></pre></pre>
+</div>
+<div data-lang="Javascript" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab" data-bug="1683171"></div>
+</div>
+</div>
+<h2><a class="header" href="#metric-parameters" id="metric-parameters">Metric parameters</a></h2>
+<p>Example datetime metric definition:</p>
+<pre><code class="language-yaml">install:
+  first_run:
+    type: datetime
+    time_unit: day
+    description: &gt;
+      Records the date when the application was first run
+    bugs:
+      - https://bugzilla.mozilla.org/000000
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=000000#c3
+    notification_emails:
+      - me@mozilla.com
+    expires: 2020-10-01
+</code></pre>
+<p>For a full reference on metrics parameters common to all metric types,
+refer to the metrics <a href="../yaml/index.html">YAML format</a> reference page.</p>
+<h3><a class="header" href="#extra-metric-parameters" id="extra-metric-parameters">Extra metric parameters</a></h3>
+<h4><a class="header" href="#time_unit" id="time_unit"><code>time_unit</code></a></h4>
 <p>Datetimes have a required <code>time_unit</code> parameter to specify the smallest unit of resolution that the metric will record. The allowed values for <code>time_unit</code> are:</p>
 <ul>
 <li><code>nanosecond</code></li>
@@ -190,196 +483,9 @@
 <li><code>day</code></li>
 </ul>
 <p>Carefully consider the required resolution for recording your metric, and choose the coarsest resolution possible.</p>
-<p>You first need to add an entry for it to the <code>metrics.yaml</code> file:</p>
-<pre><code class="language-YAML">install:
-  first_run:
-    type: datetime
-    time_unit: day
-    description: &gt;
-      Records the date when the application was first run
-    lifetime: user
-    ...
-</code></pre>
-<h2><a class="header" href="#api" id="api">API</a></h2>
-<div class="tabs">
-<div class="tabbar"></div>
-<div class="tabcontents">
-<div data-lang="Kotlin" class="tab">
-<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Install
-
-Install.firstRun.set() // Records &quot;now&quot;
-Install.firstRun.set(Calendar(2019, 3, 25)) // Records a custom datetime
-</code></pre>
-<p>There are test APIs available too.</p>
-<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Install
-
-// Was anything recorded?
-assertTrue(Install.firstRun.testHasValue())
-// Was it the expected value?
-// NOTE: Datetimes always include a timezone offset from UTC, hence the
-// &quot;-05:00&quot; suffix.
-assertEquals(&quot;2019-03-25-05:00&quot;, Install.firstRun.testGetValueAsString())
-// Was the value invalid?
-assertEquals(0, Install.firstRun.testGetNumRecordedErrors(ErrorType.InvalidValue))
-</code></pre>
-</div>
-<div data-lang="Java" class="tab">
-<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Install;
-
-Install.INSTANCE.firstRun.set(); // Records &quot;now&quot;
-Install.INSTANCE.firstRun.set(Calendar(2019, 3, 25)); // Records a custom datetime
-</code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Install;
-
-// Was anything recorded?
-assertTrue(Install.INSTANCE.firstRun.testHasValue());
-// Was it the expected value?
-// NOTE: Datetimes always include a timezone offset from UTC, hence the
-// &quot;-05:00&quot; suffix.
-assertEquals(&quot;2019-03-25-05:00&quot;, Install.INSTANCE.firstRun.testGetValueAsString());
-// Was the value invalid?
-assertEquals(0, Install.INSTANCE.firstRun.testGetNumRecordedErrors(ErrorType.InvalidValue));
-</code></pre>
-</div>
-<div data-lang="Swift" class="tab">
-<pre><code class="language-Swift">Install.firstRun.set() // Records &quot;now&quot;
-
-let dateComponents = DateComponents(
-                        calendar: Calendar.current,
-                        year: 2004, month: 12, day: 9, hour: 8, minute: 3, second: 29
-                     )
-Install.firstRun.set(dateComponents.date!) // Records a custom datetime
-</code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Swift">@testable import Glean
-
-// Was anything recorded?
-XCTAssert(Install.firstRun.testHasValue())
-// Does the datetime have the expected value?
-XCTAssertEqual(6, try Install.firstRun.testGetValue())
-// Was the value invalid?
-XCTAssertEqual(0, Install.firstRun.getNumRecordedErrors(.invalidValue))
-</code></pre>
-</div>
-<div data-lang="Python" class="tab">
-<pre><code class="language-Python">import datetime
-
-from glean import load_metrics
-metrics = load_metrics(&quot;metrics.yaml&quot;)
-
-# Records &quot;now&quot;
-metrics.install.first_run.set()
-# Records a custom datetime
-metrics.install.first_run.set(datetime.datetime(2019, 3, 25))
-</code></pre>
-<p>There are test APIs available too.</p>
-<pre><code class="language-Python"># Was anything recorded?
-assert metrics.install.first_run.test_has_value()
-
-# Was it the expected value?
-# NOTE: Datetimes always include a timezone offset from UTC, hence the
-# &quot;-05:00&quot; suffix.
-assert &quot;2019-03-25-05:00&quot; == metrics.install.first_run.test_get_value_as_str()
-# Was the value invalid?
-assert 0 == metrics.install.test_get_num_recorded_errors(
-    ErrorType.INVALID_VALUE
-)
-</code></pre>
-</div>
-<div data-lang="C#" class="tab">
-<pre><code class="language-C#">using static Mozilla.YourApplication.GleanMetrics.Install;
-
-// Records &quot;now&quot;
-Install.firstRun.Set();
-// Records a custom datetime
-Install.firstRun.Set(new DateTimeOffset(2018, 2, 25, 11, 10, 0, TimeZone.CurrentTimeZone.BaseUtcOffset));
-</code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-C#">using static Mozilla.YourApplication.GleanMetrics.Install;
-
-// Was anything recorded?
-Assert.True(Install.firstRun.TestHasValue());
-// Was it the expected value?
-// NOTE: Datetimes always include a timezone offset from UTC, hence the
-// &quot;-05:00&quot; suffix.
-Assert.Equal(&quot;2019-03-25-05:00&quot;, Install.firstRun.TestGetValueAsString());
-// Was the value invalid?
-Assert.Equal(0, Install.firstRun.TestGetNumRecordedErrors(ErrorType.InvalidValue));
-</code></pre>
-</div>
-<div data-lang="Rust" class="tab">
-<pre><code class="language-Rust">use glean::ErrorType;
-use glean_metrics;
-
-use chrono::{FixedOffset, TimeZone};
-
-// Records &quot;now&quot;
-install::first_run.set(None);
-// Records a custom datetime
-let custom_date = FixedOffset::east(0).ymd(2019, 3, 25).and_hms(0, 0, 0);
-install::first_run.set(Some(custom_date));
-</code></pre>
-<p>There are test APIs available too.</p>
-<pre><code class="language-Rust">// Was anything recorded?
-assert!(metrics.install.first_run.test_get_value(None).is_some());
-
-// Was it the expected value?
-let expected_date = FixedOffset::east(0).ymd(2019, 3, 25).and_hms(0, 0, 0);
-assert_eq!(expected_date, metrics.install.first_run.test_get_value(None));
-// Was the value invalid?
-assert_eq!(0, install::first_run.test_get_num_recorded_errors(
-    ErrorType::InvalidValue
-));
-</code></pre>
-</div>
-<div data-lang="C++" class="tab">
-<blockquote>
-<p><strong>Note</strong>: C++ APIs are only available in Firefox Desktop.</p>
-</blockquote>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
-
-PRExplodedTime date = {0, 35, 10, 12, 6, 10, 2020, 0, 0, {5 * 60 * 60, 0}};
-mozilla::glean::install::first_run.Set(&amp;date);
-</code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
-
-// Does it have the expected value?
-ASSERT_STREQ(
-  mozilla::glean::install::first_run.TestGetValue().value(),
-  &quot;2020-11-06T12:10:35+05:00&quot;_ns
-);
-// Did it run across any errors?
-// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
-</code></pre>
-</div>
-<div data-lang="JS" class="tab">
-<blockquote>
-<p><strong>Note</strong>: JS APIs are only available in Firefox Desktop.</p>
-</blockquote>
-<pre><code class="language-js">const value = new Date(&quot;2020-06-11T12:00:00&quot;);
-Glean.install.firstRun.set(value.getTime() * 1000);
-</code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-js">Assert.ok(Glean.install.firstRun.testGetValue().startsWith(&quot;2020-06-11T12:00:00&quot;));
-// Did it run across any errors?
-// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
-</code></pre>
-</div>
-</div>
-</div>
-<h2><a class="header" href="#limits" id="limits">Limits</a></h2>
-<ul>
-<li>None.</li>
-</ul>
-<h2><a class="header" href="#examples" id="examples">Examples</a></h2>
+<h2><a class="header" href="#data-questions" id="data-questions">Data questions</a></h2>
 <ul>
 <li>When did the user first run the application?</li>
-</ul>
-<h2><a class="header" href="#recorded-errors" id="recorded-errors">Recorded errors</a></h2>
-<ul>
-<li><code>invalid_value</code>: Setting the date time to an invalid value.</li>
 </ul>
 <h2><a class="header" href="#reference" id="reference">Reference</a></h2>
 <ul>
