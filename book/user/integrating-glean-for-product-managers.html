@@ -1,0 +1,290 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Integrating Glean for project managers - Glean - Cross-platform Telemetry library</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="../favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="../favicon.png">
+        
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+        <link rel="stylesheet" href="../../shared/glean.css">
+        
+        <link rel="stylesheet" href="../../shared/mermaid.css">
+        
+
+        
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">Glean</a></li><li class="chapter-item expanded affix "><li class="part-title">User Guides</li><li class="chapter-item expanded "><a href="../user/adding-glean-to-your-project.html"><strong aria-hidden="true">1.</strong> Adding Glean to your project</a></li><li class="chapter-item expanded "><a href="../user/integrating-glean-for-product-managers.html" class="active"><strong aria-hidden="true">2.</strong> Integrating Glean for project managers</a></li><li class="chapter-item expanded "><a href="../user/metrics/adding-new-metrics.html"><strong aria-hidden="true">3.</strong> Metrics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../user/metrics/adding-new-metrics.html"><strong aria-hidden="true">3.1.</strong> Adding new metrics</a></li><li class="chapter-item expanded "><a href="../user/metrics/testing-metrics.html"><strong aria-hidden="true">3.2.</strong> Testing metrics</a></li><li class="chapter-item expanded "><a href="../user/metrics/error-reporting.html"><strong aria-hidden="true">3.3.</strong> Error reporting</a></li><li class="chapter-item expanded "><a href="../user/collected-metrics/metrics.html"><strong aria-hidden="true">3.4.</strong> Metrics collected by the Glean SDK</a></li></ol></li><li class="chapter-item expanded "><a href="../user/pings/index.html"><strong aria-hidden="true">4.</strong> Pings</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../user/pings/ping-schedules-and-timings.html"><strong aria-hidden="true">4.1.</strong> Ping schedules and timings overview</a></li><li class="chapter-item expanded "><a href="../user/pings/baseline.html"><strong aria-hidden="true">4.2.</strong> Baseline Ping</a></li><li class="chapter-item expanded "><a href="../user/pings/deletion_request.html"><strong aria-hidden="true">4.3.</strong> Deletion Request Ping</a></li><li class="chapter-item expanded "><a href="../user/pings/metrics.html"><strong aria-hidden="true">4.4.</strong> Metrics Ping</a></li><li class="chapter-item expanded "><a href="../user/pings/events.html"><strong aria-hidden="true">4.5.</strong> Events Ping</a></li><li class="chapter-item expanded "><a href="../user/pings/custom.html"><strong aria-hidden="true">4.6.</strong> Custom Pings</a></li><li class="chapter-item expanded "><a href="../user/pings/testing-custom-pings.html"><strong aria-hidden="true">4.7.</strong> Testing custom pings</a></li></ol></li><li class="chapter-item expanded "><a href="../user/experiments-api.html"><strong aria-hidden="true">5.</strong> Using the experiments API</a></li><li class="chapter-item expanded "><a href="../user/debugging/index.html"><strong aria-hidden="true">6.</strong> Debugging products using Glean</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../user/debugging/debug-ping-view.html"><strong aria-hidden="true">6.1.</strong> Glean Debug Ping View</a></li><li class="chapter-item expanded "><a href="../user/debugging/android.html"><strong aria-hidden="true">6.2.</strong> Android</a></li><li class="chapter-item expanded "><a href="../user/debugging/ios.html"><strong aria-hidden="true">6.3.</strong> iOS</a></li><li class="chapter-item expanded "><a href="../user/debugging/python.html"><strong aria-hidden="true">6.4.</strong> Python</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">API Reference</li><li class="chapter-item expanded "><a href="../reference/yaml/index.html"><strong aria-hidden="true">7.</strong> YAML Format</a></li><li class="chapter-item expanded "><a href="../reference/general/index.html"><strong aria-hidden="true">8.</strong> General</a></li><li class="chapter-item expanded "><a href="../reference/metrics/index.html"><strong aria-hidden="true">9.</strong> Metric types</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/metrics/boolean.html"><strong aria-hidden="true">9.1.</strong> Boolean</a></li><li class="chapter-item expanded "><a href="../reference/metrics/labeled_booleans.html"><strong aria-hidden="true">9.2.</strong> Labeled Booleans</a></li><li class="chapter-item expanded "><a href="../reference/metrics/counter.html"><strong aria-hidden="true">9.3.</strong> Counter</a></li><li class="chapter-item expanded "><a href="../reference/metrics/labeled_counters.html"><strong aria-hidden="true">9.4.</strong> Labeled Counters</a></li><li class="chapter-item expanded "><a href="../reference/metrics/string.html"><strong aria-hidden="true">9.5.</strong> String</a></li><li class="chapter-item expanded "><a href="../reference/metrics/labeled_strings.html"><strong aria-hidden="true">9.6.</strong> Labeled Strings</a></li><li class="chapter-item expanded "><a href="../reference/metrics/string_list.html"><strong aria-hidden="true">9.7.</strong> String List</a></li><li class="chapter-item expanded "><a href="../reference/metrics/timespan.html"><strong aria-hidden="true">9.8.</strong> Timespan</a></li><li class="chapter-item expanded "><a href="../reference/metrics/timing_distribution.html"><strong aria-hidden="true">9.9.</strong> Timing Distribution</a></li><li class="chapter-item expanded "><a href="../reference/metrics/memory_distribution.html"><strong aria-hidden="true">9.10.</strong> Memory Distribution</a></li><li class="chapter-item expanded "><a href="../reference/metrics/uuid.html"><strong aria-hidden="true">9.11.</strong> UUID</a></li><li class="chapter-item expanded "><a href="../reference/metrics/datetime.html"><strong aria-hidden="true">9.12.</strong> Datetime</a></li><li class="chapter-item expanded "><a href="../reference/metrics/event.html"><strong aria-hidden="true">9.13.</strong> Event</a></li><li class="chapter-item expanded "><a href="../reference/metrics/custom_distribution.html"><strong aria-hidden="true">9.14.</strong> Custom Distribution</a></li><li class="chapter-item expanded "><a href="../reference/metrics/quantity.html"><strong aria-hidden="true">9.15.</strong> Quantity</a></li><li class="chapter-item expanded "><a href="../reference/metrics/rate.html"><strong aria-hidden="true">9.16.</strong> Rate</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Language Bindings Information</li><li class="chapter-item expanded "><a href="../language-bindings/index.html"><strong aria-hidden="true">10.</strong> Overview</a></li><li class="chapter-item expanded "><a href="../language-bindings/android/index.html"><strong aria-hidden="true">11.</strong> Android</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../language-bindings/android/android-build-configuration-options.html"><strong aria-hidden="true">11.1.</strong> Android build configuration options</a></li><li class="chapter-item expanded "><a href="../language-bindings/android/android-offline-builds.html"><strong aria-hidden="true">11.2.</strong> Android offline builds</a></li><li class="chapter-item expanded "><a href="../language-bindings/android/instrument-android-crashes-example.html"><strong aria-hidden="true">11.3.</strong> Instrumenting Android crashes with the Glean SDK</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Appendix</li><li class="chapter-item expanded "><a href="../appendix/glossary.html"><strong aria-hidden="true">12.</strong> Glossary</a></li><li class="chapter-item expanded "><a href="../appendix/changelog.html"><strong aria-hidden="true">13.</strong> Changelog</a></li><li class="chapter-item expanded "><a href="../appendix/twig.html"><strong aria-hidden="true">14.</strong> This Week in Glean</a></li><li class="chapter-item expanded "><a href="../appendix/contribution-guidelines.html"><strong aria-hidden="true">15.</strong> Contribution Guidelines</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Glean - Cross-platform Telemetry library</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                        <a href="https://github.com/mozilla/glean" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#integrating-glean-for-product-managers" id="integrating-glean-for-product-managers">Integrating Glean for product managers</a></h1>
+<p>This chapter provides guidance for planning the work involved in integrating Glean into your product, for internal Mozilla customers.
+For a technical coding perspective, see <a href="adding-glean-to-your-project.html">adding Glean to your project</a>.</p>
+<p>Glean is the standard telemetry platform required for all new Mozilla products.
+While there are some upfront costs to integrating Glean in your product, this pays off in easier long-term maintenance and a rich set of self-serve analysis tools.
+The Glean SDK team is happy to support your telemetry integration and make it successful.
+Find us in <a href="https://chat.mozilla.org/#/room/#glean:mozilla.org">#glean</a> or email <a href="mailto:glean-team@mozilla.com">glean-team@mozilla.com</a>.</p>
+<h2><a class="header" href="#building-a-telemetry-plan" id="building-a-telemetry-plan">Building a telemetry plan</a></h2>
+<p>The Glean SDK provides support for answering basic product questions out-of-the-box, such as daily active users, product version and platform information.<br />
+However, it is also a good idea to have a sense of any additional product-specific questions you are trying to answer with telemetry, and, when possible, in collaboration with a data scientist.<br />
+This of course helps for your own planning, but is also invaluable for the Glean SDK team to support you, since we will understand the ultimate goals of your product's telemetry and ensure the design will meet those goals and we can identify any new features that may be required.
+It is best to frame this document in the form of questions and use cases rather than as specific data points and schemas.</p>
+<h2><a class="header" href="#integrating-the-glean-sdk-into-your-product" id="integrating-the-glean-sdk-into-your-product">Integrating the Glean SDK into your product</a></h2>
+<p>The <a href="adding-glean-to-your-project.html">technical steps for integrating the Glean SDK in your product are documented in its own chapter</a> for supported platforms.
+We recommend having a member of the Glean SDK team review this integration to catch any potential pitfalls.</p>
+<h2><a class="header" href="#optional-adapting-glean-to-your-platform" id="optional-adapting-glean-to-your-platform">(Optional) Adapting Glean to your platform</a></h2>
+<p>The Glean SDK is a collection of cross platform libraries and tools that facilitate collection of Glean conforming telemetry from applications.<br />
+Consult the list of the currently supported <a href="../index.html">platforms and languages</a>.
+If your product's tech stack isn't currently supported, please reach out to the Glean team: significant work will be required to create a new integration.<br />
+In previous efforts, this has ranged from 1 to 3 months FTE of work, so it is important to plan for this work well in advance.
+While the first phase of this work generally requires the specialized expertise of the Glean SDK team, the second half can benefit from outside developers to move faster.</p>
+<h2><a class="header" href="#optional-designing-ping-submission" id="optional-designing-ping-submission">(Optional) Designing ping submission</a></h2>
+<p>The Glean SDK periodically sends telemetry to our servers in a bundle known as a &quot;<a href="../appendix/glossary.html#ping">ping</a>&quot;.<br />
+For mobile applications with common interaction models, such as web browsers, the Glean SDK provides <a href="pings/index.html">basic pings out-of-the-box</a>.
+For other kinds of products, it may be necessary to carefully design what triggers the submission of a ping.
+It is important to have a solid telemetry plan (see above) so we can make sure the ping submission will be able to answer the telemetry questions required of the product.</p>
+<h2><a class="header" href="#optional-new-metric-types" id="optional-new-metric-types">(Optional) New metric types</a></h2>
+<p>The Glean SDK has a number of <a href="https://mozilla.github.io/glean/book/user/metrics/index.html">different metric types</a> that it can collect.<br />
+Metric types provide &quot;guardrails&quot; to make sure that telemetry is being collected correctly, and to present the data at analysis time more automatically.
+Occasionally, products need to collect data that doesn't fit neatly into one of the available metric types.
+Glean <a href="https://wiki.mozilla.org/Glean/Adding_or_changing_Glean_metric_types">has a process</a> to request and introduce more metric types and we will work with you to design something appropriate.
+This design and implementation work is at least 4 weeks, though we are working on the foundation to accelerate that.
+Having a telemetry plan (see above) will help to identify this work early.</p>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/user/integrating-glean-for-product-managers.md">Edit this file on GitHub.</a></footer>
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../user/adding-glean-to-your-project.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../user/metrics/adding-new-metrics.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="../user/adding-glean-to-your-project.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="../user/metrics/adding-new-metrics.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="../../shared/tabs.js"></script>
+        
+        <script type="text/javascript" src="../../shared/mermaid.min.js"></script>
+        
+        <script type="text/javascript" src="../../shared/mermaid-init.js"></script>
+        
+        <script type="text/javascript" src="../chart.min.js"></script>
+        
+        <script type="text/javascript" src="../chart-distributions.js"></script>
+        
+        <script type="text/javascript" src="../chart-distributions-ui.js"></script>
+        
+
+        
+
+    </body>
+</html>
