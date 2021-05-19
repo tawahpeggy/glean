@@ -175,24 +175,16 @@
                 <div id="content" class="content">
                     <main>
                         <h1><a class="header" href="#strings" id="strings">Strings</a></h1>
-<p>This allows recording a Unicode string value with arbitrary content.</p>
+<p>String metrics allow recording a Unicode string value with arbitrary content.</p>
+<p>This metric type does not support recording JSON blobs - please get in contact with the Glean SDK team if you're missing a type.</p>
+<div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
+<h2><a class="header" href="#important" id="important">Important</a></h2>
 <blockquote>
-<p><strong>Note</strong>: Be careful using arbitrary strings and make sure they can't accidentally contain identifying data (like directory paths or user input).</p>
+<p>Be careful using arbitrary strings and make sure they can't accidentally contain identifying data (like directory paths or user input).</p>
 </blockquote>
-<blockquote>
-<p><strong>Note</strong>: This is does not support recording JSON blobs - please get in contact with the Telemetry team if you're missing a type.</p>
-</blockquote>
-<h2><a class="header" href="#configuration" id="configuration">Configuration</a></h2>
-<p>Say you're adding a metric to find out what the default search in a browser is. First you need to add an entry for the metric to the <code>metrics.yaml</code> file:</p>
-<pre><code class="language-YAML">search.default:
-  name:
-    type: string
-    description: &gt;
-      The name of the default search engine.
-    lifetime: application
-    ...
-</code></pre>
-<h2><a class="header" href="#api" id="api">API</a></h2>
+<h2><a class="header" href="#recording-api" id="recording-api">Recording API</a></h2>
+<h3><a class="header" href="#set" id="set"><code>set</code></a></h3>
+<p>Set a string metric to a specific value.</p>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
@@ -204,17 +196,6 @@ SearchDefault.name.set(&quot;duck duck go&quot;)
 // If it changed later, you can record the new value:
 SearchDefault.name.set(&quot;wikipedia&quot;)
 </code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.SearchDefault
-
-// Was anything recorded?
-assertTrue(SearchDefault.name.testHasValue())
-// Does the string metric have the expected value?
-// IMPORTANT: It may have been truncated -- see &quot;Limits&quot; below
-assertEquals(&quot;wikipedia&quot;, SearchDefault.name.testGetValue())
-// Was the string truncated, and an error reported?
-assertEquals(1, SearchDefault.name.testGetNumRecordedErrors(ErrorType.InvalidValue))
-</code></pre>
 </div>
 <div data-lang="Java" class="tab">
 <pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.SearchDefault;
@@ -224,39 +205,12 @@ SearchDefault.INSTANCE.name.set(&quot;duck duck go&quot;);
 // If it changed later, you can record the new value:
 SearchDefault.INSTANCE.name.set(&quot;wikipedia&quot;);
 </code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.SearchDefault
-
-// Was anything recorded?
-assertTrue(SearchDefault.INSTANCE.name.testHasValue());
-// Does the string metric have the expected value?
-// IMPORTANT: It may have been truncated -- see &quot;Limits&quot; below
-assertEquals(&quot;wikipedia&quot;, SearchDefault.INSTANCE.name.testGetValue());
-// Was the string truncated, and an error reported?
-assertEquals(
-    1,
-    SearchDefault.INSTANCE.name.testGetNumRecordedErrors(
-        ErrorType.InvalidValue
-    )
-);
-</code></pre>
 </div>
 <div data-lang="Swift" class="tab">
 <pre><code class="language-Swift">// Record a value into the metric.
 SearchDefault.name.set(&quot;duck duck go&quot;)
 // If it changed later, you can record the new value:
 SearchDefault.name.set(&quot;wikipedia&quot;)
-</code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Swift">@testable import Glean
-
-// Was anything recorded?
-XCTAssert(SearchDefault.name.testHasValue())
-// Does the string metric have the expected value?
-// IMPORTANT: It may have been truncated -- see &quot;Limits&quot; below
-XCTAssertEqual(&quot;wikipedia&quot;, try SearchDefault.name.testGetValue())
-// Was the string truncated, and an error reported?
-XCTAssertEqual(1, SearchDefault.name.testGetNumRecordedErrors(.invalidValue))
 </code></pre>
 </div>
 <div data-lang="Python" class="tab">
@@ -268,52 +222,104 @@ metrics.search_default.name.set(&quot;duck duck go&quot;)
 # If it changed later, you can record the new value:
 metrics.search_default.name.set(&quot;wikipedia&quot;)
 </code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Python"># Was anything recorded?
-assert metrics.search_default.name.test_has_value()
-# Does the string metric have the expected value?
-# IMPORTANT: It may have been truncated -- see &quot;Limits&quot; below
-assert &quot;wikipedia&quot; == metrics.search_default.name.test_get_value()
-# Was the string truncated, and an error reported?
-assert 1 == metrics.search_default.name.test_get_num_recorded_errors(
-    ErrorType.INVALID_VALUE
-)
-</code></pre>
 </div>
-<div data-lang="C#" class="tab">
-<pre><code class="language-C#">using static Mozilla.YourApplication.GleanMetrics.SearchDefault;
+<div data-lang="Rust" class="tab">
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean_metrics;
 
 // Record a value into the metric.
-SearchDefault.name.Set(&quot;duck duck go&quot;);
+search_default::name.set(&quot;duck duck go&quot;);
 // If it changed later, you can record the new value:
-SearchDefault.name.Set(&quot;wikipedia&quot;);
-</code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-C#">using static Mozilla.YourApplication.GleanMetrics.SearchDefault;
+search_default::name.set(&quot;wikipedia&quot;);
+<span class="boring">}
+</span></code></pre></pre>
+</div>
+<div data-lang="Javascript" class="tab">
+<pre><code class="language-js">import * as searchDefault from &quot;./path/to/generated/files/searchDefault.js&quot;;
 
-// Was anything recorded?
-Assert.True(SearchDefault.name.TestHasValue());
-// Does the string metric have the expected value?
-// IMPORTANT: It may have been truncated -- see &quot;Limits&quot; below
-Assert.Equal(&quot;wikipedia&quot;, SearchDefault.name.TestGetValue());
-// Was the string truncated, and an error reported?
-Assert.Equal(
-    1,
-    SearchDefault.name.TestGetNumRecordedErrors(
-        ErrorType.InvalidValue
-    )
-);
+// Record a value into the metric.
+searchDefault.name.set(&quot;duck duck go&quot;);
+// If it changed later, you can record the new value:
+searchDefault.name.set(&quot;wikipedia&quot;);
 </code></pre>
 </div>
-<div data-lang="C++" class="tab">
-<blockquote>
-<p><strong>Note</strong>: C++ APIs are only available in Firefox Desktop.</p>
-</blockquote>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
 <pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
 
 mozilla::glean::search_default::name.Set(&quot;wikipedia&quot;_ns);
 </code></pre>
-<p>There are test APIs available too:</p>
+<p><strong>Javascript</strong></p>
+<pre><code class="language-js">Glean.searchDefault.name.set(&quot;wikipedia&quot;);
+</code></pre>
+</div>
+</div>
+</div>
+<h4><a class="header" href="#limits" id="limits">Limits</a></h4>
+<ul>
+<li>Fixed maximum string length: 100. Longer strings are truncated. This is measured in the number of bytes when the string is encoded in UTF-8.</li>
+</ul>
+<h4><a class="header" href="#recorded-errors" id="recorded-errors">Recorded errors</a></h4>
+<ul>
+<li><a href="../../user/metrics/error-reporting.html"><code>invalid_overflow</code></a>: if the string is too long. (Prior to Glean 31.5.0, this recorded an <code>invalid_value</code>).</li>
+</ul>
+<h2><a class="header" href="#testing-api" id="testing-api">Testing API</a></h2>
+<h3><a class="header" href="#testgetvalue" id="testgetvalue"><code>testGetValue</code></a></h3>
+<p>Get the recorded value for a given string metric.</p>
+<p>The recorded value may have been truncated. See <a href="#limits">&quot;Limits&quot;</a> section above.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.SearchDefault
+
+// Does the string metric have the expected value?
+assertEquals(&quot;wikipedia&quot;, SearchDefault.name.testGetValue())
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.SearchDefault
+
+// Does the string metric have the expected value?
+assertEquals(&quot;wikipedia&quot;, SearchDefault.INSTANCE.name.testGetValue());
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+// Does the string metric have the expected value?
+XCTAssertEqual(&quot;wikipedia&quot;, try SearchDefault.name.testGetValue())
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+# Does the string metric have the expected value?
+assert &quot;wikipedia&quot; == metrics.search_default.name.test_get_value()
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean_metrics;
+
+// Does the string metric have the expected value?
+assert_eq!(6, search_default::name.test_get_value(None).unwrap());
+<span class="boring">}
+</span></code></pre></pre>
+</div>
+<div data-lang="Javascript" class="tab">
+<pre><code class="language-js">import * as searchDefault from &quot;./path/to/generated/files/searchDefault.js&quot;;
+
+assert.strictEqual(&quot;wikipedia&quot;, await searchDefault.name.testGetValue());
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
 <pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
 
 // Does it have the expected value?
@@ -321,30 +327,142 @@ ASSERT_STREQ(
   &quot;wikipedia&quot;,
   mozilla::glean::search_default::name.TestGetValue().value().get()
 );
-// Did it run across any errors?
-// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
 </code></pre>
-</div>
-<div data-lang="JS" class="tab">
-<blockquote>
-<p><strong>Note</strong>: JS APIs are currently only available in Firefox Desktop.
-General JavaScript support is coming soon via <a href="https://github.com/mozilla/glean.js/">the Glean.js project</a>.</p>
-</blockquote>
-<pre><code class="language-js">Glean.searchDefault.name.set(&quot;wikipedia&quot;);
-</code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-js">Assert.equal(&quot;wikipedia&quot;, Glean.searchDefault.name.testGetValue());
-// Did it run across any errors?
-// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
+<p><strong>Javascript</strong></p>
+<pre><code class="language-js">// Does it have the expected value?
+Assert.equal(&quot;wikipedia&quot;, Glean.searchDefault.name.testGetValue());
 </code></pre>
 </div>
 </div>
 </div>
-<h2><a class="header" href="#limits" id="limits">Limits</a></h2>
-<ul>
-<li>Fixed maximum string length: 100. Longer strings are truncated. This is measured in the number of bytes when the string is encoded in UTF-8.</li>
-</ul>
-<h2><a class="header" href="#examples" id="examples">Examples</a></h2>
+<h3><a class="header" href="#testhasvalue" id="testhasvalue"><code>testHasValue</code></a></h3>
+<p>Whether or not <strong>any</strong> value was recorded for a given string metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.SearchDefault
+
+// Was anything recorded?
+assertTrue(SearchDefault.name.testHasValue())
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.SearchDefault
+
+// Was anything recorded?
+assertTrue(SearchDefault.INSTANCE.name.testHasValue());
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+// Was anything recorded?
+XCTAssert(SearchDefault.name.testHasValue())
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+# Was anything recorded?
+assert metrics.search_default.name.test_has_value()
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab"></div>
+<div data-lang="Javascript" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h3><a class="header" href="#testgetnumrecordederrors" id="testgetnumrecordederrors"><code>testGetNumRecordedErrors</code></a></h3>
+<p>Gets number of errors recorded for a given string metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.SearchDefault
+
+// Was the string truncated, and an error reported?
+assertEquals(1, SearchDefault.name.testGetNumRecordedErrors(ErrorType.InvalidOverflow))
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.SearchDefault;
+
+// Was the string truncated, and an error reported?
+assertEquals(
+    1,
+    SearchDefault.INSTANCE.name.testGetNumRecordedErrors(
+        ErrorType.InvalidOverflow
+    )
+);
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+// Was the string truncated, and an error reported?
+XCTAssertEqual(1, SearchDefault.name.testGetNumRecordedErrors(.invalidOverflow))
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+# Was the string truncated, and an error reported?
+assert 1 == metrics.search_default.name.test_get_num_recorded_errors(
+    ErrorType.INVALID_OVERFLOW
+)
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean::ErrorType;
+
+use glean_metrics;
+
+// Was the string truncated, and an error reported?
+assert_eq!(
+  1,
+  search_default::name.test_get_num_recorded_errors(
+    ErrorType::InvalidOverflow
+  )
+);
+<span class="boring">}
+</span></code></pre></pre>
+</div>
+<div data-lang="Javascript" class="tab">
+<pre><code class="language-js">import * as searchDefault from &quot;./path/to/generated/files/searchDefault.js&quot;;
+
+// Was the string truncated, and an error reported?
+assert.strictEqual(1, await searchDefault.name.testGetNumRecordedErrors(&quot;invalid_overflow&quot;));
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab" data-bug="1683171"></div>
+</div>
+</div>
+<h2><a class="header" href="#metric-parameters" id="metric-parameters">Metric parameters</a></h2>
+<p>Example string metric definition:</p>
+<pre><code class="language-yaml">controls:
+  refresh_pressed:
+    type: string
+    description: &gt;
+      The name of the default search engine.
+    bugs:
+      - https://bugzilla.mozilla.org/000000
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=000000#c3
+    notification_emails:
+      - me@mozilla.com
+    expires: 2020-10-01
+</code></pre>
+<p>For a full reference on metrics parameters common to all metric types,
+refer to the metrics <a href="../yaml/index.html">YAML format</a> reference page.</p>
+<h3><a class="header" href="#extra-metric-parameters" id="extra-metric-parameters">Extra metric parameters</a></h3>
+<p>N/A</p>
+<h2><a class="header" href="#data-questions" id="data-questions">Data questions</a></h2>
 <ul>
 <li>
 <p>Record the operating system name with a value of <code>&quot;android&quot;</code>.</p>
@@ -353,15 +471,13 @@ General JavaScript support is coming soon via <a href="https://github.com/mozill
 <p>Recording the device model with a value of <code>&quot;SAMSUNG-SGH-I997&quot;</code>.</p>
 </li>
 </ul>
-<h2><a class="header" href="#recorded-errors" id="recorded-errors">Recorded errors</a></h2>
-<ul>
-<li><code>invalid_overflow</code>: if the string is too long. (Prior to Glean 31.5.0, this recorded an <code>invalid_value</code>).</li>
-</ul>
 <h2><a class="header" href="#reference" id="reference">Reference</a></h2>
 <ul>
-<li><a href="../../../javadoc/glean/mozilla.telemetry.glean.private/-string-metric-type/index.html">Kotlin API docs</a>.</li>
+<li><a href="../../../javadoc/glean/mozilla.telemetry.glean.private/-string-metric-type/index.html">Kotlin API docs</a></li>
 <li><a href="../../../swift/Classes/StringMetricType.html">Swift API docs</a></li>
 <li><a href="../../../python/glean/metrics/string.html">Python API docs</a></li>
+<li><a href="../../../docs/glean/private/struct.StringMetric.html">Rust API docs</a></li>
+<li><a href="https://mozilla.github.io/glean.js/classes/core_metrics_types_string.default.html#set">Javascript API docs</a></li>
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/metrics/string.md">Edit this file on GitHub.</a></footer>
                     </main>
