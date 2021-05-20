@@ -176,19 +176,9 @@
                     <main>
                         <h1><a class="header" href="#labeled-strings" id="labeled-strings">Labeled Strings</a></h1>
 <p>Labeled strings record multiple Unicode string values, each under a different label.</p>
-<h2><a class="header" href="#configuration" id="configuration">Configuration</a></h2>
-<p>For example to record which kind of error occurred in different stages of a login process - <code>&quot;RuntimeException&quot;</code> in the <code>&quot;server_auth&quot;</code> stage or <code>&quot;invalid_string&quot;</code> in the <code>&quot;enter_email&quot;</code> stage:</p>
-<pre><code class="language-YAML">login:
-  errors_by_stage:
-    type: labeled_string
-    description: Records the error type, if any, that occur in different stages of the login process.
-    labels:
-      - server_auth
-      - enter_email
-    ...
-</code></pre>
-<h2><a class="header" href="#api" id="api">API</a></h2>
-<p>Now you can use the labeled string from the application's code:</p>
+<h2><a class="header" href="#recording-api" id="recording-api">Recording API</a></h2>
+<h3><a class="header" href="#set" id="set"><code>set</code></a></h3>
+<p>Sets one of the labels in a labeled string metric to a specific value.</p>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
@@ -197,27 +187,15 @@
 
 Login.errorsByStage[&quot;server_auth&quot;].set(&quot;Invalid password&quot;)
 </code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Login
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Login;
 
-// Was anything recorded?
-assertTrue(Login.errorsByStage[&quot;server_auth&quot;].testHasValue())
-
-// Were there any invalid labels?
-assertEquals(0, Login.errorsByStage.testGetNumRecordedErrors(ErrorType.InvalidLabel))
+Login.INSTANCE.errorsByStage[&quot;server_auth&quot;].set(&quot;Invalid password&quot;);
 </code></pre>
 </div>
 <div data-lang="Swift" class="tab">
 <pre><code class="language-Swift">Login.errorsByStage[&quot;server_auth&quot;].set(&quot;Invalid password&quot;)
-</code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Swift">@testable import Glean
-
-// Was anything recorded?
-XCTAssert(Login.errorsByStage[&quot;server_auth&quot;].testHasValue())
-
-// Were there any invalid labels?
-XCTAssertEqual(0, Login.errorsByStage.testGetNumRecordedErrors(.invalidLabel))
 </code></pre>
 </div>
 <div data-lang="Python" class="tab">
@@ -226,29 +204,11 @@ metrics = load_metrics(&quot;metrics.yaml&quot;)
 
 metrics.login.errors_by_stage[&quot;server_auth&quot;].set(&quot;Invalid password&quot;)
 </code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Python"># Was anything recorded?
-assert metrics.login.errors_by_stage[&quot;server_auth&quot;].test_has_value()
-
-# Were there any invalid labels?
-assert 0 == metrics.login.errors_by_stage.test_get_num_recorded_errors(
-    ErrorType.INVALID_LABEL
-)
-</code></pre>
 </div>
-<div data-lang="C#" class="tab">
-<pre><code class="language-C#">using static Mozilla.YourApplication.GleanMetrics.Login;
+<div data-lang="Javascript" class="tab">
+<pre><code class="language-js">import * as login from &quot;./path/to/generated/files/login.js&quot;;
 
-Login.errorsByStage[&quot;server_auth&quot;].Set(&quot;Invalid password&quot;);
-</code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-C#">using static Mozilla.YourApplication.GleanMetrics.Login;
-
-// Was anything recorded?
-Assert.True(Login.errorsByStage[&quot;server_auth&quot;].TestHasValue());
-
-// Were there any invalid labels?
-Assert.Equal(0, Login.errorsByStage.TestGetNumRecordedErrors(ErrorType.InvalidLabel));
+login.errorsByStage[&quot;server_auth&quot;].set(&quot;Invalid password&quot;);
 </code></pre>
 </div>
 <div data-lang="Rust" class="tab">
@@ -260,16 +220,163 @@ Assert.Equal(0, Login.errorsByStage.TestGetNumRecordedErrors(ErrorType.InvalidLa
 login::errors_by_stage.get(&quot;server_auth&quot;).set(&quot;Invalid password&quot;);
 <span class="boring">}
 </span></code></pre></pre>
-<p>There are test APIs available too:</p>
+</div>
+</div>
+</div>
+<h4><a class="header" href="#limits" id="limits">Limits</a></h4>
+<ul>
+<li>Fixed maximum string length: 100. Longer strings are truncated. This is measured in the number of bytes when the string is encoded in UTF-8.</li>
+</ul>
+<h4><a class="header" href="#recorded-errors" id="recorded-errors">Recorded Errors</a></h4>
+<ul>
+<li><a href="../../user/metrics/error-reporting.html"><code>invalid_overflow</code></a>: if the string is too long. (Prior to Glean 31.5.0, this recorded an <code>invalid_value</code>).</li>
+<li><a href="../../user/metrics/error-reporting.html"><code>invalid_label</code></a>:
+<ul>
+<li>If the label contains invalid characters. Data is still recorded to the special label <code>__other__</code>.</li>
+<li>If the label exceeds the maximum number of allowed characters. Data is still recorded to the special label <code>__other__</code>.</li>
+</ul>
+</li>
+</ul>
+<h2><a class="header" href="#testing-api" id="testing-api">Testing API</a></h2>
+<h3><a class="header" href="#testgetvalue" id="testgetvalue"><code>testGetValue</code></a></h3>
+<p>Gets the recorded value for a given label in a labeled string metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Login
+
+// Does the metric have the expected value?
+assertTrue(Login.errorsByStage[&quot;server_auth&quot;].testGetValue())
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Login;
+
+// Does the metric have the expected value?
+assertTrue(Login.INSTANCE.errorsByStage[&quot;server_auth&quot;].testGetValue());
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+// Does the metric have the expected value?
+XCTAssert(Login.errorsByStage[&quot;server_auth&quot;].testGetValue())
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+# Does the metric have the expected value?
+assert &quot;Invalid password&quot; == metrics.login.errors_by_stage[&quot;server_auth&quot;].testGetValue())
+</code></pre>
+</div>
+<div data-lang="Javascript" class="tab">
+<pre><code class="language-js">import * as login from &quot;./path/to/generated/files/login.js&quot;;
+
+// Does the metric have the expected value?
+assert.strictEqual(&quot;Invalid password&quot;, await metrics.login.errorsByStage[&quot;server_auth&quot;].testGetValue())
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean_metrics;
+
+// Does the metric have the expected value?
+assert!(login::errors_by_stage.get(&quot;server_auth&quot;).test_get_value());
+<span class="boring">}
+</span></code></pre></pre>
+</div>
+</div>
+</div>
+<h3><a class="header" href="#testhasvalue" id="testhasvalue"><code>testHasValue</code></a></h3>
+<p>Whether or not <strong>any</strong> value was recorded for a given label in a labeled string metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Login
+
+// Was anything recorded?
+assertTrue(Login.errorsByStage[&quot;server_auth&quot;].testHasValue())
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Login;
+
+// Was anything recorded?
+assertTrue(Login.INSTANCE.errorsByStage[&quot;server_auth&quot;].testHasValue());
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+// Was anything recorded?
+XCTAssert(Login.errorsByStage[&quot;server_auth&quot;].testHasValue())
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python"># Was anything recorded?
+assert metrics.login.errors_by_stage[&quot;server_auth&quot;].test_has_value()
+</code></pre>
+</div>
+<div data-lang="Javascript" class="tab"></div>
+<div data-lang="Rust" class="tab"></div>
+</div>
+</div>
+<h3><a class="header" href="#testgetnumrecordederrors" id="testgetnumrecordederrors"><code>testGetNumRecordedErrors</code></a></h3>
+<p>Gets the number of errors recorded for a given labeled string metric in total.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Login
+
+// Were there any invalid labels?
+assertEquals(0, Login.errorsByStage.testGetNumRecordedErrors(ErrorType.InvalidLabel))
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Login;
+
+// Were there any invalid labels?
+assertEquals(0, Login.INSTANCE.errorsByStage.testGetNumRecordedErrors(ErrorType.InvalidLabel));
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+// Were there any invalid labels?
+XCTAssertEqual(0, Login.errorsByStage.testGetNumRecordedErrors(.invalidLabel))
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+# Were there any invalid labels?
+assert 0 == metrics.login.errors_by_stage.test_get_num_recorded_errors(
+    ErrorType.INVALID_LABEL
+)
+</code></pre>
+</div>
+<div data-lang="Javascript" class="tab">
+<pre><code class="language-js">import * as login from &quot;./path/to/generated/files/login.js&quot;;
+
+// Were there any invalid labels?
+assert.strictEqual(0, await login.errorsByStage[&quot;server_auth&quot;].testGetNumRecordedErrors(&quot;invalid_label&quot;));
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>use glean::ErrorType;
 
 use glean_metrics;
-
-// Was anything recorded?
-assert!(login::errors_by_stage.get(&quot;server_auth&quot;).test_get_value().is_sone());
 
 // Were there any invalid labels?
 assert_eq!(
@@ -283,45 +390,63 @@ assert_eq!(
 </div>
 </div>
 </div>
-<h2><a class="header" href="#limits" id="limits">Limits</a></h2>
+<h2><a class="header" href="#metric-parameters" id="metric-parameters">Metric parameters</a></h2>
+<p>Example labeled boolean metric definition:</p>
+<pre><code class="language-YAML">login:
+  errors_by_stage:
+    type: labeled_string
+    description: Records the error type, if any, that occur in different stages of the login process.
+    bugs:
+      - https://bugzilla.mozilla.org/000000
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=000000#c3
+    notification_emails:
+      - me@mozilla.com
+    expires: 2020-10-01
+    labels:
+      - server_auth
+      - enter_email
+      ...
+</code></pre>
+<h3><a class="header" href="#extra-metric-parameters" id="extra-metric-parameters">Extra metric parameters</a></h3>
+<h4><a class="header" href="#labels" id="labels"><code>labels</code></a></h4>
+<p>Labeled metrics may have an optional <code>labels</code> parameter, containing a list of known labels.
+The labels in this list must match the following requirements:</p>
 <ul>
 <li>
-<p>Labels must conform to the <a href="index.html#label-format">label formatting regular expression</a>.</p>
-</li>
-<li>
-<p>Labels support lowercase alphanumeric characters; they additionally allow for dots (<code>.</code>), underscores (<code>_</code>) and/or hyphens (<code>-</code>).</p>
+<p>Conform to the <a href="index.html#label-format">label formatting regular expression</a>.</p>
 </li>
 <li>
 <p>Each label must have a maximum of 60 bytes, when encoded as UTF-8.</p>
 </li>
 <li>
-<p>If the labels are specified in the <code>metrics.yaml</code>, using any label not listed in that file will be replaced with the special value <code>__other__</code>.</p>
-</li>
-<li>
-<p>The number of labels specified in the <code>metrics.yaml</code> is limited to 100.</p>
-</li>
-<li>
-<p>If the labels aren't specified in the <code>metrics.yaml</code>, only 16 different dynamic labels may be used, after which the special value <code>__other__</code> will be used.</p>
+<p>This list itself is limited to 100 labels.</p>
 </li>
 </ul>
-<h2><a class="header" href="#examples" id="examples">Examples</a></h2>
+<div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
+<h5><a class="header" href="#important" id="important">Important</a></h5>
+<blockquote>
+<p>If the labels are specified in the <code>metrics.yaml</code>, using any label not listed in that file
+will be replaced with the special value <code>__other__</code>.</p>
+<p>If the labels are <strong>not</strong> specified in the <code>metrics.yaml</code>, only 16 different dynamic labels
+may be used, after which the special value <code>__other__</code> will be used.</p>
+</blockquote>
+<p>Removing or changing labels, including their order in the registry file, is permitted. Avoid reusing labels
+that were removed in the past. It is best practice to add documentation about removed labels to the
+description field so that analysts will know of their existence and meaning in historical data.
+Special care must be taken when changing GeckoView metrics sent through the Glean SDK, as the
+index of the labels is used to report Gecko data through the Glean SDK.</p>
+<h2><a class="header" href="#data-questions" id="data-questions">Data questions</a></h2>
 <ul>
-<li>What kind of errors occurred at each step in the login process?</li>
-</ul>
-<h2><a class="header" href="#recorded-errors" id="recorded-errors">Recorded Errors</a></h2>
-<ul>
-<li>
-<p><code>invalid_label</code>: If the label contains invalid characters. Data is still recorded to the special label <code>__other__</code>.</p>
-</li>
-<li>
-<p><code>invalid_label</code>: If the label exceeds the maximum number of allowed characters. Data is still recorded to the special label <code>__other__</code>.</p>
-</li>
+<li>What kinds of errors occurred at each step in the login process?</li>
 </ul>
 <h2><a class="header" href="#reference" id="reference">Reference</a></h2>
 <ul>
 <li>Kotlin API docs: <a href="../../../javadoc/glean/mozilla.telemetry.glean.private/-labeled-metric-type/index.html"><code>LabeledMetricType</code></a>, <a href="../../../javadoc/glean/mozilla.telemetry.glean.private/-string-metric-type/index.html"><code>StringMetricType</code></a></li>
 <li>Swift API docs: <a href="../../../swift/Classes/LabeledMetricType.html"><code>LabeledMetricType</code></a>, <a href="../../../swift/Classes/StringMetricType.html"><code>StringMetricType</code></a></li>
 <li>Python API docs: <a href="../../../python/glean/metrics/labeled.html"><code>LabeledMetricBase</code></a>, <a href="../../../python/glean/metrics/string.html"><code>StringMetricType</code></a></li>
+<li>Rust API docs: <a href="../../../docs/glean/private/struct.LabeledMetric.html"><code>LabeledMetric</code></a>, <a href="../../../docs/glean/private/struct.StringMetric.html"><code>StringMetricType</code></a></li>
+<li>Javascript API docs: <a href="https://mozilla.github.io/glean.js/classes/core_metrics_types_labeled.default.html"><code>LabeledMetricType</code></a>, <a href="https://mozilla.github.io/glean.js/classes/core_metrics_types_string.default.html"><code>StringMetricType</code></a></li>
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/metrics/labeled_strings.md">Edit this file on GitHub.</a></footer>
                     </main>

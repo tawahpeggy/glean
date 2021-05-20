@@ -176,100 +176,37 @@
                     <main>
                         <h1><a class="header" href="#labeled-booleans" id="labeled-booleans">Labeled Booleans</a></h1>
 <p>Labeled booleans are used to record different related boolean flags.</p>
-<h2><a class="header" href="#configuration" id="configuration">Configuration</a></h2>
-<p>For example, you may want to record a set of flags related to accessibility (a11y).</p>
-<pre><code class="language-YAML">accessibility:
-  features:
-    type: labeled_boolean
-    description: &gt;
-      a11y features enabled on the device. ...
-    labels:
-      - screen_reader
-      - high_contrast
-    ...
-</code></pre>
-<blockquote>
-<p><strong>Note:</strong> removing or changing labels, including their order in the registry file, is permitted. Avoid reusing labels that were removed in the past. It is best practice to add documentation about removed labels to the description field so that analysts will know of their existence and meaning in historical data. Special care must be taken when changing GeckoView metrics sent through the Glean SDK, as the index of the labels is used to report Gecko data through the Glean SDK.</p>
-</blockquote>
-<h2><a class="header" href="#api" id="api">API</a></h2>
-<p>Now you can use the labeled boolean from the application's code:</p>
+<h2><a class="header" href="#recording-api" id="recording-api">Recording API</a></h2>
+<h3><a class="header" href="#set" id="set"><code>set</code></a></h3>
+<p>Sets one of the labels in a labeled boolean metric to a specific value.</p>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
 <div data-lang="Kotlin" class="tab">
 <pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Accessibility
+
 Accessibility.features[&quot;screen_reader&quot;].set(isScreenReaderEnabled())
 Accessibility.features[&quot;high_contrast&quot;].set(isHighContrastEnabled())
 </code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Accessibility
-// Was anything recorded?
-assertTrue(Accessibility.features[&quot;screen_reader&quot;].testHasValue())
-assertTrue(Accessibility.features[&quot;high_contrast&quot;].testHasValue())
-// Do the booleans have the expected values?
-assertEquals(True, Accessibility.features[&quot;screen_reader&quot;].testGetValue())
-assertEquals(False, Accessibility.features[&quot;high_contrast&quot;].testGetValue())
-// Did we record any invalid labels?
-assertEquals(0, Accessibility.features.testGetNumRecordedErrors(ErrorType.InvalidLabel))
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Accessibility;
+
+Acessibility.INSTANCE.features[&quot;screen_reader&quot;].set(isScreenReaderEnabled());
+Acessibility.INSTANCE.features[&quot;high_contrast&quot;].set(isHighContrastEnabled());
 </code></pre>
 </div>
 <div data-lang="Swift" class="tab">
 <pre><code class="language-Swift">Accessibility.features[&quot;screen_reader&quot;].set(isScreenReaderEnabled())
 Accessibility.features[&quot;high_contrast&quot;].set(isHighContrastEnabled())
 </code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Swift">@testable import Glean
-
-// Was anything recorded?
-XCTAssert(Accessibility.features[&quot;screen_reader&quot;].testHasValue())
-XCTAssert(Accessibility.features[&quot;high_contrast&quot;].testHasValue())
-// Do the booleans have the expected values?
-XCTAssertEqual(true, try Accessibility.features[&quot;screen_reader&quot;].testGetValue())
-XCTAssertEqual(false, try Accessibility.features[&quot;high_contrast&quot;].testGetValue())
-// Were there any invalid labels?
-XCTAssertEqual(0, Accessibility.features.testGetNumRecordedErrors(.invalidLabel))
-</code></pre>
 </div>
 <div data-lang="Python" class="tab">
 <pre><code class="language-Python">from glean import load_metrics
 metrics = load_metrics(&quot;metrics.yaml&quot;)
 
-metrics.accessibility.features[&quot;screen_reader&quot;].set(
-    is_screen_reader_enabled()
-)
-metrics.accessibility.features[&quot;high_contrast&quot;].set(
-    is_high_contrast_enabled()
-)
-</code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Python"># Was anything recorded?
-assert metrics.accessibility.features[&quot;screen_reader&quot;].test_has_value()
-assert metrics.accessibility.features[&quot;high_contrast&quot;].test_has_value()
-# Do the booleans have the expected values?
-assert metrics.accessibility.features[&quot;screen_reader&quot;].test_get_value()
-assert not metrics.accessibility.features[&quot;high_contrast&quot;].test_get_value()
-# Did we record any invalid labels?
-assert 0 == metrics.accessibility.features.test_get_num_recorded_errors(
-    ErrorType.INVALID_LABEL
-)
-</code></pre>
-</div>
-<div data-lang="C#" class="tab">
-<pre><code class="language-C#">using static Mozilla.YourApplication.GleanMetrics.Accessibility;
-
-Accessibility.features[&quot;screen_reader&quot;].Set(isScreenReaderEnabled());
-Accessibility.features[&quot;high_contrast&quot;].Set(isHighContrastEnabled());
-</code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-C#">using static Mozilla.YourApplication.GleanMetrics.Accessibility;
-// Was anything recorded?
-Assert.True(Accessibility.features[&quot;screen_reader&quot;].TestHasValue());
-Assert.True(Accessibility.features[&quot;high_contrast&quot;].TestHasValue());
-// Do the booleans have the expected values?
-Assert.Equal(true, Accessibility.features[&quot;screen_reader&quot;].TestGetValue());
-Assert.Equal(false, Accessibility.features[&quot;high_contrast&quot;].TestGetValue());
-// Did we record any invalid labels?
-Assert.Equal(0, Accessibility.features.TestGetNumRecordedErrors(ErrorType.InvalidLabel));
+metrics.accessibility.features[&quot;screen_reader&quot;].set(is_screen_reader_enabled())
+metrics.accessibility.features[&quot;high_contrast&quot;].set(is_high_contrast_enabled())
 </code></pre>
 </div>
 <div data-lang="Rust" class="tab">
@@ -282,7 +219,167 @@ accessibility::features.get(&quot;screen_reader&quot;).set(is_screen_reader_enab
 accessibility::features.get(&quot;high_contrast&quot;).set(is_high_contrast_enabled());
 <span class="boring">}
 </span></code></pre></pre>
-<p>There are test APIs available too:</p>
+</div>
+<div data-lang="Javascript" class="tab">
+<pre><code class="language-js">import * as acessibility from &quot;./path/to/generated/files/acessibility.js&quot;;
+
+acessibility.features[&quot;screen_reader&quot;].set(this.isScreenReaderEnabled());
+acessibility.features[&quot;high_contrast&quot;].set(this.isHighContrastEnabled());
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h4><a class="header" href="#recorded-errors" id="recorded-errors">Recorded Errors</a></h4>
+<ul>
+<li><a href="../../user/metrics/error-reporting.html"><code>invalid_label</code></a>:
+<ul>
+<li>If the label contains invalid characters. Data is still recorded to the special label <code>__other__</code>.</li>
+<li>If the label exceeds the maximum number of allowed characters. Data is still recorded to the special label <code>__other__</code>.</li>
+</ul>
+</li>
+</ul>
+<h2><a class="header" href="#testing-api" id="testing-api">Testing API</a></h2>
+<h3><a class="header" href="#testgetvalue" id="testgetvalue"><code>testGetValue</code></a></h3>
+<p>Gets the recorded value for a given label in a labeled boolean metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Accessibility
+
+// Do the booleans have the expected values?
+assertEquals(True, Accessibility.features[&quot;screen_reader&quot;].testGetValue())
+assertEquals(False, Accessibility.features[&quot;high_contrast&quot;].testGetValue())
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Accessibility;
+
+// Do the booleans have the expected values?
+assertEquals(True, Acessibility.INSTANCE.features[&quot;screen_reader&quot;].testGetValue());
+assertEquals(False, Acessibility.INSTANCE.features[&quot;high_contrast&quot;].testGetValue());
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+// Do the booleans have the expected values?
+XCTAssertEqual(true, try Accessibility.features[&quot;screen_reader&quot;].testGetValue())
+XCTAssertEqual(false, try Accessibility.features[&quot;high_contrast&quot;].testGetValue())
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+# Do the booleans have the expected values?
+assert metrics.accessibility.features[&quot;screen_reader&quot;].test_get_value()
+assert not metrics.accessibility.features[&quot;high_contrast&quot;].test_get_value()
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean_metrics;
+
+// Do the booleans have the expected values?
+assert!(accessibility::features.get(&quot;screen_reader&quot;).test_get_value(None).unwrap());
+assert!(!accessibility::features.get(&quot;high_contrast&quot;).test_get_value(None).unwrap());
+<span class="boring">}
+</span></code></pre></pre>
+</div>
+<div data-lang="Javascript" class="tab">
+<pre><code class="language-js">import * as accessibility from &quot;./path/to/generated/files/acessibility.js&quot;;
+
+assert(await accessibility.features[&quot;screen_reader&quot;].testGetValue());
+assert(!(await accessibility.features[&quot;high_contrast&quot;].testGetValue()));
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h3><a class="header" href="#testhasvalue" id="testhasvalue"><code>testHasValue</code></a></h3>
+<p>Whether or not <strong>any</strong> value was recorded for a given label in a labeled boolean metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Accessibility
+
+// Was anything recorded?
+assertTrue(Accessibility.features[&quot;screen_reader&quot;].testHasValue())
+assertTrue(Accessibility.features[&quot;high_contrast&quot;].testHasValue())
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Accessibility;
+
+// Was anything recorded?
+assertEquals(True, Acessibility.INSTANCE.features[&quot;screen_reader&quot;].testHasValue());
+assertEquals(True, Acessibility.INSTANCE.features[&quot;high_contrast&quot;].testHasValue());
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+// Was anything recorded?
+XCTAssert(Accessibility.features[&quot;screen_reader&quot;].testHasValue())
+XCTAssert(Accessibility.features[&quot;high_contrast&quot;].testHasValue())
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+# Was anything recorded?
+assert metrics.accessibility.features[&quot;screen_reader&quot;].test_has_value()
+assert metrics.accessibility.features[&quot;high_contrast&quot;].test_has_value()
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab"></div>
+<div data-lang="Javascript" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h3><a class="header" href="#testgetnumrecordederrors" id="testgetnumrecordederrors"><code>testGetNumRecordedErrors</code></a></h3>
+<p>Gets the number of errors recorded for a given labeled boolean metric in total.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Accessibility
+
+// Did we record any invalid labels?
+assertEquals(0, Accessibility.features.testGetNumRecordedErrors(ErrorType.InvalidLabel))
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Accessibility;
+
+// Did we record any invalid labels?
+assertEquals(0, Acessibility.INSTANCE.features.testGetNumRecordedErrors());
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+// Were there any invalid labels?
+XCTAssertEqual(0, Accessibility.features.testGetNumRecordedErrors(.invalidLabel))
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+# Did we record any invalid labels?
+assert 0 == metrics.accessibility.features.test_get_num_recorded_errors(
+    ErrorType.INVALID_LABEL
+)
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -290,12 +387,6 @@ accessibility::features.get(&quot;high_contrast&quot;).set(is_high_contrast_enab
 
 use glean_metrics;
 
-// Was anything recorded?
-assert!(accessibility::features.get(&quot;screen_reader&quot;).test_get_value(None).is_some());
-assert!(accessibility::features.get(&quot;high_contrast&quot;).test_get_value(None).is_some());
-// Do the booleans have the expected values?
-assert!(accessibility::features.get(&quot;screen_reader&quot;).test_get_value(None).unwrap());
-assert!(!accessibility::features.get(&quot;high_contrast&quot;).test_get_value(None).unwrap());
 // Did we record any invalid labels?
 assert_eq!(
   1,
@@ -306,47 +397,73 @@ assert_eq!(
 <span class="boring">}
 </span></code></pre></pre>
 </div>
+<div data-lang="Javascript" class="tab">
+<pre><code class="language-js">import * as accessibility from &quot;./path/to/generated/files/acessibility.js&quot;;
+
+assert(await accessibility.features.testGetNumRecordedErrors(&quot;invalid_label&quot;));
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
-<h2><a class="header" href="#limits" id="limits">Limits</a></h2>
+<h2><a class="header" href="#metric-parameters" id="metric-parameters">Metric parameters</a></h2>
+<p>Example labeled boolean metric definition:</p>
+<pre><code class="language-YAML">accessibility:
+  features:
+    type: labeled_boolean
+    description: &gt;
+      a11y features enabled on the device.
+    bugs:
+      - https://bugzilla.mozilla.org/000000
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=000000#c3
+    notification_emails:
+      - me@mozilla.com
+    expires: 2020-10-01
+    labels:
+      - screen_reader
+      - high_contrast
+      ...
+</code></pre>
+<h3><a class="header" href="#extra-metric-parameters" id="extra-metric-parameters">Extra metric parameters</a></h3>
+<h4><a class="header" href="#labels" id="labels"><code>labels</code></a></h4>
+<p>Labeled metrics may have an optional <code>labels</code> parameter, containing a list of known labels.
+The labels in this list must match the following requirements:</p>
 <ul>
 <li>
-<p>Labels must conform to the <a href="index.html#label-format">label formatting regular expression</a>.</p>
-</li>
-<li>
-<p>Labels support lowercase alphanumeric characters; they additionally allow for dots (<code>.</code>), underscores (<code>_</code>) and/or hyphens (<code>-</code>).</p>
+<p>Conform to the <a href="index.html#label-format">label formatting regular expression</a>.</p>
 </li>
 <li>
 <p>Each label must have a maximum of 60 bytes, when encoded as UTF-8.</p>
 </li>
 <li>
-<p>If the labels are specified in the <code>metrics.yaml</code>, using any label not listed in that file will be replaced with the special value <code>__other__</code>.</p>
-</li>
-<li>
-<p>The number of labels specified in the <code>metrics.yaml</code> is limited to 100.</p>
-</li>
-<li>
-<p>If the labels aren't specified in the <code>metrics.yaml</code>, only 16 different dynamic labels may be used, after which the special value <code>__other__</code> will be used.</p>
+<p>This list itself is limited to 100 labels.</p>
 </li>
 </ul>
-<h2><a class="header" href="#examples" id="examples">Examples</a></h2>
+<div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
+<h5><a class="header" href="#important" id="important">Important</a></h5>
+<blockquote>
+<p>If the labels are specified in the <code>metrics.yaml</code>, using any label not listed in that file
+will be replaced with the special value <code>__other__</code>.</p>
+<p>If the labels are <strong>not</strong> specified in the <code>metrics.yaml</code>, only 16 different dynamic labels
+may be used, after which the special value <code>__other__</code> will be used.</p>
+</blockquote>
+<p>Removing or changing labels, including their order in the registry file, is permitted. Avoid reusing labels
+that were removed in the past. It is best practice to add documentation about removed labels to the
+description field so that analysts will know of their existence and meaning in historical data.
+Special care must be taken when changing GeckoView metrics sent through the Glean SDK, as the
+index of the labels is used to report Gecko data through the Glean SDK.</p>
+<h2><a class="header" href="#data-questions" id="data-questions">Data questions</a></h2>
 <ul>
-<li>Record a related set of boolean flags.</li>
-</ul>
-<h2><a class="header" href="#recorded-errors" id="recorded-errors">Recorded Errors</a></h2>
-<ul>
-<li>
-<p><code>invalid_label</code>: If the label contains invalid characters. Data is still recorded to the special label <code>__other__</code>.</p>
-</li>
-<li>
-<p><code>invalid_label</code>: If the label exceeds the maximum number of allowed characters. Data is still recorded to the special label <code>__other__</code>.</p>
-</li>
+<li>Which accessibility features are enabled?</li>
 </ul>
 <h2><a class="header" href="#reference" id="reference">Reference</a></h2>
 <ul>
 <li>Kotlin API docs <a href="../../../javadoc/glean/mozilla.telemetry.glean.private/-labeled-metric-type/index.html"><code>LabeledMetricType</code></a>, <a href="../../../javadoc/glean/mozilla.telemetry.glean.private/-boolean-metric-type/index.html"><code>BooleanMetricType</code></a></li>
 <li>Swift API docs: <a href="../../../swift/Classes/LabeledMetricType.html"><code>LabeledMetricType</code></a>, <a href="../../../swift/Classes/BooleanMetricType.html"><code>BooleanMetricType</code></a></li>
 <li>Python API docs: <a href="../../../python/glean/metrics/labeled.html"><code>LabeledMetricBase</code></a>, <a href="../../../python/glean/metrics/boolean.html"><code>BooleanMetricType</code></a></li>
+<li>Rust API docs: <a href="../../../docs/glean/private/struct.LabeledMetric.html"><code>LabeledMetric</code></a>, <a href="../../../docs/glean/private/struct.BooleanMetric.html"><code>BooleanMetricType</code></a></li>
+<li>Javascript API docs: <a href="https://mozilla.github.io/glean.js/classes/core_metrics_types_labeled.default.html"><code>LabeledMetricType</code></a>, <a href="https://mozilla.github.io/glean.js/classes/core_metrics_types_boolean.default.html"><code>BooleanMetricType</code></a></li>
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/metrics/labeled_booleans.md">Edit this file on GitHub.</a></footer>
                     </main>

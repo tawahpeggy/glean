@@ -3454,100 +3454,37 @@ refer to the metrics <a href="reference/metrics/../yaml/index.html">YAML format<
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/metrics/boolean.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#labeled-booleans" id="labeled-booleans">Labeled Booleans</a></h1>
 <p>Labeled booleans are used to record different related boolean flags.</p>
-<h2><a class="header" href="#configuration" id="configuration">Configuration</a></h2>
-<p>For example, you may want to record a set of flags related to accessibility (a11y).</p>
-<pre><code class="language-YAML">accessibility:
-  features:
-    type: labeled_boolean
-    description: &gt;
-      a11y features enabled on the device. ...
-    labels:
-      - screen_reader
-      - high_contrast
-    ...
-</code></pre>
-<blockquote>
-<p><strong>Note:</strong> removing or changing labels, including their order in the registry file, is permitted. Avoid reusing labels that were removed in the past. It is best practice to add documentation about removed labels to the description field so that analysts will know of their existence and meaning in historical data. Special care must be taken when changing GeckoView metrics sent through the Glean SDK, as the index of the labels is used to report Gecko data through the Glean SDK.</p>
-</blockquote>
-<h2><a class="header" href="#api-1" id="api-1">API</a></h2>
-<p>Now you can use the labeled boolean from the application's code:</p>
+<h2><a class="header" href="#recording-api-1" id="recording-api-1">Recording API</a></h2>
+<h3><a class="header" href="#set-1" id="set-1"><code>set</code></a></h3>
+<p>Sets one of the labels in a labeled boolean metric to a specific value.</p>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
 <div data-lang="Kotlin" class="tab">
 <pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Accessibility
+
 Accessibility.features[&quot;screen_reader&quot;].set(isScreenReaderEnabled())
 Accessibility.features[&quot;high_contrast&quot;].set(isHighContrastEnabled())
 </code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Accessibility
-// Was anything recorded?
-assertTrue(Accessibility.features[&quot;screen_reader&quot;].testHasValue())
-assertTrue(Accessibility.features[&quot;high_contrast&quot;].testHasValue())
-// Do the booleans have the expected values?
-assertEquals(True, Accessibility.features[&quot;screen_reader&quot;].testGetValue())
-assertEquals(False, Accessibility.features[&quot;high_contrast&quot;].testGetValue())
-// Did we record any invalid labels?
-assertEquals(0, Accessibility.features.testGetNumRecordedErrors(ErrorType.InvalidLabel))
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Accessibility;
+
+Acessibility.INSTANCE.features[&quot;screen_reader&quot;].set(isScreenReaderEnabled());
+Acessibility.INSTANCE.features[&quot;high_contrast&quot;].set(isHighContrastEnabled());
 </code></pre>
 </div>
 <div data-lang="Swift" class="tab">
 <pre><code class="language-Swift">Accessibility.features[&quot;screen_reader&quot;].set(isScreenReaderEnabled())
 Accessibility.features[&quot;high_contrast&quot;].set(isHighContrastEnabled())
 </code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Swift">@testable import Glean
-
-// Was anything recorded?
-XCTAssert(Accessibility.features[&quot;screen_reader&quot;].testHasValue())
-XCTAssert(Accessibility.features[&quot;high_contrast&quot;].testHasValue())
-// Do the booleans have the expected values?
-XCTAssertEqual(true, try Accessibility.features[&quot;screen_reader&quot;].testGetValue())
-XCTAssertEqual(false, try Accessibility.features[&quot;high_contrast&quot;].testGetValue())
-// Were there any invalid labels?
-XCTAssertEqual(0, Accessibility.features.testGetNumRecordedErrors(.invalidLabel))
-</code></pre>
 </div>
 <div data-lang="Python" class="tab">
 <pre><code class="language-Python">from glean import load_metrics
 metrics = load_metrics(&quot;metrics.yaml&quot;)
 
-metrics.accessibility.features[&quot;screen_reader&quot;].set(
-    is_screen_reader_enabled()
-)
-metrics.accessibility.features[&quot;high_contrast&quot;].set(
-    is_high_contrast_enabled()
-)
-</code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Python"># Was anything recorded?
-assert metrics.accessibility.features[&quot;screen_reader&quot;].test_has_value()
-assert metrics.accessibility.features[&quot;high_contrast&quot;].test_has_value()
-# Do the booleans have the expected values?
-assert metrics.accessibility.features[&quot;screen_reader&quot;].test_get_value()
-assert not metrics.accessibility.features[&quot;high_contrast&quot;].test_get_value()
-# Did we record any invalid labels?
-assert 0 == metrics.accessibility.features.test_get_num_recorded_errors(
-    ErrorType.INVALID_LABEL
-)
-</code></pre>
-</div>
-<div data-lang="C#" class="tab">
-<pre><code class="language-C#">using static Mozilla.YourApplication.GleanMetrics.Accessibility;
-
-Accessibility.features[&quot;screen_reader&quot;].Set(isScreenReaderEnabled());
-Accessibility.features[&quot;high_contrast&quot;].Set(isHighContrastEnabled());
-</code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-C#">using static Mozilla.YourApplication.GleanMetrics.Accessibility;
-// Was anything recorded?
-Assert.True(Accessibility.features[&quot;screen_reader&quot;].TestHasValue());
-Assert.True(Accessibility.features[&quot;high_contrast&quot;].TestHasValue());
-// Do the booleans have the expected values?
-Assert.Equal(true, Accessibility.features[&quot;screen_reader&quot;].TestGetValue());
-Assert.Equal(false, Accessibility.features[&quot;high_contrast&quot;].TestGetValue());
-// Did we record any invalid labels?
-Assert.Equal(0, Accessibility.features.TestGetNumRecordedErrors(ErrorType.InvalidLabel));
+metrics.accessibility.features[&quot;screen_reader&quot;].set(is_screen_reader_enabled())
+metrics.accessibility.features[&quot;high_contrast&quot;].set(is_high_contrast_enabled())
 </code></pre>
 </div>
 <div data-lang="Rust" class="tab">
@@ -3560,7 +3497,167 @@ accessibility::features.get(&quot;screen_reader&quot;).set(is_screen_reader_enab
 accessibility::features.get(&quot;high_contrast&quot;).set(is_high_contrast_enabled());
 <span class="boring">}
 </span></code></pre></pre>
-<p>There are test APIs available too:</p>
+</div>
+<div data-lang="Javascript" class="tab">
+<pre><code class="language-js">import * as acessibility from &quot;./path/to/generated/files/acessibility.js&quot;;
+
+acessibility.features[&quot;screen_reader&quot;].set(this.isScreenReaderEnabled());
+acessibility.features[&quot;high_contrast&quot;].set(this.isHighContrastEnabled());
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h4><a class="header" href="#recorded-errors-1" id="recorded-errors-1">Recorded Errors</a></h4>
+<ul>
+<li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_label</code></a>:
+<ul>
+<li>If the label contains invalid characters. Data is still recorded to the special label <code>__other__</code>.</li>
+<li>If the label exceeds the maximum number of allowed characters. Data is still recorded to the special label <code>__other__</code>.</li>
+</ul>
+</li>
+</ul>
+<h2><a class="header" href="#testing-api-1" id="testing-api-1">Testing API</a></h2>
+<h3><a class="header" href="#testgetvalue-1" id="testgetvalue-1"><code>testGetValue</code></a></h3>
+<p>Gets the recorded value for a given label in a labeled boolean metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Accessibility
+
+// Do the booleans have the expected values?
+assertEquals(True, Accessibility.features[&quot;screen_reader&quot;].testGetValue())
+assertEquals(False, Accessibility.features[&quot;high_contrast&quot;].testGetValue())
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Accessibility;
+
+// Do the booleans have the expected values?
+assertEquals(True, Acessibility.INSTANCE.features[&quot;screen_reader&quot;].testGetValue());
+assertEquals(False, Acessibility.INSTANCE.features[&quot;high_contrast&quot;].testGetValue());
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+// Do the booleans have the expected values?
+XCTAssertEqual(true, try Accessibility.features[&quot;screen_reader&quot;].testGetValue())
+XCTAssertEqual(false, try Accessibility.features[&quot;high_contrast&quot;].testGetValue())
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+# Do the booleans have the expected values?
+assert metrics.accessibility.features[&quot;screen_reader&quot;].test_get_value()
+assert not metrics.accessibility.features[&quot;high_contrast&quot;].test_get_value()
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean_metrics;
+
+// Do the booleans have the expected values?
+assert!(accessibility::features.get(&quot;screen_reader&quot;).test_get_value(None).unwrap());
+assert!(!accessibility::features.get(&quot;high_contrast&quot;).test_get_value(None).unwrap());
+<span class="boring">}
+</span></code></pre></pre>
+</div>
+<div data-lang="Javascript" class="tab">
+<pre><code class="language-js">import * as accessibility from &quot;./path/to/generated/files/acessibility.js&quot;;
+
+assert(await accessibility.features[&quot;screen_reader&quot;].testGetValue());
+assert(!(await accessibility.features[&quot;high_contrast&quot;].testGetValue()));
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h3><a class="header" href="#testhasvalue-1" id="testhasvalue-1"><code>testHasValue</code></a></h3>
+<p>Whether or not <strong>any</strong> value was recorded for a given label in a labeled boolean metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Accessibility
+
+// Was anything recorded?
+assertTrue(Accessibility.features[&quot;screen_reader&quot;].testHasValue())
+assertTrue(Accessibility.features[&quot;high_contrast&quot;].testHasValue())
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Accessibility;
+
+// Was anything recorded?
+assertEquals(True, Acessibility.INSTANCE.features[&quot;screen_reader&quot;].testHasValue());
+assertEquals(True, Acessibility.INSTANCE.features[&quot;high_contrast&quot;].testHasValue());
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+// Was anything recorded?
+XCTAssert(Accessibility.features[&quot;screen_reader&quot;].testHasValue())
+XCTAssert(Accessibility.features[&quot;high_contrast&quot;].testHasValue())
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+# Was anything recorded?
+assert metrics.accessibility.features[&quot;screen_reader&quot;].test_has_value()
+assert metrics.accessibility.features[&quot;high_contrast&quot;].test_has_value()
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab"></div>
+<div data-lang="Javascript" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h3><a class="header" href="#testgetnumrecordederrors" id="testgetnumrecordederrors"><code>testGetNumRecordedErrors</code></a></h3>
+<p>Gets the number of errors recorded for a given labeled boolean metric in total.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Accessibility
+
+// Did we record any invalid labels?
+assertEquals(0, Accessibility.features.testGetNumRecordedErrors(ErrorType.InvalidLabel))
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Accessibility;
+
+// Did we record any invalid labels?
+assertEquals(0, Acessibility.INSTANCE.features.testGetNumRecordedErrors());
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+// Were there any invalid labels?
+XCTAssertEqual(0, Accessibility.features.testGetNumRecordedErrors(.invalidLabel))
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+# Did we record any invalid labels?
+assert 0 == metrics.accessibility.features.test_get_num_recorded_errors(
+    ErrorType.INVALID_LABEL
+)
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -3568,12 +3665,6 @@ accessibility::features.get(&quot;high_contrast&quot;).set(is_high_contrast_enab
 
 use glean_metrics;
 
-// Was anything recorded?
-assert!(accessibility::features.get(&quot;screen_reader&quot;).test_get_value(None).is_some());
-assert!(accessibility::features.get(&quot;high_contrast&quot;).test_get_value(None).is_some());
-// Do the booleans have the expected values?
-assert!(accessibility::features.get(&quot;screen_reader&quot;).test_get_value(None).unwrap());
-assert!(!accessibility::features.get(&quot;high_contrast&quot;).test_get_value(None).unwrap());
 // Did we record any invalid labels?
 assert_eq!(
   1,
@@ -3584,47 +3675,73 @@ assert_eq!(
 <span class="boring">}
 </span></code></pre></pre>
 </div>
+<div data-lang="Javascript" class="tab">
+<pre><code class="language-js">import * as accessibility from &quot;./path/to/generated/files/acessibility.js&quot;;
+
+assert(await accessibility.features.testGetNumRecordedErrors(&quot;invalid_label&quot;));
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
-<h2><a class="header" href="#limits-1" id="limits-1">Limits</a></h2>
+<h2><a class="header" href="#metric-parameters-2" id="metric-parameters-2">Metric parameters</a></h2>
+<p>Example labeled boolean metric definition:</p>
+<pre><code class="language-YAML">accessibility:
+  features:
+    type: labeled_boolean
+    description: &gt;
+      a11y features enabled on the device.
+    bugs:
+      - https://bugzilla.mozilla.org/000000
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=000000#c3
+    notification_emails:
+      - me@mozilla.com
+    expires: 2020-10-01
+    labels:
+      - screen_reader
+      - high_contrast
+      ...
+</code></pre>
+<h3><a class="header" href="#extra-metric-parameters-1" id="extra-metric-parameters-1">Extra metric parameters</a></h3>
+<h4><a class="header" href="#labels" id="labels"><code>labels</code></a></h4>
+<p>Labeled metrics may have an optional <code>labels</code> parameter, containing a list of known labels.
+The labels in this list must match the following requirements:</p>
 <ul>
 <li>
-<p>Labels must conform to the <a href="reference/metrics/index.html#label-format">label formatting regular expression</a>.</p>
-</li>
-<li>
-<p>Labels support lowercase alphanumeric characters; they additionally allow for dots (<code>.</code>), underscores (<code>_</code>) and/or hyphens (<code>-</code>).</p>
+<p>Conform to the <a href="reference/metrics/index.html#label-format">label formatting regular expression</a>.</p>
 </li>
 <li>
 <p>Each label must have a maximum of 60 bytes, when encoded as UTF-8.</p>
 </li>
 <li>
-<p>If the labels are specified in the <code>metrics.yaml</code>, using any label not listed in that file will be replaced with the special value <code>__other__</code>.</p>
-</li>
-<li>
-<p>The number of labels specified in the <code>metrics.yaml</code> is limited to 100.</p>
-</li>
-<li>
-<p>If the labels aren't specified in the <code>metrics.yaml</code>, only 16 different dynamic labels may be used, after which the special value <code>__other__</code> will be used.</p>
+<p>This list itself is limited to 100 labels.</p>
 </li>
 </ul>
-<h2><a class="header" href="#examples" id="examples">Examples</a></h2>
+<div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
+<h5><a class="header" href="#important" id="important">Important</a></h5>
+<blockquote>
+<p>If the labels are specified in the <code>metrics.yaml</code>, using any label not listed in that file
+will be replaced with the special value <code>__other__</code>.</p>
+<p>If the labels are <strong>not</strong> specified in the <code>metrics.yaml</code>, only 16 different dynamic labels
+may be used, after which the special value <code>__other__</code> will be used.</p>
+</blockquote>
+<p>Removing or changing labels, including their order in the registry file, is permitted. Avoid reusing labels
+that were removed in the past. It is best practice to add documentation about removed labels to the
+description field so that analysts will know of their existence and meaning in historical data.
+Special care must be taken when changing GeckoView metrics sent through the Glean SDK, as the
+index of the labels is used to report Gecko data through the Glean SDK.</p>
+<h2><a class="header" href="#data-questions-1" id="data-questions-1">Data questions</a></h2>
 <ul>
-<li>Record a related set of boolean flags.</li>
-</ul>
-<h2><a class="header" href="#recorded-errors-1" id="recorded-errors-1">Recorded Errors</a></h2>
-<ul>
-<li>
-<p><code>invalid_label</code>: If the label contains invalid characters. Data is still recorded to the special label <code>__other__</code>.</p>
-</li>
-<li>
-<p><code>invalid_label</code>: If the label exceeds the maximum number of allowed characters. Data is still recorded to the special label <code>__other__</code>.</p>
-</li>
+<li>Which accessibility features are enabled?</li>
 </ul>
 <h2><a class="header" href="#reference-2" id="reference-2">Reference</a></h2>
 <ul>
 <li>Kotlin API docs <a href="reference/metrics/../../../javadoc/glean/mozilla.telemetry.glean.private/-labeled-metric-type/index.html"><code>LabeledMetricType</code></a>, <a href="reference/metrics/../../../javadoc/glean/mozilla.telemetry.glean.private/-boolean-metric-type/index.html"><code>BooleanMetricType</code></a></li>
 <li>Swift API docs: <a href="reference/metrics/../../../swift/Classes/LabeledMetricType.html"><code>LabeledMetricType</code></a>, <a href="reference/metrics/../../../swift/Classes/BooleanMetricType.html"><code>BooleanMetricType</code></a></li>
 <li>Python API docs: <a href="reference/metrics/../../../python/glean/metrics/labeled.html"><code>LabeledMetricBase</code></a>, <a href="reference/metrics/../../../python/glean/metrics/boolean.html"><code>BooleanMetricType</code></a></li>
+<li>Rust API docs: <a href="reference/metrics/../../../docs/glean/private/struct.LabeledMetric.html"><code>LabeledMetric</code></a>, <a href="reference/metrics/../../../docs/glean/private/struct.BooleanMetric.html"><code>BooleanMetricType</code></a></li>
+<li>Javascript API docs: <a href="https://mozilla.github.io/glean.js/classes/core_metrics_types_labeled.default.html"><code>LabeledMetricType</code></a>, <a href="https://mozilla.github.io/glean.js/classes/core_metrics_types_boolean.default.html"><code>BooleanMetricType</code></a></li>
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/metrics/labeled_booleans.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#counter" id="counter">Counter</a></h1>
 <p>Used to count how often something happens, say how often a certain button was pressed.
@@ -3642,7 +3759,7 @@ Using your own variable for counting and setting the counter yourself could be p
 it will be difficult to reset the value at the exact moment that the value is sent in a ping.
 Instead, just use <code>counter.add</code> to increment the value and let Glean handle resetting the counter.</p>
 </blockquote>
-<h2><a class="header" href="#recording-api-1" id="recording-api-1">Recording API</a></h2>
+<h2><a class="header" href="#recording-api-2" id="recording-api-2">Recording API</a></h2>
 <h3><a class="header" href="#add" id="add"><code>add</code></a></h3>
 <p>Increases the counter by a certain amount. If no amount is passed it defaults to <code>1</code>.</p>
 <div class="tabs">
@@ -3707,13 +3824,13 @@ Glean.controls.refreshPressed.add(5);
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: If the counter is incremented by <code>0</code> or a negative value.</li>
 </ul>
-<h4><a class="header" href="#limits-2" id="limits-2">Limits</a></h4>
+<h4><a class="header" href="#limits-1" id="limits-1">Limits</a></h4>
 <ul>
 <li>Only increments;</li>
 <li>Saturates at the largest value that can be represented as a 32-bit signed integer (<code>2147483647</code>).</li>
 </ul>
-<h2><a class="header" href="#testing-api-1" id="testing-api-1">Testing API</a></h2>
-<h3><a class="header" href="#testgetvalue-1" id="testgetvalue-1"><code>testGetValue</code></a></h3>
+<h2><a class="header" href="#testing-api-2" id="testing-api-2">Testing API</a></h2>
+<h3><a class="header" href="#testgetvalue-2" id="testgetvalue-2"><code>testGetValue</code></a></h3>
 <p>Gets the recorded value for a given counter metric.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -3771,7 +3888,7 @@ ASSERT_EQ(6, mozilla::glean::controls::refresh_pressed.TestGetValue().value());
 </div>
 </div>
 </div>
-<h3><a class="header" href="#testhasvalue-1" id="testhasvalue-1"><code>testHasValue</code></a></h3>
+<h3><a class="header" href="#testhasvalue-2" id="testhasvalue-2"><code>testHasValue</code></a></h3>
 <p>Whether or not <strong>any</strong> value was recorded for a given counter metric.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -3806,7 +3923,7 @@ assert metrics.controls.refresh_pressed.test_has_value()
 <div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
-<h3><a class="header" href="#testgetnumrecordederrors" id="testgetnumrecordederrors"><code>testGetNumRecordedErrors</code></a></h3>
+<h3><a class="header" href="#testgetnumrecordederrors-1" id="testgetnumrecordederrors-1"><code>testGetNumRecordedErrors</code></a></h3>
 <p>Gets number of errors recorded for a given counter metric.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -3863,7 +3980,7 @@ assert_eq!(
 <div data-lang="Firefox Desktop" class="tab" data-bug="1683171"></div>
 </div>
 </div>
-<h2><a class="header" href="#metric-parameters-2" id="metric-parameters-2">Metric parameters</a></h2>
+<h2><a class="header" href="#metric-parameters-3" id="metric-parameters-3">Metric parameters</a></h2>
 <p>Example counter metric definition:</p>
 <pre><code class="language-yaml">controls:
   refresh_pressed:
@@ -3880,9 +3997,9 @@ assert_eq!(
 </code></pre>
 <p>For a full reference on metrics parameters common to all metric types,
 refer to the metrics <a href="reference/metrics/../yaml/index.html">YAML format</a> reference page.</p>
-<h3><a class="header" href="#extra-metric-parameters-1" id="extra-metric-parameters-1">Extra metric parameters</a></h3>
+<h3><a class="header" href="#extra-metric-parameters-2" id="extra-metric-parameters-2">Extra metric parameters</a></h3>
 <p>N/A</p>
-<h2><a class="header" href="#data-questions-1" id="data-questions-1">Data questions</a></h2>
+<h2><a class="header" href="#data-questions-2" id="data-questions-2">Data questions</a></h2>
 <ul>
 <li>How often was a certain button pressed?</li>
 </ul>
@@ -3899,58 +4016,30 @@ Each counter always starts from <code>0</code>.
 Each time you record to a labeled counter, its value is incremented.
 Unless incremented by a positive value, a counter will not be reported in pings,
 that means: the value <code>0</code> is never sent in a ping.</p>
-<h2><a class="header" href="#configuration-1" id="configuration-1">Configuration</a></h2>
-<p>For example, you may want to record a count of different types of crashes for your Android application, such as native code crashes and uncaught exceptions:</p>
-<pre><code class="language-YAML">stability:
-  crash_count:
-    type: labeled_counter
-    description: &gt;
-      Counts the number of crashes that occur in the application. ...
-    labels:
-      - uncaught_exception
-      - native_code_crash
-    ...
-</code></pre>
-<blockquote>
-<p><strong>Note:</strong> removing or changing labels, including their order in the registry file, is permitted. Avoid reusing labels that were removed in the past. It is best practice to add documentation about removed labels to the description field so that analysts will know of their existence and meaning in historical data. Special care must be taken when changing GeckoView metrics sent through the Glean SDK, as the index of the labels is used to report Gecko data through the Glean SDK.</p>
-</blockquote>
-<h2><a class="header" href="#api-2" id="api-2">API</a></h2>
-<p>Now you can use the labeled counter from the application's code:</p>
+<h2><a class="header" href="#recording-api-3" id="recording-api-3">Recording API</a></h2>
+<h3><a class="header" href="#add-1" id="add-1"><code>add</code></a></h3>
+<p>Increases one of the labels in a labeled counter metric by a certain amount.
+If no amount is passed it defaults to <code>1</code>.</p>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
 <div data-lang="Kotlin" class="tab">
 <pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Stability
+
 Stability.crashCount[&quot;uncaught_exception&quot;].add() // Adds 1 to the &quot;uncaught_exception&quot; counter.
 Stability.crashCount[&quot;native_code_crash&quot;].add(3) // Adds 3 to the &quot;native_code_crash&quot; counter.
 </code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Stability
-// Was anything recorded?
-assertTrue(Stability.crashCount[&quot;uncaught_exception&quot;].testHasValue())
-assertTrue(Stability.crashCount[&quot;native_code_crash&quot;].testHasValue())
-// Do the counters have the expected values?
-assertEquals(1, Stability.crashCount[&quot;uncaught_exception&quot;].testGetValue())
-assertEquals(3, Stability.crashCount[&quot;native_code_crash&quot;].testGetValue())
-// Were there any invalid labels?
-assertEquals(0, Stability.crashCount.testGetNumRecordedErrors(ErrorType.InvalidLabel))
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Stability;
+
+Stability.INSTANCE.crashCount[&quot;uncaught_exception&quot;].add(); // Adds 1 to the &quot;uncaught_exception&quot; counter.
+Stability.INSTANCE.crashCount[&quot;native_code_crash&quot;].add(3); // Adds 3 to the &quot;native_code_crash&quot; counter.
 </code></pre>
 </div>
 <div data-lang="Swift" class="tab">
 <pre><code class="language-Swift">Stability.crashCount[&quot;uncaught_exception&quot;].add() // Adds 1 to the &quot;uncaught_exception&quot; counter.
 Stability.crashCount[&quot;native_code_crash&quot;].add(3) // Adds 3 to the &quot;native_code_crash&quot; counter.
-</code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Swift">@testable import Glean
-
-// Was anything recorded?
-XCTAssert(Stability.crashCount[&quot;uncaught_exception&quot;].testHasValue())
-XCTAssert(Stability.crashCount[&quot;native_code_crash&quot;].testHasValue())
-// Do the counters have the expected values?
-XCTAssertEqual(1, try Stability.crashCount[&quot;uncaught_exception&quot;].testGetValue())
-XCTAssertEqual(3, try Stability.crashCount[&quot;native_code_crash&quot;].testGetValue())
-// Were there any invalid labels?
-XCTAssertEqual(0, Stability.crashCount.testGetNumRecordedErrors(.invalidLabel))
 </code></pre>
 </div>
 <div data-lang="Python" class="tab">
@@ -3961,35 +4050,6 @@ metrics = load_metrics(&quot;metrics.yaml&quot;)
 metrics.stability.crash_count[&quot;uncaught_exception&quot;].add()
 # Adds 3 to the &quot;native_code_crash&quot; counter.
 metrics.stability.crash_count[&quot;native_code_crash&quot;].add(3)
-</code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Python"># Was anything recorded?
-assert metrics.stability.crash_count[&quot;uncaught_exception&quot;].test_has_value()
-assert metrics.stability.crash_count[&quot;native_code_crash&quot;].test_has_value()
-# Do the counters have the expected values?
-assert 1 == metrics.stability.crash_count[&quot;uncaught_exception&quot;].test_get_value()
-assert 3 == metrics.stability.crash_count[&quot;native_code_crash&quot;].test_get_value()
-# Were there any invalid labels?
-assert 0 == metrics.stability.crash_count.test_get_num_recorded_errors(
-    ErrorType.INVALID_LABEL
-)
-</code></pre>
-</div>
-<div data-lang="C#" class="tab">
-<pre><code class="language-C#">using static Mozilla.YourApplication.GleanMetrics.Stability;
-Stability.crashCount[&quot;uncaught_exception&quot;].Add(); // Adds 1 to the &quot;uncaught_exception&quot; counter.
-Stability.crashCount[&quot;native_code_crash&quot;].Add(3); // Adds 3 to the &quot;native_code_crash&quot; counter.
-</code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-C#">using static Mozilla.YourApplication.GleanMetrics.Stability;
-// Was anything recorded?
-Assert.True(Stability.crashCount[&quot;uncaught_exception&quot;].TestHasValue());
-Assert.True(Stability.crashCount[&quot;native_code_crash&quot;].TestHasValue());
-// Do the counters have the expected values?
-Assert.Equal(1, Stability.crashCount[&quot;uncaught_exception&quot;].TestGetValue());
-Assert.Equal(3, Stability.crashCount[&quot;native_code_crash&quot;].TestGetValue());
-// Were there any invalid labels?
-Assert.Equal(0, Stability.crashCount.TestGetNumRecordedErrors(ErrorType.InvalidLabel));
 </code></pre>
 </div>
 <div data-lang="Rust" class="tab">
@@ -4002,19 +4062,183 @@ stability::crash_count.get(&quot;uncaught_exception&quot;).add(1); // Adds 1 to 
 stability::crash_count.get(&quot;native_code_crash&quot;).add(3); // Adds 3 to the &quot;native_code_crash&quot; counter.
 <span class="boring">}
 </span></code></pre></pre>
-<p>There are test APIs available too:</p>
+</div>
+<div data-lang="Javascript" class="tab">
+<pre><code class="language-js">import * as stability from &quot;./path/to/generated/files/stability.js&quot;;
+
+// Adds 1 to the &quot;uncaught_exception&quot; counter.
+stability.crashCount[&quot;uncaught_exception&quot;].add();
+// Adds 3 to the &quot;native_code_crash&quot; counter.
+stability.crashCount[&quot;native_code_crash&quot;].add(3);
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h4><a class="header" href="#errors-recorded" id="errors-recorded">Errors recorded</a></h4>
+<ul>
+<li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: If the counter is incremented by <code>0</code> or a negative value.</li>
+<li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_label</code></a>:
+<ul>
+<li>If the label contains invalid characters. Data is still recorded to the special label <code>__other__</code>.</li>
+<li>If the label exceeds the maximum number of allowed characters. Data is still recorded to the special label <code>__other__</code>.</li>
+</ul>
+</li>
+</ul>
+<h4><a class="header" href="#limits-2" id="limits-2">Limits</a></h4>
+<ul>
+<li>Only increments;</li>
+<li>Saturates at the largest value that can be represented as a 32-bit signed integer.</li>
+</ul>
+<h2><a class="header" href="#testing-api-3" id="testing-api-3">Testing API</a></h2>
+<h3><a class="header" href="#testgetvalue-3" id="testgetvalue-3"><code>testGetValue</code></a></h3>
+<p>Gets the recorded value for a given label in a labeled counter metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Stability
+
+// Do the counters have the expected values?
+assertEquals(1, Stability.crashCount[&quot;uncaught_exception&quot;].testGetValue())
+assertEquals(3, Stability.crashCount[&quot;native_code_crash&quot;].testGetValue())
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Stability;
+
+// Do the counters have the expected values?
+assertEquals(1, Stability.INSTANCE.crashCount[&quot;uncaught_exception&quot;].testGetValue());
+assertEquals(3, Stability.INSTANCE.crashCount[&quot;native_code_crash&quot;].testGetValue());
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+// Do the counters have the expected values?
+XCTAssertEqual(1, try Stability.crashCount[&quot;uncaught_exception&quot;].testGetValue())
+XCTAssertEqual(3, try Stability.crashCount[&quot;native_code_crash&quot;].testGetValue())
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+# Do the counters have the expected values?
+assert 1 == metrics.stability.crash_count[&quot;uncaught_exception&quot;].test_get_value()
+assert 3 == metrics.stability.crash_count[&quot;native_code_crash&quot;].test_get_value()
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean_metrics;
+
+// Do the counters have the expected values?
+assert_eq!(1, stability::crash_count.get(&quot;uncaught_exception&quot;).test_get_value().unwrap());
+assert_eq!(3, stability::crash_count.get(&quot;native_code_crash&quot;).test_get_value().unwrap());
+<span class="boring">}
+</span></code></pre></pre>
+</div>
+<div data-lang="Javascript" class="tab">
+<pre><code class="language-js">import * as stability from &quot;./path/to/generated/files/stability.js&quot;;
+
+// Do the counters have the expected values?
+assert.strictEqual(1, await stability.crashCount[&quot;uncaught_exception&quot;].testGetValue());
+assert.strictEqual(3, await stability.crashCount[&quot;native_code_crash&quot;].testGetValue());
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h3><a class="header" href="#testhasvalue-3" id="testhasvalue-3"><code>testHasValue</code></a></h3>
+<p>Whether or not <strong>any</strong> value was recorded for a given label in a labeled counter metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Stability
+
+// Was anything recorded?
+assertTrue(Stability.crashCount[&quot;uncaught_exception&quot;].testHasValue())
+assertTrue(Stability.crashCount[&quot;native_code_crash&quot;].testHasValue())
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Stability;
+
+// Was anything recorded?
+assertTrue(Stability.INSTANCE.crashCount[&quot;uncaught_exception&quot;].testHasValue());
+assertTrue(Stability.INSTANCE.crashCount[&quot;native_code_crash&quot;].testHasValue());
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+// Was anything recorded?
+XCTAssert(Stability.crashCount[&quot;uncaught_exception&quot;].testHasValue())
+XCTAssert(Stability.crashCount[&quot;native_code_crash&quot;].testHasValue())
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+# Was anything recorded?
+assert metrics.stability.crash_count[&quot;uncaught_exception&quot;].test_has_value()
+assert metrics.stability.crash_count[&quot;native_code_crash&quot;].test_has_value()
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab"></div>
+<div data-lang="Javascript" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h3><a class="header" href="#testgetnumrecordederrors-2" id="testgetnumrecordederrors-2"><code>testGetNumRecordedErrors</code></a></h3>
+<p>Gets the number of errors recorded for a given labeled counter metric in total.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Stabilit
+
+// Were there any invalid labels?
+assertEquals(0, Stability.crashCount.testGetNumRecordedErrors(ErrorType.InvalidLabel))
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Stability;
+
+// Were there any invalid labels?
+assertEquals(0, Stability.INSTANCE.crashCount.testGetNumRecordedErrors(ErrorType.InvalidLabel));
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+// Were there any invalid labels?
+XCTAssertEqual(0, Stability.crashCount.testGetNumRecordedErrors(.invalidLabel))
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+# Were there any invalid labels?
+assert 0 == metrics.stability.crash_count.test_get_num_recorded_errors(
+    ErrorType.INVALID_LABEL
+)
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>use glean::ErrorType;
 
 use glean_metrics;
-// Was anything recorded?
-assert!(stability::crash_count.get(&quot;uncaught_exception&quot;).test_get_value().is_some());
-assert!(stability::crash_count.get(&quot;native_code_crash&quot;).test_get_value().is_some());
-// Do the counters have the expected values?
-assert_eq!(1, stability::crash_count.get(&quot;uncaught_exception&quot;).test_get_value().unwrap());
-assert_eq!(3, stability::crash_count.get(&quot;native_code_crash&quot;).test_get_value().unwrap());
+
 // Were there any invalid labels?
 assert_eq!(
   0,
@@ -4025,58 +4249,85 @@ assert_eq!(
 <span class="boring">}
 </span></code></pre></pre>
 </div>
+<div data-lang="Javascript" class="tab">
+<pre><code class="language-js">import * as stability from &quot;./path/to/generated/files/stability.js&quot;;
+
+// Were there any invalid labels?
+assert.strictEqual(0, await stability.crashCount.testGetNumRecordedErrors(&quot;invalid_label&quot;));
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
-<h2><a class="header" href="#limits-3" id="limits-3">Limits</a></h2>
+<h2><a class="header" href="#metric-parameters-4" id="metric-parameters-4">Metric parameters</a></h2>
+<p>Example labeled counter metric definition:</p>
+<pre><code class="language-YAML">accessibility:
+  features:
+    type: labeled_counter
+    description: &gt;
+      Counts the number of crashes that occur in the application.
+    bugs:
+      - https://bugzilla.mozilla.org/000000
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=000000#c3
+    notification_emails:
+      - me@mozilla.com
+    expires: 2020-10-01
+    labels:
+      - uncaught_exception
+      - native_code_crash
+      ...
+</code></pre>
+<h3><a class="header" href="#extra-metric-parameters-3" id="extra-metric-parameters-3">Extra metric parameters</a></h3>
+<h4><a class="header" href="#labels-1" id="labels-1"><code>labels</code></a></h4>
+<p>Labeled metrics may have an optional <code>labels</code> parameter, containing a list of known labels.
+The labels in this list must match the following requirements:</p>
 <ul>
 <li>
-<p>Labels must conform to the <a href="reference/metrics/index.html#label-format">label formatting regular expression</a>.</p>
-</li>
-<li>
-<p>Labels support lowercase alphanumeric characters; they additionally allow for dots (<code>.</code>), underscores (<code>_</code>) and/or hyphens (<code>-</code>).</p>
+<p>Conform to the <a href="reference/metrics/index.html#label-format">label formatting regular expression</a>.</p>
 </li>
 <li>
 <p>Each label must have a maximum of 60 bytes, when encoded as UTF-8.</p>
 </li>
 <li>
-<p>If the labels are specified in the <code>metrics.yaml</code>, using any label not listed in that file will be replaced with the special value <code>__other__</code>.</p>
-</li>
-<li>
-<p>The number of labels specified in the <code>metrics.yaml</code> is limited to 100.</p>
-</li>
-<li>
-<p>If the labels aren't specified in the <code>metrics.yaml</code>, only 16 different dynamic labels may be used, after which the special value <code>__other__</code> will be used.</p>
+<p>This list itself is limited to 100 labels.</p>
 </li>
 </ul>
-<h2><a class="header" href="#examples-1" id="examples-1">Examples</a></h2>
+<div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
+<h5><a class="header" href="#important-1" id="important-1">Important</a></h5>
+<blockquote>
+<p>If the labels are specified in the <code>metrics.yaml</code>, using any label not listed in that file
+will be replaced with the special value <code>__other__</code>.</p>
+<p>If the labels are <strong>not</strong> specified in the <code>metrics.yaml</code>, only 16 different dynamic labels
+may be used, after which the special value <code>__other__</code> will be used.</p>
+</blockquote>
+<p>Removing or changing labels, including their order in the registry file, is permitted. Avoid reusing labels
+that were removed in the past. It is best practice to add documentation about removed labels to the
+description field so that analysts will know of their existence and meaning in historical data.
+Special care must be taken when changing GeckoView metrics sent through the Glean SDK, as the
+index of the labels is used to report Gecko data through the Glean SDK.</p>
+<h2><a class="header" href="#data-questions-3" id="data-questions-3">Data questions</a></h2>
 <ul>
-<li>Record the number of times different kinds of crashes occurred.</li>
-</ul>
-<h2><a class="header" href="#recorded-errors-3" id="recorded-errors-3">Recorded Errors</a></h2>
-<ul>
-<li>
-<p><code>invalid_label</code>: If the label contains invalid characters. Data is still recorded to the special label <code>__other__</code>.</p>
-</li>
-<li>
-<p><code>invalid_label</code>: If the label exceeds the maximum number of allowed characters. Data is still recorded to the special label <code>__other__</code>.</p>
-</li>
+<li>How many times did different types of crashes occur?</li>
 </ul>
 <h2><a class="header" href="#reference-4" id="reference-4">Reference</a></h2>
 <ul>
 <li>Kotlin API docs <a href="reference/metrics/../../../javadoc/glean/mozilla.telemetry.glean.private/-labeled-metric-type/index.html"><code>LabeledMetricType</code></a>, <a href="reference/metrics/../../../javadoc/glean/mozilla.telemetry.glean.private/-counter-metric-type/index.html"><code>CounterMetricType</code></a></li>
 <li>Swift API docs: <a href="reference/metrics/../../../swift/Classes/LabeledMetricType.html"><code>LabeledMetricType</code></a>, <a href="reference/metrics/../../../swift/Classes/CounterMetricType.html"><code>CounterMetricType</code></a></li>
 <li>Python API docs: <a href="reference/metrics/../../../python/glean/metrics/labeled.html"><code>LabeledMetricBase</code></a>, <a href="reference/metrics/../../../python/glean/metrics/counter.html"><code>CounterMetricType</code></a></li>
+<li>Rust API docs: <a href="reference/metrics/../../../docs/glean/private/struct.LabeledMetric.html"><code>LabeledMetric</code></a>, <a href="reference/metrics/../../../docs/glean/private/struct.CounterMetric.html"><code>CounterMetricType</code></a></li>
+<li>Javascript API docs: <a href="https://mozilla.github.io/glean.js/classes/core_metrics_types_labeled.default.html"><code>LabeledMetricType</code></a>, <a href="https://mozilla.github.io/glean.js/classes/core_metrics_types_counter.default.html"><code>CounterMetricType</code></a></li>
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/metrics/labeled_counters.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#strings" id="strings">Strings</a></h1>
 <p>String metrics allow recording a Unicode string value with arbitrary content.</p>
 <p>This metric type does not support recording JSON blobs - please get in contact with the Glean SDK team if you're missing a type.</p>
 <div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
-<h2><a class="header" href="#important" id="important">Important</a></h2>
+<h2><a class="header" href="#important-2" id="important-2">Important</a></h2>
 <blockquote>
 <p>Be careful using arbitrary strings and make sure they can't accidentally contain identifying data (like directory paths or user input).</p>
 </blockquote>
-<h2><a class="header" href="#recording-api-2" id="recording-api-2">Recording API</a></h2>
-<h3><a class="header" href="#set-1" id="set-1"><code>set</code></a></h3>
+<h2><a class="header" href="#recording-api-4" id="recording-api-4">Recording API</a></h2>
+<h3><a class="header" href="#set-2" id="set-2"><code>set</code></a></h3>
 <p>Set a string metric to a specific value.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -4150,16 +4401,16 @@ mozilla::glean::search_default::name.Set(&quot;wikipedia&quot;_ns);
 </div>
 </div>
 </div>
-<h4><a class="header" href="#limits-4" id="limits-4">Limits</a></h4>
+<h4><a class="header" href="#limits-3" id="limits-3">Limits</a></h4>
 <ul>
 <li>Fixed maximum string length: 100. Longer strings are truncated. This is measured in the number of bytes when the string is encoded in UTF-8.</li>
 </ul>
-<h4><a class="header" href="#recorded-errors-4" id="recorded-errors-4">Recorded errors</a></h4>
+<h4><a class="header" href="#recorded-errors-3" id="recorded-errors-3">Recorded errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_overflow</code></a>: if the string is too long. (Prior to Glean 31.5.0, this recorded an <code>invalid_value</code>).</li>
 </ul>
-<h2><a class="header" href="#testing-api-2" id="testing-api-2">Testing API</a></h2>
-<h3><a class="header" href="#testgetvalue-2" id="testgetvalue-2"><code>testGetValue</code></a></h3>
+<h2><a class="header" href="#testing-api-4" id="testing-api-4">Testing API</a></h2>
+<h3><a class="header" href="#testgetvalue-4" id="testgetvalue-4"><code>testGetValue</code></a></h3>
 <p>Get the recorded value for a given string metric.</p>
 <p>The recorded value may have been truncated. See <a href="reference/metrics/string.html#limits">&quot;Limits&quot;</a> section above.</p>
 <div class="tabs">
@@ -4228,7 +4479,7 @@ Assert.equal(&quot;wikipedia&quot;, Glean.searchDefault.name.testGetValue());
 </div>
 </div>
 </div>
-<h3><a class="header" href="#testhasvalue-2" id="testhasvalue-2"><code>testHasValue</code></a></h3>
+<h3><a class="header" href="#testhasvalue-4" id="testhasvalue-4"><code>testHasValue</code></a></h3>
 <p>Whether or not <strong>any</strong> value was recorded for a given string metric.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -4267,7 +4518,7 @@ assert metrics.search_default.name.test_has_value()
 <div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
-<h3><a class="header" href="#testgetnumrecordederrors-1" id="testgetnumrecordederrors-1"><code>testGetNumRecordedErrors</code></a></h3>
+<h3><a class="header" href="#testgetnumrecordederrors-3" id="testgetnumrecordederrors-3"><code>testGetNumRecordedErrors</code></a></h3>
 <p>Gets number of errors recorded for a given string metric.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -4336,7 +4587,7 @@ assert.strictEqual(1, await searchDefault.name.testGetNumRecordedErrors(&quot;in
 <div data-lang="Firefox Desktop" class="tab" data-bug="1683171"></div>
 </div>
 </div>
-<h2><a class="header" href="#metric-parameters-3" id="metric-parameters-3">Metric parameters</a></h2>
+<h2><a class="header" href="#metric-parameters-5" id="metric-parameters-5">Metric parameters</a></h2>
 <p>Example string metric definition:</p>
 <pre><code class="language-yaml">controls:
   refresh_pressed:
@@ -4353,9 +4604,9 @@ assert.strictEqual(1, await searchDefault.name.testGetNumRecordedErrors(&quot;in
 </code></pre>
 <p>For a full reference on metrics parameters common to all metric types,
 refer to the metrics <a href="reference/metrics/../yaml/index.html">YAML format</a> reference page.</p>
-<h3><a class="header" href="#extra-metric-parameters-2" id="extra-metric-parameters-2">Extra metric parameters</a></h3>
+<h3><a class="header" href="#extra-metric-parameters-4" id="extra-metric-parameters-4">Extra metric parameters</a></h3>
 <p>N/A</p>
-<h2><a class="header" href="#data-questions-2" id="data-questions-2">Data questions</a></h2>
+<h2><a class="header" href="#data-questions-4" id="data-questions-4">Data questions</a></h2>
 <ul>
 <li>
 <p>Record the operating system name with a value of <code>&quot;android&quot;</code>.</p>
@@ -4374,19 +4625,9 @@ refer to the metrics <a href="reference/metrics/../yaml/index.html">YAML format<
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/metrics/string.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#labeled-strings" id="labeled-strings">Labeled Strings</a></h1>
 <p>Labeled strings record multiple Unicode string values, each under a different label.</p>
-<h2><a class="header" href="#configuration-2" id="configuration-2">Configuration</a></h2>
-<p>For example to record which kind of error occurred in different stages of a login process - <code>&quot;RuntimeException&quot;</code> in the <code>&quot;server_auth&quot;</code> stage or <code>&quot;invalid_string&quot;</code> in the <code>&quot;enter_email&quot;</code> stage:</p>
-<pre><code class="language-YAML">login:
-  errors_by_stage:
-    type: labeled_string
-    description: Records the error type, if any, that occur in different stages of the login process.
-    labels:
-      - server_auth
-      - enter_email
-    ...
-</code></pre>
-<h2><a class="header" href="#api-3" id="api-3">API</a></h2>
-<p>Now you can use the labeled string from the application's code:</p>
+<h2><a class="header" href="#recording-api-5" id="recording-api-5">Recording API</a></h2>
+<h3><a class="header" href="#set-3" id="set-3"><code>set</code></a></h3>
+<p>Sets one of the labels in a labeled string metric to a specific value.</p>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
@@ -4395,27 +4636,15 @@ refer to the metrics <a href="reference/metrics/../yaml/index.html">YAML format<
 
 Login.errorsByStage[&quot;server_auth&quot;].set(&quot;Invalid password&quot;)
 </code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Login
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Login;
 
-// Was anything recorded?
-assertTrue(Login.errorsByStage[&quot;server_auth&quot;].testHasValue())
-
-// Were there any invalid labels?
-assertEquals(0, Login.errorsByStage.testGetNumRecordedErrors(ErrorType.InvalidLabel))
+Login.INSTANCE.errorsByStage[&quot;server_auth&quot;].set(&quot;Invalid password&quot;);
 </code></pre>
 </div>
 <div data-lang="Swift" class="tab">
 <pre><code class="language-Swift">Login.errorsByStage[&quot;server_auth&quot;].set(&quot;Invalid password&quot;)
-</code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Swift">@testable import Glean
-
-// Was anything recorded?
-XCTAssert(Login.errorsByStage[&quot;server_auth&quot;].testHasValue())
-
-// Were there any invalid labels?
-XCTAssertEqual(0, Login.errorsByStage.testGetNumRecordedErrors(.invalidLabel))
 </code></pre>
 </div>
 <div data-lang="Python" class="tab">
@@ -4424,29 +4653,11 @@ metrics = load_metrics(&quot;metrics.yaml&quot;)
 
 metrics.login.errors_by_stage[&quot;server_auth&quot;].set(&quot;Invalid password&quot;)
 </code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Python"># Was anything recorded?
-assert metrics.login.errors_by_stage[&quot;server_auth&quot;].test_has_value()
-
-# Were there any invalid labels?
-assert 0 == metrics.login.errors_by_stage.test_get_num_recorded_errors(
-    ErrorType.INVALID_LABEL
-)
-</code></pre>
 </div>
-<div data-lang="C#" class="tab">
-<pre><code class="language-C#">using static Mozilla.YourApplication.GleanMetrics.Login;
+<div data-lang="Javascript" class="tab">
+<pre><code class="language-js">import * as login from &quot;./path/to/generated/files/login.js&quot;;
 
-Login.errorsByStage[&quot;server_auth&quot;].Set(&quot;Invalid password&quot;);
-</code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-C#">using static Mozilla.YourApplication.GleanMetrics.Login;
-
-// Was anything recorded?
-Assert.True(Login.errorsByStage[&quot;server_auth&quot;].TestHasValue());
-
-// Were there any invalid labels?
-Assert.Equal(0, Login.errorsByStage.TestGetNumRecordedErrors(ErrorType.InvalidLabel));
+login.errorsByStage[&quot;server_auth&quot;].set(&quot;Invalid password&quot;);
 </code></pre>
 </div>
 <div data-lang="Rust" class="tab">
@@ -4458,16 +4669,163 @@ Assert.Equal(0, Login.errorsByStage.TestGetNumRecordedErrors(ErrorType.InvalidLa
 login::errors_by_stage.get(&quot;server_auth&quot;).set(&quot;Invalid password&quot;);
 <span class="boring">}
 </span></code></pre></pre>
-<p>There are test APIs available too:</p>
+</div>
+</div>
+</div>
+<h4><a class="header" href="#limits-4" id="limits-4">Limits</a></h4>
+<ul>
+<li>Fixed maximum string length: 100. Longer strings are truncated. This is measured in the number of bytes when the string is encoded in UTF-8.</li>
+</ul>
+<h4><a class="header" href="#recorded-errors-4" id="recorded-errors-4">Recorded Errors</a></h4>
+<ul>
+<li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_overflow</code></a>: if the string is too long. (Prior to Glean 31.5.0, this recorded an <code>invalid_value</code>).</li>
+<li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_label</code></a>:
+<ul>
+<li>If the label contains invalid characters. Data is still recorded to the special label <code>__other__</code>.</li>
+<li>If the label exceeds the maximum number of allowed characters. Data is still recorded to the special label <code>__other__</code>.</li>
+</ul>
+</li>
+</ul>
+<h2><a class="header" href="#testing-api-5" id="testing-api-5">Testing API</a></h2>
+<h3><a class="header" href="#testgetvalue-5" id="testgetvalue-5"><code>testGetValue</code></a></h3>
+<p>Gets the recorded value for a given label in a labeled string metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Login
+
+// Does the metric have the expected value?
+assertTrue(Login.errorsByStage[&quot;server_auth&quot;].testGetValue())
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Login;
+
+// Does the metric have the expected value?
+assertTrue(Login.INSTANCE.errorsByStage[&quot;server_auth&quot;].testGetValue());
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+// Does the metric have the expected value?
+XCTAssert(Login.errorsByStage[&quot;server_auth&quot;].testGetValue())
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+# Does the metric have the expected value?
+assert &quot;Invalid password&quot; == metrics.login.errors_by_stage[&quot;server_auth&quot;].testGetValue())
+</code></pre>
+</div>
+<div data-lang="Javascript" class="tab">
+<pre><code class="language-js">import * as login from &quot;./path/to/generated/files/login.js&quot;;
+
+// Does the metric have the expected value?
+assert.strictEqual(&quot;Invalid password&quot;, await metrics.login.errorsByStage[&quot;server_auth&quot;].testGetValue())
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean_metrics;
+
+// Does the metric have the expected value?
+assert!(login::errors_by_stage.get(&quot;server_auth&quot;).test_get_value());
+<span class="boring">}
+</span></code></pre></pre>
+</div>
+</div>
+</div>
+<h3><a class="header" href="#testhasvalue-5" id="testhasvalue-5"><code>testHasValue</code></a></h3>
+<p>Whether or not <strong>any</strong> value was recorded for a given label in a labeled string metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Login
+
+// Was anything recorded?
+assertTrue(Login.errorsByStage[&quot;server_auth&quot;].testHasValue())
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Login;
+
+// Was anything recorded?
+assertTrue(Login.INSTANCE.errorsByStage[&quot;server_auth&quot;].testHasValue());
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+// Was anything recorded?
+XCTAssert(Login.errorsByStage[&quot;server_auth&quot;].testHasValue())
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python"># Was anything recorded?
+assert metrics.login.errors_by_stage[&quot;server_auth&quot;].test_has_value()
+</code></pre>
+</div>
+<div data-lang="Javascript" class="tab"></div>
+<div data-lang="Rust" class="tab"></div>
+</div>
+</div>
+<h3><a class="header" href="#testgetnumrecordederrors-4" id="testgetnumrecordederrors-4"><code>testGetNumRecordedErrors</code></a></h3>
+<p>Gets the number of errors recorded for a given labeled string metric in total.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Login
+
+// Were there any invalid labels?
+assertEquals(0, Login.errorsByStage.testGetNumRecordedErrors(ErrorType.InvalidLabel))
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Login;
+
+// Were there any invalid labels?
+assertEquals(0, Login.INSTANCE.errorsByStage.testGetNumRecordedErrors(ErrorType.InvalidLabel));
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+// Were there any invalid labels?
+XCTAssertEqual(0, Login.errorsByStage.testGetNumRecordedErrors(.invalidLabel))
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+# Were there any invalid labels?
+assert 0 == metrics.login.errors_by_stage.test_get_num_recorded_errors(
+    ErrorType.INVALID_LABEL
+)
+</code></pre>
+</div>
+<div data-lang="Javascript" class="tab">
+<pre><code class="language-js">import * as login from &quot;./path/to/generated/files/login.js&quot;;
+
+// Were there any invalid labels?
+assert.strictEqual(0, await login.errorsByStage[&quot;server_auth&quot;].testGetNumRecordedErrors(&quot;invalid_label&quot;));
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>use glean::ErrorType;
 
 use glean_metrics;
-
-// Was anything recorded?
-assert!(login::errors_by_stage.get(&quot;server_auth&quot;).test_get_value().is_sone());
 
 // Were there any invalid labels?
 assert_eq!(
@@ -4481,52 +4839,70 @@ assert_eq!(
 </div>
 </div>
 </div>
-<h2><a class="header" href="#limits-5" id="limits-5">Limits</a></h2>
+<h2><a class="header" href="#metric-parameters-6" id="metric-parameters-6">Metric parameters</a></h2>
+<p>Example labeled boolean metric definition:</p>
+<pre><code class="language-YAML">login:
+  errors_by_stage:
+    type: labeled_string
+    description: Records the error type, if any, that occur in different stages of the login process.
+    bugs:
+      - https://bugzilla.mozilla.org/000000
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=000000#c3
+    notification_emails:
+      - me@mozilla.com
+    expires: 2020-10-01
+    labels:
+      - server_auth
+      - enter_email
+      ...
+</code></pre>
+<h3><a class="header" href="#extra-metric-parameters-5" id="extra-metric-parameters-5">Extra metric parameters</a></h3>
+<h4><a class="header" href="#labels-2" id="labels-2"><code>labels</code></a></h4>
+<p>Labeled metrics may have an optional <code>labels</code> parameter, containing a list of known labels.
+The labels in this list must match the following requirements:</p>
 <ul>
 <li>
-<p>Labels must conform to the <a href="reference/metrics/index.html#label-format">label formatting regular expression</a>.</p>
-</li>
-<li>
-<p>Labels support lowercase alphanumeric characters; they additionally allow for dots (<code>.</code>), underscores (<code>_</code>) and/or hyphens (<code>-</code>).</p>
+<p>Conform to the <a href="reference/metrics/index.html#label-format">label formatting regular expression</a>.</p>
 </li>
 <li>
 <p>Each label must have a maximum of 60 bytes, when encoded as UTF-8.</p>
 </li>
 <li>
-<p>If the labels are specified in the <code>metrics.yaml</code>, using any label not listed in that file will be replaced with the special value <code>__other__</code>.</p>
-</li>
-<li>
-<p>The number of labels specified in the <code>metrics.yaml</code> is limited to 100.</p>
-</li>
-<li>
-<p>If the labels aren't specified in the <code>metrics.yaml</code>, only 16 different dynamic labels may be used, after which the special value <code>__other__</code> will be used.</p>
+<p>This list itself is limited to 100 labels.</p>
 </li>
 </ul>
-<h2><a class="header" href="#examples-2" id="examples-2">Examples</a></h2>
+<div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
+<h5><a class="header" href="#important-3" id="important-3">Important</a></h5>
+<blockquote>
+<p>If the labels are specified in the <code>metrics.yaml</code>, using any label not listed in that file
+will be replaced with the special value <code>__other__</code>.</p>
+<p>If the labels are <strong>not</strong> specified in the <code>metrics.yaml</code>, only 16 different dynamic labels
+may be used, after which the special value <code>__other__</code> will be used.</p>
+</blockquote>
+<p>Removing or changing labels, including their order in the registry file, is permitted. Avoid reusing labels
+that were removed in the past. It is best practice to add documentation about removed labels to the
+description field so that analysts will know of their existence and meaning in historical data.
+Special care must be taken when changing GeckoView metrics sent through the Glean SDK, as the
+index of the labels is used to report Gecko data through the Glean SDK.</p>
+<h2><a class="header" href="#data-questions-5" id="data-questions-5">Data questions</a></h2>
 <ul>
-<li>What kind of errors occurred at each step in the login process?</li>
-</ul>
-<h2><a class="header" href="#recorded-errors-5" id="recorded-errors-5">Recorded Errors</a></h2>
-<ul>
-<li>
-<p><code>invalid_label</code>: If the label contains invalid characters. Data is still recorded to the special label <code>__other__</code>.</p>
-</li>
-<li>
-<p><code>invalid_label</code>: If the label exceeds the maximum number of allowed characters. Data is still recorded to the special label <code>__other__</code>.</p>
-</li>
+<li>What kinds of errors occurred at each step in the login process?</li>
 </ul>
 <h2><a class="header" href="#reference-6" id="reference-6">Reference</a></h2>
 <ul>
 <li>Kotlin API docs: <a href="reference/metrics/../../../javadoc/glean/mozilla.telemetry.glean.private/-labeled-metric-type/index.html"><code>LabeledMetricType</code></a>, <a href="reference/metrics/../../../javadoc/glean/mozilla.telemetry.glean.private/-string-metric-type/index.html"><code>StringMetricType</code></a></li>
 <li>Swift API docs: <a href="reference/metrics/../../../swift/Classes/LabeledMetricType.html"><code>LabeledMetricType</code></a>, <a href="reference/metrics/../../../swift/Classes/StringMetricType.html"><code>StringMetricType</code></a></li>
 <li>Python API docs: <a href="reference/metrics/../../../python/glean/metrics/labeled.html"><code>LabeledMetricBase</code></a>, <a href="reference/metrics/../../../python/glean/metrics/string.html"><code>StringMetricType</code></a></li>
+<li>Rust API docs: <a href="reference/metrics/../../../docs/glean/private/struct.LabeledMetric.html"><code>LabeledMetric</code></a>, <a href="reference/metrics/../../../docs/glean/private/struct.StringMetric.html"><code>StringMetricType</code></a></li>
+<li>Javascript API docs: <a href="https://mozilla.github.io/glean.js/classes/core_metrics_types_labeled.default.html"><code>LabeledMetricType</code></a>, <a href="https://mozilla.github.io/glean.js/classes/core_metrics_types_string.default.html"><code>StringMetricType</code></a></li>
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/metrics/labeled_strings.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#string-list" id="string-list">String List</a></h1>
 <p>Strings lists are used for recording a list of Unicode string values, such as the names of the enabled search engines.</p>
 <hr />
 <p><em>Note:</em> Be careful using arbitrary strings and make sure they can't accidentally contain identifying data (like directory paths or user input).</p>
 <hr />
-<h2><a class="header" href="#configuration-3" id="configuration-3">Configuration</a></h2>
+<h2><a class="header" href="#configuration" id="configuration">Configuration</a></h2>
 <p>First you need to add an entry for the counter to the <code>metrics.yaml</code> file:</p>
 <pre><code class="language-YAML">search:
   engines:
@@ -4536,7 +4912,7 @@ assert_eq!(
     lifetime: application
     ...
 </code></pre>
-<h2><a class="header" href="#api-4" id="api-4">API</a></h2>
+<h2><a class="header" href="#api-1" id="api-1">API</a></h2>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
@@ -4704,7 +5080,7 @@ Assert.ok(engines.includes(&quot;duck duck go&quot;));
 </div>
 </div>
 </div>
-<h2><a class="header" href="#limits-6" id="limits-6">Limits</a></h2>
+<h2><a class="header" href="#limits-5" id="limits-5">Limits</a></h2>
 <ul>
 <li>
 <p>Fixed maximum string length: 50. Longer strings are truncated. This is measured in the number of bytes when the string is encoded in UTF-8.</p>
@@ -4713,11 +5089,11 @@ Assert.ok(engines.includes(&quot;duck duck go&quot;));
 <p>Fixed maximum list length: 20 items. Additional strings are dropped.</p>
 </li>
 </ul>
-<h2><a class="header" href="#examples-3" id="examples-3">Examples</a></h2>
+<h2><a class="header" href="#examples" id="examples">Examples</a></h2>
 <ul>
 <li>The names of the enabled search engines.</li>
 </ul>
-<h2><a class="header" href="#recorded-errors-6" id="recorded-errors-6">Recorded errors</a></h2>
+<h2><a class="header" href="#recorded-errors-5" id="recorded-errors-5">Recorded errors</a></h2>
 <ul>
 <li>
 <p><code>invalid_overflow</code>: if the string is too long. (Prior to Glean 31.5.0, this recorded an <code>invalid_value</code>).</p>
@@ -4736,7 +5112,7 @@ Assert.ok(engines.includes(&quot;duck duck go&quot;));
 <p>Timespans are used to make a measurement of how much time is spent in a particular task.</p>
 <p>To measure the distribution of multiple timespans, see <a href="reference/metrics/timing_distribution.html">Timing Distributions</a>. To record absolute times, see <a href="reference/metrics/datetime.html">Datetimes</a>.</p>
 <p>It is not recommended to use timespans in multiple threads, since calling <code>start</code> or <code>stop</code> out of order will be recorded as an <code>invalid_state</code> error.</p>
-<h2><a class="header" href="#configuration-4" id="configuration-4">Configuration</a></h2>
+<h2><a class="header" href="#configuration-1" id="configuration-1">Configuration</a></h2>
 <p>Timespans have a required <code>time_unit</code> parameter to specify the smallest unit of resolution that the timespan will record. The allowed values for <code>time_unit</code> are:</p>
 <ul>
 <li><code>nanosecond</code></li>
@@ -4757,7 +5133,7 @@ Assert.ok(engines.includes(&quot;duck duck go&quot;));
     time_unit: millisecond
     ...
 </code></pre>
-<h2><a class="header" href="#api-5" id="api-5">API</a></h2>
+<h2><a class="header" href="#api-2" id="api-2">API</a></h2>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
@@ -5037,7 +5413,7 @@ HistorySync.setRawNanos(duration)
 </div>
 </div>
 </div>
-<h2><a class="header" href="#limits-7" id="limits-7">Limits</a></h2>
+<h2><a class="header" href="#limits-6" id="limits-6">Limits</a></h2>
 <ul>
 <li>
 <p>Timings are recorded in nanoseconds.</p>
@@ -5059,11 +5435,11 @@ The time measurement does not include time spent in sleep.</p>
 </ul>
 </li>
 </ul>
-<h2><a class="header" href="#examples-4" id="examples-4">Examples</a></h2>
+<h2><a class="header" href="#examples-1" id="examples-1">Examples</a></h2>
 <ul>
 <li>How much time is spent rendering the UI?</li>
 </ul>
-<h2><a class="header" href="#recorded-errors-7" id="recorded-errors-7">Recorded errors</a></h2>
+<h2><a class="header" href="#recorded-errors-6" id="recorded-errors-6">Recorded errors</a></h2>
 <ul>
 <li><code>invalid_value</code>
 <ul>
@@ -5108,7 +5484,7 @@ controls the minimum and maximum values that will recorded:</p>
 </ul>
 <p>Overflowing this range is considered an error and is reported through the error reporting mechanism. Underflowing this range is not an error and the value is silently truncated to the minimum value.</p>
 <p>Additionally, when a metric comes from GeckoView (the <code>geckoview_datapoint</code> parameter is present), the <code>time_unit</code> parameter specifies the unit that the samples are in when passed to Glean. Glean will convert all of the incoming samples to nanoseconds internally.</p>
-<h2><a class="header" href="#configuration-5" id="configuration-5">Configuration</a></h2>
+<h2><a class="header" href="#configuration-2" id="configuration-2">Configuration</a></h2>
 <p>If you wanted to create a timing distribution to measure page load times, first you need to add an entry for it to the <code>metrics.yaml</code> file:</p>
 <pre><code class="language-YAML">pages:
   page_load:
@@ -5117,7 +5493,7 @@ controls the minimum and maximum values that will recorded:</p>
       Counts how long each page takes to load
     ...
 </code></pre>
-<h2><a class="header" href="#api-6" id="api-6">API</a></h2>
+<h2><a class="header" href="#api-3" id="api-3">API</a></h2>
 <p>Now you can use the timing distribution from the application's code.
 Starting a timer returns a timer ID that needs to be used to stop or cancel the timer at a later point.
 Multiple intervals can be measured concurrently.
@@ -5372,7 +5748,7 @@ Glean.pages.pageLoad.stopAndAccumulate(timerId);
 </div>
 </div>
 </div>
-<h2><a class="header" href="#limits-8" id="limits-8">Limits</a></h2>
+<h2><a class="header" href="#limits-7" id="limits-7">Limits</a></h2>
 <ul>
 <li>
 <p>Timings are recorded in nanoseconds.</p>
@@ -5405,11 +5781,11 @@ Longer times will be truncated to the maximum value and an error will be recorde
 </ul>
 </li>
 </ul>
-<h2><a class="header" href="#examples-5" id="examples-5">Examples</a></h2>
+<h2><a class="header" href="#examples-2" id="examples-2">Examples</a></h2>
 <ul>
 <li>How long does it take a page to load?</li>
 </ul>
-<h2><a class="header" href="#recorded-errors-8" id="recorded-errors-8">Recorded errors</a></h2>
+<h2><a class="header" href="#recorded-errors-7" id="recorded-errors-7">Recorded errors</a></h2>
 <ul>
 <li><code>invalid_value</code>: If recording a negative timespan.</li>
 <li><code>invalid_state</code>: If a non-existing/stopped timer is stopped again.</li>
@@ -5495,7 +5871,7 @@ That is, the function from a value \( x \) to a bucket index is:</p>
 <blockquote>
 <p><strong>Note</strong> Check out how this bucketing algorithm would behave on the <a href="reference/metrics/memory_distribution.html#simulator">Simulator</a></p>
 </blockquote>
-<h2><a class="header" href="#configuration-6" id="configuration-6">Configuration</a></h2>
+<h2><a class="header" href="#configuration-3" id="configuration-3">Configuration</a></h2>
 <p>Memory distributions have a required <code>memory_unit</code> parameter, which specifies
 the unit the incoming memory size values are recorded in. The units are the
 power-of-2 units, so &quot;kilobyte&quot; is more correctly a &quot;kibibyte&quot;.</p>
@@ -5512,7 +5888,7 @@ power-of-2 units, so &quot;kilobyte&quot; is more correctly a &quot;kibibyte&quo
     memory_unit: kilobyte
     ...
 </code></pre>
-<h2><a class="header" href="#api-7" id="api-7">API</a></h2>
+<h2><a class="header" href="#api-4" id="api-4">API</a></h2>
 <p>Now you can use the memory distribution from the application's code.</p>
 <blockquote>
 <p><strong>Note</strong> The data <em>provided</em> to the <code>accumulate</code> method is in the configured memory unit specified in the <code>metrics.yaml</code> file. The data <em>recorded</em>, on the other hand, is always in <strong>bytes</strong>.</p>
@@ -5697,15 +6073,15 @@ Assert.equal(1, Object.entries(data.values).reduce(([bucket, count], sum) =&gt; 
 </div>
 </div>
 </div>
-<h2><a class="header" href="#limits-9" id="limits-9">Limits</a></h2>
+<h2><a class="header" href="#limits-8" id="limits-8">Limits</a></h2>
 <ul>
 <li>The maximum memory size that can be recorded is 1 Terabyte (2<sup>40</sup> bytes). Larger sizes will be truncated to 1 Terabyte.</li>
 </ul>
-<h2><a class="header" href="#examples-6" id="examples-6">Examples</a></h2>
+<h2><a class="header" href="#examples-3" id="examples-3">Examples</a></h2>
 <ul>
 <li>What is the distribution of the size of heap allocations?</li>
 </ul>
-<h2><a class="header" href="#recorded-errors-9" id="recorded-errors-9">Recorded errors</a></h2>
+<h2><a class="header" href="#recorded-errors-8" id="recorded-errors-8">Recorded errors</a></h2>
 <ul>
 <li><code>invalid_value</code>: If recording a negative memory size.</li>
 <li><code>invalid_value</code>: If recording a size larger than 1TB.</li>
@@ -5785,7 +6161,7 @@ This means that, if the configured memory unit is not <code>byte</code>, the dat
 </blockquote>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/metrics/memory_distribution.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#uuid" id="uuid">UUID</a></h1>
 <p>UUIDs metrics are used to record values that uniquely identify some entity, such as a client id.</p>
-<h2><a class="header" href="#recording-api-3" id="recording-api-3">Recording API</a></h2>
+<h2><a class="header" href="#recording-api-6" id="recording-api-6">Recording API</a></h2>
 <h3><a class="header" href="#generateandset" id="generateandset"><code>generateAndSet</code></a></h3>
 <p>Sets a UUID metric to a generated <a href="https://datatracker.ietf.org/doc/html/rfc4122">UUID</a> value.</p>
 <div class="tabs">
@@ -5850,7 +6226,7 @@ Glean.user.clientId.generateAndSet();
 </div>
 </div>
 </div>
-<h3><a class="header" href="#set-2" id="set-2"><code>set</code></a></h3>
+<h3><a class="header" href="#set-4" id="set-4"><code>set</code></a></h3>
 <p>Sets a UUID metric to a specific value.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -5918,12 +6294,12 @@ Glean.user.clientId.set(uuid);
 </div>
 </div>
 </div>
-<h4><a class="header" href="#recorded-errors-10" id="recorded-errors-10">Recorded errors</a></h4>
+<h4><a class="header" href="#recorded-errors-9" id="recorded-errors-9">Recorded errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: if the value is set to a string that is not a UUID (only applies for dynamically-typed languages, such as Python).</li>
 </ul>
-<h2><a class="header" href="#testing-api-3" id="testing-api-3">Testing API</a></h2>
-<h3><a class="header" href="#testgetvalue-3" id="testgetvalue-3"><code>testGetValue</code></a></h3>
+<h2><a class="header" href="#testing-api-6" id="testing-api-6">Testing API</a></h2>
+<h3><a class="header" href="#testgetvalue-6" id="testgetvalue-6"><code>testGetValue</code></a></h3>
 <p>Gets the recorded value for a given UUID metric.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -5991,7 +6367,7 @@ Assert.equal(Glean.user.clientId.testGetValue(), uuid);
 </div>
 </div>
 </div>
-<h3><a class="header" href="#testhasvalue-3" id="testhasvalue-3"><code>testHasValue</code></a></h3>
+<h3><a class="header" href="#testhasvalue-6" id="testhasvalue-6"><code>testHasValue</code></a></h3>
 <p>Whether or not <strong>any</strong> value was recorded for a given UUID metric.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -6030,7 +6406,7 @@ assert metrics.user.client_id.test_has_value()
 <div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
-<h3><a class="header" href="#testgetnumrecordederrors-2" id="testgetnumrecordederrors-2"><code>testGetNumRecordedErrors</code></a></h3>
+<h3><a class="header" href="#testgetnumrecordederrors-5" id="testgetnumrecordederrors-5"><code>testGetNumRecordedErrors</code></a></h3>
 <p>Gets number of errors recorded for a given UUID metric.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -6093,7 +6469,7 @@ assert.strictEqual(1, await user.clientId.testGetNumRecordedErrors(&quot;invalid
 <div data-lang="Firefox Desktop" class="tab" data-bug="1683171"></div>
 </div>
 </div>
-<h2><a class="header" href="#metric-parameters-4" id="metric-parameters-4">Metric Parameters</a></h2>
+<h2><a class="header" href="#metric-parameters-7" id="metric-parameters-7">Metric Parameters</a></h2>
 <p>You first need to add an entry for it to the <code>metrics.yaml</code> file:</p>
 <pre><code class="language-YAML">user:
   client_id:
@@ -6110,9 +6486,9 @@ assert.strictEqual(1, await user.clientId.testGetNumRecordedErrors(&quot;invalid
 </code></pre>
 <p>For a full reference on metrics parameters common to all metric types,
 refer to the metrics <a href="reference/metrics/../yaml/index.html">YAML format</a> reference page.</p>
-<h3><a class="header" href="#extra-metric-parameters-3" id="extra-metric-parameters-3">Extra metric parameters</a></h3>
+<h3><a class="header" href="#extra-metric-parameters-6" id="extra-metric-parameters-6">Extra metric parameters</a></h3>
 <p>N/A</p>
-<h2><a class="header" href="#data-questions-3" id="data-questions-3">Data questions</a></h2>
+<h2><a class="header" href="#data-questions-6" id="data-questions-6">Data questions</a></h2>
 <ul>
 <li>A unique identifier for the client.</li>
 </ul>
@@ -6130,8 +6506,8 @@ for example the date and time that the application was first run.</p>
 <p>The device's offset from UTC is recorded and sent with the Datetime value in the ping.</p>
 <p>To record a single elapsed time, see <a href="reference/metrics/timespan.html">Timespan</a>.
 To measure the distribution of multiple timespans, see <a href="reference/metrics/timing_distribution.html">Timing Distributions</a>.</p>
-<h2><a class="header" href="#recording-api-4" id="recording-api-4">Recording API</a></h2>
-<h3><a class="header" href="#set-3" id="set-3"><code>set</code></a></h3>
+<h2><a class="header" href="#recording-api-7" id="recording-api-7">Recording API</a></h2>
+<h3><a class="header" href="#set-5" id="set-5"><code>set</code></a></h3>
 <p>Sets a datetime metric to a specific date value. Defaults to now.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -6200,12 +6576,12 @@ Glean.install.firstRun.set(value.getTime() * 1000);
 </div>
 </div>
 </div>
-<h4><a class="header" href="#recorded-errors-11" id="recorded-errors-11">Recorded errors</a></h4>
+<h4><a class="header" href="#recorded-errors-10" id="recorded-errors-10">Recorded errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: Setting the date time to an invalid value.</li>
 </ul>
-<h2><a class="header" href="#testing-api-4" id="testing-api-4">Testing API</a></h2>
-<h3><a class="header" href="#testgetvalue-4" id="testgetvalue-4"><code>testGetValue</code></a></h3>
+<h2><a class="header" href="#testing-api-7" id="testing-api-7">Testing API</a></h2>
+<h3><a class="header" href="#testgetvalue-7" id="testgetvalue-7"><code>testGetValue</code></a></h3>
 <p>Get the recorded value for a given datetime metric as a language-specific Date object.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -6316,7 +6692,7 @@ assert.strictEqual(&quot;2019-03-25-05:00&quot;, await install.firstRun.testGetV
 <div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
-<h3><a class="header" href="#testhasvalue-4" id="testhasvalue-4"><code>testHasValue</code></a></h3>
+<h3><a class="header" href="#testhasvalue-7" id="testhasvalue-7"><code>testHasValue</code></a></h3>
 <p>Whether or not <strong>any</strong> value was recorded for a given datetime metric.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -6351,7 +6727,7 @@ assert metrics.install.first_run.test_has_value()
 <div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
-<h3><a class="header" href="#testgetnumrecordederrors-3" id="testgetnumrecordederrors-3"><code>testGetNumRecordedErrors</code></a></h3>
+<h3><a class="header" href="#testgetnumrecordederrors-6" id="testgetnumrecordederrors-6"><code>testGetNumRecordedErrors</code></a></h3>
 <p>Get number of errors recorded for a given datetime metric.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -6402,7 +6778,7 @@ assert_eq!(0, install::first_run.test_get_num_recorded_errors(
 <div data-lang="Firefox Desktop" class="tab" data-bug="1683171"></div>
 </div>
 </div>
-<h2><a class="header" href="#metric-parameters-5" id="metric-parameters-5">Metric parameters</a></h2>
+<h2><a class="header" href="#metric-parameters-8" id="metric-parameters-8">Metric parameters</a></h2>
 <p>Example datetime metric definition:</p>
 <pre><code class="language-yaml">install:
   first_run:
@@ -6420,7 +6796,7 @@ assert_eq!(0, install::first_run.test_get_num_recorded_errors(
 </code></pre>
 <p>For a full reference on metrics parameters common to all metric types,
 refer to the metrics <a href="reference/metrics/../yaml/index.html">YAML format</a> reference page.</p>
-<h3><a class="header" href="#extra-metric-parameters-4" id="extra-metric-parameters-4">Extra metric parameters</a></h3>
+<h3><a class="header" href="#extra-metric-parameters-7" id="extra-metric-parameters-7">Extra metric parameters</a></h3>
 <h4><a class="header" href="#time_unit" id="time_unit"><code>time_unit</code></a></h4>
 <p>Datetimes have a required <code>time_unit</code> parameter to specify the smallest unit of resolution that the metric will record. The allowed values for <code>time_unit</code> are:</p>
 <ul>
@@ -6433,7 +6809,7 @@ refer to the metrics <a href="reference/metrics/../yaml/index.html">YAML format<
 <li><code>day</code></li>
 </ul>
 <p>Carefully consider the required resolution for recording your metric, and choose the coarsest resolution possible.</p>
-<h2><a class="header" href="#data-questions-4" id="data-questions-4">Data questions</a></h2>
+<h2><a class="header" href="#data-questions-7" id="data-questions-7">Data questions</a></h2>
 <ul>
 <li>When did the user first run the application?</li>
 </ul>
@@ -6454,12 +6830,12 @@ say every time a view was open and from where.</p>
 <li>A set of key-value pairs, where the keys are predefined in the <code>extra_keys</code> metric parameter, and the values are strings.</li>
 </ul>
 <div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
-<h5><a class="header" href="#important-1" id="important-1">Important</a></h5>
+<h5><a class="header" href="#important-4" id="important-4">Important</a></h5>
 <blockquote>
 <p>Events are the most expensive metric type to record, transmit, store and analyze,
 so they should be used sparingly, and only when none of the other metric types are sufficient for answering your question.</p>
 </blockquote>
-<h2><a class="header" href="#recording-api-5" id="recording-api-5">Recording API</a></h2>
+<h2><a class="header" href="#recording-api-8" id="recording-api-8">Recording API</a></h2>
 <h3><a class="header" href="#record" id="record"><code>record</code></a></h3>
 <p>Record a new event, with optional extra values.</p>
 <div class="tabs">
@@ -6528,12 +6904,12 @@ Glean.views.loginOpened.record(extra);
 </div>
 </div>
 </div>
-<h4><a class="header" href="#recorded-errors-12" id="recorded-errors-12">Recorded errors</a></h4>
+<h4><a class="header" href="#recorded-errors-11" id="recorded-errors-11">Recorded errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_overflow</code></a>: if any of the values in the <code>extras</code> object are greater than 50 bytes in length.  (Prior to Glean 31.5.0, this recorded an <code>invalid_value</code>).</li>
 </ul>
-<h2><a class="header" href="#testing-api-5" id="testing-api-5">Testing API</a></h2>
-<h3><a class="header" href="#testgetvalue-5" id="testgetvalue-5"><code>testGetValue</code></a></h3>
+<h2><a class="header" href="#testing-api-8" id="testing-api-8">Testing API</a></h2>
+<h3><a class="header" href="#testgetvalue-8" id="testgetvalue-8"><code>testGetValue</code></a></h3>
 <p>Get the list of recorded events.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -6607,7 +6983,7 @@ Assert.equal(&quot;login_opened&quot;, events[0].name);
 </div>
 </div>
 </div>
-<h3><a class="header" href="#testhasvalue-5" id="testhasvalue-5"><code>testHasValue</code></a></h3>
+<h3><a class="header" href="#testhasvalue-8" id="testhasvalue-8"><code>testHasValue</code></a></h3>
 <p>Whether or not any event was recorded for a given event metric.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -6642,7 +7018,7 @@ assert metrics.views.login_opened.test_has_value()
 <div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
-<h3><a class="header" href="#testgetnumrecordederrors-4" id="testgetnumrecordederrors-4"><code>testGetNumRecordedErrors</code></a></h3>
+<h3><a class="header" href="#testgetnumrecordederrors-7" id="testgetnumrecordederrors-7"><code>testGetNumRecordedErrors</code></a></h3>
 <p>Get the number of errors recorded for a given event metric.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -6691,7 +7067,7 @@ assert_eq!(
 <div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
-<h2><a class="header" href="#metric-parameters-6" id="metric-parameters-6">Metric parameters</a></h2>
+<h2><a class="header" href="#metric-parameters-9" id="metric-parameters-9">Metric parameters</a></h2>
 <p>Example event metric definition:</p>
 <pre><code class="language-yaml">views:
   login_opened:
@@ -6711,7 +7087,7 @@ assert_eq!(
 </code></pre>
 <p>For a full reference on metrics parameters common to all metric types,
 refer to the metrics <a href="reference/metrics/../yaml/index.html">YAML format</a> reference page.</p>
-<h3><a class="header" href="#extra-metric-parameters-5" id="extra-metric-parameters-5">Extra metric parameters</a></h3>
+<h3><a class="header" href="#extra-metric-parameters-8" id="extra-metric-parameters-8">Extra metric parameters</a></h3>
 <h4><a class="header" href="#extra_keys" id="extra_keys"><code>extra_keys</code></a></h4>
 <p>The acceptable keys on the &quot;extra&quot; object sent with events.
 A maximum of 10 extra keys is allowed.</p>
@@ -6719,11 +7095,11 @@ A maximum of 10 extra keys is allowed.</p>
 <ul>
 <li><code>description</code>: <strong>Required.</strong> A description of the key.</li>
 </ul>
-<h2><a class="header" href="#data-questions-5" id="data-questions-5">Data questions</a></h2>
+<h2><a class="header" href="#data-questions-8" id="data-questions-8">Data questions</a></h2>
 <ul>
 <li>When and from where was the login view opened?</li>
 </ul>
-<h2><a class="header" href="#limits-10" id="limits-10">Limits</a></h2>
+<h2><a class="header" href="#limits-9" id="limits-9">Limits</a></h2>
 <ul>
 <li>When 500 events are queued on the client an events ping is immediately sent.</li>
 <li>The <code>extra_keys</code> allows for a maximum of 10 keys.</li>
@@ -6748,7 +7124,7 @@ Otherwise, look at the standard distribution metric types:</p>
 <blockquote>
 <p><strong>Note</strong>: Custom distributions are currently only allowed for GeckoView metrics (the <code>gecko_datapoint</code> parameter is present) and thus have only a Kotlin API.</p>
 </blockquote>
-<h2><a class="header" href="#configuration-7" id="configuration-7">Configuration</a></h2>
+<h2><a class="header" href="#configuration-4" id="configuration-4">Configuration</a></h2>
 <p>Custom distributions have the following required parameters:</p>
 <ul>
 <li><code>range_min</code>: (Integer) The minimum value of the first bucket</li>
@@ -6782,7 +7158,7 @@ Otherwise, look at the standard distribution metric types:</p>
     gecko_datapoint: CHECKERBOARD_PEAK
     ...
 </code></pre>
-<h2><a class="header" href="#api-8" id="api-8">API</a></h2>
+<h2><a class="header" href="#api-5" id="api-5">API</a></h2>
 <p>Now you can use the custom distribution from the application's code.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -6841,7 +7217,7 @@ assert_eq!(
 </div>
 </div>
 </div>
-<h2><a class="header" href="#limits-11" id="limits-11">Limits</a></h2>
+<h2><a class="header" href="#limits-10" id="limits-10">Limits</a></h2>
 <ul>
 <li>
 <p>The maximum value of <code>bucket_count</code> is 100.</p>
@@ -6850,7 +7226,7 @@ assert_eq!(
 <p>Only non-negative values may be recorded.</p>
 </li>
 </ul>
-<h2><a class="header" href="#recorded-errors-13" id="recorded-errors-13">Recorded errors</a></h2>
+<h2><a class="header" href="#recorded-errors-12" id="recorded-errors-12">Recorded errors</a></h2>
 <ul>
 <li><code>invalid_value</code>: If recording a negative value.</li>
 </ul>
@@ -6922,8 +7298,8 @@ For example, the width of the display in pixels.</p>
 prefer using the <a href="reference/metrics/./counter.html">Counter</a> metric type, which has a specific API for counting things
 and also takes care of resetting the count at the correct time.</p>
 </blockquote>
-<h2><a class="header" href="#recording-api-6" id="recording-api-6">Recording API</a></h2>
-<h3><a class="header" href="#set-4" id="set-4"><code>set</code></a></h3>
+<h2><a class="header" href="#recording-api-9" id="recording-api-9">Recording API</a></h2>
+<h3><a class="header" href="#set-6" id="set-6"><code>set</code></a></h3>
 <p>Sets a quantity metric to a specific value.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -6970,16 +7346,16 @@ display::width.set(width);
 <div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
-<h4><a class="header" href="#limits-12" id="limits-12">Limits</a></h4>
+<h4><a class="header" href="#limits-11" id="limits-11">Limits</a></h4>
 <ul>
 <li>Quantities must be non-negative integers or 0.</li>
 </ul>
-<h4><a class="header" href="#recorded-errors-14" id="recorded-errors-14">Recorded errors</a></h4>
+<h4><a class="header" href="#recorded-errors-13" id="recorded-errors-13">Recorded errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: If a negative value is passed in.</li>
 </ul>
-<h2><a class="header" href="#testing-api-6" id="testing-api-6">Testing API</a></h2>
-<h3><a class="header" href="#testgetvalue-6" id="testgetvalue-6"><code>testGetValue</code></a></h3>
+<h2><a class="header" href="#testing-api-9" id="testing-api-9">Testing API</a></h2>
+<h3><a class="header" href="#testgetvalue-9" id="testgetvalue-9"><code>testGetValue</code></a></h3>
 <p>Gets the recorded value for a given quantity metric.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -7035,7 +7411,7 @@ assert!(display::width.test_get_value(None).is_some());
 <div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
-<h3><a class="header" href="#testhasvalue-6" id="testhasvalue-6"><code>testHasValue</code></a></h3>
+<h3><a class="header" href="#testhasvalue-9" id="testhasvalue-9"><code>testHasValue</code></a></h3>
 <p>Whether or not <strong>any</strong> value was recorded for a given quantity metric.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -7075,7 +7451,7 @@ assert metrics.display.width.test_has_value()
 <div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
-<h3><a class="header" href="#testgetnumrecordederrors-5" id="testgetnumrecordederrors-5"><code>testGetNumRecordedErrors</code></a></h3>
+<h3><a class="header" href="#testgetnumrecordederrors-8" id="testgetnumrecordederrors-8"><code>testGetNumRecordedErrors</code></a></h3>
 <p>Gets number of errors recorded for a given quantity metric.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -7140,7 +7516,7 @@ assert_eq!(
 <div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
-<h2><a class="header" href="#metric-parameters-7" id="metric-parameters-7">Metric parameters</a></h2>
+<h2><a class="header" href="#metric-parameters-10" id="metric-parameters-10">Metric parameters</a></h2>
 <p>Example counter metric definition:</p>
 <pre><code class="language-yaml">controls:
   refresh_pressed:
@@ -7158,10 +7534,10 @@ assert_eq!(
 </code></pre>
 <p>For a full reference on metrics parameters common to all metric types,
 refer to the metrics <a href="reference/metrics/../yaml/index.html">YAML format</a> reference page.</p>
-<h3><a class="header" href="#extra-metric-parameters-6" id="extra-metric-parameters-6">Extra metric parameters</a></h3>
+<h3><a class="header" href="#extra-metric-parameters-9" id="extra-metric-parameters-9">Extra metric parameters</a></h3>
 <h4><a class="header" href="#unit" id="unit"><code>unit</code></a></h4>
 <p>Quantities have the required <code>unit</code> parameter, which is a free-form string for documentation purposes.</p>
-<h2><a class="header" href="#data-questions-6" id="data-questions-6">Data questions</a></h2>
+<h2><a class="header" href="#data-questions-9" id="data-questions-9">Data questions</a></h2>
 <ul>
 <li>What is the width of the display, in pixels?</li>
 </ul>
@@ -7187,7 +7563,7 @@ Using your own variable for counting and setting the metric yourself could be pr
 ping scheduling will make it difficult to ensure the metric is at the correct value at the correct time.
 Instead, count to the numerator and denominator as you go.</p>
 </blockquote>
-<h2><a class="header" href="#configuration-8" id="configuration-8">Configuration</a></h2>
+<h2><a class="header" href="#configuration-5" id="configuration-5">Configuration</a></h2>
 <p>Say you're adding a new rate for how often HTTP connections have errors.
 First you need to add an entry for the rate to the <code>metrics.yaml</code> file:</p>
 <pre><code class="language-YAML">network:
@@ -7223,7 +7599,7 @@ then the denominator should be defined as a <code>counter</code> and shared betw
     denominator_metric: network.http_connections
     ...
 </code></pre>
-<h2><a class="header" href="#api-9" id="api-9">API</a></h2>
+<h2><a class="header" href="#api-6" id="api-6">API</a></h2>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
@@ -7286,17 +7662,17 @@ assert_eq!(
 </div>
 </div>
 </div>
-<h2><a class="header" href="#limits-13" id="limits-13">Limits</a></h2>
+<h2><a class="header" href="#limits-12" id="limits-12">Limits</a></h2>
 <ul>
 <li>Numerator and Denominator only increment.</li>
 <li>Numerator and Denominator saturate at the largest value that can be represented as a 32-bit signed integer (<code>2147483647</code>).</li>
 </ul>
-<h2><a class="header" href="#examples-7" id="examples-7">Examples</a></h2>
+<h2><a class="header" href="#examples-4" id="examples-4">Examples</a></h2>
 <ul>
 <li>How often did an HTTP connection error?</li>
 <li>How many documents used a given CSS Property?</li>
 </ul>
-<h2><a class="header" href="#recorded-errors-15" id="recorded-errors-15">Recorded errors</a></h2>
+<h2><a class="header" href="#recorded-errors-14" id="recorded-errors-14">Recorded errors</a></h2>
 <ul>
 <li><code>invalid_value</code>: If either numerator or denominator is incremented by a negative value.</li>
 </ul>
