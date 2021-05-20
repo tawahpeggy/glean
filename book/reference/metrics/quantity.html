@@ -177,21 +177,16 @@
                         <h1><a class="header" href="#quantity" id="quantity">Quantity</a></h1>
 <p>Used to record a single non-negative integer value or 0.
 For example, the width of the display in pixels.</p>
+<div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
+<h2><a class="header" href="#do-not-use-quantity-for-counting" id="do-not-use-quantity-for-counting">Do not use Quantity for counting</a></h2>
 <blockquote>
-<p><strong>IMPORTANT</strong> If you need to <em>count</em> something (e.g. number of tabs open or number of times a button is pressed) prefer using the <a href="./counter.html">Counter</a> metric type, which has a specific API for counting things and also takes care of resetting the count at the correct time.</p>
+<p>If you need to <em>count</em> something (e.g. number of tabs open or number of times a button is pressed)
+prefer using the <a href="./counter.html">Counter</a> metric type, which has a specific API for counting things
+and also takes care of resetting the count at the correct time.</p>
 </blockquote>
-<h2><a class="header" href="#configuration" id="configuration">Configuration</a></h2>
-<p>Say you're adding a new quantity for the width of the display in pixels. First you need to add an entry for the quantity to the <code>metrics.yaml</code> file:</p>
-<pre><code class="language-YAML">display:
-  width:
-    type: quantity
-    description: &gt;
-      The width of the display, in pixels.
-    unit: pixels
-    ...
-</code></pre>
-<p>Note that quantities have a required <code>unit</code> parameter, which is a free-form string for documentation purposes.</p>
-<h2><a class="header" href="#api" id="api">API</a></h2>
+<h2><a class="header" href="#recording-api" id="recording-api">Recording API</a></h2>
+<h3><a class="header" href="#set" id="set"><code>set</code></a></h3>
+<p>Sets a quantity metric to a specific value.</p>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
@@ -200,47 +195,15 @@ For example, the width of the display in pixels.</p>
 
 Display.width.set(width)
 </code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Display
-
-// Was anything recorded?
-assertTrue(Display.width.testHasValue())
-// Does the quantity have the expected value?
-assertEquals(6, Display.width.testGetValue())
-// Did it record an error due to a negative value?
-assertEquals(1, Display.width.testGetNumRecordedErrors(ErrorType.InvalidValue))
-</code></pre>
 </div>
 <div data-lang="Java" class="tab">
 <pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Display;
 
 Display.INSTANCE.width.set(width);
 </code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Display;
-
-// Was anything recorded?
-assertTrue(Display.INSTANCE.width.testHasValue());
-// Does the quantity have the expected value?
-assertEquals(6, Display.INSTANCE.width.testGetValue());
-// Did the quantity record a negative value?
-assertEquals(
-    1, Display.INSTANCE.width.testGetNumRecordedErrors(ErrorType.InvalidValue)
-);
-</code></pre>
 </div>
 <div data-lang="Swift" class="tab">
 <pre><code class="language-Swift">Display.width.set(width)
-</code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Swift">@testable import Glean
-
-// Was anything recorded?
-XCTAssert(Display.width.testHasValue())
-// Does the quantity have the expected value?
-XCTAssertEqual(6, try Display.width.testGetValue())
-// Did the quantity record a negative value?
-XCTAssertEqual(1, Display.width.testGetNumRecordedErrors(.invalidValue))
 </code></pre>
 </div>
 <div data-lang="Python" class="tab">
@@ -249,34 +212,11 @@ metrics = load_metrics(&quot;metrics.yaml&quot;)
 
 metrics.display.width.set(width)
 </code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Python"># Was anything recorded?
-assert metrics.display.width.test_has_value()
-# Does the quantity have the expected value?
-assert 6 == metrics.display.width.test_get_value()
-# Did the quantity record an negative value?
-from glean.testing import ErrorType
-assert 1 == metrics.display.width.test_get_num_recorded_errors(
-    ErrorType.INVALID_VALUE
-)
-</code></pre>
 </div>
-<div data-lang="C#" class="tab">
-<pre><code class="language-C#">using static Mozilla.YourApplication.GleanMetrics.Display;
+<div data-lang="Javascript" class="tab">
+<pre><code class="language-js">import * as display from &quot;./path/to/generated/files/display.js&quot;;
 
-Display.width.Set(width);
-</code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-C#">using static Mozilla.YourApplication.GleanMetrics.Display;
-
-// Was anything recorded?
-Assert.True(Display.width.TestHasValue());
-// Does the counter have the expected value?
-Assert.Equal(6, Display.width.TestGetValue());
-// Did the counter record an negative value?
-Assert.Equal(
-    1, Display.width.TestGetNumRecordedErrors(ErrorType.InvalidValue)
-);
+display.width.set(window.innerHeight);
 </code></pre>
 </div>
 <div data-lang="Rust" class="tab">
@@ -288,7 +228,62 @@ Assert.Equal(
 display::width.set(width);
 <span class="boring">}
 </span></code></pre></pre>
-<p>There are test APIs available too:</p>
+</div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h4><a class="header" href="#limits" id="limits">Limits</a></h4>
+<ul>
+<li>Quantities must be non-negative integers or 0.</li>
+</ul>
+<h4><a class="header" href="#recorded-errors" id="recorded-errors">Recorded errors</a></h4>
+<ul>
+<li><a href="../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: If a negative value is passed in.</li>
+</ul>
+<h2><a class="header" href="#testing-api" id="testing-api">Testing API</a></h2>
+<h3><a class="header" href="#testgetvalue" id="testgetvalue"><code>testGetValue</code></a></h3>
+<p>Gets the recorded value for a given quantity metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Display
+
+// Does the quantity have the expected value?
+assertEquals(6, Display.width.testGetValue())
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Display;
+
+// Was anything recorded?
+assertTrue(Display.INSTANCE.width.testHasValue());
+// Does the quantity have the expected value?
+assertEquals(6, Display.INSTANCE.width.testGetValue());
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+// Does the quantity have the expected value?
+XCTAssertEqual(6, try Display.width.testGetValue())
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+# Does the quantity have the expected value?
+assert 6 == metrics.display.width.test_get_value()
+</code></pre>
+</div>
+<div data-lang="Javascript" class="tab">
+<pre><code class="language-js">import * as display from &quot;./path/to/generated/files/display.js&quot;;
+
+assert.strictEqual(433, await display.width.testGetValue());
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -296,24 +291,141 @@ display::width.set(width);
 
 // Was anything recorded?
 assert!(display::width.test_get_value(None).is_some());
-// Does it have the expected value?
-assert_eq!(width, display::width.test_get_value(None).unwrap());
 <span class="boring">}
 </span></code></pre></pre>
 </div>
+<div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
-<h2><a class="header" href="#limits" id="limits">Limits</a></h2>
-<ul>
-<li>Quantities must be non-negative integers or 0.</li>
-</ul>
-<h2><a class="header" href="#examples" id="examples">Examples</a></h2>
+<h3><a class="header" href="#testhasvalue" id="testhasvalue"><code>testHasValue</code></a></h3>
+<p>Whether or not <strong>any</strong> value was recorded for a given quantity metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Display
+
+// Was anything recorded?
+assertTrue(Display.width.testHasValue())
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Display;
+
+// Was anything recorded?
+assertTrue(Display.INSTANCE.width.testHasValue());
+);
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+// Was anything recorded?
+XCTAssert(Display.width.testHasValue())
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+# Was anything recorded?
+assert metrics.display.width.test_has_value()
+</code></pre>
+</div>
+<div data-lang="Javascript" class="tab"></div>
+<div data-lang="Rust" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h3><a class="header" href="#testgetnumrecordederrors" id="testgetnumrecordederrors"><code>testGetNumRecordedErrors</code></a></h3>
+<p>Gets number of errors recorded for a given quantity metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Display
+
+// Did it record an error due to a negative value?
+assertEquals(1, Display.width.testGetNumRecordedErrors(ErrorType.InvalidValue))
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Display;
+
+// Did the quantity record a negative value?
+assertEquals(
+    1, Display.INSTANCE.width.testGetNumRecordedErrors(ErrorType.InvalidValue)
+);
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+// Did the quantity record a negative value?
+XCTAssertEqual(1, Display.width.testGetNumRecordedErrors(.invalidValue))
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+# Did the quantity record an negative value?
+from glean.testing import ErrorType
+assert 1 == metrics.display.width.test_get_num_recorded_errors(
+    ErrorType.INVALID_VALUE
+)
+</code></pre>
+</div>
+<div data-lang="Javascript" class="tab">
+<pre><code class="language-js">import * as display from &quot;./path/to/generated/files/display.js&quot;;
+
+assert.strictEqual(0, await display.width.testGetNumRecordedErrors(&quot;invalid_value&quot;));
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean::ErrorType;
+
+use glean_metrics;
+
+assert_eq!(
+  1,
+  display::width.test_get_num_recorded_errors(
+    ErrorType::InvalidValue
+  )
+);
+<span class="boring">}
+</span></code></pre></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h2><a class="header" href="#metric-parameters" id="metric-parameters">Metric parameters</a></h2>
+<p>Example counter metric definition:</p>
+<pre><code class="language-yaml">controls:
+  refresh_pressed:
+    type: quantity
+    description: &gt;
+      The width of the display, in pixels.
+    bugs:
+      - https://bugzilla.mozilla.org/000000
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=000000#c3
+    notification_emails:
+      - me@mozilla.com
+    expires: 2020-10-01
+    unit: pixels
+</code></pre>
+<p>For a full reference on metrics parameters common to all metric types,
+refer to the metrics <a href="../yaml/index.html">YAML format</a> reference page.</p>
+<h3><a class="header" href="#extra-metric-parameters" id="extra-metric-parameters">Extra metric parameters</a></h3>
+<h4><a class="header" href="#unit" id="unit"><code>unit</code></a></h4>
+<p>Quantities have the required <code>unit</code> parameter, which is a free-form string for documentation purposes.</p>
+<h2><a class="header" href="#data-questions" id="data-questions">Data questions</a></h2>
 <ul>
 <li>What is the width of the display, in pixels?</li>
-</ul>
-<h2><a class="header" href="#recorded-errors" id="recorded-errors">Recorded errors</a></h2>
-<ul>
-<li><code>invalid_value</code>: If a negative value is passed in.</li>
 </ul>
 <h2><a class="header" href="#reference" id="reference">Reference</a></h2>
 <ul>
@@ -321,6 +433,7 @@ assert_eq!(width, display::width.test_get_value(None).unwrap());
 <li><a href="../../../swift/Classes/QuantityMetricType.html">Swift API docs</a></li>
 <li><a href="../../../python/glean/metrics/quantity.html">Python API docs</a></li>
 <li><a href="../../../docs/glean/private/quantity/struct.QuantityMetric.html">Rust API docs</a></li>
+<li><a href="https://mozilla.github.io/glean.js/classes/core_metrics_types_quantity.default.html#set">Javascript API docs</a></li>
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/metrics/quantity.md">Edit this file on GitHub.</a></footer>
                     </main>
