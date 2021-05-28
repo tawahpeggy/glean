@@ -190,8 +190,77 @@ say every time a view was open and from where.</p>
 so they should be used sparingly, and only when none of the other metric types are sufficient for answering your question.</p>
 </blockquote>
 <h2><a class="header" href="#recording-api" id="recording-api">Recording API</a></h2>
-<h3><a class="header" href="#record" id="record"><code>record</code></a></h3>
+<h3><a class="header" href="#recordobject" id="recordobject"><code>record(object)</code></a></h3>
+<p><em>Added in: <a href="../../appendix/changelog.html">v38.0.0</a></em></p>
+<!-- FIXME: Update anchor when v38.0.0 is actually released -->
+<p>Record a new event, with optional typed extra values.
+This requires <code>type</code> annotations in the definition.
+See <a href="#extra-metric-parameters">Extra metrics parameters</a>.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<p>Note that an <code>enum</code> has been generated for handling the <code>extra_keys</code>: it has the same name as the event metric, with <code>Extra</code> added.</p>
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Views
+
+Views.loginOpened.record(Views.loginOpenedExtra(sourceOfLogin = &quot;toolbar&quot;))
+</code></pre>
+</div>
+<div data-lang="Java" class="tab"></div>
+<div data-lang="Swift" class="tab">
+<p>Note that an <code>enum</code> has been generated for handling the <code>extra_keys</code>: it has the same name as the event metric, with <code>Extra</code> added.</p>
+<pre><code class="language-Swift">Views.loginOpened.record(LoginOpenedExtra(sourceOfLogin: &quot;toolbar&quot;))
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<p>Note that an <code>enum</code> has been generated for handling the <code>extra_keys</code>: it has the same name as the event metric, with <code>_extra</code> added.</p>
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+metrics.views.login_opened.record(LoginOpenedExtra(sourceOfLogin=&quot;toolbar&quot;))
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<p>Note that an <code>enum</code> has been generated for handling the <code>extra_keys</code>: it has the same name as the event metric, with <code>Keys</code> added.</p>
+<pre><code class="language-Rust">use metrics::views::{self, LoginOpenedExtra};
+
+let extra = LoginOpenedExtra { source_of_login: Some(&quot;toolbar&quot;.to_string()) };
+views::login_opened.record(extra);
+</code></pre>
+</div>
+<div data-lang="JavaScript" class="tab">
+<pre><code class="language-js">import * as views from &quot;./path/to/generated/files/views.js&quot;;
+
+views.loginOpened.record({ sourceOfLogin: &quot;toolbar&quot; });
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+using mozilla::glean::views::LoginOpenedExtra;
+LoginOpenedExtra extra = { .source_of_login = Some(&quot;value&quot;_ns) };
+mozilla::glean::views::login_opened.Record(std::move(extra))
+</code></pre>
+<p><strong>JavaScript</strong></p>
+<pre><code class="language-js">const extra = { sourceOfLogin: &quot;toolbar&quot; };
+Glean.views.loginOpened.record(extra);
+</code></pre>
+</div>
+</div>
+</div>
+<h3><a class="header" href="#recordmap-deprecated" id="recordmap-deprecated"><code>record(map)</code> (<em>deprecated</em>)</a></h3>
+<p><em>Deprecated in: <a href="../../appendix/changelog.html">v38.0.0</a></em></p>
+<!-- FIXME: Update anchor when v38.0.0 is actually released -->
 <p>Record a new event, with optional extra values.</p>
+<div class="special-quote special-quote-info fa fa-info-circle"></div>
+<h5><a class="header" href="#deprecation-notice" id="deprecation-notice">Deprecation notice</a></h5>
+<blockquote>
+<p>This API is used in v38.0.0 if an event has no <code>type</code> annotations in the definition.
+See <a href="#extra-metric-parameters">Extra metrics parameters</a>.</p>
+<p>In future versions extra values will default to a <code>string</code> type and this API will be removed.<br />
+In Rust and Firefox Desktop this API is not supported.</p>
+</blockquote>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
@@ -225,37 +294,14 @@ metrics.views.login_opened.record(
 )
 </code></pre>
 </div>
-<div data-lang="Rust" class="tab">
-<p>Note that an <code>enum</code> has been generated for handling the <code>extra_keys</code>: it has the same name as the event metric, with <code>Keys</code> added.</p>
-<pre><code class="language-Rust">use metrics::views;
-
-let mut extra = HashMap::new();
-extra.insert(views::LoginOpenedKeys::SourceOfLogin, &quot;toolbar&quot;.into());
-views::login_opened.record(extra);
-</code></pre>
-</div>
+<div data-lang="Rust" class="tab"></div>
 <div data-lang="JavaScript" class="tab">
 <pre><code class="language-js">import * as views from &quot;./path/to/generated/files/views.js&quot;;
 
 views.loginOpened.record({ sourceOfLogin: &quot;toolbar&quot; });
 </code></pre>
 </div>
-<div data-lang="Firefox Desktop" class="tab">
-<p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
-
-using mozilla::glean::views::LoginOpenedKeys;
-nsTArray&lt;Tuple&lt;LoginOpenedKeys, nsCString&gt;&gt; extra;
-nsCString source = &quot;toolbar&quot;_ns;
-extra.AppendElement(MakeTuple(LoginOpenedKeys::SourceOfLogin, source));
-
-mozilla::glean::views::login_opened.Record(std::move(extra))
-</code></pre>
-<p><strong>JavaScript</strong></p>
-<pre><code class="language-js">const extra = { sourceOfLogin: &quot;toolbar&quot; };
-Glean.views.loginOpened.record(extra);
-</code></pre>
-</div>
+<div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
 <h4><a class="header" href="#recorded-errors" id="recorded-errors">Recorded errors</a></h4>
@@ -438,6 +484,7 @@ assert_eq!(
     extra_keys:
       source_of_login:
         description: The source from which the login view was opened, e.g. &quot;toolbar&quot;.
+        type: string
 </code></pre>
 <p>For a full reference on metrics parameters common to all metric types,
 refer to the metrics <a href="../yaml/index.html">YAML format</a> reference page.</p>
@@ -447,7 +494,13 @@ refer to the metrics <a href="../yaml/index.html">YAML format</a> reference page
 A maximum of 10 extra keys is allowed.</p>
 <p>Each extra key contains additional metadata:</p>
 <ul>
-<li><code>description</code>: <strong>Required.</strong> A description of the key.</li>
+<li>
+<p><code>description</code>: <strong>Required.</strong> A description of the key.</p>
+</li>
+<li>
+<p><code>type</code>: The type of value this extra key can hold. One of <code>string</code>, <code>boolean</code>, <code>quantity</code>. Defaults to <code>string</code>.
+<strong>Note</strong>: If not specified only the legacy API on <code>record</code> is available.</p>
+</li>
 </ul>
 <h2><a class="header" href="#data-questions" id="data-questions">Data questions</a></h2>
 <ul>

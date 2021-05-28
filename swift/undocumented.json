@@ -6,6 +6,13 @@
       "symbol": "Glean",
       "symbol_kind": "source.lang.swift.decl.class",
       "warning": "undocumented"
+    },
+    {
+      "file": "/Users/distiller/project/glean-core/ios/Glean/Metrics/EventMetric.swift",
+      "line": 145,
+      "symbol": "EventMetricType.record(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
     }
   ],
   "source_directory": "/Users/distiller/project"

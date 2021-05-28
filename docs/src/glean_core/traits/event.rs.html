@@ -1,7 +1,7 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `glean-core/src/traits/event.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>event.rs - source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `glean-core/src/traits/event.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>event.rs - source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
 <link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
-<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../glean_core/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
-                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../../glean_core/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" height="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" height="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -125,11 +125,6 @@
 <span id="122">122</span>
 <span id="123">123</span>
 <span id="124">124</span>
-<span id="125">125</span>
-<span id="126">126</span>
-<span id="127">127</span>
-<span id="128">128</span>
-<span id="129">129</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -146,23 +141,22 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// Extra keys need to be pre-defined and map to a string representation.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// For user-defined `EventMetric`s these will be defined as `enums`.</span>
-<span class="doccomment">/// Each variant will correspond to an entry in the `ALLOWED_KEYS` list.</span>
+<span class="doccomment">/// For user-defined `EventMetric`s these will be defined as `struct`s.</span>
+<span class="doccomment">/// Each extra key will be a field in that struct.</span>
+<span class="doccomment">/// Each field will correspond to an entry in the `ALLOWED_KEYS` list.</span>
 <span class="doccomment">/// The Glean SDK requires the keys as strings for submission in pings,</span>
 <span class="doccomment">/// whereas in code we want to provide users a type to work with</span>
 <span class="doccomment">/// (e.g. to avoid typos or misuse of the API).</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">ExtraKeys</span>: <span class="ident">Hash</span> <span class="op">+</span> <span class="ident">Eq</span> <span class="op">+</span> <span class="ident">PartialEq</span> <span class="op">+</span> <span class="ident">Copy</span> {
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">ExtraKeys</span> {
     <span class="doccomment">/// List of allowed extra keys as strings.</span>
     <span class="kw">const</span> <span class="ident">ALLOWED_KEYS</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> [<span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>];
 
-    <span class="doccomment">/// The index of the extra key.</span>
+    <span class="doccomment">/// Convert the event extras into 2 lists:</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// It corresponds to its position in the associated `ALLOWED_KEYS` list.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// *Note*: An index of `-1` indicates an invalid / non-existing extra key.</span>
-    <span class="doccomment">/// Invalid / non-existing extra keys will be recorded as an error.</span>
-    <span class="doccomment">/// This cannot happen for generated code.</span>
-    <span class="kw">fn</span> <span class="ident">index</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">i32</span>;
+    <span class="doccomment">/// 1. The list of extra key indices.</span>
+    <span class="doccomment">///    Unset keys will be skipped.</span>
+    <span class="doccomment">/// 2. The list of extra values.</span>
+    <span class="kw">fn</span> <span class="ident">into_ffi_extra</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">i32</span>, <span class="ident">String</span><span class="op">&gt;</span>;
 }
 
 <span class="doccomment">/// Default of no extra keys for events.</span>
@@ -178,9 +172,8 @@
 <span class="kw">impl</span> <span class="ident">ExtraKeys</span> <span class="kw">for</span> <span class="ident">NoExtraKeys</span> {
     <span class="kw">const</span> <span class="ident">ALLOWED_KEYS</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> [<span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>] <span class="op">=</span> <span class="kw-2">&amp;</span>[];
 
-    <span class="kw">fn</span> <span class="ident">index</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">i32</span> {
-        <span class="comment">// This index will never be used.</span>
-        <span class="op">-</span><span class="number">1</span>
+    <span class="kw">fn</span> <span class="ident">into_ffi_extra</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">i32</span>, <span class="ident">String</span><span class="op">&gt;</span> {
+        <span class="macro">unimplemented</span><span class="macro">!</span>(<span class="string">&quot;non-existing extra keys can&#39;t be turned into a list&quot;</span>)
     }
 }
 
@@ -220,11 +213,8 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Arguments</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// * `extra` - A [`HashMap`] of (key, value) pairs. The key is one of the allowed extra keys as</span>
-    <span class="doccomment">///             set in the metric defintion.</span>
-    <span class="doccomment">///             If a wrong key is used or a value is larger than allowed, an error is reported</span>
-    <span class="doccomment">///             and no event is recorded.</span>
-    <span class="kw">fn</span> <span class="ident">record</span><span class="op">&lt;</span><span class="ident">M</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Extra</span>, <span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">extra</span>: <span class="ident">M</span>);
+    <span class="doccomment">/// * `extra` - (optional) An object for the extra keys.</span>
+    <span class="kw">fn</span> <span class="ident">record</span><span class="op">&lt;</span><span class="ident">M</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Extra</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">extra</span>: <span class="ident">M</span>);
 
     <span class="doccomment">/// **Exported for test purposes.**</span>
     <span class="doccomment">///</span>
@@ -261,5 +251,5 @@
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">i32</span>;
 }
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="glean_core"></div>
-    <script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="glean_core" data-search-js="../../../search-index.js"></div>
+    <script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script></body></html>
