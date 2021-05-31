@@ -403,8 +403,52 @@ For example, the metric defined in the <code>metrics.yaml</code> as:</p>
 <div data-lang="Python" class="tab">
 <p>Category and metric names in the <code>metrics.yaml</code> are in <code>snake_case</code>, which matches the <a href="https://www.python.org/dev/peps/pep-0008/">PEP8</a> standard, so no translation is needed for Python.</p>
 </div>
-<div data-lang="C#" class="tab">
-<p>TODO. To be implemented in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1643568">this bug</a>.</p>
+<div data-lang="Rust" class="tab">
+<p>Given the Rust coding standards defined by
+<a href="https://github.com/rust-lang/rust-clippy">clippy</a>,
+identifiers should all be <code>snake_case</code>.
+This includes category names which in the <code>metrics.yaml</code> are <code>dotted.snake_case</code>:</p>
+<pre><code class="language-YAML">compound.category:
+  metric_name:
+    ...
+</code></pre>
+<p>In Rust this becomes:</p>
+<pre><code class="language-Rust">use fog::metrics;
+
+metrics::compound_category::metric_name...
+</code></pre>
+</div>
+<div data-lang="Javascript" class="tab">
+<p>JavaScript identifiers are customarily <code>camelCase</code>.
+This requires transforming a metric defined in the <code>metrics.yaml</code> as:</p>
+<pre><code class="language-YAML">compound.category:
+  metric_name:
+    ...
+</code></pre>
+<p>to a form useful in JS as:</p>
+<pre><code class="language-js">import * as compoundCategory from &quot;./path/to/generated/files/compoundCategory.js&quot;;
+
+compoundCategory.metricName...
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab">
+<p>Firefox Desktop has
+<a href="https://firefox-source-docs.mozilla.org/code-quality/coding-style/index.html">Coding Style Guidelines</a>
+for both C++ and JS.
+This results in, for a metric defined in the <code>metrics.yaml</code> as:</p>
+<pre><code class="language-YAML">compound.category:
+  metric_name:
+    ...
+</code></pre>
+<p>an identifier that looks like:</p>
+<p><strong>C++</strong></p>
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+mozilla::glean::compound_category::metric_name...
+</code></pre>
+<p><strong>JavaScript</strong></p>
+<pre><code class="language-js">Glean.compoundCategory.metricName...
+</code></pre>
 </div>
 </div>
 </div>
