@@ -236,7 +236,18 @@ stability.crashCount[&quot;uncaught_exception&quot;].add();
 stability.crashCount[&quot;native_code_crash&quot;].add(3);
 </code></pre>
 </div>
-<div data-lang="Firefox Desktop" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+mozilla::glean::stability::crash_count.Get(&quot;uncaught_exception&quot;_ns).Add(1);
+mozilla::glean::stability::crash_count.Get(&quot;native_code_crash&quot;_ns).Add(3);
+</code></pre>
+<p><strong>Javascript</strong></p>
+<pre><code class="language-js">Glean.stability.crashCount.uncaught_exception.add(1);
+Glean.stability.crashCount[&quot;native_code_crash&quot;].add(3);
+</code></pre>
+</div>
 </div>
 </div>
 <h4><a class="header" href="#errors-recorded" id="errors-recorded">Errors recorded</a></h4>
@@ -313,7 +324,22 @@ assert.strictEqual(1, await stability.crashCount[&quot;uncaught_exception&quot;]
 assert.strictEqual(3, await stability.crashCount[&quot;native_code_crash&quot;].testGetValue());
 </code></pre>
 </div>
-<div data-lang="Firefox Desktop" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+ASSERT_EQ(
+    1,
+    mozilla::glean::stability::crash_count.Get(&quot;uncaught_exception&quot;_ns).TestGetValue().ref());
+ASSERT_EQ(
+    3,
+    mozilla::glean::stability::crash_count.Get(&quot;native_code_crash&quot;_ns).TestGetValue().ref());
+</code></pre>
+<p><strong>Javascript</strong></p>
+<pre><code class="language-js">Assert.equal(1, Glean.stability.crashCount[&quot;uncaught_exception&quot;].testGetValue());
+Assert.equal(3, Glean.stability.crashCount.native_code_crash.testGetValue());
+</code></pre>
+</div>
 </div>
 </div>
 <h3><a class="header" href="#testhasvalue" id="testhasvalue"><code>testHasValue</code></a></h3>
@@ -420,7 +446,7 @@ assert_eq!(
 assert.strictEqual(0, await stability.crashCount.testGetNumRecordedErrors(&quot;invalid_label&quot;));
 </code></pre>
 </div>
-<div data-lang="Firefox Desktop" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab" data-bug="1683171"></div>
 </div>
 </div>
 <h2><a class="header" href="#metric-parameters" id="metric-parameters">Metric parameters</a></h2>

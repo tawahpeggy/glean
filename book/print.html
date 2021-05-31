@@ -3555,7 +3555,18 @@ acessibility.features[&quot;screen_reader&quot;].set(this.isScreenReaderEnabled(
 acessibility.features[&quot;high_contrast&quot;].set(this.isHighContrastEnabled());
 </code></pre>
 </div>
-<div data-lang="Firefox Desktop" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+mozilla::glean::accessibility::features.Get(&quot;screen_reader&quot;_ns).Set(true);
+mozilla::glean::accessibility::features.Get(&quot;high_contrast&quot;_ns).Set(false);
+</code></pre>
+<p><strong>Javascript</strong></p>
+<pre><code class="language-js">Glean.accessibility.features.screen_reader.set(true);
+Glean.accessibility.features[&quot;high_contrast&quot;].set(false);
+</code></pre>
+</div>
 </div>
 </div>
 <h4><a class="header" href="#recorded-errors-1" id="recorded-errors-1">Recorded Errors</a></h4>
@@ -3625,7 +3636,22 @@ assert(await accessibility.features[&quot;screen_reader&quot;].testGetValue());
 assert(!(await accessibility.features[&quot;high_contrast&quot;].testGetValue()));
 </code></pre>
 </div>
-<div data-lang="Firefox Desktop" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+ASSERT_EQ(
+    true,
+    mozilla::glean::accessibility::features.Get(&quot;screen_reader&quot;_ns).TestGetValue().ref());
+ASSERT_EQ(
+    false,
+    mozilla::glean::accessibility::features.Get(&quot;high_contrast&quot;_ns).TestGetValue().ref());
+</code></pre>
+<p><strong>Javascript</strong></p>
+<pre><code class="language-js">Assert.equal(true, Glean.accessibility.features[&quot;screen_reader&quot;].testGetValue());
+Assert.equal(false, Glean.accessibility.features.high_contrast.testGetValue());
+</code></pre>
+</div>
 </div>
 </div>
 <h3><a class="header" href="#testhasvalue-1" id="testhasvalue-1"><code>testHasValue</code></a></h3>
@@ -3731,7 +3757,7 @@ assert_eq!(
 assert(await accessibility.features.testGetNumRecordedErrors(&quot;invalid_label&quot;));
 </code></pre>
 </div>
-<div data-lang="Firefox Desktop" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab" data-bug="1683171"></div>
 </div>
 </div>
 <h2><a class="header" href="#metric-parameters-2" id="metric-parameters-2">Metric parameters</a></h2>
@@ -3860,7 +3886,7 @@ controls.refreshPressed.add(5); // Adds 5 to the counter.
 <p><strong>C++</strong></p>
 <pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
 
-mozila::glean::controls::refresh_pressed.Add(1);
+mozilla::glean::controls::refresh_pressed.Add(1);
 mozilla::glean::controls::refresh_pressed.Add(5);
 </code></pre>
 <p><strong>Javascript</strong></p>
@@ -4128,7 +4154,18 @@ stability.crashCount[&quot;uncaught_exception&quot;].add();
 stability.crashCount[&quot;native_code_crash&quot;].add(3);
 </code></pre>
 </div>
-<div data-lang="Firefox Desktop" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+mozilla::glean::stability::crash_count.Get(&quot;uncaught_exception&quot;_ns).Add(1);
+mozilla::glean::stability::crash_count.Get(&quot;native_code_crash&quot;_ns).Add(3);
+</code></pre>
+<p><strong>Javascript</strong></p>
+<pre><code class="language-js">Glean.stability.crashCount.uncaught_exception.add(1);
+Glean.stability.crashCount[&quot;native_code_crash&quot;].add(3);
+</code></pre>
+</div>
 </div>
 </div>
 <h4><a class="header" href="#errors-recorded" id="errors-recorded">Errors recorded</a></h4>
@@ -4205,7 +4242,22 @@ assert.strictEqual(1, await stability.crashCount[&quot;uncaught_exception&quot;]
 assert.strictEqual(3, await stability.crashCount[&quot;native_code_crash&quot;].testGetValue());
 </code></pre>
 </div>
-<div data-lang="Firefox Desktop" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+ASSERT_EQ(
+    1,
+    mozilla::glean::stability::crash_count.Get(&quot;uncaught_exception&quot;_ns).TestGetValue().ref());
+ASSERT_EQ(
+    3,
+    mozilla::glean::stability::crash_count.Get(&quot;native_code_crash&quot;_ns).TestGetValue().ref());
+</code></pre>
+<p><strong>Javascript</strong></p>
+<pre><code class="language-js">Assert.equal(1, Glean.stability.crashCount[&quot;uncaught_exception&quot;].testGetValue());
+Assert.equal(3, Glean.stability.crashCount.native_code_crash.testGetValue());
+</code></pre>
+</div>
 </div>
 </div>
 <h3><a class="header" href="#testhasvalue-3" id="testhasvalue-3"><code>testHasValue</code></a></h3>
@@ -4312,7 +4364,7 @@ assert_eq!(
 assert.strictEqual(0, await stability.crashCount.testGetNumRecordedErrors(&quot;invalid_label&quot;));
 </code></pre>
 </div>
-<div data-lang="Firefox Desktop" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab" data-bug="1683171"></div>
 </div>
 </div>
 <h2><a class="header" href="#metric-parameters-4" id="metric-parameters-4">Metric parameters</a></h2>
@@ -4710,12 +4762,6 @@ metrics = load_metrics(&quot;metrics.yaml&quot;)
 metrics.login.errors_by_stage[&quot;server_auth&quot;].set(&quot;Invalid password&quot;)
 </code></pre>
 </div>
-<div data-lang="Javascript" class="tab">
-<pre><code class="language-js">import * as login from &quot;./path/to/generated/files/login.js&quot;;
-
-login.errorsByStage[&quot;server_auth&quot;].set(&quot;Invalid password&quot;);
-</code></pre>
-</div>
 <div data-lang="Rust" class="tab">
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
@@ -4725,6 +4771,22 @@ login.errorsByStage[&quot;server_auth&quot;].set(&quot;Invalid password&quot;);
 login::errors_by_stage.get(&quot;server_auth&quot;).set(&quot;Invalid password&quot;);
 <span class="boring">}
 </span></code></pre></pre>
+</div>
+<div data-lang="Javascript" class="tab">
+<pre><code class="language-js">import * as login from &quot;./path/to/generated/files/login.js&quot;;
+
+login.errorsByStage[&quot;server_auth&quot;].set(&quot;Invalid password&quot;);
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+mozilla::glean::login::errors_by_stage.Get(&quot;server_auth&quot;_ns).Set(&quot;Invalid password&quot;_ns);
+</code></pre>
+<p><strong>Javascript</strong></p>
+<pre><code class="language-js">Glean.login.errorsByStage[&quot;server_auth&quot;].set(&quot;Invalid password&quot;);
+</code></pre>
 </div>
 </div>
 </div>
@@ -4777,13 +4839,6 @@ metrics = load_metrics(&quot;metrics.yaml&quot;)
 assert &quot;Invalid password&quot; == metrics.login.errors_by_stage[&quot;server_auth&quot;].testGetValue())
 </code></pre>
 </div>
-<div data-lang="Javascript" class="tab">
-<pre><code class="language-js">import * as login from &quot;./path/to/generated/files/login.js&quot;;
-
-// Does the metric have the expected value?
-assert.strictEqual(&quot;Invalid password&quot;, await metrics.login.errorsByStage[&quot;server_auth&quot;].testGetValue())
-</code></pre>
-</div>
 <div data-lang="Rust" class="tab">
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
@@ -4794,6 +4849,27 @@ assert.strictEqual(&quot;Invalid password&quot;, await metrics.login.errorsBySta
 assert!(login::errors_by_stage.get(&quot;server_auth&quot;).test_get_value());
 <span class="boring">}
 </span></code></pre></pre>
+</div>
+<div data-lang="Javascript" class="tab">
+<pre><code class="language-js">import * as login from &quot;./path/to/generated/files/login.js&quot;;
+
+// Does the metric have the expected value?
+assert.strictEqual(&quot;Invalid password&quot;, await metrics.login.errorsByStage[&quot;server_auth&quot;].testGetValue())
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+ASSERT_STREQ(&quot;Invalid password&quot;,
+             mozilla::glean::login::errors_by_stage.Get(&quot;server_auth&quot;_ns)
+                .TestGetValue()
+                .ref()
+                .get());
+</code></pre>
+<p><strong>Javascript</strong></p>
+<pre><code class="language-js">Assert.equal(&quot;Invalid password&quot;, Glean.login.errorsByStage[&quot;server_auth&quot;].testGetValue());
+</code></pre>
 </div>
 </div>
 </div>
@@ -4828,8 +4904,9 @@ XCTAssert(Login.errorsByStage[&quot;server_auth&quot;].testHasValue())
 assert metrics.login.errors_by_stage[&quot;server_auth&quot;].test_has_value()
 </code></pre>
 </div>
-<div data-lang="Javascript" class="tab"></div>
 <div data-lang="Rust" class="tab"></div>
+<div data-lang="Javascript" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
 <h3><a class="header" href="#testgetnumrecordederrors-4" id="testgetnumrecordederrors-4"><code>testGetNumRecordedErrors</code></a></h3>
@@ -4868,13 +4945,6 @@ assert 0 == metrics.login.errors_by_stage.test_get_num_recorded_errors(
 )
 </code></pre>
 </div>
-<div data-lang="Javascript" class="tab">
-<pre><code class="language-js">import * as login from &quot;./path/to/generated/files/login.js&quot;;
-
-// Were there any invalid labels?
-assert.strictEqual(0, await login.errorsByStage[&quot;server_auth&quot;].testGetNumRecordedErrors(&quot;invalid_label&quot;));
-</code></pre>
-</div>
 <div data-lang="Rust" class="tab">
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
@@ -4893,6 +4963,14 @@ assert_eq!(
 <span class="boring">}
 </span></code></pre></pre>
 </div>
+<div data-lang="Javascript" class="tab">
+<pre><code class="language-js">import * as login from &quot;./path/to/generated/files/login.js&quot;;
+
+// Were there any invalid labels?
+assert.strictEqual(0, await login.errorsByStage[&quot;server_auth&quot;].testGetNumRecordedErrors(&quot;invalid_label&quot;));
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" calss="tab" data-bug="1683171"></div>
 </div>
 </div>
 <h2><a class="header" href="#metric-parameters-6" id="metric-parameters-6">Metric parameters</a></h2>
@@ -7751,7 +7829,16 @@ display::width.set(width);
 <span class="boring">}
 </span></code></pre></pre>
 </div>
-<div data-lang="Firefox Desktop" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+mozilla::glean::display::width.Set(innerHeight);
+</code></pre>
+<p><strong>Javascript</strong></p>
+<pre><code class="language-js">Glean.display.width.set(innerHeight);
+</code></pre>
+</div>
 </div>
 </div>
 <h4><a class="header" href="#limits-11" id="limits-11">Limits</a></h4>
@@ -7816,7 +7903,16 @@ assert!(display::width.test_get_value(None).is_some());
 <span class="boring">}
 </span></code></pre></pre>
 </div>
-<div data-lang="Firefox Desktop" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+ASSERT_EQ(433, mozilla::glean::display::width.TestGetValue().value());
+</code></pre>
+<p><strong>Javascript</strong></p>
+<pre><code class="language-js">Assert.equal(433, Glean.display.width.testGetValue());
+</code></pre>
+</div>
 </div>
 </div>
 <h3><a class="header" href="#testhasvalue-10" id="testhasvalue-10"><code>testHasValue</code></a></h3>
@@ -7921,7 +8017,7 @@ assert_eq!(
 <span class="boring">}
 </span></code></pre></pre>
 </div>
-<div data-lang="Firefox Desktop" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab" data-bug="1683171"></div>
 </div>
 </div>
 <h2><a class="header" href="#metric-parameters-11" id="metric-parameters-11">Metric parameters</a></h2>

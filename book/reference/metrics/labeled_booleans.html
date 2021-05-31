@@ -227,7 +227,18 @@ acessibility.features[&quot;screen_reader&quot;].set(this.isScreenReaderEnabled(
 acessibility.features[&quot;high_contrast&quot;].set(this.isHighContrastEnabled());
 </code></pre>
 </div>
-<div data-lang="Firefox Desktop" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+mozilla::glean::accessibility::features.Get(&quot;screen_reader&quot;_ns).Set(true);
+mozilla::glean::accessibility::features.Get(&quot;high_contrast&quot;_ns).Set(false);
+</code></pre>
+<p><strong>Javascript</strong></p>
+<pre><code class="language-js">Glean.accessibility.features.screen_reader.set(true);
+Glean.accessibility.features[&quot;high_contrast&quot;].set(false);
+</code></pre>
+</div>
 </div>
 </div>
 <h4><a class="header" href="#recorded-errors" id="recorded-errors">Recorded Errors</a></h4>
@@ -297,7 +308,22 @@ assert(await accessibility.features[&quot;screen_reader&quot;].testGetValue());
 assert(!(await accessibility.features[&quot;high_contrast&quot;].testGetValue()));
 </code></pre>
 </div>
-<div data-lang="Firefox Desktop" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+ASSERT_EQ(
+    true,
+    mozilla::glean::accessibility::features.Get(&quot;screen_reader&quot;_ns).TestGetValue().ref());
+ASSERT_EQ(
+    false,
+    mozilla::glean::accessibility::features.Get(&quot;high_contrast&quot;_ns).TestGetValue().ref());
+</code></pre>
+<p><strong>Javascript</strong></p>
+<pre><code class="language-js">Assert.equal(true, Glean.accessibility.features[&quot;screen_reader&quot;].testGetValue());
+Assert.equal(false, Glean.accessibility.features.high_contrast.testGetValue());
+</code></pre>
+</div>
 </div>
 </div>
 <h3><a class="header" href="#testhasvalue" id="testhasvalue"><code>testHasValue</code></a></h3>
@@ -403,7 +429,7 @@ assert_eq!(
 assert(await accessibility.features.testGetNumRecordedErrors(&quot;invalid_label&quot;));
 </code></pre>
 </div>
-<div data-lang="Firefox Desktop" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab" data-bug="1683171"></div>
 </div>
 </div>
 <h2><a class="header" href="#metric-parameters" id="metric-parameters">Metric parameters</a></h2>

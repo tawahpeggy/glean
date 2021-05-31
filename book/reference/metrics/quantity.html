@@ -229,7 +229,16 @@ display::width.set(width);
 <span class="boring">}
 </span></code></pre></pre>
 </div>
-<div data-lang="Firefox Desktop" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+mozilla::glean::display::width.Set(innerHeight);
+</code></pre>
+<p><strong>Javascript</strong></p>
+<pre><code class="language-js">Glean.display.width.set(innerHeight);
+</code></pre>
+</div>
 </div>
 </div>
 <h4><a class="header" href="#limits" id="limits">Limits</a></h4>
@@ -294,7 +303,16 @@ assert!(display::width.test_get_value(None).is_some());
 <span class="boring">}
 </span></code></pre></pre>
 </div>
-<div data-lang="Firefox Desktop" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+ASSERT_EQ(433, mozilla::glean::display::width.TestGetValue().value());
+</code></pre>
+<p><strong>Javascript</strong></p>
+<pre><code class="language-js">Assert.equal(433, Glean.display.width.testGetValue());
+</code></pre>
+</div>
 </div>
 </div>
 <h3><a class="header" href="#testhasvalue" id="testhasvalue"><code>testHasValue</code></a></h3>
@@ -399,7 +417,7 @@ assert_eq!(
 <span class="boring">}
 </span></code></pre></pre>
 </div>
-<div data-lang="Firefox Desktop" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab" data-bug="1683171"></div>
 </div>
 </div>
 <h2><a class="header" href="#metric-parameters" id="metric-parameters">Metric parameters</a></h2>
