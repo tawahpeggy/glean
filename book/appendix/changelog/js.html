@@ -1,0 +1,462 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Glean.js - Glean - Cross-platform Telemetry library</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="../../favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="../../favicon.png">
+        
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+        <link rel="stylesheet" href="../../../shared/glean.css">
+        
+        <link rel="stylesheet" href="../../../shared/mermaid.css">
+        
+
+        
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item affix "><a href="../../index.html">Glean</a></li><li class="chapter-item affix "><li class="part-title">User Guides</li><li class="chapter-item "><a href="../../user/adding-glean-to-your-project/index.html"><strong aria-hidden="true">1.</strong> Adding Glean to your project</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../user/adding-glean-to-your-project/kotlin.html"><strong aria-hidden="true">1.1.</strong> Kotlin</a></li><li class="chapter-item "><a href="../../user/adding-glean-to-your-project/swift.html"><strong aria-hidden="true">1.2.</strong> Swift</a></li><li class="chapter-item "><a href="../../user/adding-glean-to-your-project/python.html"><strong aria-hidden="true">1.3.</strong> Python</a></li><li class="chapter-item "><a href="../../user/adding-glean-to-your-project/javascript.html"><strong aria-hidden="true">1.4.</strong> Javascript</a></li></ol></li><li class="chapter-item "><a href="../../user/integrating-glean-for-product-managers.html"><strong aria-hidden="true">2.</strong> Integrating Glean for project managers</a></li><li class="chapter-item "><a href="../../user/metrics/adding-new-metrics.html"><strong aria-hidden="true">3.</strong> Metrics</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../user/metrics/adding-new-metrics.html"><strong aria-hidden="true">3.1.</strong> Adding new metrics</a></li><li class="chapter-item "><a href="../../user/metrics/testing-metrics.html"><strong aria-hidden="true">3.2.</strong> Testing metrics</a></li><li class="chapter-item "><a href="../../user/metrics/error-reporting.html"><strong aria-hidden="true">3.3.</strong> Error reporting</a></li><li class="chapter-item "><a href="../../user/collected-metrics/metrics.html"><strong aria-hidden="true">3.4.</strong> Metrics collected by the Glean SDK</a></li></ol></li><li class="chapter-item "><a href="../../user/pings/index.html"><strong aria-hidden="true">4.</strong> Pings</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../user/pings/ping-schedules-and-timings.html"><strong aria-hidden="true">4.1.</strong> Ping schedules and timings overview</a></li><li class="chapter-item "><a href="../../user/pings/baseline.html"><strong aria-hidden="true">4.2.</strong> Baseline Ping</a></li><li class="chapter-item "><a href="../../user/pings/deletion_request.html"><strong aria-hidden="true">4.3.</strong> Deletion Request Ping</a></li><li class="chapter-item "><a href="../../user/pings/metrics.html"><strong aria-hidden="true">4.4.</strong> Metrics Ping</a></li><li class="chapter-item "><a href="../../user/pings/events.html"><strong aria-hidden="true">4.5.</strong> Events Ping</a></li><li class="chapter-item "><a href="../../user/pings/custom.html"><strong aria-hidden="true">4.6.</strong> Custom Pings</a></li><li class="chapter-item "><a href="../../user/pings/testing-custom-pings.html"><strong aria-hidden="true">4.7.</strong> Testing custom pings</a></li></ol></li><li class="chapter-item "><a href="../../user/debugging/index.html"><strong aria-hidden="true">5.</strong> Debugging products using Glean</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../user/debugging/debug-ping-view.html"><strong aria-hidden="true">5.1.</strong> Glean Debug Ping View</a></li><li class="chapter-item "><a href="../../user/debugging/android.html"><strong aria-hidden="true">5.2.</strong> Android</a></li><li class="chapter-item "><a href="../../user/debugging/ios.html"><strong aria-hidden="true">5.3.</strong> iOS</a></li><li class="chapter-item "><a href="../../user/debugging/python.html"><strong aria-hidden="true">5.4.</strong> Python</a></li></ol></li><li class="chapter-item "><li class="part-title">API Reference</li><li class="chapter-item "><a href="../../reference/yaml/index.html"><strong aria-hidden="true">6.</strong> YAML Registry Format</a></li><li class="chapter-item "><a href="../../reference/general/index.html"><strong aria-hidden="true">7.</strong> General API</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../reference/general/initializing.html"><strong aria-hidden="true">7.1.</strong> Initializing</a></li><li class="chapter-item "><a href="../../reference/general/toggling-upload-status.html"><strong aria-hidden="true">7.2.</strong> Toggling upload status</a></li><li class="chapter-item "><a href="../../reference/general/experiments-api.html"><strong aria-hidden="true">7.3.</strong> Annotating experiments</a></li></ol></li><li class="chapter-item "><a href="../../reference/metrics/index.html"><strong aria-hidden="true">8.</strong> Metric types</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../reference/metrics/boolean.html"><strong aria-hidden="true">8.1.</strong> Boolean</a></li><li class="chapter-item "><a href="../../reference/metrics/labeled_booleans.html"><strong aria-hidden="true">8.2.</strong> Labeled Booleans</a></li><li class="chapter-item "><a href="../../reference/metrics/counter.html"><strong aria-hidden="true">8.3.</strong> Counter</a></li><li class="chapter-item "><a href="../../reference/metrics/labeled_counters.html"><strong aria-hidden="true">8.4.</strong> Labeled Counters</a></li><li class="chapter-item "><a href="../../reference/metrics/string.html"><strong aria-hidden="true">8.5.</strong> String</a></li><li class="chapter-item "><a href="../../reference/metrics/labeled_strings.html"><strong aria-hidden="true">8.6.</strong> Labeled Strings</a></li><li class="chapter-item "><a href="../../reference/metrics/string_list.html"><strong aria-hidden="true">8.7.</strong> String List</a></li><li class="chapter-item "><a href="../../reference/metrics/timespan.html"><strong aria-hidden="true">8.8.</strong> Timespan</a></li><li class="chapter-item "><a href="../../reference/metrics/timing_distribution.html"><strong aria-hidden="true">8.9.</strong> Timing Distribution</a></li><li class="chapter-item "><a href="../../reference/metrics/memory_distribution.html"><strong aria-hidden="true">8.10.</strong> Memory Distribution</a></li><li class="chapter-item "><a href="../../reference/metrics/uuid.html"><strong aria-hidden="true">8.11.</strong> UUID</a></li><li class="chapter-item "><a href="../../reference/metrics/datetime.html"><strong aria-hidden="true">8.12.</strong> Datetime</a></li><li class="chapter-item "><a href="../../reference/metrics/event.html"><strong aria-hidden="true">8.13.</strong> Event</a></li><li class="chapter-item "><a href="../../reference/metrics/custom_distribution.html"><strong aria-hidden="true">8.14.</strong> Custom Distribution</a></li><li class="chapter-item "><a href="../../reference/metrics/quantity.html"><strong aria-hidden="true">8.15.</strong> Quantity</a></li><li class="chapter-item "><a href="../../reference/metrics/rate.html"><strong aria-hidden="true">8.16.</strong> Rate</a></li></ol></li><li class="chapter-item "><li class="part-title">Language Bindings Information</li><li class="chapter-item "><a href="../../language-bindings/index.html"><strong aria-hidden="true">9.</strong> Overview</a></li><li class="chapter-item "><a href="../../language-bindings/android/index.html"><strong aria-hidden="true">10.</strong> Android</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../language-bindings/android/android-build-configuration-options.html"><strong aria-hidden="true">10.1.</strong> Android build configuration options</a></li><li class="chapter-item "><a href="../../language-bindings/android/android-offline-builds.html"><strong aria-hidden="true">10.2.</strong> Android offline builds</a></li><li class="chapter-item "><a href="../../language-bindings/android/instrument-android-crashes-example.html"><strong aria-hidden="true">10.3.</strong> Instrumenting Android crashes with the Glean SDK</a></li></ol></li><li class="chapter-item "><li class="part-title">Appendix</li><li class="chapter-item "><a href="../../appendix/glossary.html"><strong aria-hidden="true">11.</strong> Glossary</a></li><li class="chapter-item expanded "><a href="../../appendix/changelog/index.html"><strong aria-hidden="true">12.</strong> Changelog</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../appendix/changelog/sdk.html"><strong aria-hidden="true">12.1.</strong> Glean SDK</a></li><li class="chapter-item expanded "><a href="../../appendix/changelog/js.html" class="active"><strong aria-hidden="true">12.2.</strong> Glean.js</a></li></ol></li><li class="chapter-item "><a href="../../appendix/twig.html"><strong aria-hidden="true">13.</strong> This Week in Glean</a></li><li class="chapter-item "><a href="../../appendix/contribution-guidelines.html"><strong aria-hidden="true">14.</strong> Contribution Guidelines</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Glean - Cross-platform Telemetry library</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                        <a href="https://github.com/mozilla/glean" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#unreleased-changes" id="unreleased-changes">Unreleased changes</a></h1>
+<p><a href="https://github.com/mozilla/glean.js/compare/v0.14.1...main">Full changelog</a></p>
+<ul>
+<li><a href="https://github.com/mozilla/glean.js/pull/389">#389</a>: BUGFIX: Make sure to submit a <code>deletion-request</code> ping before clearing data when toggling upload.</li>
+</ul>
+<h1><a class="header" href="#v0141-2021-05-21" id="v0141-2021-05-21">v0.14.1 (2021-05-21)</a></h1>
+<p><a href="https://github.com/mozilla/glean.js/compare/v0.14.0...v0.14.1">Full changelog</a></p>
+<ul>
+<li><a href="https://github.com/mozilla/glean.js/pull/342">#342</a>: BUGFIX: Fix timespan payload representatin to match exactly the payload expected according to the Glean schema.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/343">#343</a>: BUGFIX: Report the correct failure exit code when the Glean command line tool fails.</li>
+</ul>
+<h1><a class="header" href="#v0140-2021-05-19" id="v0140-2021-05-19">v0.14.0 (2021-05-19)</a></h1>
+<p><a href="https://github.com/mozilla/glean.js/compare/v0.13.0...v0.14.0">Full changelog</a></p>
+<ul>
+<li><a href="https://github.com/mozilla/glean.js/pull/313">#313</a>: Send Glean.js version and platform information on X-Telemetry-Agent header instead of User-Agent header.</li>
+</ul>
+<h1><a class="header" href="#v0130-2021-05-18" id="v0130-2021-05-18">v0.13.0 (2021-05-18)</a></h1>
+<p><a href="https://github.com/mozilla/glean.js/compare/v0.12.0...v0.13.0">Full changelog</a></p>
+<ul>
+<li><a href="https://github.com/mozilla/glean.js/pull/313">#313</a>: Implement error recording mechanism and error checking testing API.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/319">#319</a>: BUGFIX: Do not allow recording floats with the quantity and counter metric types.</li>
+</ul>
+<h1><a class="header" href="#v0120-2021-05-11" id="v0120-2021-05-11">v0.12.0 (2021-05-11)</a></h1>
+<p><a href="https://github.com/mozilla/glean.js/compare/v0.11.0...v0.12.0">Full changelog</a></p>
+<ul>
+<li><a href="https://github.com/mozilla/glean.js/pull/279">#279</a>: BUGFIX: Ensure only empty pings triggers logging of &quot;empty ping&quot; messages.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/288">#288</a>: Support collecting <code>PlatformInfo</code> from <code>Qt</code> applications. Only OS name and locale are supported.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/281">#281</a>: Add the QuantityMetricType.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/303">#303</a>: Implement setRawNanos API for the TimespanMetricType.</li>
+</ul>
+<h1><a class="header" href="#v0110-2021-05-03" id="v0110-2021-05-03">v0.11.0 (2021-05-03)</a></h1>
+<p><a href="https://github.com/mozilla/glean.js/compare/v0.10.2...v0.11.0">Full changelog</a></p>
+<ul>
+<li><a href="https://github.com/mozilla/glean.js/pull/260">#260</a>: Set minimum node (&gt;= 12.0.0) and npm (&gt;= 7.0.0) versions.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/202">#202</a>: Add a testing API for the ping type.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/253">#253</a>:
+<ul>
+<li>Implement the timespan metric type.</li>
+<li>BUGFIX: Report event timestamps in milliseconds.</li>
+</ul>
+</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/261">#261</a>: Show a spinner while setting up python virtual environment</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/273">#273</a>: BUGFIX: Expose the missing <code>LabeledMetricType</code> and <code>TimespanMetricType</code> in Qt.</li>
+</ul>
+<h1><a class="header" href="#v0102-2021-04-26" id="v0102-2021-04-26">v0.10.2 (2021-04-26)</a></h1>
+<p><a href="https://github.com/mozilla/glean.js/compare/v0.10.1...v0.10.2">Full changelog</a></p>
+<ul>
+<li><a href="https://github.com/mozilla/glean.js/pull/256">#256</a>: BUGFIX: Add the missing <code>js</code> extension to the dispatcher.</li>
+</ul>
+<h1><a class="header" href="#v0101-2021-04-26" id="v0101-2021-04-26">v0.10.1 (2021-04-26)</a></h1>
+<p><a href="https://github.com/mozilla/glean.js/compare/v0.10.0...v0.10.1">Full changelog</a></p>
+<ul>
+<li><a href="https://github.com/mozilla/glean.js/pull/254">#254</a>: BUGFIX: Allow the usage of the Glean specific metrics API before Glean is initialized.</li>
+</ul>
+<h1><a class="header" href="#v0100-2021-04-20" id="v0100-2021-04-20">v0.10.0 (2021-04-20)</a></h1>
+<p><a href="https://github.com/mozilla/glean.js/compare/v0.9.2...v0.10.0">Full changelog</a></p>
+<ul>
+<li><a href="https://github.com/mozilla/glean.js/pull/228">#228</a>: Provide a Qt build with every new release.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/227">#227</a>: BUGFIX: Fix a bug that prevented using <code>labeled_string</code> and <code>labeled_boolean</code>.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/226">#226</a>: BUGFIX: Fix Qt build configuration to target ES5.</li>
+</ul>
+<h1><a class="header" href="#v092-2021-04-19" id="v092-2021-04-19">v0.9.2 (2021-04-19)</a></h1>
+<p><a href="https://github.com/mozilla/glean.js/compare/v0.9.1...v0.9.2">Full changelog</a></p>
+<ul>
+<li><a href="https://github.com/mozilla/glean.js/pull/220">#220</a>: Update <code>glean_parser</code> to version 3.1.1.</li>
+</ul>
+<h1><a class="header" href="#v091-2021-04-19" id="v091-2021-04-19">v0.9.1 (2021-04-19)</a></h1>
+<p><a href="https://github.com/mozilla/glean.js/compare/v0.9.0...v0.9.1">Full changelog</a></p>
+<ul>
+<li><a href="https://github.com/mozilla/glean.js/pull/219">#219</a>: BUGFIX: Fix path to ping entry point in package.json.</li>
+</ul>
+<h1><a class="header" href="#v090-2021-04-19" id="v090-2021-04-19">v0.9.0 (2021-04-19)</a></h1>
+<p><a href="https://github.com/mozilla/glean.js/compare/v0.8.1...v0.9.0">Full changelog</a></p>
+<ul>
+<li><a href="https://github.com/mozilla/glean.js/pull/201">#201</a>: BUGFIX: Do not let the platform be changed after Glean is initialized.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/215">#215</a>: Update the <code>glean-parser</code> to version 3.1.0.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/215">#214</a>: Improve error reporting of the Glean command.</li>
+</ul>
+<h1><a class="header" href="#v081-2021-04-14" id="v081-2021-04-14">v0.8.1 (2021-04-14)</a></h1>
+<p><a href="https://github.com/mozilla/glean.js/compare/v0.8.0...v0.8.1">Full changelog</a></p>
+<ul>
+<li><a href="https://github.com/mozilla/glean.js/pull/206">#206</a>: BUGFIX: Fix ping URL path.
+<ul>
+<li>Application ID was being reporting as <code>undefined</code>.</li>
+</ul>
+</li>
+</ul>
+<h1><a class="header" href="#v080-2021-04-13" id="v080-2021-04-13">v0.8.0 (2021-04-13)</a></h1>
+<p><a href="https://github.com/mozilla/glean.js/compare/v0.7.0...v0.8.0">Full changelog</a></p>
+<ul>
+<li><a href="https://github.com/mozilla/glean.js/pull/173">#173</a>: Drop Node.js support from webext entry points</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/155">#155</a>: Allow to define custom uploaders in the configuration.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/184">#184</a>: Correctly report <code>appBuild</code> and <code>appDisplayVersion</code> if provided by the user.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/198">#198</a>, <a href="https://github.com/mozilla/glean.js/pull/192">#192</a>, <a href="https://github.com/mozilla/glean.js/pull/184">#184</a>, <a href="https://github.com/mozilla/glean.js/pull/180">#180</a>, <a href="https://github.com/mozilla/glean.js/pull/174">#174</a>, <a href="https://github.com/mozilla/glean.js/pull/165">#165</a>: BUGFIX: Remove all circular dependencies.</li>
+</ul>
+<h1><a class="header" href="#v070-2021-03-26" id="v070-2021-03-26">v0.7.0 (2021-03-26)</a></h1>
+<p><a href="https://github.com/mozilla/glean.js/compare/v0.6.1...v0.7.0">Full changelog</a></p>
+<ul>
+<li><a href="https://github.com/mozilla/glean.js/pull/143">#143</a>: Provide a way to initialize and reset Glean.js in tests.</li>
+</ul>
+<h1><a class="header" href="#v061-2021-03-22" id="v061-2021-03-22">v0.6.1 (2021-03-22)</a></h1>
+<p><a href="https://github.com/mozilla/glean.js/compare/v0.6.0...v0.6.1">Full changelog</a></p>
+<ul>
+<li><a href="https://github.com/mozilla/glean.js/pull/130">#130</a>: BUGFIX: Fix destination path of CommonJS' build <code>package.json</code>.</li>
+</ul>
+<h1><a class="header" href="#v060-2021-03-22" id="v060-2021-03-22">v0.6.0 (2021-03-22)</a></h1>
+<p><a href="https://github.com/mozilla/glean.js/compare/v0.5.0...v0.6.0">Full changelog</a></p>
+<ul>
+<li><a href="https://github.com/mozilla/glean.js/pull/123">#123</a>: BUGFIX: Fix support for ES6 environments.
+<ul>
+<li>Include <code>.js</code> extensions in all local import statements.
+<ul>
+<li>ES6' module resolution algorithm does not currently support automatic resolution of file extensions and does not have the hability to import directories that have an index file. The extension and the name of the file being import need to <em>always</em> be specified. See: https://nodejs.org/api/esm.html#esm_customizing_esm_specifier_resolution_algorithm</li>
+</ul>
+</li>
+<li>Add a <code>type: module</code> declaration to the main <code>package.json</code>.
+<ul>
+<li>Without this statement, ES6 support is disabled. See: https://nodejs.org/docs/latest-v13.x/api/esm.html#esm_enabling.:</li>
+<li>To keep support for CommonJS, in our CommonJS build we include a <code>package.json</code> that overrides the <code>type: module</code> of the main <code>package.json</code> with a <code>type: commonjs</code>.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1><a class="header" href="#v050-2021-03-18" id="v050-2021-03-18">v0.5.0 (2021-03-18)</a></h1>
+<p><a href="https://github.com/mozilla/glean.js/compare/v0.4.0...v0.5.0">Full changelog</a></p>
+<ul>
+<li><a href="https://github.com/mozilla/glean.js/pull/96">#96</a>: Provide a ping encryption plugin.
+<ul>
+<li>This plugin listens to the <code>afterPingCollection</code> event. It receives the collected payload of a ping and returns an encrypted version of it using a JWK provided upon instantiation.</li>
+</ul>
+</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/95">#95</a>: Add a <code>plugins</code> property to the configuration options and create an event abstraction for triggering internal Glean events.
+<ul>
+<li>The only internal event triggered at this point is the <code>afterPingCollection</code> event, which is triggered after ping collection and logging, and before ping storing.</li>
+<li>Plugins are built to listen to a specific Glean event. Each plugin must define an <code>action</code>, which is executed everytime the event they are listening to is triggered.</li>
+</ul>
+</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/101">#101</a>: BUGFIX: Only validate Debug View Tag and Source Tags when they are present.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/102">#102</a>: BUGFIX: Include a Glean User-Agent header in all pings.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/97">#97</a>: Add support for labeled metric types (string, boolean and counter).</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/105">#105</a>: Introduce and publish the <code>glean</code> command for using the <code>glean-parser</code> in a virtual environment.</li>
+</ul>
+<h1><a class="header" href="#v040-2021-03-10" id="v040-2021-03-10">v0.4.0 (2021-03-10)</a></h1>
+<p><a href="https://github.com/mozilla/glean.js/compare/v0.3.0...v0.4.0">Full changelog</a></p>
+<ul>
+<li><a href="https://github.com/mozilla/glean.js/pull/92">#92</a>: Remove <code>web-ext-types</code> from <code>peerDependencies</code> list.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/98">#98</a>: Add external APIs for setting the Debug View Tag and Source Tags.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/99">#99</a>: BUGFIX: Add a default ping value in the testing APIs.</li>
+</ul>
+<h1><a class="header" href="#v030-2021-02-24" id="v030-2021-02-24">v0.3.0 (2021-02-24)</a></h1>
+<p><a href="https://github.com/mozilla/glean.js/compare/v0.2.0...v0.3.0">Full changelog</a></p>
+<ul>
+<li><a href="https://github.com/mozilla/glean.js/pull/90">#90</a>: Provide exports for CommonJS and browser environemnts.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/90">#90</a>: BUGIFX: Accept lifetimes as strings when instantiating metric types.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/90">#90</a>: BUGFIX: Fix type declaration paths.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/90">#90</a>: BUGFIX: Make web-ext-types a peer dependency.
+<ul>
+<li>This is quick fix until <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1694701">Bug 1694701</a> is fixed.</li>
+</ul>
+</li>
+</ul>
+<h1><a class="header" href="#v020-2021-02-23" id="v020-2021-02-23">v0.2.0 (2021-02-23)</a></h1>
+<ul>
+<li><a href="https://github.com/mozilla/glean.js/pull/85">#85</a>: Include type declarations in <code>@mozilla/glean</code> webext package bundle.</li>
+</ul>
+<p><a href="https://github.com/mozilla/glean.js/compare/v0.1.1...v0.2.0">Full changelog</a></p>
+<h1><a class="header" href="#v011-2021-02-17" id="v011-2021-02-17">v0.1.1 (2021-02-17)</a></h1>
+<p><a href="https://github.com/mozilla/glean.js/compare/v0.1.0...v0.1.1">Full changelog</a></p>
+<ul>
+<li><a href="https://github.com/mozilla/glean.js/pull/77">#77</a>: Include README.md file in <code>@mozilla/glean</code> package bundle.</li>
+</ul>
+<h1><a class="header" href="#v010-2021-02-17" id="v010-2021-02-17">v0.1.0 (2021-02-17)</a></h1>
+<p><a href="https://github.com/mozilla/glean.js/compare/46f028fb4ea7b8f312daf4666904c81d0a3eb171...v0.1.0">Full changelog</a></p>
+<ul>
+<li><a href="https://github.com/mozilla/glean.js/pull/73">#73</a>: Add this changelog file.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/42">#42</a>: Implement the <code>deletion-request</code> ping.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/41">#41</a>: Implement the <code>logPings</code> debug tool.
+<ul>
+<li>When <code>logPings</code> is enabled, pings are logged upon collection.</li>
+</ul>
+</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/40">#40</a>: Use the dispatcher in all Glean external API functions. Namely:
+<ul>
+<li>Metric recording functions;</li>
+<li>Ping submission;</li>
+<li><code>initialize</code> and <code>setUploadEnabled</code>.</li>
+</ul>
+</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/36">#36</a>: Implement the event metric type.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/31">#31</a>: Implement a task Dispatcher to help in executing Promises in a deterministic order.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/26">#26</a>: Implement the setUploadEnable API.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/25">#25</a>: Implement an adapter that leverages browser APIs to upload pings.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/24">#24</a>: Implement a ping upload manager.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/23">#23</a>: Implement the initialize API and glean internal metrics.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/22">#22</a>: Implement the PingType structure and a ping maker.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/20">#20</a>: Implement the datetime metric type.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/17">#17</a>: Implement the UUID metric type.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/14">#14</a>: Implement the counter metric type.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/13">#13</a>: Implement the string metric type.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/11">#11</a>: Implement the boolean metric type.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/9">#9</a>: Implement a metrics database module.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/8">#8</a>: Implement a web extension version of the underlying storage module.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/6">#6</a>: Implement an abstract underlying storage module.</li>
+</ul>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/appendix/changelog/js.md">Edit this file on GitHub.</a></footer>
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../../appendix/changelog/sdk.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../../appendix/twig.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="../../appendix/changelog/sdk.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="../../appendix/twig.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="../../../shared/tabs.js"></script>
+        
+        <script type="text/javascript" src="../../../shared/mermaid.min.js"></script>
+        
+        <script type="text/javascript" src="../../../shared/mermaid-init.js"></script>
+        
+        <script type="text/javascript" src="../../chart.min.js"></script>
+        
+        <script type="text/javascript" src="../../chart-distributions.js"></script>
+        
+        <script type="text/javascript" src="../../chart-distributions-ui.js"></script>
+        
+
+        
+
+    </body>
+</html>
