@@ -207,6 +207,20 @@ The <a href="https://github.com/mozilla-mobile/android-components/releases/">and
 <blockquote>
 <p>The Glean SDK APK ships binary libraries for all the supported platforms. Each library file measures about 600KB. If the final APK size of the consuming project is a concern, please enable <a href="https://developer.android.com/studio/build/configure-apk-splits#configure-abi-split">ABI splits</a>.</p>
 </blockquote>
+<h3><a class="header" href="#dependency-for-local-testing" id="dependency-for-local-testing">Dependency for local testing</a></h3>
+<p>Due to its use of a native library you will need additional setup to allow local testing.</p>
+<p>First add a new configuration to your <code>build.gradle</code>, just before your <code>dependencies</code>:</p>
+<pre><code class="language-Groovy">configurations {
+    jnaForTest
+}
+</code></pre>
+<p>Then add the following lines to your <code>dependencies</code> block:</p>
+<pre><code class="language-Groovy">jnaForTest &quot;net.java.dev.jna:jna:5.6.0@jar&quot;
+testImplementation files(configurations.jnaForTest.copyRecursive().files)
+testImplementation &quot;org.mozilla.telemetry:glean-forUnitTests:${project.ext.glean_version}&quot;
+</code></pre>
+<p><strong>Note:</strong> Always use <code>org.mozilla.telemetry:glean-forUnitTests</code>.
+This package is standalone and its version will be exported from the main Glean package automatically.</p>
 <h2><a class="header" href="#setting-up-metrics-and-pings-code-generation" id="setting-up-metrics-and-pings-code-generation">Setting up metrics and pings code generation</a></h2>
 <p>In order for the Glean SDK to generate an API for your metrics, two Gradle plugins must be included in your build:</p>
 <ul>
