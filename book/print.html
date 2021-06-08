@@ -7073,7 +7073,7 @@ This means that, if the configured memory unit is not <code>byte</code>, the dat
 <p>UUIDs metrics are used to record values that uniquely identify some entity, such as a client id.</p>
 <h2><a class="header" href="#recording-api-7" id="recording-api-7">Recording API</a></h2>
 <h3><a class="header" href="#generateandset" id="generateandset"><code>generateAndSet</code></a></h3>
-<p>Sets a UUID metric to a generated <a href="https://datatracker.ietf.org/doc/html/rfc4122">UUID</a> value.</p>
+<p>Sets a UUID metric to a randomly generated <a href="https://datatracker.ietf.org/doc/html/rfc4122">UUID</a> value (UUID v4) .</p>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
@@ -7137,7 +7137,8 @@ Glean.user.clientId.generateAndSet();
 </div>
 </div>
 <h3><a class="header" href="#set-4" id="set-4"><code>set</code></a></h3>
-<p>Sets a UUID metric to a specific value.</p>
+<p>Sets a UUID metric to a specific value.
+Accepts any UUID version.</p>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
