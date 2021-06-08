@@ -177,7 +177,7 @@
                         <h1><a class="header" href="#submitting-a-custom-ping" id="submitting-a-custom-ping">Submitting a custom ping</a></h1>
 <p>To collect and queue a custom ping for eventual uploading, call the <code>submit</code> method on the <code>PingType</code> object that the Glean SDK generated for your ping.</p>
 <p>By default, if the ping doesn't currently have any events or metrics set, <code>submit</code> will do nothing.  However, if the <code>send_if_empty</code> flag is set to true in the ping definition, it will always be submitted.</p>
-<p>For example, to submit the custom ping defined above:</p>
+<p>For example, to submit the custom ping defined in <a href="../../user/pings/custom.html#defining-a-custom-ping">Adding new custom pings</a>:</p>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
@@ -217,7 +217,14 @@ pings::search.submit(pings::SearchReasonCodes::Performed);
 pings.search.submit(&quot;performed&quot;);
 </code></pre>
 </div>
-<div data-lang="Firefox Desktop" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-cpp">mozilla::glean_pings::Search.Submit(&quot;performed&quot;_ns);
+</code></pre>
+<p><strong>JavaScript</strong></p>
+<pre><code class="language-js">GleanPings.search.submit(&quot;performed&quot;);
+</code></pre>
+</div>
 </div>
 </div>
 <p>If none of the metrics for the ping contain data the ping is not sent (unless <code>send_if_empty</code> is set to true in the definition file)</p>

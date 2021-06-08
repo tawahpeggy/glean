@@ -303,6 +303,39 @@ Glean.initialize(
 <p>Unlike Android and Swift, the Python bindings do not automatically send any pings.
 See the <a href="../../user/pings/custom.html">custom pings documentation</a> about adding custom pings and sending them.</p>
 </div>
+<div data-lang="Rust" class="tab">
+<div class="special-quote special-quote-info fa fa-info-circle"></div>
+<h5><a class="header" href="#multiple-processes-support-2" id="multiple-processes-support-2">Multiple processes support</a></h5>
+<blockquote>
+<p>The Glean SDK does not support use across multiple processes, and must only be initialized on the application's main process.</p>
+</blockquote>
+<p>The Glean SDK should be initialized as soon as possible,
+and importantly, before any other libraries in the application start using Glean.
+Library code should never call Glean.initialize,
+since it should be called exactly once per application.</p>
+<pre><code class="language-Rust">use glean::{ClientInfoMetrics, Configuration};
+let cfg = Configuration {
+    data_path,
+    application_id: &quot;my-app-id&quot;.into(),
+    upload_enabled: true,
+    max_events: None,
+    delay_ping_lifetime_io: false,
+    channel: None,
+    server_endpoint: Some(&quot;https://incoming.telemetry.mozilla.org&quot;.into()),
+    uploader: None,
+    use_core_mps: true,
+};
+
+let client_info = ClientInfoMetrics {
+    app_build: env!(&quot;CARGO_PKG_VERSION&quot;).to_string(),
+    app_display_version: env!(&quot;CARGO_PKG_VERSION&quot;).to_string(),
+};
+
+glean::initialize(cfg, client_info);
+</code></pre>
+<p>Unlike in other implementations, the Rust language bindings do not provide a default uploader.
+See <a href="../../../docs/glean/net/trait.PingUploader.html"><code>PingUploader</code></a> for details.</p>
+</div>
 <div data-lang="Javascript" class="tab">
 <p>The main control for Glean is on the <code>Glean</code> singleton.</p>
 <p>The Glean.js library should be initialized as soon as possible when the product using it is started.</p>
@@ -319,6 +352,7 @@ Glean.initialize(
 );
 </code></pre>
 </div>
+<div data-lang="Firefox Desktop" class="tab" data-info="On Firefox Desktop Glean initialization is handled internally."></div>
 </div>
 </div>
 <h2><a class="header" href="#what-happens-after-glean-is-initialized" id="what-happens-after-glean-is-initialized">What happens after Glean is initialized?</a></h2>

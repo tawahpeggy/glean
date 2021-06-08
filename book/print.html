@@ -3136,6 +3136,39 @@ Glean.initialize(
 <p>Unlike Android and Swift, the Python bindings do not automatically send any pings.
 See the <a href="reference/general/../../user/pings/custom.html">custom pings documentation</a> about adding custom pings and sending them.</p>
 </div>
+<div data-lang="Rust" class="tab">
+<div class="special-quote special-quote-info fa fa-info-circle"></div>
+<h5><a class="header" href="#multiple-processes-support-2" id="multiple-processes-support-2">Multiple processes support</a></h5>
+<blockquote>
+<p>The Glean SDK does not support use across multiple processes, and must only be initialized on the application's main process.</p>
+</blockquote>
+<p>The Glean SDK should be initialized as soon as possible,
+and importantly, before any other libraries in the application start using Glean.
+Library code should never call Glean.initialize,
+since it should be called exactly once per application.</p>
+<pre><code class="language-Rust">use glean::{ClientInfoMetrics, Configuration};
+let cfg = Configuration {
+    data_path,
+    application_id: &quot;my-app-id&quot;.into(),
+    upload_enabled: true,
+    max_events: None,
+    delay_ping_lifetime_io: false,
+    channel: None,
+    server_endpoint: Some(&quot;https://incoming.telemetry.mozilla.org&quot;.into()),
+    uploader: None,
+    use_core_mps: true,
+};
+
+let client_info = ClientInfoMetrics {
+    app_build: env!(&quot;CARGO_PKG_VERSION&quot;).to_string(),
+    app_display_version: env!(&quot;CARGO_PKG_VERSION&quot;).to_string(),
+};
+
+glean::initialize(cfg, client_info);
+</code></pre>
+<p>Unlike in other implementations, the Rust language bindings do not provide a default uploader.
+See <a href="reference/general/../../../docs/glean/net/trait.PingUploader.html"><code>PingUploader</code></a> for details.</p>
+</div>
 <div data-lang="Javascript" class="tab">
 <p>The main control for Glean is on the <code>Glean</code> singleton.</p>
 <p>The Glean.js library should be initialized as soon as possible when the product using it is started.</p>
@@ -3152,6 +3185,7 @@ Glean.initialize(
 );
 </code></pre>
 </div>
+<div data-lang="Firefox Desktop" class="tab" data-info="On Firefox Desktop Glean initialization is handled internally."></div>
 </div>
 </div>
 <h2><a class="header" href="#what-happens-after-glean-is-initialized" id="what-happens-after-glean-is-initialized">What happens after Glean is initialized?</a></h2>
@@ -3414,9 +3448,19 @@ from pkg_resources import resource_filename
 pings = load_pings(resource_filename(__name__, &quot;pings.yaml&quot;))
 </code></pre>
 </div>
-<div data-lang="Rust" class="tab"></div>
+<div data-lang="Rust" class="tab">
+<p>In Rust custom pings need to be registered individually.
+This should be done before calling <code>glean::initialize</code>.</p>
+<pre><code class="language-Rust">use your_glean_metrics::pings;
+
+glean::register_ping_type(&amp;pings::custom_ping);
+glean::register_ping_type(&amp;pings::search);
+glean::initialize(cfg, client_info);
+</code></pre>
+</div>
 <div data-lang="Javascript" class="tab"></div>
-<div data-lang="Firefox Desktop" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab" data-info="On Firefox Desktop all custom pings are registered automatically."></div>
+</div>
 </div>
 </div>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/general/register-custom-pings.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#debugging" id="debugging">Debugging</a></h1>
@@ -8635,7 +8679,7 @@ assert_eq!(
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/metrics/rate.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#submitting-a-custom-ping" id="submitting-a-custom-ping">Submitting a custom ping</a></h1>
 <p>To collect and queue a custom ping for eventual uploading, call the <code>submit</code> method on the <code>PingType</code> object that the Glean SDK generated for your ping.</p>
 <p>By default, if the ping doesn't currently have any events or metrics set, <code>submit</code> will do nothing.  However, if the <code>send_if_empty</code> flag is set to true in the ping definition, it will always be submitted.</p>
-<p>For example, to submit the custom ping defined above:</p>
+<p>For example, to submit the custom ping defined in <a href="reference/pings/../../user/pings/custom.html#defining-a-custom-ping">Adding new custom pings</a>:</p>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
@@ -8675,7 +8719,14 @@ pings::search.submit(pings::SearchReasonCodes::Performed);
 pings.search.submit(&quot;performed&quot;);
 </code></pre>
 </div>
-<div data-lang="Firefox Desktop" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-cpp">mozilla::glean_pings::Search.Submit(&quot;performed&quot;_ns);
+</code></pre>
+<p><strong>JavaScript</strong></p>
+<pre><code class="language-js">GleanPings.search.submit(&quot;performed&quot;);
+</code></pre>
+</div>
 </div>
 </div>
 <p>If none of the metrics for the ping contain data the ping is not sent (unless <code>send_if_empty</code> is set to true in the definition file)</p>
@@ -10567,6 +10618,13 @@ This is a major milestone in using a cross-platform implementation of Glean on t
 <p>First testing release.</p>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/appendix/changelog/sdk.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#unreleased-changes-1" id="unreleased-changes-1">Unreleased changes</a></h1>
 <p><a href="https://github.com/mozilla/glean.js/compare/v0.15.0...main">Full changelog</a></p>
+<ul>
+<li><a href="https://github.com/mozilla/glean.js/pull/399">#399</a>: Check if there are ping data before attempting to delete it.
+<ul>
+<li>This change lowers the amount of log messages related to attempting to delete inexistent data.</li>
+</ul>
+</li>
+</ul>
 <h1><a class="header" href="#v0150-2021-06-03" id="v0150-2021-06-03">v0.15.0 (2021-06-03)</a></h1>
 <p><a href="https://github.com/mozilla/glean.js/compare/v0.14.1...v0.15.0">Full changelog</a></p>
 <ul>
