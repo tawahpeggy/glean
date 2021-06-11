@@ -182,25 +182,134 @@ You can think of it like a fraction, with a numerator and a denominator.</p>
 <p>All rates start without a value.
 A rate with a numerator of 0 is valid and will be sent to ensure we capture the
 &quot;no errors happened&quot; or &quot;no use counted&quot; cases.</p>
+<div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
+<h2><a class="header" href="#let-the-glean-metric-do-the-counting" id="let-the-glean-metric-do-the-counting">Let the Glean metric do the counting</a></h2>
 <blockquote>
-<p><strong>IMPORTANT:</strong> When using a rate metric, it is important to let the Glean metric do the counting.
+<p>When using a rate metric, it is important to let the Glean metric do the counting.
 Using your own variable for counting and setting the metric yourself could be problematic:
 ping scheduling will make it difficult to ensure the metric is at the correct value at the correct time.
 Instead, count to the numerator and denominator as you go.</p>
 </blockquote>
-<h2><a class="header" href="#configuration" id="configuration">Configuration</a></h2>
-<p>Say you're adding a new rate for how often HTTP connections have errors.
-First you need to add an entry for the rate to the <code>metrics.yaml</code> file:</p>
+<h2><a class="header" href="#recording-api" id="recording-api">Recording API</a></h2>
+<h3><a class="header" href="#addtonumerator--addtodenominator" id="addtonumerator--addtodenominator"><code>addToNumerator</code> / <code>addToDenominator</code></a></h3>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab"></div>
+<div data-lang="Java" class="tab"></div>
+<div data-lang="Swift" class="tab"></div>
+<div data-lang="Python" class="tab"></div>
+<div data-lang="Rust" class="tab">
+<p>Count numerator and denominator individually:</p>
+<pre><code class="language-Rust">use glean_metrics::*;
+
+if connection_had_error {
+    network::http_connection_error.add_to_numerator(1);
+}
+
+network::http_connection_error.add_to_denominator(1);
+</code></pre>
+<h4><a class="header" href="#external-denominators" id="external-denominators">External Denominators</a></h4>
+<p>If the rate uses an external denominator,
+adding to the denominator must be done through the denominator's
+<a href="./counter.html#recording-api"><code>counter</code> API</a>:</p>
+<pre><code class="language-Rust">use glean_metrics;
+
+if connection_had_error {
+    network::http_connection_error.add_to_numerator(1);
+}
+
+network::http_connections.add(1);
+</code></pre>
+</div>
+<div data-lang="Javascript" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h4><a class="header" href="#recorded-errors" id="recorded-errors">Recorded errors</a></h4>
+<ul>
+<li><code>invalid_value</code>: If either numerator or denominator is incremented by a negative value.</li>
+</ul>
+<h4><a class="header" href="#limits" id="limits">Limits</a></h4>
+<ul>
+<li>Numerator and Denominator only increment.</li>
+<li>Numerator and Denominator saturate at the largest value that can be represented as a 32-bit signed integer (<code>2147483647</code>).</li>
+</ul>
+<h2><a class="header" href="#testing-api" id="testing-api">Testing API</a></h2>
+<h3><a class="header" href="#testgetvalue" id="testgetvalue"><code>testGetValue</code></a></h3>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab"></div>
+<div data-lang="Java" class="tab"></div>
+<div data-lang="Swift" class="tab"></div>
+<div data-lang="Python" class="tab"></div>
+<div data-lang="Rust" class="tab">
+<pre><code class="language-Rust">use glean_metrics::*;
+
+assert_eq!((1, 1), network::http_connection_error.test_get_value(None).unwrap());
+</code></pre>
+</div>
+<div data-lang="Javascript" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h3><a class="header" href="#testhasvalue" id="testhasvalue"><code>testHasValue</code></a></h3>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab"></div>
+<div data-lang="Java" class="tab"></div>
+<div data-lang="Swift" class="tab"></div>
+<div data-lang="Python" class="tab"></div>
+<div data-lang="Rust" class="tab"></div>
+<div data-lang="Javascript" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h3><a class="header" href="#testgetnumrecordederrors" id="testgetnumrecordederrors"><code>testGetNumRecordedErrors</code></a></h3>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab"></div>
+<div data-lang="Java" class="tab"></div>
+<div data-lang="Swift" class="tab"></div>
+<div data-lang="Python" class="tab"></div>
+<div data-lang="Rust" class="tab">
+<pre><code class="language-Rust">use glean_metrics::*;
+use glean::ErrorType;
+
+assert_eq!(
+    0,
+    network::http_connection_error.test_get_num_recorded_errors(
+        ErrorType::InvalidValue
+    )
+);
+</code></pre>
+</div>
+<div data-lang="Javascript" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h2><a class="header" href="#metric-parameters" id="metric-parameters">Metric parameters</a></h2>
+<p>Example rate metric definition:</p>
 <pre><code class="language-YAML">network:
   http_connection_error:
     type: rate
     description: &gt;
       How many HTTP connections error out out of the total connections made.
-    ...
+    bugs:
+      - https://bugzilla.mozilla.org/000000
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=000000#c3
+    notification_emails:
+      - me@mozilla.com
+    expires: 2020-10-01
 </code></pre>
-<h3><a class="header" href="#external-denominators" id="external-denominators">External Denominators</a></h3>
+<p>For a full reference on metrics parameters common to all metric types,
+refer to the metrics <a href="../yaml/index.html">YAML format</a> reference page.</p>
+<h3><a class="header" href="#external-denominators-1" id="external-denominators-1">External Denominators</a></h3>
 <p>If several rates share the same denominator
-(from our example above, maybe there are multiple rates per total connections made)
 then the denominator should be defined as a <code>counter</code> and shared between
 <code>rates</code> using the <code>denominator_metric</code> property:</p>
 <pre><code class="language-YAML">network:
@@ -224,82 +333,10 @@ then the denominator should be defined as a <code>counter</code> and shared betw
     denominator_metric: network.http_connections
     ...
 </code></pre>
-<h2><a class="header" href="#api" id="api">API</a></h2>
-<div class="tabs">
-<div class="tabbar"></div>
-<div class="tabcontents">
-<div data-lang="Rust" class="tab">
-<p>Since a rate is two numbers, you add to each one individually:</p>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>use glean_metrics::*;
-
-if connection_had_error {
-    network::http_connection_error.add_to_numerator(1);
-}
-
-network::http_connection_error.add_to_denominator(1);
-<span class="boring">}
-</span></code></pre></pre>
-<p>If the rate uses an external denominator,
-adding to the denominator must be done through the denominator's
-<code>counter</code> API:</p>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>use glean_metrics;
-
-if connection_had_error {
-    network::http_connection_error.add_to_numerator(1);
-}
-if connection_was_slow {
-    network::http_connection_slow.add_to_numerator(1);
-}
-
-// network::http_connection_error has no `add_to_denominator` method.
-network::http_connections.add(1);
-<span class="boring">}
-</span></code></pre></pre>
-<p>There are test APIs available too.
-Whether the rate has an external denominator or not,
-you can use this API to get the current value:</p>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>use glean::ErrorType;
-
-use glean_metrics;
-
-// Was anything recorded?
-assert!(network::http_connection_error.test_get_value(None).is_some());
-// Does it contain counter have the expected values?
-assert_eq!((1, 1), network::http_connection_error.test_get_value(None).unwrap());
-// Did the numerator or denominator ever have a negative value added?
-assert_eq!(
-  0,
-  network::http_connection_error.test_get_num_recorded_errors(
-    ErrorType::InvalidValue
-  )
-);
-<span class="boring">}
-</span></code></pre></pre>
-</div>
-</div>
-</div>
-<h2><a class="header" href="#limits" id="limits">Limits</a></h2>
-<ul>
-<li>Numerator and Denominator only increment.</li>
-<li>Numerator and Denominator saturate at the largest value that can be represented as a 32-bit signed integer (<code>2147483647</code>).</li>
-</ul>
-<h2><a class="header" href="#examples" id="examples">Examples</a></h2>
+<h2><a class="header" href="#data-questions" id="data-questions">Data Questions</a></h2>
 <ul>
 <li>How often did an HTTP connection error?</li>
 <li>How many documents used a given CSS Property?</li>
-</ul>
-<h2><a class="header" href="#recorded-errors" id="recorded-errors">Recorded errors</a></h2>
-<ul>
-<li><code>invalid_value</code>: If either numerator or denominator is incremented by a negative value.</li>
 </ul>
 <h2><a class="header" href="#reference" id="reference">Reference</a></h2>
 <ul>
