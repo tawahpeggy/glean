@@ -176,212 +176,304 @@
                     <main>
                         <h1><a class="header" href="#string-list" id="string-list">String List</a></h1>
 <p>Strings lists are used for recording a list of Unicode string values, such as the names of the enabled search engines.</p>
-<hr />
-<p><em>Note:</em> Be careful using arbitrary strings and make sure they can't accidentally contain identifying data (like directory paths or user input).</p>
-<hr />
-<h2><a class="header" href="#configuration" id="configuration">Configuration</a></h2>
-<p>First you need to add an entry for the counter to the <code>metrics.yaml</code> file:</p>
-<pre><code class="language-YAML">search:
-  engines:
-    type: string_list
-    description: &gt;
-      Records the name of the enabled search engines.
-    lifetime: application
-    ...
-</code></pre>
-<h2><a class="header" href="#api" id="api">API</a></h2>
+<div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
+<h5><a class="header" href="#important" id="important">Important</a></h5>
+<blockquote>
+<p>Be careful using arbitrary strings and make sure they can't accidentally contain identifying data (like directory paths or user input).</p>
+</blockquote>
+<h2><a class="header" href="#recording-api" id="recording-api">Recording API</a></h2>
+<h3><a class="header" href="#add" id="add"><code>add</code></a></h3>
+<p>Add a new string to the list.</p>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
 <div data-lang="Kotlin" class="tab">
 <pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Search
 
-// Add them one at a time
-engines.forEach {
-  Search.engines.add(it)
-}
-
-// Set them in one go
-Search.engines.set(engines)
+Search.engines.add(&quot;wikipedia&quot;)
+Search.engines.add(&quot;duck duck go&quot;)
 </code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Search
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Search
 
-// Was anything recorded?
-assertTrue(Search.engines.testHasValue())
-// Does it have the expected value?
-// IMPORTANT: It may have been truncated -- see &quot;Limits&quot; below
-assertEquals(listOf(&quot;Google&quot;, &quot;DuckDuckGo&quot;), Search.engines.testGetValue())
-// Were any of the values too long, and thus an error was recorded?
-assertEquals(1, Search.engines.testGetNumRecordedErrors(ErrorType.InvalidValue))
+Search.INSTANCE.engines().add(&quot;wikipedia&quot;)
+Search.INSTANCE.engines().add(&quot;duck duck go&quot;)
 </code></pre>
 </div>
 <div data-lang="Swift" class="tab">
-<pre><code class="language-Swift">// Add them one at a time
-for engine in engines {
-    Search.engines.add(engine)
-}
-
-// Set them in one go
-Search.engines.set(engines)
+<pre><code class="language-Swift">Search.engines.add(&quot;wikipedia&quot;)
+Search.engines.add(&quot;duck duck go&quot;)
 </code></pre>
-<p>There are test APIs available too:</p>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+metrics.search.engines.add(&quot;wikipedia&quot;)
+metrics.search.engines.add(&quot;duck duck go&quot;)
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><code class="language-Rust">use glean_metrics::search;
+
+search::engines.add(&quot;wikipedia&quot;.to_string());
+search::engines.add(&quot;duck duck go&quot;.to_string());
+</code></pre>
+</div>
+<div data-lang="Javascript" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+mozilla::glean::search::engines.Add(&quot;wikipedia&quot;_ns);
+mozilla::glean::search::engines.Add(&quot;duck duck go&quot;_ns);
+</code></pre>
+<p><strong>JavaScript</strong></p>
+<pre><code class="language-js">Glean.search.engines.add(&quot;wikipedia&quot;);
+Glean.search.engines.add(&quot;duck duck go&quot;);
+</code></pre>
+</div>
+</div>
+</div>
+<h4><a class="header" href="#recorded-errors" id="recorded-errors">Recorded errors</a></h4>
+<ul>
+<li><code>invalid_overflow</code>: if the string is too long. (Prior to Glean 31.5.0, this recorded an <code>invalid_value</code>).</li>
+<li><code>invalid_value</code>: if the list is too long.</li>
+</ul>
+<h4><a class="header" href="#limits" id="limits">Limits</a></h4>
+<ul>
+<li>Fixed maximum string length: 50. Longer strings are truncated. This is measured in the number of bytes when the string is encoded in UTF-8.</li>
+<li>Fixed maximum list length: 20 items. Additional strings are dropped.</li>
+</ul>
+<h3><a class="header" href="#set" id="set"><code>set</code></a></h3>
+<p>Set the metric to a specific list of strings.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Search
+
+Search.engines.set(listOf(&quot;wikipedia&quot;, &quot;duck duck go&quot;))
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Search
+
+Search.INSTANCE.engines().set(listOf(&quot;wikipedia&quot;, &quot;duck duck go&quot;))
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">Search.engines.set([&quot;wikipedia&quot;, &quot;duck duck go&quot;])
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+metrics.search.engines.set([&quot;wikipedia&quot;, &quot;duck duck go&quot;])
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><code class="language-Rust">use glean_metrics::search;
+
+search::engines.set(vec![&quot;wikipedia&quot;.to_string(), &quot;duck duck go&quot;.to_string()])
+</code></pre>
+</div>
+<div data-lang="Javascript" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+mozilla::glean::search::engines.Set({&quot;wikipedia&quot;_ns, &quot;duck duck go&quot;_ns});
+</code></pre>
+<p><strong>JavaScript</strong></p>
+<pre><code class="language-js">Glean.search.engines.set([&quot;wikipedia&quot;, &quot;duck duck go&quot;]);
+</code></pre>
+</div>
+</div>
+</div>
+<h4><a class="header" href="#recorded-errors-1" id="recorded-errors-1">Recorded errors</a></h4>
+<ul>
+<li><code>invalid_overflow</code>: if the string is too long. (Prior to Glean 31.5.0, this recorded an <code>invalid_value</code>).</li>
+<li><code>invalid_value</code>: if the list is too long.</li>
+</ul>
+<h4><a class="header" href="#limits-1" id="limits-1">Limits</a></h4>
+<ul>
+<li>Fixed maximum string length: 50. Longer strings are truncated. This is measured in the number of bytes when the string is encoded in UTF-8.</li>
+<li>Fixed maximum list length: 20 items. Additional strings are dropped.</li>
+</ul>
+<h2><a class="header" href="#testing-api" id="testing-api">Testing API</a></h2>
+<h3><a class="header" href="#testgetvalue" id="testgetvalue"><code>testGetValue</code></a></h3>
+<p>Gets the recorded value for a given string list metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Search
+
+assertEquals(listOf(&quot;Google&quot;, &quot;DuckDuckGo&quot;), Search.engines.testGetValue())
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Search
+
+assertEquals(
+    Arrays.asList(&quot;Google&quot;, &quot;DuckDuckGo&quot;),
+    Search.INSTANCE.engines().testGetValue()
+)
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
 <pre><code class="language-Swift">@testable import Glean
 
-// Was anything recorded?
-XCTAssert(Search.engines.testHasValue())
-// Does it have the expected value?
-// IMPORTANT: It may have been truncated -- see &quot;Limits&quot; below
 XCTAssertEqual([&quot;Google&quot;, &quot;DuckDuckGo&quot;], try Search.engines.testGetValue())
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+assert [&quot;Google&quot;, &quot;DuckDuckGo&quot;] == metrics.search.engines.test_get_value()
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><code class="language-Rust">use glean_metrics::search;
+
+assert_eq!(
+    vec![&quot;Google&quot;.to_string(), &quot;DuckDuckGo&quot;.to_string()],
+    search::engines.test_get_value(None).unwrap()
+);
+</code></pre>
+</div>
+<div data-lang="Javascript" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+nsTArray&lt;nsCString&gt; list = mozilla::glean::search::engines.TestGetValue();
+ASSERT_TRUE(list.Contains(&quot;wikipedia&quot;_ns));
+ASSERT_TRUE(list.Constains(&quot;duck duck go&quot;_ns));
+</code></pre>
+<p><strong>JavaScript</strong></p>
+<pre><code class="language-js">const engines = Glean.search.engines.testGetValue();
+Assert.ok(engines.includes(&quot;wikipedia&quot;));
+Assert.ok(engines.includes(&quot;duck duck go&quot;));
+</code></pre>
+</div>
+</div>
+</div>
+<h3><a class="header" href="#testhasvalue" id="testhasvalue"><code>testHasValue</code></a></h3>
+<p>Whether or not <strong>any</strong> value was recorded for a given string list metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Search
+
+assertTrue(Search.engines.testHasValue())
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Search
+
+assertTrue(Search.INSTANCE.engines().testHasValue())
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+XCTAssert(Search.engines.testHasValue())
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+assert metrics.search.engines.test_has_value()
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab"></div>
+<div data-lang="Javascript" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h3><a class="header" href="#testgetnumrecordederrors" id="testgetnumrecordederrors"><code>testGetNumRecordedErrors</code></a></h3>
+<p>Gets number of errors recorded for a given string list metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Search
+
+assertEquals(1, Search.engines.testGetNumRecordedErrors(ErrorType.InvalidValue))
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Search
+
+assertEquals(
+    1, Search.INSTANCE.engines().testGetNumRecordedErrors(ErrorType.InvalidValue)
+)
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
 // Were any of the values too long, and thus an error was recorded?
 XCTAssertEqual(1, Search.engines.testGetNumRecordedErrors(.invalidValue))
 </code></pre>
 </div>
 <div data-lang="Python" class="tab">
 <pre><code class="language-Python">from glean import load_metrics
-
 metrics = load_metrics(&quot;metrics.yaml&quot;)
 
-# Add them one at a time
-for engine in engines:
-    metrics.search.engines.add(engine)
-
-# Set them in one go
-metrics.search.engines.set(engines)
-</code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Python"># Was anything recorded?
-assert metrics.search.engines.test_has_value()
-# Does it have the expected value?
-# IMPORTANT: It may have been truncated -- see &quot;Limits&quot; below
-assert [&quot;Google&quot;, &quot;DuckDuckGo&quot;] == metrics.search.engines.test_get_value()
-# Were any of the values too long, and thus an error was recorded?
 assert 1 == metrics.search.engines.test_get_num_recorded_errors(
     ErrorType.INVALID_VALUE
 )
 </code></pre>
 </div>
-<div data-lang="C#" class="tab">
-<pre><code class="language-C#">using static Mozilla.YourApplication.GleanMetrics.Search;
-
-// Set a string array into the metric.
-Search.engines.Set(new string[] { &quot;Google&quot;, &quot;DuckDuckGo&quot; });
-// Add another string into the metric.
-Search.engines.Add(&quot;Baidu&quot;);
-</code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-C#">using static Mozilla.YourApplication.GleanMetrics.Search;
-
-// Was anything recorded?
-Assert.True(Search.engines.TestHasValue());
-// Does the string list metric have the expected value?
-// IMPORTANT: It may have been truncated -- see &quot;Limits&quot; below
-var snapshot = Search.engines.TestGetValue();
-Assert.Equal(3, Search.engines.Length);
-Assert.Equal(&quot;Google&quot;, Search.engines[0]);
-Assert.Equal(&quot;DuckDuckGo&quot;, Search.engines[1]);
-Assert.Equal(&quot;Baidu&quot;, Search.engines[2]);
-// Was the string truncated, and an error reported?
-Assert.Equal(
-    1,
-    Search.engines.TestGetNumRecordedErrors(
-        ErrorType.InvalidValue
-    )
-);
-</code></pre>
-</div>
 <div data-lang="Rust" class="tab">
-<pre><code class="language-Rust">use glean_metrics;
-
-// Add them one at a time
-engines.iter().for_each(|x|
-  search::engines.add(x)
-);
-
-// Set them in one go
-search::engines.set(engines)
-</code></pre>
-<p>There are test APIs available too:</p>
 <pre><code class="language-Rust">use glean::ErrorType;
-use glean_metrics;
+use glean_metrics::search;
 
-// Was anything recorded?
-assert!(search::engines.test_get_value(None).is_some());
-// Does it have the expected value?
-// IMPORTANT: It may have been truncated -- see &quot;Limits&quot; below
 assert_eq!(
-    vec![&quot;Google&quot;.to_string(), &quot;DuckDuckGo&quot;.to_string()], 
-    search::engines.test_get_value(None)
-);
-// Were any of the values too long, and thus an error was recorded?
-assert_eq!(
-    0, 
+    0,
     search::engines.test_get_num_recorded_errors(ErrorType::InvalidValue)
 );
 </code></pre>
 </div>
-<div data-lang="C++" class="tab">
-<blockquote>
-<p><strong>Note</strong>: C++ APIs are only available in Firefox Desktop.</p>
-</blockquote>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
-
-mozilla::glean::search::engines.Add(&quot;wikipedia&quot;_ns);
-mozilla::glean::search::engines.Add(&quot;duck duck go&quot;_ns);
-</code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
-
-// Does it have the expected values?
-nsTArray&lt;nsCString&gt; list = mozilla::glean::search::engines.TestGetValue();
-ASSERT_TRUE(list.Contains(&quot;wikipedia&quot;_ns));
-ASSERT_TRUE(list.Constains(&quot;duck duck go&quot;_ns));
-// Did it run across any errors?
-// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
-</code></pre>
-</div>
-<div data-lang="JS" class="tab">
-<blockquote>
-<p><strong>Note</strong>: JS APIs are only available in Firefox Desktop.</p>
-</blockquote>
-<pre><code class="language-js">Glean.search.engines.add(&quot;wikipedia&quot;);
-Glean.search.engines.add(&quot;duck duck go&quot;);
-</code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-js">const engines = Glean.search.engines.testGetValue();
-Assert.ok(engines.includes(&quot;wikipedia&quot;));
-Assert.ok(engines.includes(&quot;duck duck go&quot;));
-// Did it run across any errors?
-// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
-</code></pre>
+<div data-lang="Javascript" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab" data-bug="1683171"></div>
 </div>
 </div>
-</div>
-<h2><a class="header" href="#limits" id="limits">Limits</a></h2>
+<h2><a class="header" href="#metric-parameters" id="metric-parameters">Metric parameters</a></h2>
+<p>Example string list metric definition:</p>
+<pre><code class="language-YAML">search:
+  engines:
+    type: string_list
+    description: &gt;
+      Records the name of the enabled search engines.
+    bugs:
+      - https://bugzilla.mozilla.org/000000
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=000000#c3
+    notification_emails:
+      - me@mozilla.com
+    expires: 2020-10-01
+</code></pre>
+<p>For a full reference on metrics parameters common to all metric types,
+refer to the metrics <a href="../yaml/index.html">YAML format</a> reference page.</p>
+<h3><a class="header" href="#extra-metric-parameters" id="extra-metric-parameters">Extra metric parameters</a></h3>
+<p>N/A</p>
+<h2><a class="header" href="#data-questions" id="data-questions">Data questions</a></h2>
 <ul>
-<li>
-<p>Fixed maximum string length: 50. Longer strings are truncated. This is measured in the number of bytes when the string is encoded in UTF-8.</p>
-</li>
-<li>
-<p>Fixed maximum list length: 20 items. Additional strings are dropped.</p>
-</li>
-</ul>
-<h2><a class="header" href="#examples" id="examples">Examples</a></h2>
-<ul>
-<li>The names of the enabled search engines.</li>
-</ul>
-<h2><a class="header" href="#recorded-errors" id="recorded-errors">Recorded errors</a></h2>
-<ul>
-<li>
-<p><code>invalid_overflow</code>: if the string is too long. (Prior to Glean 31.5.0, this recorded an <code>invalid_value</code>).</p>
-</li>
-<li>
-<p><code>invalid_value</code>: if the list is too long</p>
-</li>
+<li>Which search engines are enabled?</li>
 </ul>
 <h2><a class="header" href="#reference" id="reference">Reference</a></h2>
 <ul>
 <li><a href="../../../javadoc/glean/mozilla.telemetry.glean.private/-string-list-metric-type/index.html">Kotlin API docs</a></li>
+<li><a href="../../../swift/Classes/StringListMetricType.html">Swift API docs</a></li>
 <li><a href="../../../python/glean/metrics/string_list.html">Python API docs</a></li>
 <li><a href="../../../docs/glean/private/struct.StringListMetric.html">Rust API docs</a></li>
 </ul>
