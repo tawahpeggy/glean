@@ -8217,7 +8217,16 @@ graphics::checkerboard_peak.accumulate_samples_signed(vec![23]);
 </code></pre>
 </div>
 <div data-lang="Javascript" class="tab"></div>
-<div data-lang="Firefox Desktop" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+mozilla::glean::graphics::checkerboard_peak.AccumulateSamples({ 23 });
+</code></pre>
+<p><strong>JavaScript</strong></p>
+<pre><code class="language-js">Glean.graphics.checkerboardPeak.accumulateSamples([23])
+</code></pre>
+</div>
 </div>
 </div>
 <h4><a class="header" href="#limits-14" id="limits-14">Limits</a></h4>
@@ -8260,7 +8269,18 @@ assert_eq!(23, graphics::checkerboard_peak.test_get_value(None).unwrap().sum);
 </code></pre>
 </div>
 <div data-lang="Javascript" class="tab"></div>
-<div data-lang="Firefox Desktop" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+auto data = mozilla::glean::graphics::checkerboard_peak.TestGetValue().value();
+ASSERT_EQ(23UL, data.sum);
+</code></pre>
+<p><strong>JavaScript</strong></p>
+<pre><code class="language-js">let data = Glean.graphics.checkerboardPeak.testGetValue();
+Assert.equal(23, data.sum);
+</code></pre>
+</div>
 </div>
 </div>
 <h3><a class="header" href="#testhasvalue-11" id="testhasvalue-11"><code>testHasValue</code></a></h3>
@@ -8345,9 +8365,6 @@ assert_eq!(
 <li><code>exponential</code>: The buckets follow a natural logarithmic distribution</li>
 </ul>
 </li>
-<li><code>gecko_datapoint</code>: (String) This is a Gecko-specific property.
-It is the name of the Gecko metric to accumulate the data from,
-when using the Glean SDK in a product using GeckoView.</li>
 </ul>
 <blockquote>
 <p><strong>Note</strong> Check out how these bucketing algorithms would behave on the <a href="reference/metrics/custom_distribution.html#simulator">Custom distribution simulator</a>.</p>
@@ -8355,6 +8372,9 @@ when using the Glean SDK in a product using GeckoView.</li>
 <p>Custom distributions have the following optional parameters:</p>
 <ul>
 <li><code>unit</code>: (String) The unit of the values in the metric. For documentation purposes only -- does not affect data collection.</li>
+<li><code>gecko_datapoint</code>: (String) This is a Gecko-specific property.
+It is the name of the Gecko metric to accumulate the data from,
+when using the Glean SDK in a product using GeckoView.</li>
 </ul>
 <h2><a class="header" href="#reference-14" id="reference-14">Reference</a></h2>
 <ul>
@@ -9190,6 +9210,14 @@ Each ping has its own schedule to gather all its locally saved metrics and creat
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/appendix/changelog/index.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#unreleased-changes" id="unreleased-changes">Unreleased changes</a></h1>
 <p><a href="https://github.com/mozilla/glean/compare/v39.0.3...main">Full changelog</a></p>
+<ul>
+<li>General
+<ul>
+<li>Updated <code>glean_parser</code> version to 3.6.0</li>
+<li>Allow Custom Distribution metric type on all platforms (<a href="https://github.com/mozilla/glean/pull/1679">#1679</a>)</li>
+</ul>
+</li>
+</ul>
 <h1><a class="header" href="#v3903-2021-06-09" id="v3903-2021-06-09">v39.0.3 (2021-06-09)</a></h1>
 <p><a href="https://github.com/mozilla/glean/compare/v39.0.2...v39.0.3">Full changelog</a></p>
 <ul>
