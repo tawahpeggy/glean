@@ -4,55 +4,39 @@
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
         <title>Toggling upload status - Glean - Cross-platform Telemetry library</title>
-        
-        
-
+                
 
         <!-- Custom HTML head -->
         
-
 
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
-        
-        <link rel="icon" href="../../favicon.svg">
-        
-        
-        <link rel="shortcut icon" href="../../favicon.png">
-        
-        <link rel="stylesheet" href="../../css/variables.css">
+                <link rel="icon" href="../../favicon.svg">
+                        <link rel="shortcut icon" href="../../favicon.png">
+                <link rel="stylesheet" href="../../css/variables.css">
         <link rel="stylesheet" href="../../css/general.css">
         <link rel="stylesheet" href="../../css/chrome.css">
+                <link rel="stylesheet" href="../../css/print.css" media="print">
         
-        <link rel="stylesheet" href="../../css/print.css" media="print">
-        
-
         <!-- Fonts -->
         <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+                <link rel="stylesheet" href="../../fonts/fonts.css">
         
-        <link rel="stylesheet" href="../../fonts/fonts.css">
-        
-
         <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="../../highlight.css">
         <link rel="stylesheet" href="../../tomorrow-night.css">
         <link rel="stylesheet" href="../../ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
+                <link rel="stylesheet" href="../../../shared/glean.css">
+                <link rel="stylesheet" href="../../../shared/mermaid.css">
         
-        <link rel="stylesheet" href="../../../shared/glean.css">
-        
-        <link rel="stylesheet" href="../../../shared/mermaid.css">
-        
-
-        
-        <!-- MathJax -->
+                <!-- MathJax -->
         <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        
-    </head>
+            </head>
     <body>
         <!-- Provide site root to javascript -->
         <script type="text/javascript">
@@ -102,8 +86,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item affix "><a href="../../index.html">Glean</a></li><li class="chapter-item affix "><li class="part-title">User Guides</li><li class="chapter-item "><a href="../../user/adding-glean-to-your-project/index.html"><strong aria-hidden="true">1.</strong> Adding Glean to your project</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../user/adding-glean-to-your-project/kotlin.html"><strong aria-hidden="true">1.1.</strong> Kotlin</a></li><li class="chapter-item "><a href="../../user/adding-glean-to-your-project/swift.html"><strong aria-hidden="true">1.2.</strong> Swift</a></li><li class="chapter-item "><a href="../../user/adding-glean-to-your-project/python.html"><strong aria-hidden="true">1.3.</strong> Python</a></li><li class="chapter-item "><a href="../../user/adding-glean-to-your-project/javascript.html"><strong aria-hidden="true">1.4.</strong> JavaScript</a></li><li class="chapter-item "><a href="../../user/adding-glean-to-your-project/qt.html"><strong aria-hidden="true">1.5.</strong> Qt/QML</a></li></ol></li><li class="chapter-item "><a href="../../user/integrating-glean-for-product-managers.html"><strong aria-hidden="true">2.</strong> Integrating Glean for project managers</a></li><li class="chapter-item "><a href="../../user/metrics/adding-new-metrics.html"><strong aria-hidden="true">3.</strong> Metrics</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../user/metrics/adding-new-metrics.html"><strong aria-hidden="true">3.1.</strong> Adding new metrics</a></li><li class="chapter-item "><a href="../../user/metrics/testing-metrics.html"><strong aria-hidden="true">3.2.</strong> Testing metrics</a></li><li class="chapter-item "><a href="../../user/metrics/error-reporting.html"><strong aria-hidden="true">3.3.</strong> Error reporting</a></li><li class="chapter-item "><a href="../../user/collected-metrics/metrics.html"><strong aria-hidden="true">3.4.</strong> Metrics collected by the Glean SDK</a></li></ol></li><li class="chapter-item "><a href="../../user/pings/index.html"><strong aria-hidden="true">4.</strong> Pings</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../user/pings/custom.html"><strong aria-hidden="true">4.1.</strong> Adding new custom pings</a></li><li class="chapter-item "><a href="../../user/pings/testing-custom-pings.html"><strong aria-hidden="true">4.2.</strong> Testing custom pings</a></li><li class="chapter-item "><a href="../../user/pings/sent-by-glean.html"><strong aria-hidden="true">4.3.</strong> Pings sent by Glean</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../user/pings/baseline.html"><strong aria-hidden="true">4.3.1.</strong> Baseline Ping</a></li><li class="chapter-item "><a href="../../user/pings/deletion_request.html"><strong aria-hidden="true">4.3.2.</strong> Deletion Request Ping</a></li><li class="chapter-item "><a href="../../user/pings/events.html"><strong aria-hidden="true">4.3.3.</strong> Events Ping</a></li><li class="chapter-item "><a href="../../user/pings/metrics.html"><strong aria-hidden="true">4.3.4.</strong> Metrics Ping</a></li><li class="chapter-item "><a href="../../user/pings/ping-schedules-and-timings.html"><strong aria-hidden="true">4.3.5.</strong> Schedules and timings overview</a></li></ol></li></ol></li><li class="chapter-item "><a href="../../user/debugging/index.html"><strong aria-hidden="true">5.</strong> Debugging products using Glean</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../user/debugging/android.html"><strong aria-hidden="true">5.1.</strong> Android</a></li><li class="chapter-item "><a href="../../user/debugging/ios.html"><strong aria-hidden="true">5.2.</strong> iOS</a></li><li class="chapter-item "><a href="../../user/debugging/python.html"><strong aria-hidden="true">5.3.</strong> Python</a></li><li class="chapter-item "><a href="../../user/debugging/javascript.html"><strong aria-hidden="true">5.4.</strong> JavaScript</a></li></ol></li><li class="chapter-item "><li class="part-title">API Reference</li><li class="chapter-item "><a href="../../reference/yaml/index.html"><strong aria-hidden="true">6.</strong> YAML Registry Format</a></li><li class="chapter-item expanded "><a href="../../reference/general/index.html"><strong aria-hidden="true">7.</strong> General API</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../reference/general/initializing.html"><strong aria-hidden="true">7.1.</strong> Initializing</a></li><li class="chapter-item expanded "><a href="../../reference/general/toggling-upload-status.html" class="active"><strong aria-hidden="true">7.2.</strong> Toggling upload status</a></li><li class="chapter-item "><a href="../../reference/general/experiments-api.html"><strong aria-hidden="true">7.3.</strong> Annotating experiments</a></li><li class="chapter-item "><a href="../../reference/general/register-custom-pings.html"><strong aria-hidden="true">7.4.</strong> Registering custom pings</a></li></ol></li><li class="chapter-item "><a href="../../reference/debug/index.html"><strong aria-hidden="true">8.</strong> Debugging</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../reference/debug/logPings.html"><strong aria-hidden="true">8.1.</strong> Log pings</a></li><li class="chapter-item "><a href="../../reference/debug/debugViewTag.html"><strong aria-hidden="true">8.2.</strong> Debug View Tag</a></li><li class="chapter-item "><a href="../../reference/debug/sourceTags.html"><strong aria-hidden="true">8.3.</strong> Source Tags</a></li></ol></li><li class="chapter-item "><a href="../../reference/metrics/index.html"><strong aria-hidden="true">9.</strong> Metric types</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../reference/metrics/boolean.html"><strong aria-hidden="true">9.1.</strong> Boolean</a></li><li class="chapter-item "><a href="../../reference/metrics/labeled_booleans.html"><strong aria-hidden="true">9.2.</strong> Labeled Booleans</a></li><li class="chapter-item "><a href="../../reference/metrics/counter.html"><strong aria-hidden="true">9.3.</strong> Counter</a></li><li class="chapter-item "><a href="../../reference/metrics/labeled_counters.html"><strong aria-hidden="true">9.4.</strong> Labeled Counters</a></li><li class="chapter-item "><a href="../../reference/metrics/string.html"><strong aria-hidden="true">9.5.</strong> String</a></li><li class="chapter-item "><a href="../../reference/metrics/labeled_strings.html"><strong aria-hidden="true">9.6.</strong> Labeled Strings</a></li><li class="chapter-item "><a href="../../reference/metrics/string_list.html"><strong aria-hidden="true">9.7.</strong> String List</a></li><li class="chapter-item "><a href="../../reference/metrics/timespan.html"><strong aria-hidden="true">9.8.</strong> Timespan</a></li><li class="chapter-item "><a href="../../reference/metrics/timing_distribution.html"><strong aria-hidden="true">9.9.</strong> Timing Distribution</a></li><li class="chapter-item "><a href="../../reference/metrics/memory_distribution.html"><strong aria-hidden="true">9.10.</strong> Memory Distribution</a></li><li class="chapter-item "><a href="../../reference/metrics/uuid.html"><strong aria-hidden="true">9.11.</strong> UUID</a></li><li class="chapter-item "><a href="../../reference/metrics/datetime.html"><strong aria-hidden="true">9.12.</strong> Datetime</a></li><li class="chapter-item "><a href="../../reference/metrics/event.html"><strong aria-hidden="true">9.13.</strong> Event</a></li><li class="chapter-item "><a href="../../reference/metrics/custom_distribution.html"><strong aria-hidden="true">9.14.</strong> Custom Distribution</a></li><li class="chapter-item "><a href="../../reference/metrics/quantity.html"><strong aria-hidden="true">9.15.</strong> Quantity</a></li><li class="chapter-item "><a href="../../reference/metrics/rate.html"><strong aria-hidden="true">9.16.</strong> Rate</a></li></ol></li><li class="chapter-item "><a href="../../reference/pings/index.html"><strong aria-hidden="true">10.</strong> Pings</a></li><li class="chapter-item affix "><li class="part-title">Language Bindings Information</li><li class="chapter-item "><a href="../../language-bindings/index.html"><strong aria-hidden="true">11.</strong> Overview</a></li><li class="chapter-item "><a href="../../language-bindings/android/index.html"><strong aria-hidden="true">12.</strong> Android</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../language-bindings/android/android-build-configuration-options.html"><strong aria-hidden="true">12.1.</strong> Android build configuration options</a></li><li class="chapter-item "><a href="../../language-bindings/android/android-offline-builds.html"><strong aria-hidden="true">12.2.</strong> Android offline builds</a></li><li class="chapter-item "><a href="../../language-bindings/android/instrument-android-crashes-example.html"><strong aria-hidden="true">12.3.</strong> Instrumenting Android crashes with the Glean SDK</a></li></ol></li><li class="chapter-item "><a href="../../language-bindings/javascript/index.html"><strong aria-hidden="true">13.</strong> JavaScript</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../language-bindings/javascript/plugins/index.html"><strong aria-hidden="true">13.1.</strong> Plugins</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../language-bindings/javascript/plugins/encryption.html"><strong aria-hidden="true">13.1.1.</strong> Ping Encryption Plugin</a></li></ol></li></ol></li><li class="chapter-item "><li class="part-title">Appendix</li><li class="chapter-item "><a href="../../appendix/glossary.html"><strong aria-hidden="true">14.</strong> Glossary</a></li><li class="chapter-item "><a href="../../appendix/changelog/index.html"><strong aria-hidden="true">15.</strong> Changelog</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../appendix/changelog/sdk.html"><strong aria-hidden="true">15.1.</strong> Glean SDK</a></li><li class="chapter-item "><a href="../../appendix/changelog/js.html"><strong aria-hidden="true">15.2.</strong> Glean.js</a></li></ol></li><li class="chapter-item "><a href="../../appendix/twig.html"><strong aria-hidden="true">16.</strong> This Week in Glean</a></li><li class="chapter-item "><a href="../../appendix/contribution-guidelines.html"><strong aria-hidden="true">17.</strong> Contribution Guidelines</a></li></ol>
-            </div>
+                <ol class="chapter"><li class="chapter-item affix "><a href="../../index.html">Glean</a></li><li class="chapter-item affix "><li class="part-title">User Guides</li><li class="chapter-item "><a href="../../user/adding-glean-to-your-project/index.html"><strong aria-hidden="true">1.</strong> Adding Glean to your project</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../user/adding-glean-to-your-project/kotlin.html"><strong aria-hidden="true">1.1.</strong> Kotlin</a></li><li class="chapter-item "><a href="../../user/adding-glean-to-your-project/swift.html"><strong aria-hidden="true">1.2.</strong> Swift</a></li><li class="chapter-item "><a href="../../user/adding-glean-to-your-project/python.html"><strong aria-hidden="true">1.3.</strong> Python</a></li><li class="chapter-item "><a href="../../user/adding-glean-to-your-project/javascript.html"><strong aria-hidden="true">1.4.</strong> JavaScript</a></li><li class="chapter-item "><a href="../../user/adding-glean-to-your-project/qt.html"><strong aria-hidden="true">1.5.</strong> Qt/QML</a></li></ol></li><li class="chapter-item "><a href="../../user/integrating-glean-for-product-managers.html"><strong aria-hidden="true">2.</strong> Integrating Glean for project managers</a></li><li class="chapter-item "><a href="../../user/metrics/adding-new-metrics.html"><strong aria-hidden="true">3.</strong> Metrics</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../user/metrics/adding-new-metrics.html"><strong aria-hidden="true">3.1.</strong> Adding new metrics</a></li><li class="chapter-item "><a href="../../user/metrics/testing-metrics.html"><strong aria-hidden="true">3.2.</strong> Testing metrics</a></li><li class="chapter-item "><a href="../../user/metrics/error-reporting.html"><strong aria-hidden="true">3.3.</strong> Error reporting</a></li><li class="chapter-item "><a href="../../user/collected-metrics/metrics.html"><strong aria-hidden="true">3.4.</strong> Metrics collected by the Glean SDK</a></li></ol></li><li class="chapter-item "><a href="../../user/pings/index.html"><strong aria-hidden="true">4.</strong> Pings</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../user/pings/custom.html"><strong aria-hidden="true">4.1.</strong> Adding new custom pings</a></li><li class="chapter-item "><a href="../../user/pings/testing-custom-pings.html"><strong aria-hidden="true">4.2.</strong> Testing custom pings</a></li><li class="chapter-item "><a href="../../user/pings/sent-by-glean.html"><strong aria-hidden="true">4.3.</strong> Pings sent by Glean</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../user/pings/baseline.html"><strong aria-hidden="true">4.3.1.</strong> Baseline Ping</a></li><li class="chapter-item "><a href="../../user/pings/deletion_request.html"><strong aria-hidden="true">4.3.2.</strong> Deletion Request Ping</a></li><li class="chapter-item "><a href="../../user/pings/events.html"><strong aria-hidden="true">4.3.3.</strong> Events Ping</a></li><li class="chapter-item "><a href="../../user/pings/metrics.html"><strong aria-hidden="true">4.3.4.</strong> Metrics Ping</a></li><li class="chapter-item "><a href="../../user/pings/ping-schedules-and-timings.html"><strong aria-hidden="true">4.3.5.</strong> Schedules and timings overview</a></li></ol></li></ol></li><li class="chapter-item "><a href="../../user/debugging/index.html"><strong aria-hidden="true">5.</strong> Debugging products using Glean</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../user/debugging/android.html"><strong aria-hidden="true">5.1.</strong> Android</a></li><li class="chapter-item "><a href="../../user/debugging/ios.html"><strong aria-hidden="true">5.2.</strong> iOS</a></li><li class="chapter-item "><a href="../../user/debugging/python.html"><strong aria-hidden="true">5.3.</strong> Python</a></li><li class="chapter-item "><a href="../../user/debugging/javascript.html"><strong aria-hidden="true">5.4.</strong> JavaScript</a></li></ol></li><li class="chapter-item "><li class="part-title">API Reference</li><li class="chapter-item "><a href="../../reference/yaml/index.html"><strong aria-hidden="true">6.</strong> YAML Registry Format</a></li><li class="chapter-item expanded "><a href="../../reference/general/index.html"><strong aria-hidden="true">7.</strong> General API</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../reference/general/initializing.html"><strong aria-hidden="true">7.1.</strong> Initializing</a></li><li class="chapter-item expanded "><a href="../../reference/general/toggling-upload-status.html" class="active"><strong aria-hidden="true">7.2.</strong> Toggling upload status</a></li><li class="chapter-item "><a href="../../reference/general/experiments-api.html"><strong aria-hidden="true">7.3.</strong> Annotating experiments</a></li><li class="chapter-item "><a href="../../reference/general/register-custom-pings.html"><strong aria-hidden="true">7.4.</strong> Registering custom pings</a></li></ol></li><li class="chapter-item "><a href="../../reference/debug/index.html"><strong aria-hidden="true">8.</strong> Debugging</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../reference/debug/logPings.html"><strong aria-hidden="true">8.1.</strong> Log pings</a></li><li class="chapter-item "><a href="../../reference/debug/debugViewTag.html"><strong aria-hidden="true">8.2.</strong> Debug View Tag</a></li><li class="chapter-item "><a href="../../reference/debug/sourceTags.html"><strong aria-hidden="true">8.3.</strong> Source Tags</a></li></ol></li><li class="chapter-item "><a href="../../reference/metrics/index.html"><strong aria-hidden="true">9.</strong> Metric types</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../reference/metrics/boolean.html"><strong aria-hidden="true">9.1.</strong> Boolean</a></li><li class="chapter-item "><a href="../../reference/metrics/labeled_booleans.html"><strong aria-hidden="true">9.2.</strong> Labeled Booleans</a></li><li class="chapter-item "><a href="../../reference/metrics/counter.html"><strong aria-hidden="true">9.3.</strong> Counter</a></li><li class="chapter-item "><a href="../../reference/metrics/labeled_counters.html"><strong aria-hidden="true">9.4.</strong> Labeled Counters</a></li><li class="chapter-item "><a href="../../reference/metrics/string.html"><strong aria-hidden="true">9.5.</strong> String</a></li><li class="chapter-item "><a href="../../reference/metrics/labeled_strings.html"><strong aria-hidden="true">9.6.</strong> Labeled Strings</a></li><li class="chapter-item "><a href="../../reference/metrics/string_list.html"><strong aria-hidden="true">9.7.</strong> String List</a></li><li class="chapter-item "><a href="../../reference/metrics/timespan.html"><strong aria-hidden="true">9.8.</strong> Timespan</a></li><li class="chapter-item "><a href="../../reference/metrics/timing_distribution.html"><strong aria-hidden="true">9.9.</strong> Timing Distribution</a></li><li class="chapter-item "><a href="../../reference/metrics/memory_distribution.html"><strong aria-hidden="true">9.10.</strong> Memory Distribution</a></li><li class="chapter-item "><a href="../../reference/metrics/uuid.html"><strong aria-hidden="true">9.11.</strong> UUID</a></li><li class="chapter-item "><a href="../../reference/metrics/datetime.html"><strong aria-hidden="true">9.12.</strong> Datetime</a></li><li class="chapter-item "><a href="../../reference/metrics/event.html"><strong aria-hidden="true">9.13.</strong> Event</a></li><li class="chapter-item "><a href="../../reference/metrics/custom_distribution.html"><strong aria-hidden="true">9.14.</strong> Custom Distribution</a></li><li class="chapter-item "><a href="../../reference/metrics/quantity.html"><strong aria-hidden="true">9.15.</strong> Quantity</a></li><li class="chapter-item "><a href="../../reference/metrics/rate.html"><strong aria-hidden="true">9.16.</strong> Rate</a></li></ol></li><li class="chapter-item "><a href="../../reference/pings/index.html"><strong aria-hidden="true">10.</strong> Pings</a></li><li class="chapter-item affix "><li class="part-title">Language Bindings Information</li><li class="chapter-item "><a href="../../language-bindings/index.html"><strong aria-hidden="true">11.</strong> Overview</a></li><li class="chapter-item "><a href="../../language-bindings/android/index.html"><strong aria-hidden="true">12.</strong> Android</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../language-bindings/android/android-build-configuration-options.html"><strong aria-hidden="true">12.1.</strong> Android build configuration options</a></li><li class="chapter-item "><a href="../../language-bindings/android/android-offline-builds.html"><strong aria-hidden="true">12.2.</strong> Android offline builds</a></li><li class="chapter-item "><a href="../../language-bindings/android/instrument-android-crashes-example.html"><strong aria-hidden="true">12.3.</strong> Instrumenting Android crashes with the Glean SDK</a></li></ol></li><li class="chapter-item "><a href="../../language-bindings/javascript/index.html"><strong aria-hidden="true">13.</strong> JavaScript</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../language-bindings/javascript/plugins/index.html"><strong aria-hidden="true">13.1.</strong> Plugins</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../language-bindings/javascript/plugins/encryption.html"><strong aria-hidden="true">13.1.1.</strong> Ping Encryption Plugin</a></li></ol></li></ol></li><li class="chapter-item "><li class="part-title">Appendix</li><li class="chapter-item "><a href="../../appendix/glossary.html"><strong aria-hidden="true">14.</strong> Glossary</a></li><li class="chapter-item "><a href="../../appendix/changelog/index.html"><strong aria-hidden="true">15.</strong> Changelog</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../appendix/changelog/sdk.html"><strong aria-hidden="true">15.1.</strong> Glean SDK</a></li><li class="chapter-item "><a href="../../appendix/changelog/js.html"><strong aria-hidden="true">15.2.</strong> Glean.js</a></li></ol></li><li class="chapter-item "><a href="../../appendix/twig.html"><strong aria-hidden="true">16.</strong> This Week in Glean</a></li><li class="chapter-item "><a href="../../appendix/contribution-guidelines.html"><strong aria-hidden="true">17.</strong> Contribution Guidelines</a></li></ol>            </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
 
@@ -127,33 +110,27 @@
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
                         </ul>
-                        
-                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                                <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
                             <i class="fa fa-search"></i>
                         </button>
-                        
-                    </div>
+                                            </div>
 
                     <h1 class="menu-title">Glean - Cross-platform Telemetry library</h1>
 
                     <div class="right-buttons">
-                        
-                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                                                <a href="../../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
-                        
-                        
-                        <a href="https://github.com/mozilla/glean" title="Git repository" aria-label="Git repository">
+                                                                        <a href="https://github.com/mozilla/glean" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        
+                                                
                     </div>
                 </div>
 
-                
-                <div id="search-wrapper" class="hidden">
+                                <div id="search-wrapper" class="hidden">
                     <form id="searchbar-outer" class="searchbar-outer">
-                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
                     </form>
                     <div id="searchresults-outer" class="searchresults-outer hidden">
                         <div id="searchresults-header" class="searchresults-header"></div>
@@ -162,7 +139,6 @@
                     </div>
                 </div>
                 
-
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
                 <script type="text/javascript">
                     document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
@@ -174,14 +150,14 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#toggling-upload-status" id="toggling-upload-status">Toggling upload status</a></h1>
+                        <h1 id="toggling-upload-status"><a class="header" href="#toggling-upload-status">Toggling upload status</a></h1>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
 <div data-lang="Kotlin" class="tab">
 <p><code>Glean.setUploadEnabled()</code> should be called in response to the user enabling or disabling telemetry.</p>
 <div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
-<h5><a class="header" href="#do-not-call-setuploadenabled-before-initializing" id="do-not-call-setuploadenabled-before-initializing">Do not call <code>setUploadEnabled</code> before initializing</a></h5>
+<h5 id="do-not-call-setuploadenabled-before-initializing"><a class="header" href="#do-not-call-setuploadenabled-before-initializing">Do not call <code>setUploadEnabled</code> before initializing</a></h5>
 <blockquote>
 <p>If called before <code>Glean.initialize()</code> the call to <code>Glean.setUploadEnabled()</code> will be ignored.
 Set the initial state using <code>uploadEnabled</code> on <code>Glean.initialize()</code>.</p>
@@ -190,7 +166,7 @@ Set the initial state using <code>uploadEnabled</code> on <code>Glean.initialize
 <div data-lang="Swift" class="tab">
 <p><code>Glean.shared.setUploadEnabled()</code> should be called in response to the user enabling or disabling telemetry.</p>
 <div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
-<h5><a class="header" href="#do-not-call-setuploadenabled-before-initializing-1" id="do-not-call-setuploadenabled-before-initializing-1">Do not call <code>setUploadEnabled</code> before initializing</a></h5>
+<h5 id="do-not-call-setuploadenabled-before-initializing-1"><a class="header" href="#do-not-call-setuploadenabled-before-initializing-1">Do not call <code>setUploadEnabled</code> before initializing</a></h5>
 <blockquote>
 <p>If called before <code>Glean.shared.initialize()</code> the call to <code>Glean.shared.setUploadEnabled()</code> will be ignored.
 Set the initial state using <code>uploadEnabled</code> on <code>Glean.shared.initialize()</code>.</p>
@@ -199,7 +175,7 @@ Set the initial state using <code>uploadEnabled</code> on <code>Glean.shared.ini
 <div data-lang="Python" class="tab">
 <p><code>Glean.set_upload_enabled()</code> should be called in response to the user enabling or disabling telemetry.</p>
 <div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
-<h5><a class="header" href="#do-not-call-set_upload_enabled-before-initializing" id="do-not-call-set_upload_enabled-before-initializing">Do not call <code>set_upload_enabled</code> before initializing</a></h5>
+<h5 id="do-not-call-set_upload_enabled-before-initializing"><a class="header" href="#do-not-call-set_upload_enabled-before-initializing">Do not call <code>set_upload_enabled</code> before initializing</a></h5>
 <blockquote>
 <p>If called before <code>Glean.initialize()</code> the call to <code>Glean.set_upload_enabled()</code> will be ignored.
 Set the initial state using <code>upload_enabled</code> on <code>Glean.initialize()</code>.</p>
@@ -208,7 +184,7 @@ Set the initial state using <code>upload_enabled</code> on <code>Glean.initializ
 <div data-lang="JavaScript" class="tab">
 <p><code>Glean.setUploadEnabled()</code> should be called in response to the user enabling or disabling telemetry.</p>
 <div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
-<h5><a class="header" href="#do-not-call-setuploadenabled-before-initializing-2" id="do-not-call-setuploadenabled-before-initializing-2">Do not call <code>setUploadEnabled</code> before initializing</a></h5>
+<h5 id="do-not-call-setuploadenabled-before-initializing-2"><a class="header" href="#do-not-call-setuploadenabled-before-initializing-2">Do not call <code>setUploadEnabled</code> before initializing</a></h5>
 <blockquote>
 <p>If called before <code>Glean.initialize()</code> the call to <code>Glean.setUploadEnabled()</code> will be ignored.
 Set the initial state using <code>uploadEnabled</code> on <code>Glean.initialize()</code>.</p>
@@ -224,79 +200,55 @@ When re-enabling, core Glean metrics will be recomputed at that time.</p>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                        
-                            <a rel="prev" href="../../reference/general/initializing.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                                    <a rel="prev" href="../../reference/general/initializing.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
-
-                        
-                            <a rel="next" href="../../reference/general/experiments-api.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                                    <a rel="next" href="../../reference/general/experiments-api.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
-
                         <div style="clear: both"></div>
                     </nav>
                 </div>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                
-                    <a rel="prev" href="../../reference/general/initializing.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                    <a rel="prev" href="../../reference/general/initializing.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
-
-                
-                    <a rel="next" href="../../reference/general/experiments-api.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                    <a rel="next" href="../../reference/general/experiments-api.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
-                
-            </nav>
+                            </nav>
 
         </div>
 
         
-
         
-
         
-
-        
-        <script type="text/javascript">
+                <script type="text/javascript">
             window.playground_copyable = true;
         </script>
         
-
         
-
-        
-        <script src="../../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+                <script src="../../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="../../mark.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="../../searcher.js" type="text/javascript" charset="utf-8"></script>
         
-
         <script src="../../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="../../highlight.js" type="text/javascript" charset="utf-8"></script>
         <script src="../../book.js" type="text/javascript" charset="utf-8"></script>
 
         <!-- Custom JS scripts -->
+                <script type="text/javascript" src="../../../shared/tabs.js"></script>
+                <script type="text/javascript" src="../../../shared/mermaid.min.js"></script>
+                <script type="text/javascript" src="../../../shared/mermaid-init.js"></script>
+                <script type="text/javascript" src="../../chart.min.js"></script>
+                <script type="text/javascript" src="../../chart-distributions.js"></script>
+                <script type="text/javascript" src="../../chart-distributions-ui.js"></script>
         
-        <script type="text/javascript" src="../../../shared/tabs.js"></script>
         
-        <script type="text/javascript" src="../../../shared/mermaid.min.js"></script>
-        
-        <script type="text/javascript" src="../../../shared/mermaid-init.js"></script>
-        
-        <script type="text/javascript" src="../../chart.min.js"></script>
-        
-        <script type="text/javascript" src="../../chart-distributions.js"></script>
-        
-        <script type="text/javascript" src="../../chart-distributions-ui.js"></script>
-        
-
-        
-
     </body>
 </html>
