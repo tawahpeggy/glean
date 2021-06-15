@@ -468,6 +468,13 @@ assert.strictEqual(1, await views.loginOpened.testGetNumRecordedErrors(&quot;inv
 </code></pre>
 <p>For a full reference on metrics parameters common to all metric types,
 refer to the metrics <a href="../yaml/index.html">YAML format</a> reference page.</p>
+<div class="special-quote special-quote-info fa fa-info-circle"></div>
+<h4 id="events-require-lifetime-ping"><a class="header" href="#events-require-lifetime-ping">Events require <code>lifetime: ping</code>.</a></h4>
+<blockquote>
+<p>Recorded events are always sent in their respective pings and then cleared.
+They cannot be persisted longer.
+The <code>glean_parser</code> will reject any other lifetime.</p>
+</blockquote>
 <h3 id="extra-metric-parameters"><a class="header" href="#extra-metric-parameters">Extra metric parameters</a></h3>
 <h4 id="extra_keys"><a class="header" href="#extra_keys"><code>extra_keys</code></a></h4>
 <p>The acceptable keys on the &quot;extra&quot; object sent with events.
