@@ -498,6 +498,14 @@ The easiest way to do this is through <a href="https://rustup.rs/">rustup</a>.</
 <div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
 <h5 id="important-1"><a class="header" href="#important-1">Important</a></h5>
 <blockquote>
+<p>Installing Python wheels is still a rapidly evolving feature of the Python package ecosystem.
+If the above command fails, try upgrading <code>pip</code>:</p>
+<pre><code class="language-bash">python -m pip install --upgrade pip
+</code></pre>
+</blockquote>
+<div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
+<h5 id="important-2"><a class="header" href="#important-2">Important</a></h5>
+<blockquote>
 <p>The Glean SDK Python bindings make extensive use of type annotations to catch type related errors at build time. We highly recommend adding <a href="https://mypy-lang.org">mypy</a> to your continuous integration workflow to catch errors related to type mismatches early.</p>
 </blockquote>
 <h2 id="consuming-yaml-registry-files"><a class="header" href="#consuming-yaml-registry-files">Consuming YAML registry files</a></h2>
@@ -4263,7 +4271,7 @@ The labels in this list must match the following requirements:</p>
 </li>
 </ul>
 <div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
-<h5 id="important-2"><a class="header" href="#important-2">Important</a></h5>
+<h5 id="important-3"><a class="header" href="#important-3">Important</a></h5>
 <blockquote>
 <p>If the labels are specified in the <code>metrics.yaml</code>, using any label not listed in that file
 will be replaced with the special value <code>__other__</code>.</p>
@@ -4870,7 +4878,7 @@ The labels in this list must match the following requirements:</p>
 </li>
 </ul>
 <div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
-<h5 id="important-3"><a class="header" href="#important-3">Important</a></h5>
+<h5 id="important-4"><a class="header" href="#important-4">Important</a></h5>
 <blockquote>
 <p>If the labels are specified in the <code>metrics.yaml</code>, using any label not listed in that file
 will be replaced with the special value <code>__other__</code>.</p>
@@ -4898,7 +4906,7 @@ index of the labels is used to report Gecko data through the Glean SDK.</p>
 <p>String metrics allow recording a Unicode string value with arbitrary content.</p>
 <p>This metric type does not support recording JSON blobs - please get in contact with the Glean SDK team if you're missing a type.</p>
 <div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
-<h2 id="important-4"><a class="header" href="#important-4">Important</a></h2>
+<h2 id="important-5"><a class="header" href="#important-5">Important</a></h2>
 <blockquote>
 <p>Be careful using arbitrary strings and make sure they can't accidentally contain identifying data (like directory paths or user input).</p>
 </blockquote>
@@ -5475,7 +5483,7 @@ The labels in this list must match the following requirements:</p>
 </li>
 </ul>
 <div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
-<h5 id="important-5"><a class="header" href="#important-5">Important</a></h5>
+<h5 id="important-6"><a class="header" href="#important-6">Important</a></h5>
 <blockquote>
 <p>If the labels are specified in the <code>metrics.yaml</code>, using any label not listed in that file
 will be replaced with the special value <code>__other__</code>.</p>
@@ -5502,7 +5510,7 @@ index of the labels is used to report Gecko data through the Glean SDK.</p>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/metrics/labeled_strings.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="string-list"><a class="header" href="#string-list">String List</a></h1>
 <p>Strings lists are used for recording a list of Unicode string values, such as the names of the enabled search engines.</p>
 <div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
-<h5 id="important-6"><a class="header" href="#important-6">Important</a></h5>
+<h5 id="important-7"><a class="header" href="#important-7">Important</a></h5>
 <blockquote>
 <p>Be careful using arbitrary strings and make sure they can't accidentally contain identifying data (like directory paths or user input).</p>
 </blockquote>
@@ -7818,7 +7826,7 @@ say every time a view was open and from where.</p>
 <li>A set of key-value pairs, where the keys are predefined in the <code>extra_keys</code> metric parameter, and the values are strings.</li>
 </ul>
 <div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
-<h5 id="important-7"><a class="header" href="#important-7">Important</a></h5>
+<h5 id="important-8"><a class="header" href="#important-8">Important</a></h5>
 <blockquote>
 <p>Events are the most expensive metric type to record, transmit, store and analyze,
 so they should be used sparingly, and only when none of the other metric types are sufficient for answering your question.</p>
@@ -10927,6 +10935,12 @@ This is a major milestone in using a cross-platform implementation of Glean on t
 <li><a href="https://github.com/mozilla/glean.js/pull/399">#399</a>: Check if there are ping data before attempting to delete it.
 <ul>
 <li>This change lowers the amount of log messages related to attempting to delete inexistent data.</li>
+</ul>
+</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/415">#415</a>: Gzip ping paylod before upload
+<ul>
+<li>This changes the signature of <code>Uploader.post</code> to accept <code>string | Uint8Array</code> for the <code>body</code> parameter, instead of only <code>string</code>.</li>
+<li>The gizpping functionality is disabled in Qt/QML environments. Follow <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1716322">Bug 1716322</a> for updates on the status of this feature on that platform.</li>
 </ul>
 </li>
 </ul>

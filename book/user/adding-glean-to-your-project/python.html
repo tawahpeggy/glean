@@ -165,6 +165,14 @@ The easiest way to do this is through <a href="https://rustup.rs/">rustup</a>.</
 <div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
 <h5 id="important"><a class="header" href="#important">Important</a></h5>
 <blockquote>
+<p>Installing Python wheels is still a rapidly evolving feature of the Python package ecosystem.
+If the above command fails, try upgrading <code>pip</code>:</p>
+<pre><code class="language-bash">python -m pip install --upgrade pip
+</code></pre>
+</blockquote>
+<div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
+<h5 id="important-1"><a class="header" href="#important-1">Important</a></h5>
+<blockquote>
 <p>The Glean SDK Python bindings make extensive use of type annotations to catch type related errors at build time. We highly recommend adding <a href="https://mypy-lang.org">mypy</a> to your continuous integration workflow to catch errors related to type mismatches early.</p>
 </blockquote>
 <h2 id="consuming-yaml-registry-files"><a class="header" href="#consuming-yaml-registry-files">Consuming YAML registry files</a></h2>

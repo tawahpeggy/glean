@@ -159,6 +159,12 @@
 <li>This change lowers the amount of log messages related to attempting to delete inexistent data.</li>
 </ul>
 </li>
+<li><a href="https://github.com/mozilla/glean.js/pull/415">#415</a>: Gzip ping paylod before upload
+<ul>
+<li>This changes the signature of <code>Uploader.post</code> to accept <code>string | Uint8Array</code> for the <code>body</code> parameter, instead of only <code>string</code>.</li>
+<li>The gizpping functionality is disabled in Qt/QML environments. Follow <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1716322">Bug 1716322</a> for updates on the status of this feature on that platform.</li>
+</ul>
+</li>
 </ul>
 <h1 id="v0150-2021-06-03"><a class="header" href="#v0150-2021-06-03">v0.15.0 (2021-06-03)</a></h1>
 <p><a href="https://github.com/mozilla/glean.js/compare/v0.14.1...v0.15.0">Full changelog</a></p>
