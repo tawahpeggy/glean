@@ -1889,274 +1889,15 @@ search:
       - search
       - default
 </code></pre>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/user/pings/custom.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="unit-testing-glean-custom-pings-for-android"><a class="header" href="#unit-testing-glean-custom-pings-for-android">Unit testing Glean custom pings for Android</a></h1>
-<p>Applications defining <a href="user/pings/custom.html">custom pings</a> can use use the strategy defined in this document to test these pings in unit tests.</p>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/user/pings/custom.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="testing-custom-pings"><a class="header" href="#testing-custom-pings">Testing custom pings</a></h1>
+<p>Applications defining <a href="user/pings/custom.html">custom pings</a> can use use the <a href="user/pings/../../reference/pings/index.html#testing-api">ping testing API</a> to test these pings in unit tests.</p>
 <h2 id="general-testing-strategy"><a class="header" href="#general-testing-strategy">General testing strategy</a></h2>
-<p>The schedule of custom pings depends on the specific application implementation, since it is up to the SDK user to define the ping semantics. This makes writing unit tests for custom pings a bit more involved.</p>
-<p>One possible strategy could be to wrap the Glean SDK API call to send the ping in a function that can be mocked in the unit test. This would allow for checking the status and the values of the metrics contained in the ping at the time in which the application would have sent it.</p>
-<h2 id="example-testing-of-a-custom-ping"><a class="header" href="#example-testing-of-a-custom-ping">Example testing of a custom ping</a></h2>
-<p>Let us start by defining a custom ping with a sample metric in it. Here is the <code>pings.yaml</code> file:</p>
-<pre><code class="language-yaml">$schema: moz://mozilla.org/schemas/glean/pings/2-0-0
-
-my-custom-ping:
-  description: &gt;
-    This ping is intended to showcase the recommended testing strategy for
-    custom pings.
-  include_client_id: false
-  bugs:
-    - https://bugzilla.mozilla.org/1556985/
-  data_reviews:
-    - https://bugzilla.mozilla.org/show_bug.cgi?id=1556985
-  notification_emails:
-    - custom-ping-owner@example.com
-
-</code></pre>
-<p>And here is the <code>metrics.yaml</code></p>
-<pre><code class="language-yaml">$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
-
-custom_ping_data:
-  sample_string:
-    type: string
-    lifetime: ping
-    description: &gt;
-      A sample string metric for demonstrating unit tests for custom pings.
-    send_in_pings:
-      - my-custom-ping
-    bugs:
-      - https://bugzilla.mozilla.org/1556985/
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1556985
-    notification_emails:
-      - custom-ping-owner@example.com
-    expires: &quot;2019-10-01&quot;
-</code></pre>
-<p>A potential usage of the Glean SDK generated API could be the following:</p>
-<div class="tabs">
-<div class="tabbar"></div>
-<div class="tabcontents">
-<div data-lang="Kotlin" class="tab">
-<pre><code class="language-kotlin">import my.component.GleanMetrics.Pings
-import my.component.GleanMetrics.CustomPingData
-
-class MyCustomPingScheduler {
-  /**
-   * HERE ONLY TO KEEP THE EXAMPLE SIMPLE.
-   *
-   * A function that consumes the Glean SDK generated metrics API to
-   * record some data. It doesn't really need to be in a function, nor
-   * in this class. The Glean SDK API can be called when the data is
-   * generated.
-   */
-  fun addSomeData() {
-    // Record some sample data.
-    CustomPingData.sampleString.set(&quot;test-data&quot;)
-  }
-
-  /**
-   * Called to implement the ping scheduling logic for 'my_custom_ping'.
-   */
-  fun schedulePing() {
-    // ... some scheduling logic that will end up calling the function below.
-    submitPing()
-  }
-
-  /**
-   * Internal function to only be overridden in tests. This
-   * calls the Glean SDK API to send custom pings.
-   */
-  @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-  internal fun submitPing() {
-    Pings.MyCustomPing.submit()
-  }
-}
-</code></pre>
-<p>The following unit test intercepts the <code>MyCustomPingScheduler.submitPing()</code> call in order to perform the validation on the data.
-This specific example uses Mockito, but any other framework would work.</p>
-<pre><code class="language-kotlin">// Metrics and pings definitions.
-import my.component.GleanMetrics.Pings
-import my.component.GleanMetrics.CustomPingData
-
-// Mockito imports for using spies.
-import org.mockito.Mockito.spy
-import org.mockito.Mockito.`when`
-
-@RunWith(AndroidJUnit4::class)
-class MyCustomPingSchedulerTest {
-    // Apply the GleanTestRule to set up a disposable Glean instance.
-    // Please note that this clears the Glean data across tests.
-    @get:Rule
-    val gleanRule = GleanTestRule(ApplicationProvider.getApplicationContext())
-
-    @Test
-    fun `verify custom ping metrics`() {
-      val scheduler = spy(MyCustomPingScheduler())
-      doAnswer {
-        // Here we validate the content that goes into the ping.
-        assertTrue(CustomPingData.sampleString.testHasValue())
-        assertEquals(&quot;test-data&quot;, CustomPingData.sampleString.testGetValue())
-
-        // We want to intercept this call, but we also want to make sure the
-        // real Glean API is called in order to clear the ping store and to provide
-        // consistent behaviour with respect to the application.
-        it.callRealMethod()
-      }.`when`(scheduler).submitPing()
-
-      scheduler.addSomeData()
-      scheduler.schedulePing()
-    }
-}
-</code></pre>
-</div>
-<div data-lang="Swift" class="tab">
-<pre><code class="language-swift">import Foundation
-import Glean
-
-// Use typealiases to simplify usage.
-// This can be placed anywhere in your code to be available in all files.
-typealias CustomPingData = GleanMetrics.CustomPingData
-typealias Pings = GleanMetrics.Pings
-
-class MyCustomPingScheduler {
-    /**
-     * HERE ONLY TO KEEP THE EXAMPLE SIMPLE.
-     *
-     * A function that consumes the Glean SDK generated metrics API to
-     * record some data. It doesn't really need to be in a function, nor
-     * in this class. The Glean SDK API can be called when the data is
-     * generated.
-     */
-    func addSomeData() {
-       // Record some sample data.
-       CustomPingData.sampleString.set(&quot;test-data&quot;)
-    }
-
-    /**
-     * Called to implement the ping scheduling logic for 'my_custom_ping'.
-     */
-    func schedulePing() {
-        // ... some scheduling logic that will end up calling the function below.
-        submitPing()
-    }
-
-    /**
-     * Internal function to only be overridden in tests. This
-     * calls the Glean SDK API to send custom pings.
-     */
-    internal func submitPing() {
-        Pings.shared.myCustomPing.submit()
-    }
-}
-</code></pre>
-<p>The following unit test intercepts the <code>MyCustomPingScheduler.submitPing()</code> call in order to perform the validation on the data.
-This example uses a manual mock implementation, but you could use a framework for that.</p>
-<pre><code class="language-swift">@testable import YourApplication
-import Glean
-import XCTest
-
-class MyCustomPingSchedulerMock: MyCustomPingScheduler {
-    var submitWasCalled = false
-
-    deinit {
-        XCTAssertTrue(submitWasCalled, &quot;submitPing should have been called once&quot;)
-    }
-
-    override func submitPing() {
-        submitWasCalled = true
-
-        XCTAssertTrue(CustomPingData.os.testHasValue())
-        XCTAssertEqual(&quot;test-data&quot;, try! CustomPingData.os.testGetValue())
-
-        super.submitPing()
-    }
-}
-
-class MyCustomPingSchedulerTests: XCTestCase {
-    override func setUp() {
-        Glean.shared.resetGlean(clearStores: true)
-    }
-
-    func testCustomPingMetrics() {
-        let scheduler = MyCustomPingSchedulerMock()
-        scheduler.addSomeData()
-        scheduler.schedulePing()
-    }
-}
-</code></pre>
-</div>
-<div data-lang="Python" class="tab">
-<pre><code class="language-python">import glean
-
-metrics = glean.load_metrics(&quot;metrics.yaml&quot;)
-pings = glean.load_pings(&quot;pings.yaml&quot;)
-
-
-class MyCustomPingScheduler:
-    def add_some_data(self):
-        &quot;&quot;&quot;
-        HERE ONLY TO KEEP THE EXAMPLE SIMPLE.
-
-        A function that consumes the Glean SDK generated metrics API to
-        record some data. It doesn't really need to be in a function, nor
-        in this class. The Glean SDK API can be called when the data is
-        generated.
-        &quot;&quot;&quot;
-        # Record some sample data.
-        metrics.custom_ping_data.sample_string.set(&quot;test-data&quot;)
-
-    def schedule_ping(self):
-        &quot;&quot;&quot;
-        Called to implement the ping scheduling logic for 'my_custom_ping'.
-        &quot;&quot;&quot;
-        # ... some scheduling logic that will end up calling the function below.
-        self._submit_ping()
-
-    def _submit_ping(self):
-        &quot;&quot;&quot;
-        Internal function to only be overridden in tests.
-        &quot;&quot;&quot;
-        pings.my_custom_ping.submit()
-</code></pre>
-<p>The following unit test intercepts the <code>MyCustomPingScheduler._submit_ping()</code> call in order to perform the validation on the data.</p>
-<pre><code class="language-python">from unittest.mock import MagicMock
-
-from glean import testing
-
-import custom_ping_scheduler
-
-
-# This will be run before every test in the entire test suite
-def pytest_runtest_setup(item):
-    testing.reset_glean(application_id=&quot;my-app&quot;, application_version=&quot;0.0.1&quot;)
-
-
-def test_verify_custom_ping_metrics():
-    scheduler = custom_ping_scheduler.MyCustomPingScheduler()
-
-    original_submit_ping = scheduler._submit_ping
-
-    def _submit_ping(self):
-        # Here we validate the content that goes into the ping.
-        assert (
-            custom_ping_scheduler.metrics.custom_ping_data.sample_string.test_has_value()
-        )
-        assert (
-            &quot;test-data&quot;
-            == custom_ping_scheduler.metrics.custom_ping_data.sample_string.test_get_value()
-        )
-
-        # We want to intercept this call, but we also want to make sure the
-        # real Glean API is called in order to clear the ping strong and to
-        # provide consistent behavior with respect to the application.
-        original_submit_ping(self)
-
-    scheduler._submit_ping = MagicMock(_submit_ping)
-
-    scheduler.add_some_data()
-    scheduler.schedule_ping()
-</code></pre>
-</div>
-</div>
-</div>
+<p>The schedule of custom pings depends on the specific application implementation, since it is up to the SDK user to define the ping semantics. This makes the testing strategy a bit more complex, but usually boiling down to:</p>
+<ol>
+<li>Triggering the code path that accumulates/records the data.</li>
+<li>Defining a callback validation function using the <a href="user/pings/../../reference/pings/index.html#testbeforenextsubmit">ping testing API</a>.</li>
+<li>Finally triggering the code path that submits the custom ping or submitting the ping using the <a href="user/pings/../../reference/pings/index.html#submit"><code>submit</code> API</a>.</li>
+</ol>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/user/pings/testing-custom-pings.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="pings-sent-by-glean"><a class="header" href="#pings-sent-by-glean">Pings sent by Glean</a></h1>
 <p>If data collection is enabled, the Glean SDK provides a set of built-in pings that are assembled out of the box without any developer intervention.  The following is a list of these built-in pings:</p>
 <ul>
@@ -8872,8 +8613,18 @@ then the denominator should be defined as a <code>counter</code> and shared betw
 <ul>
 <li><a href="reference/metrics/../../../docs/glean/private/rate/struct.RateMetric.html">Rust API docs</a></li>
 </ul>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/metrics/rate.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="submitting-a-custom-ping"><a class="header" href="#submitting-a-custom-ping">Submitting a custom ping</a></h1>
-<p>To collect and queue a custom ping for eventual uploading, call the <code>submit</code> method on the <code>PingType</code> object that the Glean SDK generated for your ping.</p>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/metrics/rate.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="pings-1"><a class="header" href="#pings-1">Pings</a></h1>
+<h2 id="submission-api"><a class="header" href="#submission-api">Submission API</a></h2>
+<h3 id="submit"><a class="header" href="#submit"><code>submit</code></a></h3>
+<p>Collect and queue a custom ping for eventual uploading.</p>
+<div class="special-quote special-quote-info fa fa-info-circle"></div>
+<h5 id="glean-owned-pings-are-submitted-automatically"><a class="header" href="#glean-owned-pings-are-submitted-automatically">Glean-owned pings are submitted automatically</a></h5>
+<blockquote>
+<p>Products do not need to submit Glean built-in pings,
+as their scheduling is managed internally. The APIs
+on this page are only relevant for products defining
+<a href="reference/pings/../../user/pings/custom.html#defining-a-custom-ping">custom pings</a>.</p>
+</blockquote>
 <p>By default, if the ping doesn't currently have any events or metrics set, <code>submit</code> will do nothing.  However, if the <code>send_if_empty</code> flag is set to true in the ping definition, it will always be submitted.</p>
 <p>For example, to submit the custom ping defined in <a href="reference/pings/../../user/pings/custom.html#defining-a-custom-ping">Adding new custom pings</a>:</p>
 <div class="tabs">
@@ -8882,11 +8633,18 @@ then the denominator should be defined as a <code>counter</code> and shared betw
 <div data-lang="Kotlin" class="tab">
 <pre><code class="language-kotlin">import org.mozilla.yourApplication.GleanMetrics.Pings
 Pings.search.submit(
-    GleanMetrics.Pings.searchReasonCodes.performed
+    Pings.searchReasonCodes.performed
 )
 </code></pre>
 </div>
-<div data-lang="Java" class="tab"></div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-java">import org.mozilla.yourApplication.GleanMetrics.Pings
+
+Pings.INSTANCE.search.submit(
+    Pings.INSTANCE.searchReasonCodes.performed
+);
+</code></pre>
+</div>
 <div data-lang="Swift" class="tab">
 <pre><code class="language-swift">import Glean
 
@@ -8926,6 +8684,160 @@ pings.search.submit(&quot;performed&quot;);
 </div>
 </div>
 <p>If none of the metrics for the ping contain data the ping is not sent (unless <code>send_if_empty</code> is set to true in the definition file)</p>
+<h2 id="testing-api-14"><a class="header" href="#testing-api-14">Testing API</a></h2>
+<h3 id="testbeforenextsubmit"><a class="header" href="#testbeforenextsubmit"><code>testBeforeNextSubmit</code></a></h3>
+<p>Runs a validation function before the ping is collected.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-kotlin">import org.mozilla.yourApplication.GleanMetrics.Search
+import org.mozilla.yourApplication.GleanMetrics.Pings
+
+// Record some data.
+Search.defaultEngine.add(5);
+
+// Instruct the ping API to validate the ping data.
+var validatorRun = false
+Pings.search.testBeforeNextSubmit { reason -&gt;
+    assertEquals(Pings.searchReasonCodes.performed, reason)
+    assertEquals(5, Search.defaultEngine.testGetValue())
+    validatorRun = true
+}
+
+// Submit the ping.
+Pings.search.submit(
+    Pings.searchReasonCodes.performed
+)
+
+// Verify that the validator run.
+assertTrue(validatorRun)
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-java">import org.mozilla.yourApplication.GleanMetrics.Search
+import org.mozilla.yourApplication.GleanMetrics.Pings
+
+// Record some data.
+Search.INSTANCE.defaultEngine.add(5);
+
+// Instruct the ping API to validate the ping data.
+boolean validatorRun = false;
+Pings.INSTANCE.search.testBeforeNextSubmit((reason) -&gt; {
+    assertEquals(Pings.searchReasonCodes.performed, reason);
+    assertEquals(5, Search.INSTANCE.defaultEngine.testGetValue());
+    validatorRun = true;
+});
+
+// Submit the ping.
+Pings.INSTANCE.search.submit(
+    Pings.INSTANCE.searchReasonCodes.performed
+);
+
+// Verify that the validator run.
+assertTrue(validatorRun);
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-swift">@testable import Glean
+
+// Record some data.
+Search.defaultEngine.add(5)
+
+// Instruct the ping API to validate the ping data.
+var validatorRun = false
+GleanMetrics.pings.shared.search.testBeforeNextSubmit { reason in
+    XCTAssertEqual(.performed, reason, &quot;Unexpected reason for search ping submitted&quot;)
+    XCTAssertEqual(5, try Search.defaultEngine.testGetValue(), &quot;Unexpected value for default engine in search ping&quot;)
+    validatorRun = true
+}
+
+// Submit the ping.
+GleanMetrics.Pings.shared.search.submit(
+    reason: .performed
+)
+
+// Verify that the validator run.
+XCTAssert(validatorRun, &quot;Expected validator to be called by now.&quot;)
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics, load_pings
+
+pings = load_pings(&quot;pings.yaml&quot;)
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+# Record some data.
+metrics.search.default_engine.add(5)
+
+# Need a mutable object and plain booleans are not.
+callback_was_called = [False]
+
+def check_custom_ping(reason):
+    assert reason == pings.search_reason_codes.PERFORMED
+    assert 5 == metrics.search.default_engine.test_get_value()
+    callback_was_called[0] = True
+
+# Instruct the ping API to validate the ping data.
+pings.search.test_before_next_submit(check_custom_ping)
+
+# Submit the ping.
+pings.search.submit(pings.search_reason_codes.PERFORMED)
+
+# Verify that the validator run.
+assert callback_was_called[0]
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><code class="language-Rust">use glean::Pings;
+use glean_metrics;
+
+// Record some data.
+search::default_engine.add(5);
+
+// Instruct the ping API to validate the ping data.
+pings::search.test_before_next_submit(move |reason| {
+    assert_eq!(pings::SearchReasonCodes::Performed, reason);
+    assert_eq!(5, search::default_engine.test_get_value(None).unwrap());
+});
+
+// When the `submit` API is not directly called by the
+// test code, it may be worth checking that the validator
+// function run by using a canary boolean in the closure
+// used in `test_before_next_submit` and asserting on its
+// value after submission.
+
+// Submit the ping.
+pings::search.submit(pings::SearchReasonCodes::Performed);
+</code></pre>
+</div>
+<div data-lang="JavaScript" class="tab">
+<pre><code class="language-js">import * as search from &quot;./path/to/generated/files/search.js&quot;;
+import * as pings from &quot;./path/to/generated/files/pings.js&quot;;
+
+// Record some data.
+search.defaultEngine.add(5);
+
+// Instruct the ping API to validate the ping data.
+let validatorRun = false;
+const p = pings.search.testBeforeNextSubmit(async reason =&gt; {
+  assert.strictEqual(reason, &quot;performed&quot;);
+  assert.strictEqual(await search.defaultEngine.testGetValue(), 5);
+  validatorRun = true;
+});
+
+// Submit the ping.
+pings.search.submit(&quot;performed&quot;);
+// Wait for the validation to finish.
+assert.doesNotThrow(await p);
+
+// Verify that the validator run.
+assert.ok(validatorRun);
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/pings/index.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="overview"><a class="header" href="#overview">Overview</a></h1>
 <p>The Glean SDK provides multiple language bindings for integration into different platforms and with different programming languages</p>
 <h2 id="rust"><a class="header" href="#rust">Rust</a></h2>

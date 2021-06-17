@@ -150,8 +150,18 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="submitting-a-custom-ping"><a class="header" href="#submitting-a-custom-ping">Submitting a custom ping</a></h1>
-<p>To collect and queue a custom ping for eventual uploading, call the <code>submit</code> method on the <code>PingType</code> object that the Glean SDK generated for your ping.</p>
+                        <h1 id="pings"><a class="header" href="#pings">Pings</a></h1>
+<h2 id="submission-api"><a class="header" href="#submission-api">Submission API</a></h2>
+<h3 id="submit"><a class="header" href="#submit"><code>submit</code></a></h3>
+<p>Collect and queue a custom ping for eventual uploading.</p>
+<div class="special-quote special-quote-info fa fa-info-circle"></div>
+<h5 id="glean-owned-pings-are-submitted-automatically"><a class="header" href="#glean-owned-pings-are-submitted-automatically">Glean-owned pings are submitted automatically</a></h5>
+<blockquote>
+<p>Products do not need to submit Glean built-in pings,
+as their scheduling is managed internally. The APIs
+on this page are only relevant for products defining
+<a href="../../user/pings/custom.html#defining-a-custom-ping">custom pings</a>.</p>
+</blockquote>
 <p>By default, if the ping doesn't currently have any events or metrics set, <code>submit</code> will do nothing.  However, if the <code>send_if_empty</code> flag is set to true in the ping definition, it will always be submitted.</p>
 <p>For example, to submit the custom ping defined in <a href="../../user/pings/custom.html#defining-a-custom-ping">Adding new custom pings</a>:</p>
 <div class="tabs">
@@ -160,11 +170,18 @@
 <div data-lang="Kotlin" class="tab">
 <pre><code class="language-kotlin">import org.mozilla.yourApplication.GleanMetrics.Pings
 Pings.search.submit(
-    GleanMetrics.Pings.searchReasonCodes.performed
+    Pings.searchReasonCodes.performed
 )
 </code></pre>
 </div>
-<div data-lang="Java" class="tab"></div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-java">import org.mozilla.yourApplication.GleanMetrics.Pings
+
+Pings.INSTANCE.search.submit(
+    Pings.INSTANCE.searchReasonCodes.performed
+);
+</code></pre>
+</div>
 <div data-lang="Swift" class="tab">
 <pre><code class="language-swift">import Glean
 
@@ -204,6 +221,160 @@ pings.search.submit(&quot;performed&quot;);
 </div>
 </div>
 <p>If none of the metrics for the ping contain data the ping is not sent (unless <code>send_if_empty</code> is set to true in the definition file)</p>
+<h2 id="testing-api"><a class="header" href="#testing-api">Testing API</a></h2>
+<h3 id="testbeforenextsubmit"><a class="header" href="#testbeforenextsubmit"><code>testBeforeNextSubmit</code></a></h3>
+<p>Runs a validation function before the ping is collected.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-kotlin">import org.mozilla.yourApplication.GleanMetrics.Search
+import org.mozilla.yourApplication.GleanMetrics.Pings
+
+// Record some data.
+Search.defaultEngine.add(5);
+
+// Instruct the ping API to validate the ping data.
+var validatorRun = false
+Pings.search.testBeforeNextSubmit { reason -&gt;
+    assertEquals(Pings.searchReasonCodes.performed, reason)
+    assertEquals(5, Search.defaultEngine.testGetValue())
+    validatorRun = true
+}
+
+// Submit the ping.
+Pings.search.submit(
+    Pings.searchReasonCodes.performed
+)
+
+// Verify that the validator run.
+assertTrue(validatorRun)
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-java">import org.mozilla.yourApplication.GleanMetrics.Search
+import org.mozilla.yourApplication.GleanMetrics.Pings
+
+// Record some data.
+Search.INSTANCE.defaultEngine.add(5);
+
+// Instruct the ping API to validate the ping data.
+boolean validatorRun = false;
+Pings.INSTANCE.search.testBeforeNextSubmit((reason) -&gt; {
+    assertEquals(Pings.searchReasonCodes.performed, reason);
+    assertEquals(5, Search.INSTANCE.defaultEngine.testGetValue());
+    validatorRun = true;
+});
+
+// Submit the ping.
+Pings.INSTANCE.search.submit(
+    Pings.INSTANCE.searchReasonCodes.performed
+);
+
+// Verify that the validator run.
+assertTrue(validatorRun);
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-swift">@testable import Glean
+
+// Record some data.
+Search.defaultEngine.add(5)
+
+// Instruct the ping API to validate the ping data.
+var validatorRun = false
+GleanMetrics.pings.shared.search.testBeforeNextSubmit { reason in
+    XCTAssertEqual(.performed, reason, &quot;Unexpected reason for search ping submitted&quot;)
+    XCTAssertEqual(5, try Search.defaultEngine.testGetValue(), &quot;Unexpected value for default engine in search ping&quot;)
+    validatorRun = true
+}
+
+// Submit the ping.
+GleanMetrics.Pings.shared.search.submit(
+    reason: .performed
+)
+
+// Verify that the validator run.
+XCTAssert(validatorRun, &quot;Expected validator to be called by now.&quot;)
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics, load_pings
+
+pings = load_pings(&quot;pings.yaml&quot;)
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+# Record some data.
+metrics.search.default_engine.add(5)
+
+# Need a mutable object and plain booleans are not.
+callback_was_called = [False]
+
+def check_custom_ping(reason):
+    assert reason == pings.search_reason_codes.PERFORMED
+    assert 5 == metrics.search.default_engine.test_get_value()
+    callback_was_called[0] = True
+
+# Instruct the ping API to validate the ping data.
+pings.search.test_before_next_submit(check_custom_ping)
+
+# Submit the ping.
+pings.search.submit(pings.search_reason_codes.PERFORMED)
+
+# Verify that the validator run.
+assert callback_was_called[0]
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><code class="language-Rust">use glean::Pings;
+use glean_metrics;
+
+// Record some data.
+search::default_engine.add(5);
+
+// Instruct the ping API to validate the ping data.
+pings::search.test_before_next_submit(move |reason| {
+    assert_eq!(pings::SearchReasonCodes::Performed, reason);
+    assert_eq!(5, search::default_engine.test_get_value(None).unwrap());
+});
+
+// When the `submit` API is not directly called by the
+// test code, it may be worth checking that the validator
+// function run by using a canary boolean in the closure
+// used in `test_before_next_submit` and asserting on its
+// value after submission.
+
+// Submit the ping.
+pings::search.submit(pings::SearchReasonCodes::Performed);
+</code></pre>
+</div>
+<div data-lang="JavaScript" class="tab">
+<pre><code class="language-js">import * as search from &quot;./path/to/generated/files/search.js&quot;;
+import * as pings from &quot;./path/to/generated/files/pings.js&quot;;
+
+// Record some data.
+search.defaultEngine.add(5);
+
+// Instruct the ping API to validate the ping data.
+let validatorRun = false;
+const p = pings.search.testBeforeNextSubmit(async reason =&gt; {
+  assert.strictEqual(reason, &quot;performed&quot;);
+  assert.strictEqual(await search.defaultEngine.testGetValue(), 5);
+  validatorRun = true;
+});
+
+// Submit the ping.
+pings.search.submit(&quot;performed&quot;);
+// Wait for the validation to finish.
+assert.doesNotThrow(await p);
+
+// Verify that the validator run.
+assert.ok(validatorRun);
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/pings/index.md">Edit this file on GitHub.</a></footer>
                     </main>
 
