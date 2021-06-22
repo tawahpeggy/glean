@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `glean-core/src/error.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>error.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings"></script><script src="../../storage.js"></script><script src="../../crates.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
 <link rel="alternate icon" type="image/png" href="../../favicon-16x16.png">
-<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../glean_core/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../brush.svg" width="18" height="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
+<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../glean_core/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../brush.svg" width="18" height="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
                 <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" height="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
@@ -195,14 +195,14 @@
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
 <span class="comment">// file, You can obtain one at https://mozilla.org/MPL/2.0/.</span>
 
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ffi</span>::<span class="ident">OsString</span>;
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fmt</span>::{<span class="self">self</span>, <span class="ident">Display</span>};
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">io</span>;
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">result</span>;
+<span class="kw">use</span> <span class="ident">std::ffi::OsString</span>;
+<span class="kw">use</span> <span class="ident">std::fmt</span>::{<span class="self">self</span>, <span class="ident">Display</span>};
+<span class="kw">use</span> <span class="ident">std::io</span>;
+<span class="kw">use</span> <span class="ident">std::result</span>;
 
-<span class="kw">use</span> <span class="ident">ffi_support</span>::{<span class="ident">handle_map</span>::<span class="ident">HandleError</span>, <span class="ident">ExternError</span>};
+<span class="kw">use</span> <span class="ident">ffi_support</span>::{<span class="ident">handle_map::HandleError</span>, <span class="ident">ExternError</span>};
 
-<span class="kw">use</span> <span class="ident">rkv</span>::<span class="ident">StoreError</span>;
+<span class="kw">use</span> <span class="ident">rkv::StoreError</span>;
 
 <span class="doccomment">/// A specialized [`Result`] type for this crate&#39;s operations.</span>
 <span class="doccomment">///</span>
@@ -211,7 +211,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// [`Result`]: https://doc.rust-lang.org/stable/std/result/enum.Result.html</span>
 <span class="doccomment">/// [`Error`]: std.struct.Error.html</span>
-<span class="kw">pub</span> <span class="kw">type</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
+<span class="kw">pub</span> <span class="kw">type</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">result::Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
 
 <span class="doccomment">/// A list enumerating the categories of errors in this crate.</span>
 <span class="doccomment">///</span>
@@ -229,13 +229,13 @@
     <span class="ident">Handle</span>(<span class="ident">HandleError</span>),
 
     <span class="doccomment">/// IO error</span>
-    <span class="ident">IoError</span>(<span class="ident">io</span>::<span class="ident">Error</span>),
+    <span class="ident">IoError</span>(<span class="ident">io::Error</span>),
 
     <span class="doccomment">/// IO error</span>
     <span class="ident">Rkv</span>(<span class="ident">StoreError</span>),
 
     <span class="doccomment">/// JSON error</span>
-    <span class="ident">Json</span>(<span class="ident">serde_json</span>::<span class="ident">error</span>::<span class="ident">Error</span>),
+    <span class="ident">Json</span>(<span class="ident">serde_json::error::Error</span>),
 
     <span class="doccomment">/// TimeUnit conversion failed</span>
     <span class="ident">TimeUnit</span>(<span class="ident">i32</span>),
@@ -276,14 +276,14 @@
     <span class="doccomment">/// This is exposed in order to expose conversion errors on the FFI layer.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">utf8_error</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span> {
         <span class="ident">Error</span> {
-            <span class="ident">kind</span>: <span class="ident">ErrorKind</span>::<span class="ident">Utf8Error</span>,
+            <span class="ident">kind</span>: <span class="ident">ErrorKind::Utf8Error</span>,
         }
     }
 
     <span class="doccomment">/// Indicates an error that no requested global object is initialized</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">not_initialized</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span> {
         <span class="ident">Error</span> {
-            <span class="ident">kind</span>: <span class="ident">ErrorKind</span>::<span class="ident">NotInitialized</span>,
+            <span class="ident">kind</span>: <span class="ident">ErrorKind::NotInitialized</span>,
         }
     }
 
@@ -293,25 +293,25 @@
     }
 }
 
-<span class="kw">impl</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span> <span class="kw">for</span> <span class="ident">Error</span> {}
+<span class="kw">impl</span> <span class="ident">std::error::Error</span> <span class="kw">for</span> <span class="ident">Error</span> {}
 
 <span class="kw">impl</span> <span class="ident">Display</span> <span class="kw">for</span> <span class="ident">Error</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt::Result</span> {
         <span class="kw">use</span> <span class="ident">ErrorKind</span>::<span class="kw-2">*</span>;
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">kind</span>() {
-            <span class="ident">Lifetime</span>(<span class="ident">l</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;Lifetime conversion from {} failed&quot;</span>, <span class="ident">l</span>),
-            <span class="ident">Handle</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;Invalid handle: {}&quot;</span>, <span class="ident">e</span>),
-            <span class="ident">IoError</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;An I/O error occurred: {}&quot;</span>, <span class="ident">e</span>),
-            <span class="ident">Rkv</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;An Rkv error occurred: {}&quot;</span>, <span class="ident">e</span>),
-            <span class="ident">Json</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;A JSON error occurred: {}&quot;</span>, <span class="ident">e</span>),
-            <span class="ident">TimeUnit</span>(<span class="ident">t</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;TimeUnit conversion from {} failed&quot;</span>, <span class="ident">t</span>),
-            <span class="ident">MemoryUnit</span>(<span class="ident">m</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;MemoryUnit conversion from {} failed&quot;</span>, <span class="ident">m</span>),
-            <span class="ident">HistogramType</span>(<span class="ident">h</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;HistogramType conversion from {} failed&quot;</span>, <span class="ident">h</span>),
-            <span class="ident">OsString</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;OsString conversion from {:?} failed&quot;</span>, <span class="ident">s</span>),
-            <span class="ident">Utf8Error</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;Invalid UTF-8 byte sequence in string&quot;</span>),
-            <span class="ident">InvalidConfig</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;Invalid Glean configuration provided&quot;</span>),
-            <span class="ident">NotInitialized</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;Global Glean object missing&quot;</span>),
-            <span class="ident">PingBodyOverflow</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write</span><span class="macro">!</span>(
+            <span class="ident">Lifetime</span>(<span class="ident">l</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;Lifetime conversion from {} failed&quot;</span>, <span class="ident">l</span>),
+            <span class="ident">Handle</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;Invalid handle: {}&quot;</span>, <span class="ident">e</span>),
+            <span class="ident">IoError</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;An I/O error occurred: {}&quot;</span>, <span class="ident">e</span>),
+            <span class="ident">Rkv</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;An Rkv error occurred: {}&quot;</span>, <span class="ident">e</span>),
+            <span class="ident">Json</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;A JSON error occurred: {}&quot;</span>, <span class="ident">e</span>),
+            <span class="ident">TimeUnit</span>(<span class="ident">t</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;TimeUnit conversion from {} failed&quot;</span>, <span class="ident">t</span>),
+            <span class="ident">MemoryUnit</span>(<span class="ident">m</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;MemoryUnit conversion from {} failed&quot;</span>, <span class="ident">m</span>),
+            <span class="ident">HistogramType</span>(<span class="ident">h</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;HistogramType conversion from {} failed&quot;</span>, <span class="ident">h</span>),
+            <span class="ident">OsString</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;OsString conversion from {:?} failed&quot;</span>, <span class="ident">s</span>),
+            <span class="ident">Utf8Error</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;Invalid UTF-8 byte sequence in string&quot;</span>),
+            <span class="ident">InvalidConfig</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;Invalid Glean configuration provided&quot;</span>),
+            <span class="ident">NotInitialized</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;Global Glean object missing&quot;</span>),
+            <span class="ident">PingBodyOverflow</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(
                 <span class="ident">f</span>,
                 <span class="string">&quot;Ping request body size exceeded maximum size allowed: {}kB.&quot;</span>,
                 <span class="ident">s</span> <span class="op">/</span> <span class="number">1024</span>
@@ -329,15 +329,15 @@
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">HandleError</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">error</span>: <span class="ident">HandleError</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span> {
         <span class="ident">Error</span> {
-            <span class="ident">kind</span>: <span class="ident">ErrorKind</span>::<span class="ident">Handle</span>(<span class="ident">error</span>),
+            <span class="ident">kind</span>: <span class="ident">ErrorKind::Handle</span>(<span class="ident">error</span>),
         }
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">io</span>::<span class="ident">Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">error</span>: <span class="ident">io</span>::<span class="ident">Error</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span> {
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">io::Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">error</span>: <span class="ident">io::Error</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span> {
         <span class="ident">Error</span> {
-            <span class="ident">kind</span>: <span class="ident">ErrorKind</span>::<span class="ident">IoError</span>(<span class="ident">error</span>),
+            <span class="ident">kind</span>: <span class="ident">ErrorKind::IoError</span>(<span class="ident">error</span>),
         }
     }
 }
@@ -345,21 +345,21 @@
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">StoreError</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">error</span>: <span class="ident">StoreError</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span> {
         <span class="ident">Error</span> {
-            <span class="ident">kind</span>: <span class="ident">ErrorKind</span>::<span class="ident">Rkv</span>(<span class="ident">error</span>),
+            <span class="ident">kind</span>: <span class="ident">ErrorKind::Rkv</span>(<span class="ident">error</span>),
         }
     }
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ExternError</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">error</span>: <span class="ident">Error</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ExternError</span> {
-        <span class="ident">ffi_support</span>::<span class="ident">ExternError</span>::<span class="ident">new_error</span>(<span class="ident">ffi_support</span>::<span class="ident">ErrorCode</span>::<span class="ident">new</span>(<span class="number">42</span>), <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">error</span>))
+        <span class="ident">ffi_support::ExternError::new_error</span>(<span class="ident">ffi_support::ErrorCode::new</span>(<span class="number">42</span>), <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">error</span>))
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">serde_json</span>::<span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">error</span>: <span class="ident">serde_json</span>::<span class="ident">error</span>::<span class="ident">Error</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span> {
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">serde_json::error::Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">error</span>: <span class="ident">serde_json::error::Error</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span> {
         <span class="ident">Error</span> {
-            <span class="ident">kind</span>: <span class="ident">ErrorKind</span>::<span class="ident">Json</span>(<span class="ident">error</span>),
+            <span class="ident">kind</span>: <span class="ident">ErrorKind::Json</span>(<span class="ident">error</span>),
         }
     }
 }
@@ -367,7 +367,7 @@
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">OsString</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">error</span>: <span class="ident">OsString</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span> {
         <span class="ident">Error</span> {
-            <span class="ident">kind</span>: <span class="ident">ErrorKind</span>::<span class="ident">OsString</span>(<span class="ident">error</span>),
+            <span class="ident">kind</span>: <span class="ident">ErrorKind::OsString</span>(<span class="ident">error</span>),
         }
     }
 }
@@ -375,11 +375,11 @@
 <span class="doccomment">/// To satisfy integer conversion done by the macros on the FFI side, we need to be able to turn</span>
 <span class="doccomment">/// something infallible into an error.</span>
 <span class="doccomment">/// This will never actually be reached, as an integer-to-integer conversion is infallible.</span>
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">Infallible</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="kw">_</span>: <span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">Infallible</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span> {
-        <span class="macro">unreachable</span><span class="macro">!</span>()
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">std::convert::Infallible</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="kw">_</span>: <span class="ident">std::convert::Infallible</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span> {
+        <span class="macro">unreachable!</span>()
     }
 }
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="glean_core" data-search-js="../../search-index.js"></div>
+</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="glean_core" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
     <script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script></body></html>

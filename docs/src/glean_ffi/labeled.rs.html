@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `glean-core/ffi/src/labeled.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>labeled.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings"></script><script src="../../storage.js"></script><script src="../../crates.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
 <link rel="alternate icon" type="image/png" href="../../favicon-16x16.png">
-<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../glean_ffi/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../brush.svg" width="18" height="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
+<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../glean_ffi/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../brush.svg" width="18" height="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
                 <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" height="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
@@ -144,13 +144,13 @@
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
 <span class="comment">// file, You can obtain one at https://mozilla.org/MPL/2.0/.</span>
 
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">TryFrom</span>;
+<span class="kw">use</span> <span class="ident">std::convert::TryFrom</span>;
 
 <span class="kw">use</span> <span class="ident">glean_core</span>::{<span class="ident">metrics</span>::<span class="kw-2">*</span>, <span class="ident">CommonMetricData</span>, <span class="ident">Lifetime</span>};
 
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">boolean</span>::<span class="ident">BOOLEAN_METRICS</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">counter</span>::<span class="ident">COUNTER_METRICS</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">string</span>::<span class="ident">STRING_METRICS</span>;
+<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::boolean::BOOLEAN_METRICS</span>;
+<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::counter::COUNTER_METRICS</span>;
+<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::string::STRING_METRICS</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="kw-2">*</span>;
 
 <span class="doccomment">/// Generate FFI functions for labeled metrics.</span>
@@ -169,11 +169,11 @@
 <span class="doccomment">/// * `new_name` - Function name to create a new labeled metric of this type.</span>
 <span class="doccomment">/// * `destroy_name` - Function name to destroy the labeled metric.</span>
 <span class="doccomment">/// * `get_name` - Function name to get a new instance of the underlying metric.</span>
-<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">impl_labeled_metric</span> {
+<span class="macro">macro_rules!</span> <span class="ident">impl_labeled_metric</span> {
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">metric</span>:<span class="ident">ty</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">global</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">metric_global</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">new_name</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">destroy_name</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">get_name</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">test_get_num_recorded_errors</span>:<span class="ident">ident</span>) <span class="op">=</span><span class="op">&gt;</span> {
-        <span class="kw">static</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">global</span>: <span class="ident">once_cell</span>::<span class="ident">sync</span>::<span class="ident">Lazy</span><span class="op">&lt;</span><span class="ident">ConcurrentHandleMap</span><span class="op">&lt;</span><span class="ident">LabeledMetric</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">metric</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">=</span>
-            <span class="ident">once_cell</span>::<span class="ident">sync</span>::<span class="ident">Lazy</span>::<span class="ident">new</span>(<span class="ident">ConcurrentHandleMap</span>::<span class="ident">new</span>);
-        <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro">define_infallible_handle_map_deleter</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">global</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">destroy_name</span>);
+        <span class="kw">static</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">global</span>: <span class="ident">once_cell::sync::Lazy</span><span class="op">&lt;</span><span class="ident">ConcurrentHandleMap</span><span class="op">&lt;</span><span class="ident">LabeledMetric</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">metric</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">=</span>
+            <span class="ident">once_cell::sync::Lazy::new</span>(<span class="ident">ConcurrentHandleMap::new</span>);
+        <span class="macro-nonterminal">$</span><span class="kw">crate</span><span class="macro">::define_infallible_handle_map_deleter!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">global</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">destroy_name</span>);
 
         <span class="doccomment">/// Create a new labeled metric.</span>
         <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
@@ -197,16 +197,16 @@
                 } <span class="kw">else</span> {
                     <span class="prelude-val">Some</span>(<span class="ident">labels</span>)
                 };
-                <span class="kw">let</span> <span class="ident">lifetime</span> <span class="op">=</span> <span class="ident">Lifetime</span>::<span class="ident">try_from</span>(<span class="ident">lifetime</span>)<span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="ident">lifetime</span> <span class="op">=</span> <span class="ident">Lifetime::try_from</span>(<span class="ident">lifetime</span>)<span class="question-mark">?</span>;
 
-                <span class="prelude-val">Ok</span>(<span class="ident">LabeledMetric</span>::<span class="ident">new</span>(
-                    <span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">metric</span><span class="op">&gt;</span>::<span class="ident">new</span>(<span class="ident">CommonMetricData</span> {
+                <span class="prelude-val">Ok</span>(<span class="ident">LabeledMetric::new</span>(
+                    <span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">metric</span><span class="op">&gt;</span><span class="ident">::new</span>(<span class="ident">CommonMetricData</span> {
                         <span class="ident">name</span>,
                         <span class="ident">category</span>,
                         <span class="ident">send_in_pings</span>,
                         <span class="ident">lifetime</span>,
                         <span class="ident">disabled</span>: <span class="ident">disabled</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span>,
-                        ..<span class="ident">Default</span>::<span class="ident">default</span>()
+                        ..<span class="ident">Default::default</span>()
                     }),
                     <span class="ident">labels</span>,
                 ))
@@ -228,12 +228,12 @@
             <span class="ident">error_type</span>: <span class="ident">i32</span>,
             <span class="ident">storage_name</span>: <span class="ident">FfiStr</span>,
         ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">i32</span> {
-            <span class="kw">crate</span>::<span class="ident">with_glean_value</span>(<span class="op">|</span><span class="ident">glean</span><span class="op">|</span> {
-                <span class="kw">crate</span>::<span class="ident">HandleMapExtension</span>::<span class="ident">call_infallible</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">global</span>, <span class="ident">metric_id</span>, <span class="op">|</span><span class="ident">metric</span><span class="op">|</span> {
-                    <span class="kw">let</span> <span class="ident">error_type</span> <span class="op">=</span> <span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">TryFrom</span>::<span class="ident">try_from</span>(<span class="ident">error_type</span>).<span class="ident">unwrap</span>();
+            <span class="kw">crate</span><span class="ident">::with_glean_value</span>(<span class="op">|</span><span class="ident">glean</span><span class="op">|</span> {
+                <span class="kw">crate</span><span class="ident">::HandleMapExtension::call_infallible</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">global</span>, <span class="ident">metric_id</span>, <span class="op">|</span><span class="ident">metric</span><span class="op">|</span> {
+                    <span class="kw">let</span> <span class="ident">error_type</span> <span class="op">=</span> <span class="ident">std::convert::TryFrom::try_from</span>(<span class="ident">error_type</span>).<span class="ident">unwrap</span>();
                     <span class="kw">let</span> <span class="ident">storage_name</span> <span class="op">=</span>
-                        <span class="kw">crate</span>::<span class="ident">FallibleToString</span>::<span class="ident">to_string_fallible</span>(<span class="kw-2">&amp;</span><span class="ident">storage_name</span>).<span class="ident">unwrap</span>();
-                    <span class="ident">glean_core</span>::<span class="ident">test_get_num_recorded_errors</span>(
+                        <span class="kw">crate</span><span class="ident">::FallibleToString::to_string_fallible</span>(<span class="kw-2">&amp;</span><span class="ident">storage_name</span>).<span class="ident">unwrap</span>();
+                    <span class="ident">glean_core::test_get_num_recorded_errors</span>(
                         <span class="ident">glean</span>,
                         <span class="kw-2">&amp;</span><span class="ident">metric</span>.<span class="ident">get_submetric</span>().<span class="ident">meta</span>(),
                         <span class="ident">error_type</span>,
@@ -247,7 +247,7 @@
 }
 
 <span class="comment">// Create the required FFI functions for LabeledMetric&lt;CounterMetric&gt;</span>
-<span class="macro">impl_labeled_metric</span><span class="macro">!</span>(
+<span class="macro">impl_labeled_metric!</span>(
     <span class="ident">CounterMetric</span>,
     <span class="ident">LABELED_COUNTER</span>,
     <span class="ident">COUNTER_METRICS</span>,
@@ -258,7 +258,7 @@
 );
 
 <span class="comment">// Create the required FFI functions for LabeledMetric&lt;BooleanMetric&gt;</span>
-<span class="macro">impl_labeled_metric</span><span class="macro">!</span>(
+<span class="macro">impl_labeled_metric!</span>(
     <span class="ident">BooleanMetric</span>,
     <span class="ident">LABELED_BOOLEAN</span>,
     <span class="ident">BOOLEAN_METRICS</span>,
@@ -269,7 +269,7 @@
 );
 
 <span class="comment">// Create the required FFI functions for LabeledMetric&lt;StringMetric&gt;</span>
-<span class="macro">impl_labeled_metric</span><span class="macro">!</span>(
+<span class="macro">impl_labeled_metric!</span>(
     <span class="ident">StringMetric</span>,
     <span class="ident">LABELED_STRING</span>,
     <span class="ident">STRING_METRICS</span>,
@@ -279,5 +279,5 @@
     <span class="ident">glean_labeled_string_test_get_num_recorded_errors</span>
 );
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="glean_ffi" data-search-js="../../search-index.js"></div>
+</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="glean_ffi" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
     <script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script></body></html>

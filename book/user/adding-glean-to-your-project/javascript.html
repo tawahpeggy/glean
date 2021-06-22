@@ -160,9 +160,13 @@
 <li>npm &gt;= 7.0.0.</li>
 <li>Webpack &gt;= 5.34.0.</li>
 <li>Python &gt;= 3.6.<sup class="footnote-reference"><a href="#1">1</a></sup></li>
+<li>(<em>for browsers other than Firefox</em>) <a href="https://github.com/mozilla/webextension-polyfill">webextension-polyfill</a> &gt;= 0.8.0.<sup class="footnote-reference"><a href="#2">2</a></sup></li>
 </ul>
 <div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
 <p>The <code>glean</code> command requires Python to download <a href="https://mozilla.github.io/glean_parser/"><code>glean_parser</code></a> which is a Python library.</p>
+</div>
+<div class="footnote-definition" id="2"><sup class="footnote-definition-label">2</sup>
+<p>Glean.js assumes a Promise-based <code>browser</code> API: Firefox provides such an API by default. Other browsers may require using a polyfill library such us <code>webextesion-polyfill</code> when using Glean in browser extensions.</p>
 </div>
 <h2 id="setting-up-the-dependency"><a class="header" href="#setting-up-the-dependency">Setting up the dependency</a></h2>
 <p>The Glean.js package is distributed as an npm package <a href="https://www.npmjs.com/package/@mozilla/glean"><code>@mozilla/glean</code></a>.</p>

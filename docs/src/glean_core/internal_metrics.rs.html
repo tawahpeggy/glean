@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `glean-core/src/internal_metrics.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>internal_metrics.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings"></script><script src="../../storage.js"></script><script src="../../crates.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
 <link rel="alternate icon" type="image/png" href="../../favicon-16x16.png">
-<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../glean_core/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../brush.svg" width="18" height="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
+<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../glean_core/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../brush.svg" width="18" height="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
                 <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" height="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
@@ -250,44 +250,44 @@
 <span class="kw">impl</span> <span class="ident">CoreMetrics</span> {
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CoreMetrics</span> {
         <span class="ident">CoreMetrics</span> {
-            <span class="ident">client_id</span>: <span class="ident">UuidMetric</span>::<span class="ident">new</span>(<span class="ident">CommonMetricData</span> {
+            <span class="ident">client_id</span>: <span class="ident">UuidMetric::new</span>(<span class="ident">CommonMetricData</span> {
                 <span class="ident">name</span>: <span class="string">&quot;client_id&quot;</span>.<span class="ident">into</span>(),
                 <span class="ident">category</span>: <span class="string">&quot;&quot;</span>.<span class="ident">into</span>(),
-                <span class="ident">send_in_pings</span>: <span class="macro">vec</span><span class="macro">!</span>[<span class="string">&quot;glean_client_info&quot;</span>.<span class="ident">into</span>()],
-                <span class="ident">lifetime</span>: <span class="ident">Lifetime</span>::<span class="ident">User</span>,
+                <span class="ident">send_in_pings</span>: <span class="macro">vec!</span>[<span class="string">&quot;glean_client_info&quot;</span>.<span class="ident">into</span>()],
+                <span class="ident">lifetime</span>: <span class="ident">Lifetime::User</span>,
                 <span class="ident">disabled</span>: <span class="bool-val">false</span>,
                 <span class="ident">dynamic_label</span>: <span class="prelude-val">None</span>,
             }),
 
-            <span class="ident">first_run_date</span>: <span class="ident">DatetimeMetric</span>::<span class="ident">new</span>(
+            <span class="ident">first_run_date</span>: <span class="ident">DatetimeMetric::new</span>(
                 <span class="ident">CommonMetricData</span> {
                     <span class="ident">name</span>: <span class="string">&quot;first_run_date&quot;</span>.<span class="ident">into</span>(),
                     <span class="ident">category</span>: <span class="string">&quot;&quot;</span>.<span class="ident">into</span>(),
-                    <span class="ident">send_in_pings</span>: <span class="macro">vec</span><span class="macro">!</span>[<span class="string">&quot;glean_client_info&quot;</span>.<span class="ident">into</span>()],
-                    <span class="ident">lifetime</span>: <span class="ident">Lifetime</span>::<span class="ident">User</span>,
+                    <span class="ident">send_in_pings</span>: <span class="macro">vec!</span>[<span class="string">&quot;glean_client_info&quot;</span>.<span class="ident">into</span>()],
+                    <span class="ident">lifetime</span>: <span class="ident">Lifetime::User</span>,
                     <span class="ident">disabled</span>: <span class="bool-val">false</span>,
                     <span class="ident">dynamic_label</span>: <span class="prelude-val">None</span>,
                 },
-                <span class="ident">TimeUnit</span>::<span class="ident">Day</span>,
+                <span class="ident">TimeUnit::Day</span>,
             ),
 
-            <span class="ident">first_run_hour</span>: <span class="ident">DatetimeMetric</span>::<span class="ident">new</span>(
+            <span class="ident">first_run_hour</span>: <span class="ident">DatetimeMetric::new</span>(
                 <span class="ident">CommonMetricData</span> {
                     <span class="ident">name</span>: <span class="string">&quot;first_run_hour&quot;</span>.<span class="ident">into</span>(),
                     <span class="ident">category</span>: <span class="string">&quot;glean.validation&quot;</span>.<span class="ident">into</span>(),
-                    <span class="ident">send_in_pings</span>: <span class="macro">vec</span><span class="macro">!</span>[<span class="string">&quot;metrics&quot;</span>.<span class="ident">into</span>(), <span class="string">&quot;baseline&quot;</span>.<span class="ident">into</span>()],
-                    <span class="ident">lifetime</span>: <span class="ident">Lifetime</span>::<span class="ident">User</span>,
+                    <span class="ident">send_in_pings</span>: <span class="macro">vec!</span>[<span class="string">&quot;metrics&quot;</span>.<span class="ident">into</span>(), <span class="string">&quot;baseline&quot;</span>.<span class="ident">into</span>()],
+                    <span class="ident">lifetime</span>: <span class="ident">Lifetime::User</span>,
                     <span class="ident">disabled</span>: <span class="bool-val">false</span>,
                     <span class="ident">dynamic_label</span>: <span class="prelude-val">None</span>,
                 },
-                <span class="ident">TimeUnit</span>::<span class="ident">Hour</span>,
+                <span class="ident">TimeUnit::Hour</span>,
             ),
 
-            <span class="ident">os</span>: <span class="ident">StringMetric</span>::<span class="ident">new</span>(<span class="ident">CommonMetricData</span> {
+            <span class="ident">os</span>: <span class="ident">StringMetric::new</span>(<span class="ident">CommonMetricData</span> {
                 <span class="ident">name</span>: <span class="string">&quot;os&quot;</span>.<span class="ident">into</span>(),
                 <span class="ident">category</span>: <span class="string">&quot;&quot;</span>.<span class="ident">into</span>(),
-                <span class="ident">send_in_pings</span>: <span class="macro">vec</span><span class="macro">!</span>[<span class="string">&quot;glean_client_info&quot;</span>.<span class="ident">into</span>()],
-                <span class="ident">lifetime</span>: <span class="ident">Lifetime</span>::<span class="ident">Application</span>,
+                <span class="ident">send_in_pings</span>: <span class="macro">vec!</span>[<span class="string">&quot;glean_client_info&quot;</span>.<span class="ident">into</span>()],
+                <span class="ident">lifetime</span>: <span class="ident">Lifetime::Application</span>,
                 <span class="ident">disabled</span>: <span class="bool-val">false</span>,
                 <span class="ident">dynamic_label</span>: <span class="prelude-val">None</span>,
             }),
@@ -298,32 +298,32 @@
 <span class="kw">impl</span> <span class="ident">AdditionalMetrics</span> {
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">AdditionalMetrics</span> {
         <span class="ident">AdditionalMetrics</span> {
-            <span class="ident">io_errors</span>: <span class="ident">CounterMetric</span>::<span class="ident">new</span>(<span class="ident">CommonMetricData</span> {
+            <span class="ident">io_errors</span>: <span class="ident">CounterMetric::new</span>(<span class="ident">CommonMetricData</span> {
                 <span class="ident">name</span>: <span class="string">&quot;io&quot;</span>.<span class="ident">into</span>(),
                 <span class="ident">category</span>: <span class="string">&quot;glean.error&quot;</span>.<span class="ident">into</span>(),
-                <span class="ident">send_in_pings</span>: <span class="macro">vec</span><span class="macro">!</span>[<span class="string">&quot;metrics&quot;</span>.<span class="ident">into</span>()],
-                <span class="ident">lifetime</span>: <span class="ident">Lifetime</span>::<span class="ident">Ping</span>,
+                <span class="ident">send_in_pings</span>: <span class="macro">vec!</span>[<span class="string">&quot;metrics&quot;</span>.<span class="ident">into</span>()],
+                <span class="ident">lifetime</span>: <span class="ident">Lifetime::Ping</span>,
                 <span class="ident">disabled</span>: <span class="bool-val">false</span>,
                 <span class="ident">dynamic_label</span>: <span class="prelude-val">None</span>,
             }),
 
-            <span class="ident">pings_submitted</span>: <span class="ident">LabeledMetric</span>::<span class="ident">new</span>(
-                <span class="ident">CounterMetric</span>::<span class="ident">new</span>(<span class="ident">CommonMetricData</span> {
+            <span class="ident">pings_submitted</span>: <span class="ident">LabeledMetric::new</span>(
+                <span class="ident">CounterMetric::new</span>(<span class="ident">CommonMetricData</span> {
                     <span class="ident">name</span>: <span class="string">&quot;pings_submitted&quot;</span>.<span class="ident">into</span>(),
                     <span class="ident">category</span>: <span class="string">&quot;glean.validation&quot;</span>.<span class="ident">into</span>(),
-                    <span class="ident">send_in_pings</span>: <span class="macro">vec</span><span class="macro">!</span>[<span class="string">&quot;metrics&quot;</span>.<span class="ident">into</span>(), <span class="string">&quot;baseline&quot;</span>.<span class="ident">into</span>()],
-                    <span class="ident">lifetime</span>: <span class="ident">Lifetime</span>::<span class="ident">Ping</span>,
+                    <span class="ident">send_in_pings</span>: <span class="macro">vec!</span>[<span class="string">&quot;metrics&quot;</span>.<span class="ident">into</span>(), <span class="string">&quot;baseline&quot;</span>.<span class="ident">into</span>()],
+                    <span class="ident">lifetime</span>: <span class="ident">Lifetime::Ping</span>,
                     <span class="ident">disabled</span>: <span class="bool-val">false</span>,
                     <span class="ident">dynamic_label</span>: <span class="prelude-val">None</span>,
                 }),
                 <span class="prelude-val">None</span>,
             ),
 
-            <span class="ident">invalid_timezone_offset</span>: <span class="ident">CounterMetric</span>::<span class="ident">new</span>(<span class="ident">CommonMetricData</span> {
+            <span class="ident">invalid_timezone_offset</span>: <span class="ident">CounterMetric::new</span>(<span class="ident">CommonMetricData</span> {
                 <span class="ident">name</span>: <span class="string">&quot;invalid_timezone_offset&quot;</span>.<span class="ident">into</span>(),
                 <span class="ident">category</span>: <span class="string">&quot;glean.time&quot;</span>.<span class="ident">into</span>(),
-                <span class="ident">send_in_pings</span>: <span class="macro">vec</span><span class="macro">!</span>[<span class="string">&quot;metrics&quot;</span>.<span class="ident">into</span>()],
-                <span class="ident">lifetime</span>: <span class="ident">Lifetime</span>::<span class="ident">Ping</span>,
+                <span class="ident">send_in_pings</span>: <span class="macro">vec!</span>[<span class="string">&quot;metrics&quot;</span>.<span class="ident">into</span>()],
+                <span class="ident">lifetime</span>: <span class="ident">Lifetime::Ping</span>,
                 <span class="ident">disabled</span>: <span class="bool-val">false</span>,
                 <span class="ident">dynamic_label</span>: <span class="prelude-val">None</span>,
             }),
@@ -343,16 +343,16 @@
 <span class="kw">impl</span> <span class="ident">UploadMetrics</span> {
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">UploadMetrics</span> {
         <span class="ident">UploadMetrics</span> {
-            <span class="ident">ping_upload_failure</span>: <span class="ident">LabeledMetric</span>::<span class="ident">new</span>(
-                <span class="ident">CounterMetric</span>::<span class="ident">new</span>(<span class="ident">CommonMetricData</span> {
+            <span class="ident">ping_upload_failure</span>: <span class="ident">LabeledMetric::new</span>(
+                <span class="ident">CounterMetric::new</span>(<span class="ident">CommonMetricData</span> {
                     <span class="ident">name</span>: <span class="string">&quot;ping_upload_failure&quot;</span>.<span class="ident">into</span>(),
                     <span class="ident">category</span>: <span class="string">&quot;glean.upload&quot;</span>.<span class="ident">into</span>(),
-                    <span class="ident">send_in_pings</span>: <span class="macro">vec</span><span class="macro">!</span>[<span class="string">&quot;metrics&quot;</span>.<span class="ident">into</span>()],
-                    <span class="ident">lifetime</span>: <span class="ident">Lifetime</span>::<span class="ident">Ping</span>,
+                    <span class="ident">send_in_pings</span>: <span class="macro">vec!</span>[<span class="string">&quot;metrics&quot;</span>.<span class="ident">into</span>()],
+                    <span class="ident">lifetime</span>: <span class="ident">Lifetime::Ping</span>,
                     <span class="ident">disabled</span>: <span class="bool-val">false</span>,
                     <span class="ident">dynamic_label</span>: <span class="prelude-val">None</span>,
                 }),
-                <span class="prelude-val">Some</span>(<span class="macro">vec</span><span class="macro">!</span>[
+                <span class="prelude-val">Some</span>(<span class="macro">vec!</span>[
                     <span class="string">&quot;status_code_4xx&quot;</span>.<span class="ident">into</span>(),
                     <span class="string">&quot;status_code_5xx&quot;</span>.<span class="ident">into</span>(),
                     <span class="string">&quot;status_code_unknown&quot;</span>.<span class="ident">into</span>(),
@@ -361,44 +361,44 @@
                 ]),
             ),
 
-            <span class="ident">discarded_exceeding_pings_size</span>: <span class="ident">MemoryDistributionMetric</span>::<span class="ident">new</span>(
+            <span class="ident">discarded_exceeding_pings_size</span>: <span class="ident">MemoryDistributionMetric::new</span>(
                 <span class="ident">CommonMetricData</span> {
                     <span class="ident">name</span>: <span class="string">&quot;discarded_exceeding_ping_size&quot;</span>.<span class="ident">into</span>(),
                     <span class="ident">category</span>: <span class="string">&quot;glean.upload&quot;</span>.<span class="ident">into</span>(),
-                    <span class="ident">send_in_pings</span>: <span class="macro">vec</span><span class="macro">!</span>[<span class="string">&quot;metrics&quot;</span>.<span class="ident">into</span>()],
-                    <span class="ident">lifetime</span>: <span class="ident">Lifetime</span>::<span class="ident">Ping</span>,
+                    <span class="ident">send_in_pings</span>: <span class="macro">vec!</span>[<span class="string">&quot;metrics&quot;</span>.<span class="ident">into</span>()],
+                    <span class="ident">lifetime</span>: <span class="ident">Lifetime::Ping</span>,
                     <span class="ident">disabled</span>: <span class="bool-val">false</span>,
                     <span class="ident">dynamic_label</span>: <span class="prelude-val">None</span>,
                 },
-                <span class="ident">MemoryUnit</span>::<span class="ident">Kilobyte</span>,
+                <span class="ident">MemoryUnit::Kilobyte</span>,
             ),
 
-            <span class="ident">pending_pings_directory_size</span>: <span class="ident">MemoryDistributionMetric</span>::<span class="ident">new</span>(
+            <span class="ident">pending_pings_directory_size</span>: <span class="ident">MemoryDistributionMetric::new</span>(
                 <span class="ident">CommonMetricData</span> {
                     <span class="ident">name</span>: <span class="string">&quot;pending_pings_directory_size&quot;</span>.<span class="ident">into</span>(),
                     <span class="ident">category</span>: <span class="string">&quot;glean.upload&quot;</span>.<span class="ident">into</span>(),
-                    <span class="ident">send_in_pings</span>: <span class="macro">vec</span><span class="macro">!</span>[<span class="string">&quot;metrics&quot;</span>.<span class="ident">into</span>()],
-                    <span class="ident">lifetime</span>: <span class="ident">Lifetime</span>::<span class="ident">Ping</span>,
+                    <span class="ident">send_in_pings</span>: <span class="macro">vec!</span>[<span class="string">&quot;metrics&quot;</span>.<span class="ident">into</span>()],
+                    <span class="ident">lifetime</span>: <span class="ident">Lifetime::Ping</span>,
                     <span class="ident">disabled</span>: <span class="bool-val">false</span>,
                     <span class="ident">dynamic_label</span>: <span class="prelude-val">None</span>,
                 },
-                <span class="ident">MemoryUnit</span>::<span class="ident">Kilobyte</span>,
+                <span class="ident">MemoryUnit::Kilobyte</span>,
             ),
 
-            <span class="ident">deleted_pings_after_quota_hit</span>: <span class="ident">CounterMetric</span>::<span class="ident">new</span>(<span class="ident">CommonMetricData</span> {
+            <span class="ident">deleted_pings_after_quota_hit</span>: <span class="ident">CounterMetric::new</span>(<span class="ident">CommonMetricData</span> {
                 <span class="ident">name</span>: <span class="string">&quot;deleted_pings_after_quota_hit&quot;</span>.<span class="ident">into</span>(),
                 <span class="ident">category</span>: <span class="string">&quot;glean.upload&quot;</span>.<span class="ident">into</span>(),
-                <span class="ident">send_in_pings</span>: <span class="macro">vec</span><span class="macro">!</span>[<span class="string">&quot;metrics&quot;</span>.<span class="ident">into</span>()],
-                <span class="ident">lifetime</span>: <span class="ident">Lifetime</span>::<span class="ident">Ping</span>,
+                <span class="ident">send_in_pings</span>: <span class="macro">vec!</span>[<span class="string">&quot;metrics&quot;</span>.<span class="ident">into</span>()],
+                <span class="ident">lifetime</span>: <span class="ident">Lifetime::Ping</span>,
                 <span class="ident">disabled</span>: <span class="bool-val">false</span>,
                 <span class="ident">dynamic_label</span>: <span class="prelude-val">None</span>,
             }),
 
-            <span class="ident">pending_pings</span>: <span class="ident">CounterMetric</span>::<span class="ident">new</span>(<span class="ident">CommonMetricData</span> {
+            <span class="ident">pending_pings</span>: <span class="ident">CounterMetric::new</span>(<span class="ident">CommonMetricData</span> {
                 <span class="ident">name</span>: <span class="string">&quot;pending_pings&quot;</span>.<span class="ident">into</span>(),
                 <span class="ident">category</span>: <span class="string">&quot;glean.upload&quot;</span>.<span class="ident">into</span>(),
-                <span class="ident">send_in_pings</span>: <span class="macro">vec</span><span class="macro">!</span>[<span class="string">&quot;metrics&quot;</span>.<span class="ident">into</span>()],
-                <span class="ident">lifetime</span>: <span class="ident">Lifetime</span>::<span class="ident">Ping</span>,
+                <span class="ident">send_in_pings</span>: <span class="macro">vec!</span>[<span class="string">&quot;metrics&quot;</span>.<span class="ident">into</span>()],
+                <span class="ident">lifetime</span>: <span class="ident">Lifetime::Ping</span>,
                 <span class="ident">disabled</span>: <span class="bool-val">false</span>,
                 <span class="ident">dynamic_label</span>: <span class="prelude-val">None</span>,
             }),
@@ -414,20 +414,20 @@
 <span class="kw">impl</span> <span class="ident">DatabaseMetrics</span> {
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DatabaseMetrics</span> {
         <span class="ident">DatabaseMetrics</span> {
-            <span class="ident">size</span>: <span class="ident">MemoryDistributionMetric</span>::<span class="ident">new</span>(
+            <span class="ident">size</span>: <span class="ident">MemoryDistributionMetric::new</span>(
                 <span class="ident">CommonMetricData</span> {
                     <span class="ident">name</span>: <span class="string">&quot;size&quot;</span>.<span class="ident">into</span>(),
                     <span class="ident">category</span>: <span class="string">&quot;glean.database&quot;</span>.<span class="ident">into</span>(),
-                    <span class="ident">send_in_pings</span>: <span class="macro">vec</span><span class="macro">!</span>[<span class="string">&quot;metrics&quot;</span>.<span class="ident">into</span>()],
-                    <span class="ident">lifetime</span>: <span class="ident">Lifetime</span>::<span class="ident">Ping</span>,
+                    <span class="ident">send_in_pings</span>: <span class="macro">vec!</span>[<span class="string">&quot;metrics&quot;</span>.<span class="ident">into</span>()],
+                    <span class="ident">lifetime</span>: <span class="ident">Lifetime::Ping</span>,
                     <span class="ident">disabled</span>: <span class="bool-val">false</span>,
                     <span class="ident">dynamic_label</span>: <span class="prelude-val">None</span>,
                 },
-                <span class="ident">MemoryUnit</span>::<span class="ident">Byte</span>,
+                <span class="ident">MemoryUnit::Byte</span>,
             ),
         }
     }
 }
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="glean_core" data-search-js="../../search-index.js"></div>
+</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="glean_core" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
     <script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script></body></html>
