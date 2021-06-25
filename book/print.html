@@ -3863,10 +3863,10 @@ assert(!(await accessibility.features[&quot;high_contrast&quot;].testGetValue())
 
 ASSERT_EQ(
     true,
-    mozilla::glean::accessibility::features.Get(&quot;screen_reader&quot;_ns).TestGetValue().ref());
+    mozilla::glean::accessibility::features.Get(&quot;screen_reader&quot;_ns).TestGetValue().unwrap().ref());
 ASSERT_EQ(
     false,
-    mozilla::glean::accessibility::features.Get(&quot;high_contrast&quot;_ns).TestGetValue().ref());
+    mozilla::glean::accessibility::features.Get(&quot;high_contrast&quot;_ns).TestGetValue().unwrap().ref());
 </code></pre>
 <p><strong>JavaScript</strong></p>
 <pre><code class="language-js">Assert.equal(true, Glean.accessibility.features[&quot;screen_reader&quot;].testGetValue());
@@ -3978,7 +3978,7 @@ assert_eq!(
 assert(await accessibility.features.testGetNumRecordedErrors(&quot;invalid_label&quot;));
 </code></pre>
 </div>
-<div data-lang="Firefox Desktop" class="tab" data-bug="1683171"></div>
+<div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
 <h2 id="metric-parameters-2"><a class="header" href="#metric-parameters-2">Metric parameters</a></h2>
@@ -4177,10 +4177,12 @@ assert.strictEqual(6, await controls.refreshPressed.testGetValue());
 <p><strong>C++</strong></p>
 <pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
 
-ASSERT_EQ(6, mozilla::glean::controls::refresh_pressed.TestGetValue().value());
+ASSERT_TRUE(mozilla::glean::controls::refresh_pressed.TestGetValue().isOk());
+ASSERT_EQ(6, mozilla::glean::controls::refresh_pressed.TestGetValue().unwrap().value());
 </code></pre>
 <p><strong>JavaScript</strong></p>
-<pre><code class="language-js">Assert.equal(6, Glean.controls.refreshPressed.testGetValue());
+<pre><code class="language-js">// testGetValue will throw NS_ERROR_LOSS_OF_SIGNIFICANT_DATA on error.
+Assert.equal(6, Glean.controls.refreshPressed.testGetValue());
 </code></pre>
 </div>
 </div>
@@ -4279,7 +4281,7 @@ assert_eq!(
 assert.strictEqual(1, await controls.refreshPressed.testGetNumRecordedErrors(&quot;invalid_value&quot;));
 </code></pre>
 </div>
-<div data-lang="Firefox Desktop" class="tab" data-bug="1683171"></div>
+<div data-lang="Firefox Desktop" class="tab" data-info="Firefox Desktop uses testGetValue to communicate errors"></div>
 </div>
 </div>
 <h2 id="metric-parameters-3"><a class="header" href="#metric-parameters-3">Metric parameters</a></h2>
@@ -4469,10 +4471,10 @@ assert.strictEqual(3, await stability.crashCount[&quot;native_code_crash&quot;].
 
 ASSERT_EQ(
     1,
-    mozilla::glean::stability::crash_count.Get(&quot;uncaught_exception&quot;_ns).TestGetValue().ref());
+    mozilla::glean::stability::crash_count.Get(&quot;uncaught_exception&quot;_ns).TestGetValue().unwrap().ref());
 ASSERT_EQ(
     3,
-    mozilla::glean::stability::crash_count.Get(&quot;native_code_crash&quot;_ns).TestGetValue().ref());
+    mozilla::glean::stability::crash_count.Get(&quot;native_code_crash&quot;_ns).TestGetValue().unwrap().ref());
 </code></pre>
 <p><strong>JavaScript</strong></p>
 <pre><code class="language-js">Assert.equal(1, Glean.stability.crashCount[&quot;uncaught_exception&quot;].testGetValue());
@@ -4585,7 +4587,7 @@ assert_eq!(
 assert.strictEqual(0, await stability.crashCount.testGetNumRecordedErrors(&quot;invalid_label&quot;));
 </code></pre>
 </div>
-<div data-lang="Firefox Desktop" class="tab" data-bug="1683171"></div>
+<div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
 <h2 id="metric-parameters-4"><a class="header" href="#metric-parameters-4">Metric parameters</a></h2>
@@ -4795,14 +4797,17 @@ assert.strictEqual(&quot;wikipedia&quot;, await searchDefault.name.testGetValue(
 <p><strong>C++</strong></p>
 <pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
 
+// Is it clear of errors?
+ASSERT_TRUE(mozilla::glean::search_default::name.TestGetValue().isOk());
 // Does it have the expected value?
 ASSERT_STREQ(
   &quot;wikipedia&quot;,
-  mozilla::glean::search_default::name.TestGetValue().value().get()
+  mozilla::glean::search_default::name.TestGetValue().unwrap().value().get()
 );
 </code></pre>
 <p><strong>JavaScript</strong></p>
 <pre><code class="language-js">// Does it have the expected value?
+// testGetValue will throw NS_ERROR_LOSS_OF_SIGNIFICANT_DATA on error.
 Assert.equal(&quot;wikipedia&quot;, Glean.searchDefault.name.testGetValue());
 </code></pre>
 </div>
@@ -4913,7 +4918,7 @@ assert_eq!(
 assert.strictEqual(1, await searchDefault.name.testGetNumRecordedErrors(&quot;invalid_overflow&quot;));
 </code></pre>
 </div>
-<div data-lang="Firefox Desktop" class="tab" data-bug="1683171"></div>
+<div data-lang="Firefox Desktop" class="tab" data-info="Firefox Desktop uses testGetValue to communicate errors"></div>
 </div>
 </div>
 <h2 id="metric-parameters-5"><a class="header" href="#metric-parameters-5">Metric parameters</a></h2>
@@ -5085,6 +5090,7 @@ assert.strictEqual(&quot;Invalid password&quot;, await metrics.login.errorsBySta
 ASSERT_STREQ(&quot;Invalid password&quot;,
              mozilla::glean::login::errors_by_stage.Get(&quot;server_auth&quot;_ns)
                 .TestGetValue()
+                .unwrap()
                 .ref()
                 .get());
 </code></pre>
@@ -5191,7 +5197,7 @@ assert_eq!(
 assert.strictEqual(0, await login.errorsByStage[&quot;server_auth&quot;].testGetNumRecordedErrors(&quot;invalid_label&quot;));
 </code></pre>
 </div>
-<div data-lang="Firefox Desktop" calss="tab" data-bug="1683171"></div>
+<div data-lang="Firefox Desktop" calss="tab"></div>
 </div>
 </div>
 <h2 id="metric-parameters-6"><a class="header" href="#metric-parameters-6">Metric parameters</a></h2>
@@ -5429,12 +5435,14 @@ assert_eq!(
 <p><strong>C++</strong></p>
 <pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
 
-nsTArray&lt;nsCString&gt; list = mozilla::glean::search::engines.TestGetValue();
+ASSERT_EQUAL(mozilla::glean::search::engines.TestGetValue().isOk());
+nsTArray&lt;nsCString&gt; list = mozilla::glean::search::engines.TestGetValue().unwrap();
 ASSERT_TRUE(list.Contains(&quot;wikipedia&quot;_ns));
 ASSERT_TRUE(list.Constains(&quot;duck duck go&quot;_ns));
 </code></pre>
 <p><strong>JavaScript</strong></p>
-<pre><code class="language-js">const engines = Glean.search.engines.testGetValue();
+<pre><code class="language-js">// testGetValue will throw NS_ERROR_LOSS_OF_SIGNIFICANT_DATA on error.
+const engines = Glean.search.engines.testGetValue();
 Assert.ok(engines.includes(&quot;wikipedia&quot;));
 Assert.ok(engines.includes(&quot;duck duck go&quot;));
 </code></pre>
@@ -5522,7 +5530,7 @@ assert_eq!(
 </code></pre>
 </div>
 <div data-lang="JavaScript" class="tab"></div>
-<div data-lang="Firefox Desktop" class="tab" data-bug="1683171"></div>
+<div data-lang="Firefox Desktop" class="tab" data-bug="Firefox Desktop uses testGetValue to communicate errors"></div>
 </div>
 </div>
 <h2 id="metric-parameters-7"><a class="header" href="#metric-parameters-7">Metric parameters</a></h2>
@@ -6029,10 +6037,12 @@ assert(await auth.loginTime.testGetValue() &gt; 0);
 <p><strong>C++</strong></p>
 <pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
 
-ASSERT_TRUE(mozilla::glean::auth::login_time.TestGetValue().value() &gt; 0);
+ASSERT_TRUE(mozilla::glean::auth::login_time.TestGetValue().isOk());
+ASSERT_GE(mozilla::glean::auth::login_time.TestGetValue().unwrap().value(), 0);
 </code></pre>
 <p><strong>JavaScript</strong></p>
-<pre><code class="language-js">Assert.ok(Glean.auth.loginTime.testGetValue() &gt; 0);
+<pre><code class="language-js">// testGetValue will throw NS_ERROR_LOSS_OF_SIGNIFICANT_DATA on error.
+Assert.ok(Glean.auth.loginTime.testGetValue() &gt; 0);
 </code></pre>
 </div>
 </div>
@@ -6134,7 +6144,7 @@ assert_eq!(1, login_time.test_get_num_recorded_errors(ErrorType::InvalidValue));
 assert.strictEqual(1, await auth.loginTime.testGetNumRecordedErrors(&quot;invalid_value&quot;));
 </code></pre>
 </div>
-<div data-lang="Firefox Desktop" class="tab" data-bug="1683171"></div>
+<div data-lang="Firefox Desktop" class="tab" data-info="Firefox Desktop uses testGetValue to communicate errors"></div>
 </div>
 </div>
 <h2 id="metric-parameters-8"><a class="header" href="#metric-parameters-8">Metric parameters</a></h2>
@@ -6456,10 +6466,8 @@ mozilla::glean::pages::page_load.StopAndAccumulate(timerId);
 <pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
 
 // Does it have an expected values?
-const data = mozilla::glean::pages::page_load.TestGetValue().value();
+const data = mozilla::glean::pages::page_load.TestGetValue().value().unwrap();
 ASSERT_TRUE(data.sum &gt; 0);
-// Did it run across any errors?
-// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
 </code></pre>
 </div>
 <div data-lang="JS" class="tab">
@@ -6472,8 +6480,6 @@ Glean.pages.pageLoad.stopAndAccumulate(timerId);
 </code></pre>
 <p>There are test APIs available too:</p>
 <pre><code class="language-js">Assert.ok(Glean.pages.pageLoad.testGetValue().sum &gt; 0);
-// Did it run across any errors?
-// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
 </code></pre>
 </div>
 </div>
@@ -6781,9 +6787,7 @@ mozilla::glean::memory::heap_allocated.Accumulate(bytes / 1024);
 <pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
 
 // Does it have the expected value?
-ASSERT_EQ(11 * 1024, mozilla::glean::memory::heap_allocated.TestGetValue().value().sum);
-// Did it run across any errors?
-// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
+ASSERT_EQ(11 * 1024, mozilla::glean::memory::heap_allocated.TestGetValue().unwrap().value().sum);
 </code></pre>
 </div>
 <div data-lang="JS" class="tab">
@@ -6797,8 +6801,6 @@ ASSERT_EQ(11 * 1024, mozilla::glean::memory::heap_allocated.TestGetValue().value
 Assert.equal(11 * 1024, data.sum);
 // Does it have the right number of samples?
 Assert.equal(1, Object.entries(data.values).reduce(([bucket, count], sum) =&gt; count + sum, 0));
-// Did it run across any errors?
-// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
 </code></pre>
 </div>
 </div>
@@ -7088,11 +7090,14 @@ assert(uuid, await user.clientId.testGetValue());
 <p><strong>C++</strong></p>
 <pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
 
+// Is it clear of errors?
+ASSERT_TRUE(mozilla::glean::user::client_id.TestGetValue().isOk());
 // Does it have an expected values?
-ASSERT_STREQ(kUuid.get(), mozilla::glean::user::client_id.TestGetValue().value().get());
+ASSERT_STREQ(kUuid.get(), mozilla::glean::user::client_id.TestGetValue().unwrap().value().get());
 </code></pre>
 <p><strong>JavaScript</strong></p>
 <pre><code class="language-js">const uuid = &quot;decafdec-afde-cafd-ecaf-decafdecafde&quot;;
+// testGetValue will throw NS_ERROR_LOSS_OF_SIGNIFICANT_DATA on error.
 Assert.equal(Glean.user.clientId.testGetValue(), uuid);
 </code></pre>
 </div>
@@ -7197,7 +7202,7 @@ assert_eq!(
 assert.strictEqual(1, await user.clientId.testGetNumRecordedErrors(&quot;invalid_value&quot;));
 </code></pre>
 </div>
-<div data-lang="Firefox Desktop" class="tab" data-bug="1683171"></div>
+<div data-lang="Firefox Desktop" class="tab" data-info="Firefox Desktop uses testGetValue to communicate errors"></div>
 </div>
 </div>
 <h2 id="metric-parameters-9"><a class="header" href="#metric-parameters-9">Metric Parameters</a></h2>
@@ -7370,15 +7375,17 @@ assert.deepStrictEqual(expectedDate, await install.firstRun.testGetValue());
 <pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
 
 PRExplodedTime date{0, 35, 10, 12, 6, 10, 2020, 0, 0, {5 * 60 * 60, 0}};
+ASSERT_TRUE(mozilla::glean::install::first_run.TestGetValue().isOk());
 ASSERT_EQ(
     0,
     std::memcmp(
         &amp;date,
-        mozilla::glean::install::first_run.TestGetValue().ptr(),
+        mozilla::glean::install::first_run.TestGetValue().unwrap().ptr(),
         sizeof(date)));
 </code></pre>
 <p><strong>JavaScript</strong></p>
 <pre><code class="language-js">const value = new Date(&quot;2020-06-11T12:00:00&quot;);
+// testGetValue will throw NS_ERROR_LOSS_OF_SIGNIFICANT_DATA on error.
 Assert.equal(Glean.install.firstRun.testGetValue().getTime(), value.getTime());
 </code></pre>
 </div>
@@ -7515,7 +7522,7 @@ assert_eq!(0, install::first_run.test_get_num_recorded_errors(
 assert.strictEqual(1, await install.firstRun.testGetNumRecordedErrors(&quot;invalid_value&quot;));
 </code></pre>
 </div>
-<div data-lang="Firefox Desktop" class="tab" data-bug="1683171"></div>
+<div data-lang="Firefox Desktop" class="tab" data-info="Firefox Desktop uses testGetValue to communicate errors"></div>
 </div>
 </div>
 <h2 id="metric-parameters-10"><a class="header" href="#metric-parameters-10">Metric parameters</a></h2>
@@ -8303,10 +8310,12 @@ assert!(display::width.test_get_value(None).is_some());
 <p><strong>C++</strong></p>
 <pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
 
-ASSERT_EQ(433, mozilla::glean::display::width.TestGetValue().value());
+ASSERT_TRUE(mozilla::glean::display::width.TestGetValue().isOk());
+ASSERT_EQ(433, mozilla::glean::display::width.TestGetValue().unwrap().value());
 </code></pre>
 <p><strong>JavaScript</strong></p>
-<pre><code class="language-js">Assert.equal(433, Glean.display.width.testGetValue());
+<pre><code class="language-js">// testGetValue will throw NS_ERROR_LOSS_OF_SIGNIFICANT_DATA on error.
+Assert.equal(433, Glean.display.width.testGetValue());
 </code></pre>
 </div>
 </div>
@@ -8413,7 +8422,7 @@ assert_eq!(
 <span class="boring">}
 </span></code></pre></pre>
 </div>
-<div data-lang="Firefox Desktop" class="tab" data-bug="1683171"></div>
+<div data-lang="Firefox Desktop" class="tab" data-info="Firefox Desktop uses testGetValue to communicate errors"></div>
 </div>
 </div>
 <h2 id="metric-parameters-13"><a class="header" href="#metric-parameters-13">Metric parameters</a></h2>

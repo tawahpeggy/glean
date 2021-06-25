@@ -349,11 +349,14 @@ assert(uuid, await user.clientId.testGetValue());
 <p><strong>C++</strong></p>
 <pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
 
+// Is it clear of errors?
+ASSERT_TRUE(mozilla::glean::user::client_id.TestGetValue().isOk());
 // Does it have an expected values?
-ASSERT_STREQ(kUuid.get(), mozilla::glean::user::client_id.TestGetValue().value().get());
+ASSERT_STREQ(kUuid.get(), mozilla::glean::user::client_id.TestGetValue().unwrap().value().get());
 </code></pre>
 <p><strong>JavaScript</strong></p>
 <pre><code class="language-js">const uuid = &quot;decafdec-afde-cafd-ecaf-decafdecafde&quot;;
+// testGetValue will throw NS_ERROR_LOSS_OF_SIGNIFICANT_DATA on error.
 Assert.equal(Glean.user.clientId.testGetValue(), uuid);
 </code></pre>
 </div>
@@ -458,7 +461,7 @@ assert_eq!(
 assert.strictEqual(1, await user.clientId.testGetNumRecordedErrors(&quot;invalid_value&quot;));
 </code></pre>
 </div>
-<div data-lang="Firefox Desktop" class="tab" data-bug="1683171"></div>
+<div data-lang="Firefox Desktop" class="tab" data-info="Firefox Desktop uses testGetValue to communicate errors"></div>
 </div>
 </div>
 <h2 id="metric-parameters"><a class="header" href="#metric-parameters">Metric Parameters</a></h2>

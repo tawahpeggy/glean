@@ -415,10 +415,8 @@ mozilla::glean::pages::page_load.StopAndAccumulate(timerId);
 <pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
 
 // Does it have an expected values?
-const data = mozilla::glean::pages::page_load.TestGetValue().value();
+const data = mozilla::glean::pages::page_load.TestGetValue().value().unwrap();
 ASSERT_TRUE(data.sum &gt; 0);
-// Did it run across any errors?
-// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
 </code></pre>
 </div>
 <div data-lang="JS" class="tab">
@@ -431,8 +429,6 @@ Glean.pages.pageLoad.stopAndAccumulate(timerId);
 </code></pre>
 <p>There are test APIs available too:</p>
 <pre><code class="language-js">Assert.ok(Glean.pages.pageLoad.testGetValue().sum &gt; 0);
-// Did it run across any errors?
-// TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1683171
 </code></pre>
 </div>
 </div>

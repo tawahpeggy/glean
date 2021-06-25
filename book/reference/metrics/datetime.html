@@ -289,15 +289,17 @@ assert.deepStrictEqual(expectedDate, await install.firstRun.testGetValue());
 <pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
 
 PRExplodedTime date{0, 35, 10, 12, 6, 10, 2020, 0, 0, {5 * 60 * 60, 0}};
+ASSERT_TRUE(mozilla::glean::install::first_run.TestGetValue().isOk());
 ASSERT_EQ(
     0,
     std::memcmp(
         &amp;date,
-        mozilla::glean::install::first_run.TestGetValue().ptr(),
+        mozilla::glean::install::first_run.TestGetValue().unwrap().ptr(),
         sizeof(date)));
 </code></pre>
 <p><strong>JavaScript</strong></p>
 <pre><code class="language-js">const value = new Date(&quot;2020-06-11T12:00:00&quot;);
+// testGetValue will throw NS_ERROR_LOSS_OF_SIGNIFICANT_DATA on error.
 Assert.equal(Glean.install.firstRun.testGetValue().getTime(), value.getTime());
 </code></pre>
 </div>
@@ -434,7 +436,7 @@ assert_eq!(0, install::first_run.test_get_num_recorded_errors(
 assert.strictEqual(1, await install.firstRun.testGetNumRecordedErrors(&quot;invalid_value&quot;));
 </code></pre>
 </div>
-<div data-lang="Firefox Desktop" class="tab" data-bug="1683171"></div>
+<div data-lang="Firefox Desktop" class="tab" data-info="Firefox Desktop uses testGetValue to communicate errors"></div>
 </div>
 </div>
 <h2 id="metric-parameters"><a class="header" href="#metric-parameters">Metric parameters</a></h2>

@@ -283,6 +283,7 @@ assert.strictEqual(&quot;Invalid password&quot;, await metrics.login.errorsBySta
 ASSERT_STREQ(&quot;Invalid password&quot;,
              mozilla::glean::login::errors_by_stage.Get(&quot;server_auth&quot;_ns)
                 .TestGetValue()
+                .unwrap()
                 .ref()
                 .get());
 </code></pre>
@@ -389,7 +390,7 @@ assert_eq!(
 assert.strictEqual(0, await login.errorsByStage[&quot;server_auth&quot;].testGetNumRecordedErrors(&quot;invalid_label&quot;));
 </code></pre>
 </div>
-<div data-lang="Firefox Desktop" calss="tab" data-bug="1683171"></div>
+<div data-lang="Firefox Desktop" calss="tab"></div>
 </div>
 </div>
 <h2 id="metric-parameters"><a class="header" href="#metric-parameters">Metric parameters</a></h2>

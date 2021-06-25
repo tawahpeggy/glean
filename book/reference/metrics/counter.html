@@ -287,10 +287,12 @@ assert.strictEqual(6, await controls.refreshPressed.testGetValue());
 <p><strong>C++</strong></p>
 <pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
 
-ASSERT_EQ(6, mozilla::glean::controls::refresh_pressed.TestGetValue().value());
+ASSERT_TRUE(mozilla::glean::controls::refresh_pressed.TestGetValue().isOk());
+ASSERT_EQ(6, mozilla::glean::controls::refresh_pressed.TestGetValue().unwrap().value());
 </code></pre>
 <p><strong>JavaScript</strong></p>
-<pre><code class="language-js">Assert.equal(6, Glean.controls.refreshPressed.testGetValue());
+<pre><code class="language-js">// testGetValue will throw NS_ERROR_LOSS_OF_SIGNIFICANT_DATA on error.
+Assert.equal(6, Glean.controls.refreshPressed.testGetValue());
 </code></pre>
 </div>
 </div>
@@ -389,7 +391,7 @@ assert_eq!(
 assert.strictEqual(1, await controls.refreshPressed.testGetNumRecordedErrors(&quot;invalid_value&quot;));
 </code></pre>
 </div>
-<div data-lang="Firefox Desktop" class="tab" data-bug="1683171"></div>
+<div data-lang="Firefox Desktop" class="tab" data-info="Firefox Desktop uses testGetValue to communicate errors"></div>
 </div>
 </div>
 <h2 id="metric-parameters"><a class="header" href="#metric-parameters">Metric parameters</a></h2>

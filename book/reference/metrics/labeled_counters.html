@@ -306,10 +306,10 @@ assert.strictEqual(3, await stability.crashCount[&quot;native_code_crash&quot;].
 
 ASSERT_EQ(
     1,
-    mozilla::glean::stability::crash_count.Get(&quot;uncaught_exception&quot;_ns).TestGetValue().ref());
+    mozilla::glean::stability::crash_count.Get(&quot;uncaught_exception&quot;_ns).TestGetValue().unwrap().ref());
 ASSERT_EQ(
     3,
-    mozilla::glean::stability::crash_count.Get(&quot;native_code_crash&quot;_ns).TestGetValue().ref());
+    mozilla::glean::stability::crash_count.Get(&quot;native_code_crash&quot;_ns).TestGetValue().unwrap().ref());
 </code></pre>
 <p><strong>JavaScript</strong></p>
 <pre><code class="language-js">Assert.equal(1, Glean.stability.crashCount[&quot;uncaught_exception&quot;].testGetValue());
@@ -422,7 +422,7 @@ assert_eq!(
 assert.strictEqual(0, await stability.crashCount.testGetNumRecordedErrors(&quot;invalid_label&quot;));
 </code></pre>
 </div>
-<div data-lang="Firefox Desktop" class="tab" data-bug="1683171"></div>
+<div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
 <h2 id="metric-parameters"><a class="header" href="#metric-parameters">Metric parameters</a></h2>

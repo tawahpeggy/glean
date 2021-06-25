@@ -290,10 +290,10 @@ assert(!(await accessibility.features[&quot;high_contrast&quot;].testGetValue())
 
 ASSERT_EQ(
     true,
-    mozilla::glean::accessibility::features.Get(&quot;screen_reader&quot;_ns).TestGetValue().ref());
+    mozilla::glean::accessibility::features.Get(&quot;screen_reader&quot;_ns).TestGetValue().unwrap().ref());
 ASSERT_EQ(
     false,
-    mozilla::glean::accessibility::features.Get(&quot;high_contrast&quot;_ns).TestGetValue().ref());
+    mozilla::glean::accessibility::features.Get(&quot;high_contrast&quot;_ns).TestGetValue().unwrap().ref());
 </code></pre>
 <p><strong>JavaScript</strong></p>
 <pre><code class="language-js">Assert.equal(true, Glean.accessibility.features[&quot;screen_reader&quot;].testGetValue());
@@ -405,7 +405,7 @@ assert_eq!(
 assert(await accessibility.features.testGetNumRecordedErrors(&quot;invalid_label&quot;));
 </code></pre>
 </div>
-<div data-lang="Firefox Desktop" class="tab" data-bug="1683171"></div>
+<div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
 <h2 id="metric-parameters"><a class="header" href="#metric-parameters">Metric parameters</a></h2>

@@ -327,12 +327,14 @@ assert_eq!(
 <p><strong>C++</strong></p>
 <pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
 
-nsTArray&lt;nsCString&gt; list = mozilla::glean::search::engines.TestGetValue();
+ASSERT_EQUAL(mozilla::glean::search::engines.TestGetValue().isOk());
+nsTArray&lt;nsCString&gt; list = mozilla::glean::search::engines.TestGetValue().unwrap();
 ASSERT_TRUE(list.Contains(&quot;wikipedia&quot;_ns));
 ASSERT_TRUE(list.Constains(&quot;duck duck go&quot;_ns));
 </code></pre>
 <p><strong>JavaScript</strong></p>
-<pre><code class="language-js">const engines = Glean.search.engines.testGetValue();
+<pre><code class="language-js">// testGetValue will throw NS_ERROR_LOSS_OF_SIGNIFICANT_DATA on error.
+const engines = Glean.search.engines.testGetValue();
 Assert.ok(engines.includes(&quot;wikipedia&quot;));
 Assert.ok(engines.includes(&quot;duck duck go&quot;));
 </code></pre>
@@ -420,7 +422,7 @@ assert_eq!(
 </code></pre>
 </div>
 <div data-lang="JavaScript" class="tab"></div>
-<div data-lang="Firefox Desktop" class="tab" data-bug="1683171"></div>
+<div data-lang="Firefox Desktop" class="tab" data-bug="Firefox Desktop uses testGetValue to communicate errors"></div>
 </div>
 </div>
 <h2 id="metric-parameters"><a class="header" href="#metric-parameters">Metric parameters</a></h2>

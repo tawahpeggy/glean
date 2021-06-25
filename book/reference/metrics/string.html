@@ -298,14 +298,17 @@ assert.strictEqual(&quot;wikipedia&quot;, await searchDefault.name.testGetValue(
 <p><strong>C++</strong></p>
 <pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
 
+// Is it clear of errors?
+ASSERT_TRUE(mozilla::glean::search_default::name.TestGetValue().isOk());
 // Does it have the expected value?
 ASSERT_STREQ(
   &quot;wikipedia&quot;,
-  mozilla::glean::search_default::name.TestGetValue().value().get()
+  mozilla::glean::search_default::name.TestGetValue().unwrap().value().get()
 );
 </code></pre>
 <p><strong>JavaScript</strong></p>
 <pre><code class="language-js">// Does it have the expected value?
+// testGetValue will throw NS_ERROR_LOSS_OF_SIGNIFICANT_DATA on error.
 Assert.equal(&quot;wikipedia&quot;, Glean.searchDefault.name.testGetValue());
 </code></pre>
 </div>
@@ -416,7 +419,7 @@ assert_eq!(
 assert.strictEqual(1, await searchDefault.name.testGetNumRecordedErrors(&quot;invalid_overflow&quot;));
 </code></pre>
 </div>
-<div data-lang="Firefox Desktop" class="tab" data-bug="1683171"></div>
+<div data-lang="Firefox Desktop" class="tab" data-info="Firefox Desktop uses testGetValue to communicate errors"></div>
 </div>
 </div>
 <h2 id="metric-parameters"><a class="header" href="#metric-parameters">Metric parameters</a></h2>
