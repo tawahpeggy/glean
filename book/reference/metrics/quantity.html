@@ -374,12 +374,8 @@ assert 1 == metrics.display.width.test_get_num_recorded_errors(
 </div>
 <div data-lang="JavaScript" class="tab">
 <pre><code class="language-js">import * as display from &quot;./path/to/generated/files/display.js&quot;;
-import { ErrorType } from &quot;@mozilla/glean/&lt;platform&gt;&quot;;
 
-assert.strictEqual(
-  0,
-  await display.width.testGetNumRecordedErrors(ErrorType.InvalidValue)
-);
+assert.strictEqual(0, await display.width.testGetNumRecordedErrors(&quot;invalid_value&quot;));
 </code></pre>
 </div>
 <div data-lang="Rust" class="tab">

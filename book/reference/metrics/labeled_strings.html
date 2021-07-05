@@ -385,13 +385,9 @@ assert_eq!(
 </div>
 <div data-lang="JavaScript" class="tab">
 <pre><code class="language-js">import * as login from &quot;./path/to/generated/files/login.js&quot;;
-import { ErrorType } from &quot;@mozilla/glean/&lt;platform&gt;&quot;;
 
 // Were there any invalid labels?
-assert(
-  0,
-  await login.errorsByStage.testGetNumRecordedErrors(ErrorType.InvalidLabel)
-);
+assert.strictEqual(0, await login.errorsByStage[&quot;server_auth&quot;].testGetNumRecordedErrors(&quot;invalid_label&quot;));
 </code></pre>
 </div>
 <div data-lang="Firefox Desktop" calss="tab"></div>

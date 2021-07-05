@@ -456,13 +456,9 @@ assert_eq!(
 </div>
 <div data-lang="JavaScript" class="tab">
 <pre><code class="language-js">import * as user from &quot;./path/to/generated/files/user.js&quot;;
-import { ErrorType } from &quot;@mozilla/glean/&lt;platform&gt;&quot;;
 
 // Was the string truncated, and an error reported?
-assert.strictEqual(
-  1,
-  await user.clientId.testGetNumRecordedErrors(ErrorType.InvalidValue)
-);
+assert.strictEqual(1, await user.clientId.testGetNumRecordedErrors(&quot;invalid_value&quot;));
 </code></pre>
 </div>
 <div data-lang="Firefox Desktop" class="tab" data-info="Firefox Desktop uses testGetValue to communicate errors"></div>

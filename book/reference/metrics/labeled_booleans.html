@@ -401,12 +401,8 @@ assert_eq!(
 </div>
 <div data-lang="JavaScript" class="tab">
 <pre><code class="language-js">import * as accessibility from &quot;./path/to/generated/files/acessibility.js&quot;;
-import { ErrorType } from &quot;@mozilla/glean/&lt;platform&gt;&quot;;
 
-assert(
-  1,
-  await accessibility.features.testGetNumRecordedErrors(ErrorType.InvalidLabel)
-);
+assert(await accessibility.features.testGetNumRecordedErrors(&quot;invalid_label&quot;));
 </code></pre>
 </div>
 <div data-lang="Firefox Desktop" class="tab"></div>
