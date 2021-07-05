@@ -1090,7 +1090,7 @@
                 <span class="comment">// The next times we start, we would have them around already.</span>
                 <span class="kw">let</span> <span class="ident">is_first_run</span> <span class="op">=</span> <span class="ident">glean</span>.<span class="ident">is_first_run</span>();
                 <span class="kw">if</span> <span class="ident">is_first_run</span> {
-                    <span class="ident">initialize_core_metrics</span>(<span class="kw-2">&amp;</span><span class="ident">glean</span>, <span class="kw-2">&amp;</span><span class="ident">state</span>.<span class="ident">client_info</span>, <span class="ident">state</span>.<span class="ident">channel</span>.<span class="ident">clone</span>());
+                    <span class="ident">initialize_core_metrics</span>(<span class="ident">glean</span>, <span class="kw-2">&amp;</span><span class="ident">state</span>.<span class="ident">client_info</span>, <span class="ident">state</span>.<span class="ident">channel</span>.<span class="ident">clone</span>());
                 }
 
                 <span class="comment">// Deal with any pending events so we can start recording new ones</span>
@@ -1127,7 +1127,7 @@
                 <span class="comment">// Any new value will be sent in newly generated pings after startup.</span>
                 <span class="kw">if</span> <span class="op">!</span><span class="ident">is_first_run</span> {
                     <span class="ident">glean</span>.<span class="ident">clear_application_lifetime_metrics</span>();
-                    <span class="ident">initialize_core_metrics</span>(<span class="kw-2">&amp;</span><span class="ident">glean</span>, <span class="kw-2">&amp;</span><span class="ident">state</span>.<span class="ident">client_info</span>, <span class="ident">state</span>.<span class="ident">channel</span>.<span class="ident">clone</span>());
+                    <span class="ident">initialize_core_metrics</span>(<span class="ident">glean</span>, <span class="kw-2">&amp;</span><span class="ident">state</span>.<span class="ident">client_info</span>, <span class="ident">state</span>.<span class="ident">channel</span>.<span class="ident">clone</span>());
                 }
             });
 
@@ -1136,7 +1136,7 @@
                 <span class="prelude-val">Ok</span>(<span class="ident">task_count</span>) <span class="kw">if</span> <span class="ident">task_count</span> <span class="op">&gt;</span> <span class="number">0</span> <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="ident">with_glean</span>(<span class="op">|</span><span class="ident">glean</span><span class="op">|</span> {
                         <span class="ident">glean_metrics::error::preinit_tasks_overflow</span>
-                            .<span class="ident">add_sync</span>(<span class="kw-2">&amp;</span><span class="ident">glean</span>, <span class="ident">task_count</span> <span class="kw">as</span> <span class="ident">i32</span>);
+                            .<span class="ident">add_sync</span>(<span class="ident">glean</span>, <span class="ident">task_count</span> <span class="kw">as</span> <span class="ident">i32</span>);
                     });
                 }
                 <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {}
@@ -1271,7 +1271,7 @@
             <span class="ident">glean</span>.<span class="ident">start_metrics_ping_scheduler</span>();
             <span class="comment">// If uploading is being re-enabled, we have to restore the</span>
             <span class="comment">// application-lifetime metrics.</span>
-            <span class="ident">initialize_core_metrics</span>(<span class="kw-2">&amp;</span><span class="ident">glean</span>, <span class="kw-2">&amp;</span><span class="ident">state</span>.<span class="ident">client_info</span>, <span class="ident">state</span>.<span class="ident">channel</span>.<span class="ident">clone</span>());
+            <span class="ident">initialize_core_metrics</span>(<span class="ident">glean</span>, <span class="kw-2">&amp;</span><span class="ident">state</span>.<span class="ident">client_info</span>, <span class="ident">state</span>.<span class="ident">channel</span>.<span class="ident">clone</span>());
         }
 
         <span class="kw">if</span> <span class="ident">old_enabled</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="ident">enabled</span> {
@@ -1358,7 +1358,7 @@
             <span class="kw">return</span> <span class="bool-val">false</span>;
         }
 
-        <span class="ident">glean</span>.<span class="ident">submit_ping_by_name</span>(<span class="kw-2">&amp;</span><span class="ident">ping</span>, <span class="ident">reason</span>.<span class="ident">as_deref</span>())
+        <span class="ident">glean</span>.<span class="ident">submit_ping_by_name</span>(<span class="ident">ping</span>, <span class="ident">reason</span>.<span class="ident">as_deref</span>())
     });
 
     <span class="kw">if</span> <span class="ident">submitted_ping</span> {

@@ -1886,7 +1886,7 @@
 
         <span class="kw">if</span> <span class="ident">should_delete</span> {
             <span class="macro">log::debug!</span>(<span class="string">&quot;Need to delete remaining LMDB files.&quot;</span>);
-            <span class="ident">delete_lmdb_database</span>(<span class="kw-2">&amp;</span><span class="ident">path</span>);
+            <span class="ident">delete_lmdb_database</span>(<span class="ident">path</span>);
         }
 
         <span class="macro">log::debug!</span>(<span class="string">&quot;Migration ended. Safe-mode database in {}&quot;</span>, <span class="ident">path</span>.<span class="ident">display</span>());
@@ -2033,7 +2033,7 @@
     <span class="kw">fn</span> <span class="ident">open_rkv</span>(<span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Rkv</span><span class="op">&gt;</span> {
         <span class="ident">fs::create_dir_all</span>(<span class="kw-2">&amp;</span><span class="ident">path</span>)<span class="question-mark">?</span>;
 
-        <span class="kw">let</span> <span class="ident">rkv</span> <span class="op">=</span> <span class="ident">rkv_new</span>(<span class="kw-2">&amp;</span><span class="ident">path</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">rkv</span> <span class="op">=</span> <span class="ident">rkv_new</span>(<span class="ident">path</span>)<span class="question-mark">?</span>;
         <span class="ident">migrate</span>(<span class="ident">path</span>, <span class="kw-2">&amp;</span><span class="ident">rkv</span>);
 
         <span class="macro">log::info!</span>(<span class="string">&quot;Database initialized&quot;</span>);

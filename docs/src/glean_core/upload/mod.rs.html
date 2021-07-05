@@ -1857,7 +1857,7 @@
             <span class="prelude-val">Ok</span>(<span class="ident">request</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">request</span>),
             <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="macro">log::warn!</span>(<span class="string">&quot;Error trying to build ping request: {}&quot;</span>, <span class="ident">e</span>);
-                <span class="self">self</span>.<span class="ident">directory_manager</span>.<span class="ident">delete_file</span>(<span class="kw-2">&amp;</span><span class="ident">document_id</span>);
+                <span class="self">self</span>.<span class="ident">directory_manager</span>.<span class="ident">delete_file</span>(<span class="ident">document_id</span>);
 
                 <span class="comment">// Record the error.</span>
                 <span class="comment">// Currently the only possible error is PingBodyOverflow.</span>
@@ -1971,7 +1971,7 @@
                     <span class="ident">deleting</span> <span class="op">=</span> <span class="bool-val">true</span>;
                 }
 
-                <span class="kw">if</span> <span class="ident">deleting</span> <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">directory_manager</span>.<span class="ident">delete_file</span>(<span class="kw-2">&amp;</span><span class="ident">document_id</span>) {
+                <span class="kw">if</span> <span class="ident">deleting</span> <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">directory_manager</span>.<span class="ident">delete_file</span>(<span class="ident">document_id</span>) {
                     <span class="self">self</span>.<span class="ident">upload_metrics</span>
                         .<span class="ident">deleted_pings_after_quota_hit</span>
                         .<span class="ident">add</span>(<span class="ident">glean</span>, <span class="number">1</span>);
@@ -2219,7 +2219,7 @@
                     <span class="ident">document_id</span>,
                     <span class="ident">status</span>
                 );
-                <span class="self">self</span>.<span class="ident">enqueue_ping_from_file</span>(<span class="ident">glean</span>, <span class="kw-2">&amp;</span><span class="ident">document_id</span>);
+                <span class="self">self</span>.<span class="ident">enqueue_ping_from_file</span>(<span class="ident">glean</span>, <span class="ident">document_id</span>);
                 <span class="self">self</span>.<span class="ident">recoverable_failure_count</span>
                     .<span class="ident">fetch_add</span>(<span class="number">1</span>, <span class="ident">Ordering::SeqCst</span>);
             }

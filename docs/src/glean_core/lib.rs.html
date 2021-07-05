@@ -1447,7 +1447,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// Whether at least one ping was generated.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">on_ready_to_submit_pings</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">event_data_store</span>.<span class="ident">flush_pending_events_on_startup</span>(<span class="kw-2">&amp;</span><span class="self">self</span>)
+        <span class="self">self</span>.<span class="ident">event_data_store</span>.<span class="ident">flush_pending_events_on_startup</span>(<span class="self">self</span>)
     }
 
     <span class="doccomment">/// Sets whether upload is enabled or not.</span>
@@ -1606,7 +1606,7 @@
 
     <span class="doccomment">/// Gets a handle to the database.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">storage</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Database</span> {
-        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">data_store</span>.<span class="ident">as_ref</span>().<span class="ident">expect</span>(<span class="string">&quot;No database found&quot;</span>)
+        <span class="self">self</span>.<span class="ident">data_store</span>.<span class="ident">as_ref</span>().<span class="ident">expect</span>(<span class="string">&quot;No database found&quot;</span>)
     }
 
     <span class="doccomment">/// Gets a handle to the event database.</span>
@@ -1660,7 +1660,7 @@
     <span class="doccomment">/// The snapshot in a string encoded as JSON. If the snapshot is empty, returns an empty string.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">snapshot</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">store_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">clear_store</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
         <span class="ident">StorageManager</span>
-            .<span class="ident">snapshot</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">storage</span>(), <span class="ident">store_name</span>, <span class="ident">clear_store</span>)
+            .<span class="ident">snapshot</span>(<span class="self">self</span>.<span class="ident">storage</span>(), <span class="ident">store_name</span>, <span class="ident">clear_store</span>)
             .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">String::from</span>(<span class="string">&quot;&quot;</span>))
     }
 
@@ -1699,7 +1699,7 @@
         <span class="kw">let</span> <span class="ident">ping_maker</span> <span class="op">=</span> <span class="ident">PingMaker::new</span>();
         <span class="kw">let</span> <span class="ident">doc_id</span> <span class="op">=</span> <span class="ident">Uuid::new_v4</span>().<span class="ident">to_string</span>();
         <span class="kw">let</span> <span class="ident">url_path</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">make_path</span>(<span class="kw-2">&amp;</span><span class="ident">ping</span>.<span class="ident">name</span>, <span class="kw-2">&amp;</span><span class="ident">doc_id</span>);
-        <span class="kw">match</span> <span class="ident">ping_maker</span>.<span class="ident">collect</span>(<span class="self">self</span>, <span class="kw-2">&amp;</span><span class="ident">ping</span>, <span class="ident">reason</span>, <span class="kw-2">&amp;</span><span class="ident">doc_id</span>, <span class="kw-2">&amp;</span><span class="ident">url_path</span>) {
+        <span class="kw">match</span> <span class="ident">ping_maker</span>.<span class="ident">collect</span>(<span class="self">self</span>, <span class="ident">ping</span>, <span class="ident">reason</span>, <span class="kw-2">&amp;</span><span class="ident">doc_id</span>, <span class="kw-2">&amp;</span><span class="ident">url_path</span>) {
             <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="macro">log::info!</span>(
                     <span class="string">&quot;No content for ping &#39;{}&#39;, therefore no ping queued.&quot;</span>,
@@ -1714,10 +1714,10 @@
                 <span class="comment">// be included in the *next* metrics ping.</span>
                 <span class="self">self</span>.<span class="ident">additional_metrics</span>
                     .<span class="ident">pings_submitted</span>
-                    .<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">ping</span>.<span class="ident">name</span>)
-                    .<span class="ident">add</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="number">1</span>);
+                    .<span class="ident">get</span>(<span class="ident">ping</span>.<span class="ident">name</span>)
+                    .<span class="ident">add</span>(<span class="self">self</span>, <span class="number">1</span>);
 
-                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="ident">ping_maker</span>.<span class="ident">store_ping</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">get_data_path</span>(), <span class="kw-2">&amp;</span><span class="ident">ping</span>) {
+                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="ident">ping_maker</span>.<span class="ident">store_ping</span>(<span class="self">self</span>.<span class="ident">get_data_path</span>(), <span class="kw-2">&amp;</span><span class="ident">ping</span>) {
                     <span class="macro">log::warn!</span>(<span class="string">&quot;IO error while writing ping to file: {}. Enqueuing upload of what we have in memory.&quot;</span>, <span class="ident">e</span>);
                     <span class="self">self</span>.<span class="ident">additional_metrics</span>.<span class="ident">io_errors</span>.<span class="ident">add</span>(<span class="self">self</span>, <span class="number">1</span>);
                     <span class="comment">// `serde_json::to_string` only fails if serialization of the content</span>
@@ -1818,8 +1818,8 @@
         <span class="ident">branch</span>: <span class="ident">String</span>,
         <span class="ident">extra</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     ) {
-        <span class="kw">let</span> <span class="ident">metric</span> <span class="op">=</span> <span class="ident">metrics::ExperimentMetric::new</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">experiment_id</span>);
-        <span class="ident">metric</span>.<span class="ident">set_active</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">branch</span>, <span class="ident">extra</span>);
+        <span class="kw">let</span> <span class="ident">metric</span> <span class="op">=</span> <span class="ident">metrics::ExperimentMetric::new</span>(<span class="self">self</span>, <span class="ident">experiment_id</span>);
+        <span class="ident">metric</span>.<span class="ident">set_active</span>(<span class="self">self</span>, <span class="ident">branch</span>, <span class="ident">extra</span>);
     }
 
     <span class="doccomment">/// Indicates that an experiment is no longer running.</span>
@@ -1828,8 +1828,8 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// * `experiment_id` - The id of the active experiment to deactivate (maximum 30 bytes).</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_experiment_inactive</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">experiment_id</span>: <span class="ident">String</span>) {
-        <span class="kw">let</span> <span class="ident">metric</span> <span class="op">=</span> <span class="ident">metrics::ExperimentMetric::new</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">experiment_id</span>);
-        <span class="ident">metric</span>.<span class="ident">set_inactive</span>(<span class="kw-2">&amp;</span><span class="self">self</span>);
+        <span class="kw">let</span> <span class="ident">metric</span> <span class="op">=</span> <span class="ident">metrics::ExperimentMetric::new</span>(<span class="self">self</span>, <span class="ident">experiment_id</span>);
+        <span class="ident">metric</span>.<span class="ident">set_inactive</span>(<span class="self">self</span>);
     }
 
     <span class="doccomment">/// Persists [`Lifetime::Ping`] data that might be in memory in case</span>
@@ -2041,8 +2041,8 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// if the requested experiment is active, `None` otherwise.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_get_experiment_data_as_json</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">experiment_id</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">metric</span> <span class="op">=</span> <span class="ident">metrics::ExperimentMetric::new</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">experiment_id</span>);
-        <span class="ident">metric</span>.<span class="ident">test_get_value_as_json_string</span>(<span class="kw-2">&amp;</span><span class="self">self</span>)
+        <span class="kw">let</span> <span class="ident">metric</span> <span class="op">=</span> <span class="ident">metrics::ExperimentMetric::new</span>(<span class="self">self</span>, <span class="ident">experiment_id</span>);
+        <span class="ident">metric</span>.<span class="ident">test_get_value_as_json_string</span>(<span class="self">self</span>)
     }
 
     <span class="doccomment">/// **Test-only API (exported for FFI purposes).**</span>
@@ -2071,7 +2071,7 @@
     <span class="doccomment">/// If Glean wsa configured with `use_core_mps: false`, this has no effect.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">start_metrics_ping_scheduler</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">schedule_metrics_pings</span> {
-            <span class="ident">scheduler::schedule</span>(<span class="kw-2">&amp;</span><span class="self">self</span>);
+            <span class="ident">scheduler::schedule</span>(<span class="self">self</span>);
         }
     }
 }
