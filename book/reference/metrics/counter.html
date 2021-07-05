@@ -387,8 +387,12 @@ assert_eq!(
 </div>
 <div data-lang="JavaScript" class="tab">
 <pre><code class="language-js">import * as controls from &quot;./path/to/generated/files/controls.js&quot;;
+import { ErrorType } from &quot;@mozilla/glean/&lt;platform&gt;&quot;;
 
-assert.strictEqual(1, await controls.refreshPressed.testGetNumRecordedErrors(&quot;invalid_value&quot;));
+assert.strictEqual(
+  1,
+  await controls.refreshPressed.testGetNumRecordedErrors(ErrorType.InvalidValue)
+);
 </code></pre>
 </div>
 <div data-lang="Firefox Desktop" class="tab" data-info="Firefox Desktop uses testGetValue to communicate errors"></div>

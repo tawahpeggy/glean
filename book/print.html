@@ -3974,8 +3974,12 @@ assert_eq!(
 </div>
 <div data-lang="JavaScript" class="tab">
 <pre><code class="language-js">import * as accessibility from &quot;./path/to/generated/files/acessibility.js&quot;;
+import { ErrorType } from &quot;@mozilla/glean/&lt;platform&gt;&quot;;
 
-assert(await accessibility.features.testGetNumRecordedErrors(&quot;invalid_label&quot;));
+assert(
+  1,
+  await accessibility.features.testGetNumRecordedErrors(ErrorType.InvalidLabel)
+);
 </code></pre>
 </div>
 <div data-lang="Firefox Desktop" class="tab"></div>
@@ -4277,8 +4281,12 @@ assert_eq!(
 </div>
 <div data-lang="JavaScript" class="tab">
 <pre><code class="language-js">import * as controls from &quot;./path/to/generated/files/controls.js&quot;;
+import { ErrorType } from &quot;@mozilla/glean/&lt;platform&gt;&quot;;
 
-assert.strictEqual(1, await controls.refreshPressed.testGetNumRecordedErrors(&quot;invalid_value&quot;));
+assert.strictEqual(
+  1,
+  await controls.refreshPressed.testGetNumRecordedErrors(ErrorType.InvalidValue)
+);
 </code></pre>
 </div>
 <div data-lang="Firefox Desktop" class="tab" data-info="Firefox Desktop uses testGetValue to communicate errors"></div>
@@ -4582,9 +4590,13 @@ assert_eq!(
 </div>
 <div data-lang="JavaScript" class="tab">
 <pre><code class="language-js">import * as stability from &quot;./path/to/generated/files/stability.js&quot;;
+import { ErrorType } from &quot;@mozilla/glean/&lt;platform&gt;&quot;;
 
 // Were there any invalid labels?
-assert.strictEqual(0, await stability.crashCount.testGetNumRecordedErrors(&quot;invalid_label&quot;));
+assert(
+  0,
+  await stability.crashCount.testGetNumRecordedErrors(ErrorType.InvalidLabel)
+);
 </code></pre>
 </div>
 <div data-lang="Firefox Desktop" class="tab"></div>
@@ -4913,9 +4925,13 @@ assert_eq!(
 </div>
 <div data-lang="JavaScript" class="tab">
 <pre><code class="language-js">import * as searchDefault from &quot;./path/to/generated/files/searchDefault.js&quot;;
+import { ErrorType } from &quot;@mozilla/glean/&lt;platform&gt;&quot;;
 
 // Was the string truncated, and an error reported?
-assert.strictEqual(1, await searchDefault.name.testGetNumRecordedErrors(&quot;invalid_overflow&quot;));
+assert.strictEqual(
+  1,
+  await searchDefault.name.testGetNumRecordedErrors(ErrorType.InvalidOverflow)
+);
 </code></pre>
 </div>
 <div data-lang="Firefox Desktop" class="tab" data-info="Firefox Desktop uses testGetValue to communicate errors"></div>
@@ -5192,9 +5208,13 @@ assert_eq!(
 </div>
 <div data-lang="JavaScript" class="tab">
 <pre><code class="language-js">import * as login from &quot;./path/to/generated/files/login.js&quot;;
+import { ErrorType } from &quot;@mozilla/glean/&lt;platform&gt;&quot;;
 
 // Were there any invalid labels?
-assert.strictEqual(0, await login.errorsByStage[&quot;server_auth&quot;].testGetNumRecordedErrors(&quot;invalid_label&quot;));
+assert(
+  0,
+  await login.errorsByStage.testGetNumRecordedErrors(ErrorType.InvalidLabel)
+);
 </code></pre>
 </div>
 <div data-lang="Firefox Desktop" calss="tab"></div>
@@ -6140,8 +6160,12 @@ assert_eq!(1, login_time.test_get_num_recorded_errors(ErrorType::InvalidValue));
 </div>
 <div data-lang="JavaScript" class="tab">
 <pre><code class="language-js">import * as auth from &quot;./path/to/generated/files/auth.js&quot;;
+import { ErrorType } from &quot;@mozilla/glean/&lt;platform&gt;&quot;;;
 
-assert.strictEqual(1, await auth.loginTime.testGetNumRecordedErrors(&quot;invalid_value&quot;));
+assert.strictEqual(
+  1,
+  await auth.loginTime.testGetNumRecordedErrors(ErrorType.InvalidValue)
+);
 </code></pre>
 </div>
 <div data-lang="Firefox Desktop" class="tab" data-info="Firefox Desktop uses testGetValue to communicate errors"></div>
@@ -7197,9 +7221,13 @@ assert_eq!(
 </div>
 <div data-lang="JavaScript" class="tab">
 <pre><code class="language-js">import * as user from &quot;./path/to/generated/files/user.js&quot;;
+import { ErrorType } from &quot;@mozilla/glean/&lt;platform&gt;&quot;;
 
 // Was the string truncated, and an error reported?
-assert.strictEqual(1, await user.clientId.testGetNumRecordedErrors(&quot;invalid_value&quot;));
+assert.strictEqual(
+  1,
+  await user.clientId.testGetNumRecordedErrors(ErrorType.InvalidValue)
+);
 </code></pre>
 </div>
 <div data-lang="Firefox Desktop" class="tab" data-info="Firefox Desktop uses testGetValue to communicate errors"></div>
@@ -7518,8 +7546,12 @@ assert_eq!(0, install::first_run.test_get_num_recorded_errors(
 </div>
 <div data-lang="JavaScript" class="tab">
 <pre><code class="language-js">import * as install from &quot;./path/to/generated/files/install.js&quot;;
+import { ErrorType } from &quot;@mozilla/glean/&lt;platform&gt;&quot;;
 
-assert.strictEqual(1, await install.firstRun.testGetNumRecordedErrors(&quot;invalid_value&quot;));
+assert.strictEqual(
+  1,
+  await install.firstRun.testGetNumRecordedErrors(ErrorType.InvalidValue)
+);
 </code></pre>
 </div>
 <div data-lang="Firefox Desktop" class="tab" data-info="Firefox Desktop uses testGetValue to communicate errors"></div>
@@ -7858,8 +7890,12 @@ assert_eq!(
 </div>
 <div data-lang="JavaScript" class="tab">
 <pre><code class="language-js">import * as views from &quot;./path/to/generated/files/views.js&quot;;
+import { ErrorType } from &quot;@mozilla/glean/&lt;platform&gt;&quot;;
 
-assert.strictEqual(1, await views.loginOpened.testGetNumRecordedErrors(&quot;invalid_value&quot;));
+assert.strictEqual(
+  1,
+  await views.loginOpened.testGetNumRecordedErrors(ErrorType.InvalidValue)
+);
 </code></pre>
 </div>
 <div data-lang="Firefox Desktop" class="tab"></div>
@@ -8401,8 +8437,12 @@ assert 1 == metrics.display.width.test_get_num_recorded_errors(
 </div>
 <div data-lang="JavaScript" class="tab">
 <pre><code class="language-js">import * as display from &quot;./path/to/generated/files/display.js&quot;;
+import { ErrorType } from &quot;@mozilla/glean/&lt;platform&gt;&quot;;
 
-assert.strictEqual(0, await display.width.testGetNumRecordedErrors(&quot;invalid_value&quot;));
+assert.strictEqual(
+  0,
+  await display.width.testGetNumRecordedErrors(ErrorType.InvalidValue)
+);
 </code></pre>
 </div>
 <div data-lang="Rust" class="tab">
@@ -10869,6 +10909,7 @@ This is a major milestone in using a cross-platform implementation of Glean on t
 </li>
 <li><a href="https://github.com/mozilla/glean.js/pull/431">#431</a>: BUGFIX: Record the timestamp for events before dispatching to the internal task queue.</li>
 <li><a href="https://github.com/mozilla/glean.js/pull/462">#462</a>: Implement Storage module for Qt/QML platform.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/466">#466</a>: Expose <code>ErrorType</code> enum, for using with the <code>testGetNumRecordedErrors</code> API.</li>
 </ul>
 <h1 id="v0150-2021-06-03"><a class="header" href="#v0150-2021-06-03">v0.15.0 (2021-06-03)</a></h1>
 <p><a href="https://github.com/mozilla/glean.js/compare/v0.14.1...v0.15.0">Full changelog</a></p>
