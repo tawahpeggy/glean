@@ -432,8 +432,12 @@ assert_eq!(0, install::first_run.test_get_num_recorded_errors(
 </div>
 <div data-lang="JavaScript" class="tab">
 <pre><code class="language-js">import * as install from &quot;./path/to/generated/files/install.js&quot;;
+import { ErrorType } from &quot;@mozilla/glean/&lt;platform&gt;&quot;;
 
-assert.strictEqual(1, await install.firstRun.testGetNumRecordedErrors(&quot;invalid_value&quot;));
+assert.strictEqual(
+  1,
+  await install.firstRun.testGetNumRecordedErrors(ErrorType.InvalidValue)
+);
 </code></pre>
 </div>
 <div data-lang="Firefox Desktop" class="tab" data-info="Firefox Desktop uses testGetValue to communicate errors"></div>

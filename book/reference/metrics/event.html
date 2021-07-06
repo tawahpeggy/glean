@@ -440,8 +440,12 @@ assert_eq!(
 </div>
 <div data-lang="JavaScript" class="tab">
 <pre><code class="language-js">import * as views from &quot;./path/to/generated/files/views.js&quot;;
+import { ErrorType } from &quot;@mozilla/glean/&lt;platform&gt;&quot;;
 
-assert.strictEqual(1, await views.loginOpened.testGetNumRecordedErrors(&quot;invalid_value&quot;));
+assert.strictEqual(
+  1,
+  await views.loginOpened.testGetNumRecordedErrors(ErrorType.InvalidValue)
+);
 </code></pre>
 </div>
 <div data-lang="Firefox Desktop" class="tab"></div>
