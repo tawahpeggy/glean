@@ -151,21 +151,24 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="unreleased-changes"><a class="header" href="#unreleased-changes">Unreleased changes</a></h1>
-<p><a href="https://github.com/mozilla/glean.js/compare/v0.15.0...main">Full changelog</a></p>
+<p><a href="https://github.com/mozilla/glean.js/compare/v0.16.0...main">Full changelog</a></p>
+<h1 id="v0160-2021-07-06"><a class="header" href="#v0160-2021-07-06">v0.16.0 (2021-07-06)</a></h1>
+<p><a href="https://github.com/mozilla/glean.js/compare/v0.15.0...v0.16.0">Full changelog</a></p>
 <ul>
-<li><a href="https://github.com/mozilla/glean.js/pull/411">#411</a>: Tag all messages logged by Glean with the component they are coming from.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/346">#346</a>: Provide default HTTP client for Qt/QML platform.</li>
 <li><a href="https://github.com/mozilla/glean.js/pull/399">#399</a>: Check if there are ping data before attempting to delete it.
 <ul>
 <li>This change lowers the amount of log messages related to attempting to delete inexistent data.</li>
 </ul>
 </li>
+<li><a href="https://github.com/mozilla/glean.js/pull/411">#411</a>: Tag all messages logged by Glean with the component they are coming from.</li>
 <li><a href="https://github.com/mozilla/glean.js/pull/415">#415</a>, <a href="https://github.com/mozilla/glean.js/pull/430">#430</a>: Gzip ping paylod before upload
 <ul>
 <li>This changes the signature of <code>Uploader.post</code> to accept <code>string | Uint8Array</code> for the <code>body</code> parameter, instead of only <code>string</code>.</li>
 </ul>
 </li>
 <li><a href="https://github.com/mozilla/glean.js/pull/431">#431</a>: BUGFIX: Record the timestamp for events before dispatching to the internal task queue.</li>
-<li><a href="https://github.com/mozilla/glean.js/pull/462">#462</a>: Implement Storage module for Qt/QML platform.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/462">#462</a>: Implement persistent storage for Qt/QML platform.</li>
 <li><a href="https://github.com/mozilla/glean.js/pull/466">#466</a>: Expose <code>ErrorType</code> enum, for using with the <code>testGetNumRecordedErrors</code> API.</li>
 <li><a href="https://github.com/mozilla/glean.js/pull/497">#497</a>: Implement limit of 1MB for ping request payload. Limit is calculated after gzip compression.</li>
 </ul>
