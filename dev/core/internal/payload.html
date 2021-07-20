@@ -245,10 +245,15 @@ See <a href="#timing-distribution">timing distribution</a> for more details.</p>
 <h4 id="example-7"><a class="header" href="#example-7">Example</a></h4>
 <pre><code class="language-json">&quot;29711dc8-a954-11e9-898a-eb4ea7e8fd3f&quot;
 </code></pre>
+<h3 id="url"><a class="header" href="#url">URL</a></h3>
+<p>A <a href="../../../book/reference/metrics/url.html">URL</a> is represented by the encoded string representation of the URL.</p>
+<h4 id="example-8"><a class="header" href="#example-8">Example</a></h4>
+<pre><code class="language-json">&quot;https://mysearchengine.com/?query=%25s&quot;
+</code></pre>
 <h3 id="datetime"><a class="header" href="#datetime">Datetime</a></h3>
 <p>A <a href="../../../book/reference/metrics/datetime.html">Datetime</a> is represented by its ISO8601 string representation, truncated to the metric's time unit.
 It always includes the timezone offset.</p>
-<h4 id="example-8"><a class="header" href="#example-8">Example</a></h4>
+<h4 id="example-9"><a class="header" href="#example-9">Example</a></h4>
 <pre><code class="language-json">&quot;2019-07-18T14:06:00.000+02:00&quot;
 </code></pre>
 <h3 id="event"><a class="header" href="#event">Event</a></h3>
@@ -260,7 +265,7 @@ Each event object has the following keys:</p>
 <tr><td><code>name</code></td><td>String</td><td>The event's name, as defined in the <code>metrics.yaml</code> file.</td></tr>
 <tr><td><code>extra</code></td><td>Object (optional)</td><td>Extra data associated with the event. Both the keys and values of this object are strings. The keys must be from the set defined for this event in the <code>metrics.yaml</code> file. The values have a maximum length of 50 bytes, when encoded as UTF-8.</td></tr>
 </tbody></table>
-<h4 id="example-9"><a class="header" href="#example-9">Example</a></h4>
+<h4 id="example-10"><a class="header" href="#example-10">Example</a></h4>
 <pre><code class="language-json">[
   {
     &quot;timestamp&quot;: 0,
@@ -302,7 +307,7 @@ This range starts with the first bucket (as specified in the <code>range_min</co
 <pre><code>recorded:        12: 2,                      22: 1
 sent:     10: 0, 12: 2, 14: 0, 17: 0, 19: 0, 22: 1, 24: 0
 </code></pre>
-<h4 id="example-10"><a class="header" href="#example-10">Example:</a></h4>
+<h4 id="example-11"><a class="header" href="#example-11">Example:</a></h4>
 <pre><code class="language-json">{
     &quot;sum&quot;: 3,
     &quot;values&quot;: {
@@ -336,7 +341,7 @@ See the individual metric types for details on the value payload:</p>
 </code></pre>
 <h3 id="rate"><a class="header" href="#rate">Rate</a></h3>
 <p>A <a href="../../../book/reference/metrics/rate.html">Rate</a> is represented by its <code>numerator</code> and <code>denominator</code>.</p>
-<h4 id="example-11"><a class="header" href="#example-11">Example</a></h4>
+<h4 id="example-12"><a class="header" href="#example-12">Example</a></h4>
 <pre><code class="language-json">{
     &quot;numerator&quot;: 22,
     &quot;denominator&quot;: 7,
