@@ -9707,7 +9707,37 @@ Each ping has its own schedule to gather all its locally saved metrics and creat
 <li><a href="appendix/changelog/./js.html">Glean.js</a></li>
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/appendix/changelog/index.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="unreleased-changes"><a class="header" href="#unreleased-changes">Unreleased changes</a></h1>
-<p><a href="https://github.com/mozilla/glean/compare/v39.1.0...main">Full changelog</a></p>
+<p><a href="https://github.com/mozilla/glean/compare/v40.0.0...main">Full changelog</a></p>
+<h1 id="v4000-2021-07-28"><a class="header" href="#v4000-2021-07-28">v40.0.0 (2021-07-28)</a></h1>
+<p><a href="https://github.com/mozilla/glean/compare/v39.1.0...v40.0.0">Full changelog</a></p>
+<ul>
+<li>
+<p>Android</p>
+<ul>
+<li>
+<p><strong>Breaking Change</strong>: Split the Glean Kotlin SDK into two packages: <code>glean</code> and <code>glean-native</code> (<a href="https://github.com/mozilla/glean/pull/1595">#1595</a>).<br />
+Consumers will need to switch to <code>org.mozilla.telemetry:glean-native-forUnitTests</code>.<br />
+Old code in <code>build.gradle</code>:</p>
+<pre><code>testImplementation &quot;org.mozilla.telemetry:glean-forUnitTests:${project.ext.glean_version}&quot;
+</code></pre>
+<p>New code in <code>build.gradle</code>:</p>
+<pre><code>testImplementation &quot;org.mozilla.telemetry:glean-native-forUnitTests:${project.ext.glean_version}&quot;
+</code></pre>
+</li>
+<li>
+<p>The <code>glean-gradle-plugin</code> now automatically excludes the <code>glean-native</code> dependency if <code>geckoview-omni</code> is also part of the build.
+Glean native functionality will be provided by the <code>geckoview-omni</code> package.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Rust</p>
+<ul>
+<li>The <code>glean-ffi</code> is no longer compiled as a <code>cdylib</code>. Other language SDKs consume <code>glean-bundle</code> instead as a <code>cdylib</code>.
+This doesn't affect consumers.</li>
+</ul>
+</li>
+</ul>
 <h1 id="v3910-2021-07-26"><a class="header" href="#v3910-2021-07-26">v39.1.0 (2021-07-26)</a></h1>
 <p><a href="https://github.com/mozilla/glean/compare/v39.0.4...v39.1.0">Full changelog</a></p>
 <ul>
