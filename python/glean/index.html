@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.9.2" />
+<meta name="generator" content="pdoc 0.10.0" />
 <title>glean API documentation</title>
 <meta name="description" content="Top-level package for Glean SDK." />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
@@ -117,7 +117,7 @@ __pdoc__ = {&#34;libglean_ffi&#34;: False}</code></pre>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="glean.load_metrics"><code class="name flex">
-<span>def <span class="ident">load_metrics</span></span>(<span>filepath: Union[str, pathlib.Path, List[Union[str, pathlib.Path]]], config: Union[dict, NoneType] = None) ‑> Any</span>
+<span>def <span class="ident">load_metrics</span></span>(<span>filepath: Union[str, pathlib.Path, List[Union[str, pathlib.Path]]], config: Optional[dict] = None) ‑> Any</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Load metrics from a <code>metrics.yaml</code> file.</p>
@@ -194,7 +194,7 @@ the <code>metrics.yaml</code> file.</p>
 </details>
 </dd>
 <dt id="glean.load_pings"><code class="name flex">
-<span>def <span class="ident">load_pings</span></span>(<span>filepath: Union[str, pathlib.Path, List[Union[str, pathlib.Path]]], config: Union[dict, NoneType] = None) ‑> Any</span>
+<span>def <span class="ident">load_pings</span></span>(<span>filepath: Union[str, pathlib.Path, List[Union[str, pathlib.Path]]], config: Optional[dict] = None) ‑> Any</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Load pings from a <code>pings.yaml</code> file.</p>
@@ -249,7 +249,7 @@ the <code>pings.yaml</code> file.</p>
 <dl>
 <dt id="glean.Configuration"><code class="flex name class">
 <span>class <span class="ident">Configuration</span></span>
-<span>(</span><span>server_endpoint: str = None, channel: Union[str, NoneType] = None, max_events: int = 500, ping_uploader: Union[<a title="glean.net.base_uploader.BaseUploader" href="net/base_uploader.html#glean.net.base_uploader.BaseUploader">BaseUploader</a>, NoneType] = None, allow_multiprocessing: bool = True)</span>
+<span>(</span><span>server_endpoint: str = None, channel: Optional[str] = None, max_events: int = 500, ping_uploader: Optional[<a title="glean.net.base_uploader.BaseUploader" href="net/base_uploader.html#glean.net.base_uploader.BaseUploader">BaseUploader</a>] = None, allow_multiprocessing: bool = True)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Configuration values for Glean.</p>
@@ -351,7 +351,7 @@ to offload some work (such as ping uploading).</dd>
 </details>
 <h3>Instance variables</h3>
 <dl>
-<dt id="glean.Configuration.channel"><code class="name">var <span class="ident">channel</span> : Union[str, NoneType]</code></dt>
+<dt id="glean.Configuration.channel"><code class="name">var <span class="ident">channel</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>The release channel the application is on, if known.</p></div>
 <details class="source">
@@ -1087,7 +1087,7 @@ def handle_client_inactive(cls):
 </details>
 </dd>
 <dt id="glean.Glean.initialize"><code class="name flex">
-<span>def <span class="ident">initialize</span></span>(<span>application_id: str, application_version: str, upload_enabled: bool, configuration: Union[<a title="glean.config.Configuration" href="config.html#glean.config.Configuration">Configuration</a>, NoneType] = None, data_dir: pathlib.Path = None, application_build_id: Union[str, NoneType] = None) ‑> NoneType</span>
+<span>def <span class="ident">initialize</span></span>(<span>application_id: str, application_version: str, upload_enabled: bool, configuration: Optional[<a title="glean.config.Configuration" href="config.html#glean.config.Configuration">Configuration</a>] = None, data_dir: pathlib.Path = None, application_build_id: Optional[str] = None) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Initialize the Glean SDK.</p>
@@ -1287,7 +1287,7 @@ def register_ping_type(cls, ping: &#34;PingType&#34;) -&gt; None:
 </details>
 </dd>
 <dt id="glean.Glean.set_experiment_active"><code class="name flex">
-<span>def <span class="ident">set_experiment_active</span></span>(<span>experiment_id: str, branch: str, extra: Union[Dict[str, str], NoneType] = None) ‑> NoneType</span>
+<span>def <span class="ident">set_experiment_active</span></span>(<span>experiment_id: str, branch: str, extra: Optional[Dict[str, str]] = None) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Indicate that an experiment is running. Glean will then add an
@@ -1341,7 +1341,7 @@ def set_experiment_active(
 </details>
 </dd>
 <dt id="glean.Glean.set_experiment_inactive"><code class="name flex">
-<span>def <span class="ident">set_experiment_inactive</span></span>(<span>experiment_id: str) ‑> NoneType</span>
+<span>def <span class="ident">set_experiment_inactive</span></span>(<span>experiment_id: str) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Indicate that the experiment is no longer running.</p>
@@ -1371,7 +1371,7 @@ def set_experiment_inactive(cls, experiment_id: str) -&gt; None:
 </details>
 </dd>
 <dt id="glean.Glean.set_upload_enabled"><code class="name flex">
-<span>def <span class="ident">set_upload_enabled</span></span>(<span>enabled: bool) ‑> NoneType</span>
+<span>def <span class="ident">set_upload_enabled</span></span>(<span>enabled: bool) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Enable or disable Glean collection and upload.</p>
@@ -1436,7 +1436,7 @@ def set_upload_enabled(cls, enabled: bool) -&gt; None:
 </details>
 </dd>
 <dt id="glean.Glean.test_collect"><code class="name flex">
-<span>def <span class="ident">test_collect</span></span>(<span>ping: PingType, reason: Union[str, NoneType] = None) ‑> str</span>
+<span>def <span class="ident">test_collect</span></span>(<span>ping: PingType, reason: Optional[str] = None) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Collect a ping and return as a string.</p>
@@ -1640,7 +1640,7 @@ def test_is_experiment_active(cls, experiment_id: str) -&gt; bool:
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
 </footer>
 </body>
 </html>

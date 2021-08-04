@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.9.2" />
+<meta name="generator" content="pdoc 0.10.0" />
 <title>glean.metrics API documentation</title>
 <meta name="description" content="This module contains all of the metric types." />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
@@ -285,7 +285,7 @@ previously registered in the metrics.yaml file.</p>
 <h3>Methods</h3>
 <dl>
 <dt id="glean.metrics.BooleanMetricType.set"><code class="name flex">
-<span>def <span class="ident">set</span></span>(<span>self, value: bool) ‑> NoneType</span>
+<span>def <span class="ident">set</span></span>(<span>self, value: bool) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Set a boolean value.</p>
@@ -314,7 +314,7 @@ previously registered in the metrics.yaml file.</p>
 </details>
 </dd>
 <dt id="glean.metrics.BooleanMetricType.test_get_value"><code class="name flex">
-<span>def <span class="ident">test_get_value</span></span>(<span>self, ping_name: Union[str, NoneType] = None) ‑> bool</span>
+<span>def <span class="ident">test_get_value</span></span>(<span>self, ping_name: Optional[str] = None) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns the stored value for testing purposes only.</p>
@@ -355,7 +355,7 @@ of the ping to retrieve the metric for.</dd>
 </details>
 </dd>
 <dt id="glean.metrics.BooleanMetricType.test_has_value"><code class="name flex">
-<span>def <span class="ident">test_has_value</span></span>(<span>self, ping_name: Union[str, NoneType] = None) ‑> bool</span>
+<span>def <span class="ident">test_has_value</span></span>(<span>self, ping_name: Optional[str] = None) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Tests whether a value is stored for the metric for testing purposes
@@ -533,7 +533,7 @@ enforced.</p></div>
 <h3>Methods</h3>
 <dl>
 <dt id="glean.metrics.CounterMetricType.add"><code class="name flex">
-<span>def <span class="ident">add</span></span>(<span>self, amount: int = 1) ‑> NoneType</span>
+<span>def <span class="ident">add</span></span>(<span>self, amount: int = 1) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Add to counter value.</p>
@@ -564,7 +564,7 @@ counter by.</dd>
 </details>
 </dd>
 <dt id="glean.metrics.CounterMetricType.test_get_num_recorded_errors"><code class="name flex">
-<span>def <span class="ident">test_get_num_recorded_errors</span></span>(<span>self, error_type: <a title="glean.testing.error_type.ErrorType" href="../testing/error_type.html#glean.testing.error_type.ErrorType">ErrorType</a>, ping_name: Union[str, NoneType] = None) ‑> int</span>
+<span>def <span class="ident">test_get_num_recorded_errors</span></span>(<span>self, error_type: <a title="glean.testing.error_type.ErrorType" href="../testing/error_type.html#glean.testing.error_type.ErrorType">ErrorType</a>, ping_name: Optional[str] = None) ‑> int</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns the number of errors recorded for the given metric.</p>
@@ -609,7 +609,7 @@ the given error type.</p></div>
 </details>
 </dd>
 <dt id="glean.metrics.CounterMetricType.test_get_value"><code class="name flex">
-<span>def <span class="ident">test_get_value</span></span>(<span>self, ping_name: Union[str, NoneType] = None) ‑> int</span>
+<span>def <span class="ident">test_get_value</span></span>(<span>self, ping_name: Optional[str] = None) ‑> int</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns the stored value for testing purposes only.</p>
@@ -648,7 +648,7 @@ of the ping to retrieve the metric for.</dd>
 </details>
 </dd>
 <dt id="glean.metrics.CounterMetricType.test_has_value"><code class="name flex">
-<span>def <span class="ident">test_has_value</span></span>(<span>self, ping_name: Union[str, NoneType] = None) ‑> bool</span>
+<span>def <span class="ident">test_has_value</span></span>(<span>self, ping_name: Optional[str] = None) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Tests whether a value is stored for the metric for testing purposes
@@ -862,7 +862,7 @@ previously registered in the metrics.yaml file.</p>
 <h3>Methods</h3>
 <dl>
 <dt id="glean.metrics.DatetimeMetricType.set"><code class="name flex">
-<span>def <span class="ident">set</span></span>(<span>self, value: Union[datetime.datetime, NoneType] = None) ‑> NoneType</span>
+<span>def <span class="ident">set</span></span>(<span>self, value: Optional[datetime.datetime] = None) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Set a datetime value, truncating it to the metric's resolution.</p>
@@ -911,7 +911,7 @@ value to set. If not provided, will record the current time.</dd>
 </details>
 </dd>
 <dt id="glean.metrics.DatetimeMetricType.test_get_num_recorded_errors"><code class="name flex">
-<span>def <span class="ident">test_get_num_recorded_errors</span></span>(<span>self, error_type: <a title="glean.testing.error_type.ErrorType" href="../testing/error_type.html#glean.testing.error_type.ErrorType">ErrorType</a>, ping_name: Union[str, NoneType] = None) ‑> int</span>
+<span>def <span class="ident">test_get_num_recorded_errors</span></span>(<span>self, error_type: <a title="glean.testing.error_type.ErrorType" href="../testing/error_type.html#glean.testing.error_type.ErrorType">ErrorType</a>, ping_name: Optional[str] = None) ‑> int</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns the number of errors recorded for the given metric.</p>
@@ -956,7 +956,7 @@ the given error type.</p></div>
 </details>
 </dd>
 <dt id="glean.metrics.DatetimeMetricType.test_get_value"><code class="name flex">
-<span>def <span class="ident">test_get_value</span></span>(<span>self, ping_name: Union[str, NoneType] = None) ‑> datetime.datetime</span>
+<span>def <span class="ident">test_get_value</span></span>(<span>self, ping_name: Optional[str] = None) ‑> datetime.datetime</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns the stored value for testing purposes only.</p>
@@ -992,7 +992,7 @@ of the ping to retrieve the metric for.</dd>
 </details>
 </dd>
 <dt id="glean.metrics.DatetimeMetricType.test_get_value_as_str"><code class="name flex">
-<span>def <span class="ident">test_get_value_as_str</span></span>(<span>self, ping_name: Union[str, NoneType] = None) ‑> str</span>
+<span>def <span class="ident">test_get_value_as_str</span></span>(<span>self, ping_name: Optional[str] = None) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns the stored value for testing purposes only, as an ISO8601 string.</p>
@@ -1033,7 +1033,7 @@ of the ping to retrieve the metric for.</dd>
 </details>
 </dd>
 <dt id="glean.metrics.DatetimeMetricType.test_has_value"><code class="name flex">
-<span>def <span class="ident">test_has_value</span></span>(<span>self, ping_name: Union[str, NoneType] = None) ‑> bool</span>
+<span>def <span class="ident">test_has_value</span></span>(<span>self, ping_name: Optional[str] = None) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Tests whether a value is stored for the metric for testing purposes
@@ -1338,7 +1338,7 @@ enforced.</p></div>
 <h3>Methods</h3>
 <dl>
 <dt id="glean.metrics.EventMetricType.record"><code class="name flex">
-<span>def <span class="ident">record</span></span>(<span>self, extra: Union[Dict[int, str], glean.metrics.event.EventExtras, NoneType] = None) ‑> NoneType</span>
+<span>def <span class="ident">record</span></span>(<span>self, extra: Union[Dict[int, str], glean.metrics.event.EventExtras, None] = None) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Record an event by using the information provided by the instance of
@@ -1374,7 +1374,7 @@ The maximum length for values is 100.</dd>
 </details>
 </dd>
 <dt id="glean.metrics.EventMetricType.test_get_num_recorded_errors"><code class="name flex">
-<span>def <span class="ident">test_get_num_recorded_errors</span></span>(<span>self, error_type: <a title="glean.testing.error_type.ErrorType" href="../testing/error_type.html#glean.testing.error_type.ErrorType">ErrorType</a>, ping_name: Union[str, NoneType] = None) ‑> int</span>
+<span>def <span class="ident">test_get_num_recorded_errors</span></span>(<span>self, error_type: <a title="glean.testing.error_type.ErrorType" href="../testing/error_type.html#glean.testing.error_type.ErrorType">ErrorType</a>, ping_name: Optional[str] = None) ‑> int</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns the number of errors recorded for the given metric.</p>
@@ -1419,7 +1419,7 @@ the given error type.</p></div>
 </details>
 </dd>
 <dt id="glean.metrics.EventMetricType.test_get_value"><code class="name flex">
-<span>def <span class="ident">test_get_value</span></span>(<span>self, ping_name: Union[str, NoneType] = None) ‑> List[<a title="glean.metrics.event.RecordedEventData" href="event.html#glean.metrics.event.RecordedEventData">RecordedEventData</a>]</span>
+<span>def <span class="ident">test_get_value</span></span>(<span>self, ping_name: Optional[str] = None) ‑> List[<a title="glean.metrics.event.RecordedEventData" href="event.html#glean.metrics.event.RecordedEventData">RecordedEventData</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns the stored value for testing purposes only.</p>
@@ -1466,7 +1466,7 @@ of the ping to retrieve the metric for.</dd>
 </details>
 </dd>
 <dt id="glean.metrics.EventMetricType.test_has_value"><code class="name flex">
-<span>def <span class="ident">test_has_value</span></span>(<span>self, ping_name: Union[str, NoneType] = None) ‑> bool</span>
+<span>def <span class="ident">test_has_value</span></span>(<span>self, ping_name: Optional[str] = None) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Tests whether a value is stored for the metric for testing purposes
@@ -1713,7 +1713,7 @@ and making sure that limits are enforced.</p></div>
 <h3>Methods</h3>
 <dl>
 <dt id="glean.metrics.JweMetricType.set"><code class="name flex">
-<span>def <span class="ident">set</span></span>(<span>self, header: str, key: str, init_vector: str, cipher_text: str, auth_tag: str) ‑> NoneType</span>
+<span>def <span class="ident">set</span></span>(<span>self, header: str, key: str, init_vector: str, cipher_text: str, auth_tag: str) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Build a JWE value from its elements and set to it.</p>
@@ -1800,7 +1800,7 @@ Can be an empty octet sequence.</dd>
 </details>
 </dd>
 <dt id="glean.metrics.JweMetricType.test_get_compact_representation"><code class="name flex">
-<span>def <span class="ident">test_get_compact_representation</span></span>(<span>self, ping_name: Union[str, NoneType] = None) ‑> str</span>
+<span>def <span class="ident">test_get_compact_representation</span></span>(<span>self, ping_name: Optional[str] = None) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns the stored value as the compact representation
@@ -1843,7 +1843,7 @@ of the ping to retrieve the metric for.</dd>
 </details>
 </dd>
 <dt id="glean.metrics.JweMetricType.test_get_num_recorded_errors"><code class="name flex">
-<span>def <span class="ident">test_get_num_recorded_errors</span></span>(<span>self, error_type: <a title="glean.testing.error_type.ErrorType" href="../testing/error_type.html#glean.testing.error_type.ErrorType">ErrorType</a>, ping_name: Union[str, NoneType] = None) ‑> int</span>
+<span>def <span class="ident">test_get_num_recorded_errors</span></span>(<span>self, error_type: <a title="glean.testing.error_type.ErrorType" href="../testing/error_type.html#glean.testing.error_type.ErrorType">ErrorType</a>, ping_name: Optional[str] = None) ‑> int</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns the number of errors recorded for the given metric.</p>
@@ -1888,7 +1888,7 @@ the given error type.</p></div>
 </details>
 </dd>
 <dt id="glean.metrics.JweMetricType.test_get_value"><code class="name flex">
-<span>def <span class="ident">test_get_value</span></span>(<span>self, ping_name: Union[str, NoneType] = None) ‑> glean.metrics.jwe.JweData</span>
+<span>def <span class="ident">test_get_value</span></span>(<span>self, ping_name: Optional[str] = None) ‑> glean.metrics.jwe.JweData</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns the stored value for testing purposes only.</p>
@@ -1939,7 +1939,7 @@ of the ping to retrieve the metric for.</dd>
 </details>
 </dd>
 <dt id="glean.metrics.JweMetricType.test_has_value"><code class="name flex">
-<span>def <span class="ident">test_has_value</span></span>(<span>self, ping_name: Union[str, NoneType] = None) ‑> bool</span>
+<span>def <span class="ident">test_has_value</span></span>(<span>self, ping_name: Optional[str] = None) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Tests whether a value is stored for the metric for testing purposes
@@ -1982,7 +1982,7 @@ of the ping to retrieve the metric for.</dd>
 </dd>
 <dt id="glean.metrics.LabeledBooleanMetricType"><code class="flex name class">
 <span>class <span class="ident">LabeledBooleanMetricType</span></span>
-<span>(</span><span>disabled: bool, category: str, lifetime: <a title="glean.metrics.lifetime.Lifetime" href="lifetime.html#glean.metrics.lifetime.Lifetime">Lifetime</a>, name: str, send_in_pings: List[str], labels: Union[Set[str], NoneType] = None)</span>
+<span>(</span><span>disabled: bool, category: str, lifetime: <a title="glean.metrics.lifetime.Lifetime" href="lifetime.html#glean.metrics.lifetime.Lifetime">Lifetime</a>, name: str, send_in_pings: List[str], labels: Optional[Set[str]] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>This implements the developer-facing API for labeled metrics.</p>
@@ -2014,7 +2014,7 @@ metric storage and rearrange them correctly in the ping.</p></div>
 </dd>
 <dt id="glean.metrics.LabeledCounterMetricType"><code class="flex name class">
 <span>class <span class="ident">LabeledCounterMetricType</span></span>
-<span>(</span><span>disabled: bool, category: str, lifetime: <a title="glean.metrics.lifetime.Lifetime" href="lifetime.html#glean.metrics.lifetime.Lifetime">Lifetime</a>, name: str, send_in_pings: List[str], labels: Union[Set[str], NoneType] = None)</span>
+<span>(</span><span>disabled: bool, category: str, lifetime: <a title="glean.metrics.lifetime.Lifetime" href="lifetime.html#glean.metrics.lifetime.Lifetime">Lifetime</a>, name: str, send_in_pings: List[str], labels: Optional[Set[str]] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>This implements the developer-facing API for labeled metrics.</p>
@@ -2046,7 +2046,7 @@ metric storage and rearrange them correctly in the ping.</p></div>
 </dd>
 <dt id="glean.metrics.LabeledStringMetricType"><code class="flex name class">
 <span>class <span class="ident">LabeledStringMetricType</span></span>
-<span>(</span><span>disabled: bool, category: str, lifetime: <a title="glean.metrics.lifetime.Lifetime" href="lifetime.html#glean.metrics.lifetime.Lifetime">Lifetime</a>, name: str, send_in_pings: List[str], labels: Union[Set[str], NoneType] = None)</span>
+<span>(</span><span>disabled: bool, category: str, lifetime: <a title="glean.metrics.lifetime.Lifetime" href="lifetime.html#glean.metrics.lifetime.Lifetime">Lifetime</a>, name: str, send_in_pings: List[str], labels: Optional[Set[str]] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>This implements the developer-facing API for labeled metrics.</p>
@@ -2266,7 +2266,7 @@ previously registered in the metrics.yaml file.</p></div>
 <h3>Methods</h3>
 <dl>
 <dt id="glean.metrics.MemoryDistributionMetricType.accumulate"><code class="name flex">
-<span>def <span class="ident">accumulate</span></span>(<span>self, sample: int) ‑> NoneType</span>
+<span>def <span class="ident">accumulate</span></span>(<span>self, sample: int) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Record a single value, in the unit specified by <code>memory_unit</code>, to the distribution.</p>
@@ -2295,7 +2295,7 @@ previously registered in the metrics.yaml file.</p></div>
 </details>
 </dd>
 <dt id="glean.metrics.MemoryDistributionMetricType.test_get_num_recorded_errors"><code class="name flex">
-<span>def <span class="ident">test_get_num_recorded_errors</span></span>(<span>self, error_type: <a title="glean.testing.error_type.ErrorType" href="../testing/error_type.html#glean.testing.error_type.ErrorType">ErrorType</a>, ping_name: Union[str, NoneType] = None) ‑> int</span>
+<span>def <span class="ident">test_get_num_recorded_errors</span></span>(<span>self, error_type: <a title="glean.testing.error_type.ErrorType" href="../testing/error_type.html#glean.testing.error_type.ErrorType">ErrorType</a>, ping_name: Optional[str] = None) ‑> int</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns the number of errors recorded for the given metric.</p>
@@ -2340,7 +2340,7 @@ the given error type.</p></div>
 </details>
 </dd>
 <dt id="glean.metrics.MemoryDistributionMetricType.test_get_value"><code class="name flex">
-<span>def <span class="ident">test_get_value</span></span>(<span>self, ping_name: Union[str, NoneType] = None) ‑> <a title="glean.metrics.distribution_data.DistributionData" href="distribution_data.html#glean.metrics.distribution_data.DistributionData">DistributionData</a></span>
+<span>def <span class="ident">test_get_value</span></span>(<span>self, ping_name: Optional[str] = None) ‑> <a title="glean.metrics.distribution_data.DistributionData" href="distribution_data.html#glean.metrics.distribution_data.DistributionData">DistributionData</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns the stored value for testing purposes only.</p>
@@ -2383,7 +2383,7 @@ of the ping to retrieve the metric for.</dd>
 </details>
 </dd>
 <dt id="glean.metrics.MemoryDistributionMetricType.test_has_value"><code class="name flex">
-<span>def <span class="ident">test_has_value</span></span>(<span>self, ping_name: Union[str, NoneType] = None) ‑> bool</span>
+<span>def <span class="ident">test_has_value</span></span>(<span>self, ping_name: Optional[str] = None) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Tests whether a value is stored for the metric for testing purposes
@@ -2597,7 +2597,7 @@ def name(self) -&gt; str:
 <h3>Methods</h3>
 <dl>
 <dt id="glean.metrics.PingType.submit"><code class="name flex">
-<span>def <span class="ident">submit</span></span>(<span>self, reason: Union[int, NoneType] = None) ‑> NoneType</span>
+<span>def <span class="ident">submit</span></span>(<span>self, reason: Optional[int] = None) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Collect and submit the ping for eventual uploading.</p>
@@ -2634,7 +2634,7 @@ def name(self) -&gt; str:
 </details>
 </dd>
 <dt id="glean.metrics.PingType.test_before_next_submit"><code class="name flex">
-<span>def <span class="ident">test_before_next_submit</span></span>(<span>self, cb: Callable[[Union[str, NoneType]], NoneType])</span>
+<span>def <span class="ident">test_before_next_submit</span></span>(<span>self, cb: Callable[[Optional[str]], None])</span>
 </code></dt>
 <dd>
 <div class="desc"><p><strong>Test-only API</strong></p>
@@ -2800,7 +2800,7 @@ enforced.</p></div>
 <h3>Methods</h3>
 <dl>
 <dt id="glean.metrics.QuantityMetricType.set"><code class="name flex">
-<span>def <span class="ident">set</span></span>(<span>self, value: int) ‑> NoneType</span>
+<span>def <span class="ident">set</span></span>(<span>self, value: int) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Set a quantity value.</p>
@@ -2829,7 +2829,7 @@ enforced.</p></div>
 </details>
 </dd>
 <dt id="glean.metrics.QuantityMetricType.test_get_num_recorded_errors"><code class="name flex">
-<span>def <span class="ident">test_get_num_recorded_errors</span></span>(<span>self, error_type: <a title="glean.testing.error_type.ErrorType" href="../testing/error_type.html#glean.testing.error_type.ErrorType">ErrorType</a>, ping_name: Union[str, NoneType] = None) ‑> int</span>
+<span>def <span class="ident">test_get_num_recorded_errors</span></span>(<span>self, error_type: <a title="glean.testing.error_type.ErrorType" href="../testing/error_type.html#glean.testing.error_type.ErrorType">ErrorType</a>, ping_name: Optional[str] = None) ‑> int</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns the number of errors recorded for the given metric.</p>
@@ -2874,7 +2874,7 @@ the given error type.</p></div>
 </details>
 </dd>
 <dt id="glean.metrics.QuantityMetricType.test_get_value"><code class="name flex">
-<span>def <span class="ident">test_get_value</span></span>(<span>self, ping_name: Union[str, NoneType] = None) ‑> int</span>
+<span>def <span class="ident">test_get_value</span></span>(<span>self, ping_name: Optional[str] = None) ‑> int</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns the stored value for testing purposes only.</p>
@@ -2913,7 +2913,7 @@ of the ping to retrieve the metric for.</dd>
 </details>
 </dd>
 <dt id="glean.metrics.QuantityMetricType.test_has_value"><code class="name flex">
-<span>def <span class="ident">test_has_value</span></span>(<span>self, ping_name: Union[str, NoneType] = None) ‑> bool</span>
+<span>def <span class="ident">test_has_value</span></span>(<span>self, ping_name: Optional[str] = None) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Tests whether a value is stored for the metric for testing purposes
@@ -2956,7 +2956,7 @@ of the ping to retrieve the metric for.</dd>
 </dd>
 <dt id="glean.metrics.RecordedEventData"><code class="flex name class">
 <span>class <span class="ident">RecordedEventData</span></span>
-<span>(</span><span>category: str, name: str, timestamp: int, extra: Union[Dict[str, str], NoneType] = None)</span>
+<span>(</span><span>category: str, name: str, timestamp: int, extra: Optional[Dict[str, str]] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Deserialized event data.</p>
@@ -3044,7 +3044,7 @@ def category(self) -&gt; str:
     return self._category</code></pre>
 </details>
 </dd>
-<dt id="glean.metrics.RecordedEventData.extra"><code class="name">var <span class="ident">extra</span> : Union[Dict[str, str], NoneType]</code></dt>
+<dt id="glean.metrics.RecordedEventData.extra"><code class="name">var <span class="ident">extra</span> : Optional[Dict[str, str]]</code></dt>
 <dd>
 <div class="desc"><p>Any extra data recorded for the event.</p></div>
 <details class="source">
@@ -3335,7 +3335,7 @@ input data and making sure that limits are enforced.</p></div>
 <h3>Methods</h3>
 <dl>
 <dt id="glean.metrics.StringListMetricType.add"><code class="name flex">
-<span>def <span class="ident">add</span></span>(<span>self, value: str) ‑> NoneType</span>
+<span>def <span class="ident">add</span></span>(<span>self, value: str) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Appends a string value to one or more string list metric stores. If the
@@ -3368,7 +3368,7 @@ maximum length it will be truncated.</p>
 </details>
 </dd>
 <dt id="glean.metrics.StringListMetricType.set"><code class="name flex">
-<span>def <span class="ident">set</span></span>(<span>self, value: Iterable[str]) ‑> NoneType</span>
+<span>def <span class="ident">set</span></span>(<span>self, value: Iterable[str]) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Sets a string list to one or more metric stores. If any string exceeds
@@ -3404,7 +3404,7 @@ will be truncated.</p>
 </details>
 </dd>
 <dt id="glean.metrics.StringListMetricType.test_get_num_recorded_errors"><code class="name flex">
-<span>def <span class="ident">test_get_num_recorded_errors</span></span>(<span>self, error_type: <a title="glean.testing.error_type.ErrorType" href="../testing/error_type.html#glean.testing.error_type.ErrorType">ErrorType</a>, ping_name: Union[str, NoneType] = None) ‑> int</span>
+<span>def <span class="ident">test_get_num_recorded_errors</span></span>(<span>self, error_type: <a title="glean.testing.error_type.ErrorType" href="../testing/error_type.html#glean.testing.error_type.ErrorType">ErrorType</a>, ping_name: Optional[str] = None) ‑> int</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns the number of errors recorded for the given metric.</p>
@@ -3449,7 +3449,7 @@ the given error type.</p></div>
 </details>
 </dd>
 <dt id="glean.metrics.StringListMetricType.test_get_value"><code class="name flex">
-<span>def <span class="ident">test_get_value</span></span>(<span>self, ping_name: Union[str, NoneType] = None) ‑> List[str]</span>
+<span>def <span class="ident">test_get_value</span></span>(<span>self, ping_name: Optional[str] = None) ‑> List[str]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns the stored value for testing purposes only.</p>
@@ -3492,7 +3492,7 @@ of the ping to retrieve the metric for.</dd>
 </details>
 </dd>
 <dt id="glean.metrics.StringListMetricType.test_has_value"><code class="name flex">
-<span>def <span class="ident">test_has_value</span></span>(<span>self, ping_name: Union[str, NoneType] = None) ‑> bool</span>
+<span>def <span class="ident">test_has_value</span></span>(<span>self, ping_name: Optional[str] = None) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Tests whether a value is stored for the metric for testing purposes
@@ -3685,7 +3685,7 @@ enforced.</p></div>
 <h3>Methods</h3>
 <dl>
 <dt id="glean.metrics.StringMetricType.set"><code class="name flex">
-<span>def <span class="ident">set</span></span>(<span>self, value: str) ‑> NoneType</span>
+<span>def <span class="ident">set</span></span>(<span>self, value: str) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Set a string value.</p>
@@ -3716,7 +3716,7 @@ the string exceeds the maximum length, it will be truncated.</dd>
 </details>
 </dd>
 <dt id="glean.metrics.StringMetricType.test_get_num_recorded_errors"><code class="name flex">
-<span>def <span class="ident">test_get_num_recorded_errors</span></span>(<span>self, error_type: <a title="glean.testing.error_type.ErrorType" href="../testing/error_type.html#glean.testing.error_type.ErrorType">ErrorType</a>, ping_name: Union[str, NoneType] = None) ‑> int</span>
+<span>def <span class="ident">test_get_num_recorded_errors</span></span>(<span>self, error_type: <a title="glean.testing.error_type.ErrorType" href="../testing/error_type.html#glean.testing.error_type.ErrorType">ErrorType</a>, ping_name: Optional[str] = None) ‑> int</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns the number of errors recorded for the given metric.</p>
@@ -3761,7 +3761,7 @@ the given error type.</p></div>
 </details>
 </dd>
 <dt id="glean.metrics.StringMetricType.test_get_value"><code class="name flex">
-<span>def <span class="ident">test_get_value</span></span>(<span>self, ping_name: Union[str, NoneType] = None) ‑> str</span>
+<span>def <span class="ident">test_get_value</span></span>(<span>self, ping_name: Optional[str] = None) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns the stored value for testing purposes only.</p>
@@ -3802,7 +3802,7 @@ of the ping to retrieve the metric for.</dd>
 </details>
 </dd>
 <dt id="glean.metrics.StringMetricType.test_has_value"><code class="name flex">
-<span>def <span class="ident">test_has_value</span></span>(<span>self, ping_name: Union[str, NoneType] = None) ‑> bool</span>
+<span>def <span class="ident">test_has_value</span></span>(<span>self, ping_name: Optional[str] = None) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Tests whether a value is stored for the metric for testing purposes
@@ -4151,7 +4151,7 @@ previously registered in the metrics.yaml file.</p>
 <h3>Methods</h3>
 <dl>
 <dt id="glean.metrics.TimespanMetricType.cancel"><code class="name flex">
-<span>def <span class="ident">cancel</span></span>(<span>self) ‑> NoneType</span>
+<span>def <span class="ident">cancel</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Abort a previous <code>start</code> call. No error is recorded if no <code>start</code> was called.</p></div>
@@ -4202,7 +4202,7 @@ is not recorded.</p>
 </details>
 </dd>
 <dt id="glean.metrics.TimespanMetricType.set_raw_nanos"><code class="name flex">
-<span>def <span class="ident">set_raw_nanos</span></span>(<span>self, elapsed_nanos: int) ‑> NoneType</span>
+<span>def <span class="ident">set_raw_nanos</span></span>(<span>self, elapsed_nanos: int) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Explicitly set the timespan value, in nanoseconds.</p>
@@ -4239,7 +4239,7 @@ times in a way that can not make use of [start]/[stop]/[cancel].</p>
 </details>
 </dd>
 <dt id="glean.metrics.TimespanMetricType.start"><code class="name flex">
-<span>def <span class="ident">start</span></span>(<span>self) ‑> NoneType</span>
+<span>def <span class="ident">start</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Start tracking time for the provided metric.</p>
@@ -4269,7 +4269,7 @@ start time will be preserved.</p></div>
 </details>
 </dd>
 <dt id="glean.metrics.TimespanMetricType.stop"><code class="name flex">
-<span>def <span class="ident">stop</span></span>(<span>self) ‑> NoneType</span>
+<span>def <span class="ident">stop</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Stop tracking time for the provided metric.</p>
@@ -4301,7 +4301,7 @@ existing value.</p></div>
 </details>
 </dd>
 <dt id="glean.metrics.TimespanMetricType.test_get_num_recorded_errors"><code class="name flex">
-<span>def <span class="ident">test_get_num_recorded_errors</span></span>(<span>self, error_type: <a title="glean.testing.error_type.ErrorType" href="../testing/error_type.html#glean.testing.error_type.ErrorType">ErrorType</a>, ping_name: Union[str, NoneType] = None) ‑> int</span>
+<span>def <span class="ident">test_get_num_recorded_errors</span></span>(<span>self, error_type: <a title="glean.testing.error_type.ErrorType" href="../testing/error_type.html#glean.testing.error_type.ErrorType">ErrorType</a>, ping_name: Optional[str] = None) ‑> int</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns the number of errors recorded for the given metric.</p>
@@ -4346,7 +4346,7 @@ the given error type.</p></div>
 </details>
 </dd>
 <dt id="glean.metrics.TimespanMetricType.test_get_value"><code class="name flex">
-<span>def <span class="ident">test_get_value</span></span>(<span>self, ping_name: Union[str, NoneType] = None) ‑> int</span>
+<span>def <span class="ident">test_get_value</span></span>(<span>self, ping_name: Optional[str] = None) ‑> int</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns the stored value for testing purposes only.</p>
@@ -4385,7 +4385,7 @@ of the ping to retrieve the metric for.</dd>
 </details>
 </dd>
 <dt id="glean.metrics.TimespanMetricType.test_has_value"><code class="name flex">
-<span>def <span class="ident">test_has_value</span></span>(<span>self, ping_name: Union[str, NoneType] = None) ‑> bool</span>
+<span>def <span class="ident">test_has_value</span></span>(<span>self, ping_name: Optional[str] = None) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Tests whether a value is stored for the metric for testing purposes
@@ -4667,7 +4667,7 @@ previously registered in the metrics.yaml file.</p></div>
 <h3>Methods</h3>
 <dl>
 <dt id="glean.metrics.TimingDistributionMetricType.cancel"><code class="name flex">
-<span>def <span class="ident">cancel</span></span>(<span>self, timer_id: Union[int, NoneType]) ‑> NoneType</span>
+<span>def <span class="ident">cancel</span></span>(<span>self, timer_id: Optional[int]) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Abort a previous <code>start</code> call. No error is recorded if no <code>start</code> was called.</p>
@@ -4743,7 +4743,7 @@ is not recorded.</p>
 </details>
 </dd>
 <dt id="glean.metrics.TimingDistributionMetricType.start"><code class="name flex">
-<span>def <span class="ident">start</span></span>(<span>self) ‑> Union[int, NoneType]</span>
+<span>def <span class="ident">start</span></span>(<span>self) ‑> Optional[int]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Start tracking time for the provided metric.
@@ -4779,7 +4779,7 @@ Multiple timers can run simultaneously.</p>
 </details>
 </dd>
 <dt id="glean.metrics.TimingDistributionMetricType.stop_and_accumulate"><code class="name flex">
-<span>def <span class="ident">stop_and_accumulate</span></span>(<span>self, timer_id: Union[int, NoneType]) ‑> NoneType</span>
+<span>def <span class="ident">stop_and_accumulate</span></span>(<span>self, timer_id: Optional[int]) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Stop tracking time for the provided metric and associated timer id. Add a
@@ -4836,7 +4836,7 @@ the same timespan metric.</dd>
 </details>
 </dd>
 <dt id="glean.metrics.TimingDistributionMetricType.test_get_num_recorded_errors"><code class="name flex">
-<span>def <span class="ident">test_get_num_recorded_errors</span></span>(<span>self, error_type: <a title="glean.testing.error_type.ErrorType" href="../testing/error_type.html#glean.testing.error_type.ErrorType">ErrorType</a>, ping_name: Union[str, NoneType] = None) ‑> int</span>
+<span>def <span class="ident">test_get_num_recorded_errors</span></span>(<span>self, error_type: <a title="glean.testing.error_type.ErrorType" href="../testing/error_type.html#glean.testing.error_type.ErrorType">ErrorType</a>, ping_name: Optional[str] = None) ‑> int</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns the number of errors recorded for the given metric.</p>
@@ -4881,7 +4881,7 @@ the given error type.</p></div>
 </details>
 </dd>
 <dt id="glean.metrics.TimingDistributionMetricType.test_get_value"><code class="name flex">
-<span>def <span class="ident">test_get_value</span></span>(<span>self, ping_name: Union[str, NoneType] = None) ‑> <a title="glean.metrics.distribution_data.DistributionData" href="distribution_data.html#glean.metrics.distribution_data.DistributionData">DistributionData</a></span>
+<span>def <span class="ident">test_get_value</span></span>(<span>self, ping_name: Optional[str] = None) ‑> <a title="glean.metrics.distribution_data.DistributionData" href="distribution_data.html#glean.metrics.distribution_data.DistributionData">DistributionData</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns the stored value for testing purposes only.</p>
@@ -4924,7 +4924,7 @@ of the ping to retrieve the metric for.</dd>
 </details>
 </dd>
 <dt id="glean.metrics.TimingDistributionMetricType.test_has_value"><code class="name flex">
-<span>def <span class="ident">test_has_value</span></span>(<span>self, ping_name: Union[str, NoneType] = None) ‑> bool</span>
+<span>def <span class="ident">test_has_value</span></span>(<span>self, ping_name: Optional[str] = None) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Tests whether a value is stored for the metric for testing purposes
@@ -5115,7 +5115,7 @@ previously registered in the metrics.yaml file.</p>
 <h3>Methods</h3>
 <dl>
 <dt id="glean.metrics.UuidMetricType.generate_and_set"><code class="name flex">
-<span>def <span class="ident">generate_and_set</span></span>(<span>self) ‑> Union[uuid.UUID, NoneType]</span>
+<span>def <span class="ident">generate_and_set</span></span>(<span>self) ‑> Optional[uuid.UUID]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Generate a new UUID value and set it in the metric store.</p></div>
@@ -5136,7 +5136,7 @@ previously registered in the metrics.yaml file.</p>
 </details>
 </dd>
 <dt id="glean.metrics.UuidMetricType.set"><code class="name flex">
-<span>def <span class="ident">set</span></span>(<span>self, value: uuid.UUID) ‑> NoneType</span>
+<span>def <span class="ident">set</span></span>(<span>self, value: uuid.UUID) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Explicitly set an existing UUID value.</p>
@@ -5165,7 +5165,7 @@ previously registered in the metrics.yaml file.</p>
 </details>
 </dd>
 <dt id="glean.metrics.UuidMetricType.test_get_num_recorded_errors"><code class="name flex">
-<span>def <span class="ident">test_get_num_recorded_errors</span></span>(<span>self, error_type: <a title="glean.testing.error_type.ErrorType" href="../testing/error_type.html#glean.testing.error_type.ErrorType">ErrorType</a>, ping_name: Union[str, NoneType] = None) ‑> int</span>
+<span>def <span class="ident">test_get_num_recorded_errors</span></span>(<span>self, error_type: <a title="glean.testing.error_type.ErrorType" href="../testing/error_type.html#glean.testing.error_type.ErrorType">ErrorType</a>, ping_name: Optional[str] = None) ‑> int</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns the number of errors recorded for the given metric.</p>
@@ -5210,7 +5210,7 @@ the given error type.</p></div>
 </details>
 </dd>
 <dt id="glean.metrics.UuidMetricType.test_get_value"><code class="name flex">
-<span>def <span class="ident">test_get_value</span></span>(<span>self, ping_name: Union[str, NoneType] = None) ‑> uuid.UUID</span>
+<span>def <span class="ident">test_get_value</span></span>(<span>self, ping_name: Optional[str] = None) ‑> uuid.UUID</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns the stored value for testing purposes only.</p>
@@ -5254,7 +5254,7 @@ of the ping to retrieve the metric for.</dd>
 </details>
 </dd>
 <dt id="glean.metrics.UuidMetricType.test_has_value"><code class="name flex">
-<span>def <span class="ident">test_has_value</span></span>(<span>self, ping_name: Union[str, NoneType] = None) ‑> bool</span>
+<span>def <span class="ident">test_has_value</span></span>(<span>self, ping_name: Optional[str] = None) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Tests whether a value is stored for the metric for testing purposes
@@ -5528,7 +5528,7 @@ of the ping to retrieve the metric for.</dd>
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
 </footer>
 </body>
 </html>
