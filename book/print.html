@@ -1881,7 +1881,7 @@ on the <code>pings.yaml</code> file structure.</p>
 <h2 id="sending-metrics-in-a-custom-ping"><a class="header" href="#sending-metrics-in-a-custom-ping">Sending metrics in a custom ping</a></h2>
 <p>To send a metric on a custom ping, you add the custom ping's name to the <code>send_in_pings</code> parameter in the <code>metrics.yaml</code> file.</p>
 <div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
-<h5 id="ping-metadata-must-be-loaded-before-sending"><a class="header" href="#ping-metadata-must-be-loaded-before-sending">Ping metadata must be loaded before sending!</a></h5>
+<h3 id="ping-metadata-must-be-loaded-before-sending"><a class="header" href="#ping-metadata-must-be-loaded-before-sending">Ping metadata must be loaded before sending!</a></h3>
 <blockquote>
 <p>After defining a custom ping, before it can be used for sending data, its metadata must be <a href="user/pings/../../reference/general/register-custom-pings.html">loaded into your application or library</a>.</p>
 </blockquote>
@@ -1898,6 +1898,95 @@ on the <code>pings.yaml</code> file structure.</p>
 <pre><code class="language-YAML">    send_in_pings:
       - search
       - default
+</code></pre>
+<h2 id="the-gleanrestarted-event"><a class="header" href="#the-gleanrestarted-event">The <code>glean.restarted</code> event</a></h2>
+<p>For custom pings that contain event metrics, the <code>glean.restarted</code> event is injected by Glean
+on every application restart that may happen during the pings measurement window.</p>
+<div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
+<h3 id="only-applies-to-the-glean-javascript-sdk"><a class="header" href="#only-applies-to-the-glean-javascript-sdk">Only applies to the Glean JavaScript SDK</a></h3>
+<blockquote>
+<p>The behavior described in this section only applies to custom pings sent by
+the Glean JavaScript SDK. Follow the implementation of this feature on the other
+SDKs through <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1716725">Bug 1716725</a>.</p>
+</blockquote>
+<h3 id="event-timestamps-throughout-application-restarts"><a class="header" href="#event-timestamps-throughout-application-restarts">Event timestamps throughout application restarts</a></h3>
+<p>Event timestamps are always calculated relative to the first event in a ping. The first event
+will always have timestamp <code>0</code> and subsequent events will have timestamps corresponding to the
+elapsed amount of milliseconds since that first event.</p>
+<p>That is also the case for events recorded throughout restarts.</p>
+<h4 id="example"><a class="header" href="#example">Example</a></h4>
+<p>In the below example payload, there were two events recorded on the first application run.
+The first event is timestamp <code>0</code> and the second event happens one second after the first one,
+so it has timestamp <code>1000</code>.</p>
+<p>The application is restarted one hour after the first event and a <code>glean.restarted</code> event is
+recorded, timestamp <code>3600000</code>. Finally, an event is recorded during the second application run
+two seconds after restart, timestamp <code>3800000</code>.</p>
+<pre><code class="language-json">{
+  ...
+  &quot;events&quot;: [
+    {
+      &quot;timestamp&quot;: 0,
+      &quot;category&quot;: &quot;examples&quot;,
+      &quot;name&quot;: &quot;event_example&quot;,
+    },
+    {
+      &quot;timestamp&quot;: 1000,
+      &quot;category&quot;: &quot;examples&quot;,
+      &quot;name&quot;: &quot;event_example&quot;
+    },
+    {
+      &quot;timestamp&quot;: 3600000,
+      &quot;category&quot;: &quot;glean&quot;,
+      &quot;name&quot;: &quot;restarted&quot;
+    },
+    {
+      &quot;timestamp&quot;: 3800000,
+      &quot;category&quot;: &quot;examples&quot;,
+      &quot;name&quot;: &quot;event_example&quot;
+    },
+  ]
+}
+</code></pre>
+<h4 id="caveat-handling-decreasing-time-offsets"><a class="header" href="#caveat-handling-decreasing-time-offsets">Caveat: Handling decreasing time offsets</a></h4>
+<p>For events recorded in a single application run, Glean relies on a monotonically increasing timer
+to calculate event timestamps, while for calculating the time elapsed between application runs Glean
+has to rely on the computer clock, which is not necessarily monotonically increasing.</p>
+<p>In the case that timestamps in between application runs are not monotonically increasing, Glean
+will take the value of the previous timestamp and add one millisecond, thus guaranteeing that
+timestamps are always increasing.</p>
+<p>In the below example payload, the first and second application runs go exactly like in the
+<a href="user/pings/custom.html#example">example above</a>.</p>
+<p>The only difference is that when the restart happens, the offset between the absolute time
+of the first event and the absolute time of the restart is not enough to keep the timestamps increasing.
+That may happen for many reasons, such as a change in timezones or simply a manual change in the clock
+by the user.</p>
+<p>In this case, Glean will ignore the incorrect timestamp and add one millisecond to the last timestamp
+of the previous run, in order to keep the monotonically increasing nature of the timestamps.</p>
+<pre><code class="language-json">{
+  ...
+  &quot;events&quot;: [
+    {
+      &quot;timestamp&quot;: 0,
+      &quot;category&quot;: &quot;examples&quot;,
+      &quot;name&quot;: &quot;event_example&quot;,
+    },
+    {
+      &quot;timestamp&quot;: 1000,
+      &quot;category&quot;: &quot;examples&quot;,
+      &quot;name&quot;: &quot;event_example&quot;
+    },
+    {
+      &quot;timestamp&quot;: 1001,
+      &quot;category&quot;: &quot;glean&quot;,
+      &quot;name&quot;: &quot;restarted&quot;
+    },
+    {
+      &quot;timestamp&quot;: 3001,
+      &quot;category&quot;: &quot;examples&quot;,
+      &quot;name&quot;: &quot;event_example&quot;
+    },
+  ]
+}
 </code></pre>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/user/pings/custom.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="testing-custom-pings"><a class="header" href="#testing-custom-pings">Testing custom pings</a></h1>
 <p>Applications defining <a href="user/pings/custom.html">custom pings</a> can use use the <a href="user/pings/../../reference/pings/index.html#testing-api">ping testing API</a> to test these pings in unit tests.</p>
@@ -2088,14 +2177,15 @@ If the application crashes, an <code>events</code> ping is generated next time t
 <p>When the queue of events exceeds <code>Glean.configuration.maxEvents</code> (default 500).</p>
 </li>
 <li>
-<p>If there are any unsent events found on disk when starting the application. It would be impossible to coordinate the timestamps across a reboot, so it's best to just collect all events from the previous run into their own ping, and start over.</p>
+<p>If there are any unsent events found on disk when starting the application. <em>(This results in this ping never containing the <a href="user/pings/./custom.html#the-gleanrestarted-event"><code>glean.restarted</code></a> event.)</em></p>
 </li>
 </ol>
 <p>All of these cases are handled automatically, with no intervention or configuration required by the application.</p>
 <div class="special-quote special-quote-info fa fa-info-circle"></div>
-<h5 id="python-and-gleanjs-caveats"><a class="header" href="#python-and-gleanjs-caveats">Python and Glean.js caveats</a></h5>
+<h5 id="python-and-javascript-caveats"><a class="header" href="#python-and-javascript-caveats">Python and JavaScript caveats</a></h5>
 <blockquote>
-<p>Since the Python bindings don't have a concept of &quot;going to background&quot;, case (1) above does not apply.</p>
+<p>Since the Glean Python and JavaScript SDKs don't have a concept of &quot;going to background&quot;,
+case (1) above does not apply.</p>
 </blockquote>
 <h2 id="contents-2"><a class="header" href="#contents-2">Contents</a></h2>
 <p>At the top-level, this ping contains the following keys:</p>
@@ -2149,7 +2239,7 @@ If the application crashes, an <code>events</code> ping is generated next time t
   },
   &quot;events&quot;: [
     {
-      &quot;timestamp&quot;: 123456789,
+      &quot;timestamp&quot;: 0,
       &quot;category&quot;: &quot;examples&quot;,
       &quot;name&quot;: &quot;event_example&quot;,
       &quot;extra&quot;: {
@@ -2158,7 +2248,7 @@ If the application crashes, an <code>events</code> ping is generated next time t
       }
     },
     {
-      &quot;timestamp&quot;: 123456791,
+      &quot;timestamp&quot;: 1000,
       &quot;category&quot;: &quot;examples&quot;,
       &quot;name&quot;: &quot;event_example&quot;
     }
@@ -8008,7 +8098,11 @@ refer to the <a href="reference/metrics/../yaml/metrics.html">metrics YAML regis
 say every time a view was open and from where.</p>
 <p>Each event contains the following data:</p>
 <ul>
-<li>A timestamp, in milliseconds. The first event in any ping always has a value of <code>0</code>, and subsequent event timestamps are relative to it.</li>
+<li>A timestamp, in milliseconds. The first event in any ping always has a value of <code>0</code>, and subsequent event timestamps are relative to it.
+<ul>
+<li>If sending events in custom pings, see <a href="reference/metrics/../../user/pings/custom.html#the-gleanrestarted-event">note</a> on event timestamp calculation throughout restarts.</li>
+</ul>
+</li>
 <li>The name of the event.</li>
 <li>A set of key-value pairs, where the keys are predefined in the <code>extra_keys</code> metric parameter, and the values are strings.</li>
 </ul>
