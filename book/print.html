@@ -1954,6 +1954,13 @@ has to rely on the computer clock, which is not necessarily monotonically increa
 <p>In the case that timestamps in between application runs are not monotonically increasing, Glean
 will take the value of the previous timestamp and add one millisecond, thus guaranteeing that
 timestamps are always increasing.</p>
+<div class="special-quote special-quote-info fa fa-info-circle"></div>
+<h5 id="checking-for-decreasing-time-offsets-between-restarts"><a class="header" href="#checking-for-decreasing-time-offsets-between-restarts">Checking for decreasing time offsets between restarts</a></h5>
+<blockquote>
+<p>When this edge case is hit, Glean records an <a href="user/pings/../error-reporting.html"><code>InvalidValue</code> error</a>
+for the <code>glean.restarted</code> metric. This metric may be consulted at analysis time.
+It is sent in the same ping where the error happened.</p>
+</blockquote>
 <p>In the below example payload, the first and second application runs go exactly like in the
 <a href="user/pings/custom.html#example">example above</a>.</p>
 <p>The only difference is that when the restart happens, the offset between the absolute time
@@ -11465,6 +11472,8 @@ This is a major milestone in using a cross-platform implementation of Glean on t
 <p><a href="https://github.com/mozilla/glean.js/compare/v0.18.1...main">Full changelog</a></p>
 <ul>
 <li><a href="https://github.com/mozilla/glean.js/pull/534">#534</a>: Expose <code>Uploader</code> base class through <code>@mozilla/glean/&lt;platform&gt;/uploader</code> entry point.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/580">#580</a>: Limit size of pings database to 250 pings or 10MB.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/580">#580</a>: BUGFIX: Pending pings at startup up are uploaded from oldest to newest.</li>
 </ul>
 <h1 id="v0181-2021-07-22"><a class="header" href="#v0181-2021-07-22">v0.18.1 (2021-07-22)</a></h1>
 <p><a href="https://github.com/mozilla/glean.js/compare/v0.18.0...v0.18.1">Full changelog</a></p>

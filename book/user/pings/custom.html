@@ -248,6 +248,13 @@ has to rely on the computer clock, which is not necessarily monotonically increa
 <p>In the case that timestamps in between application runs are not monotonically increasing, Glean
 will take the value of the previous timestamp and add one millisecond, thus guaranteeing that
 timestamps are always increasing.</p>
+<div class="special-quote special-quote-info fa fa-info-circle"></div>
+<h5 id="checking-for-decreasing-time-offsets-between-restarts"><a class="header" href="#checking-for-decreasing-time-offsets-between-restarts">Checking for decreasing time offsets between restarts</a></h5>
+<blockquote>
+<p>When this edge case is hit, Glean records an <a href="../error-reporting.html"><code>InvalidValue</code> error</a>
+for the <code>glean.restarted</code> metric. This metric may be consulted at analysis time.
+It is sent in the same ping where the error happened.</p>
+</blockquote>
 <p>In the below example payload, the first and second application runs go exactly like in the
 <a href="#example">example above</a>.</p>
 <p>The only difference is that when the restart happens, the offset between the absolute time
