@@ -279,11 +279,24 @@ This does not affect the availability of data already collected by the pipeline.
 <h4 id="lifetime"><a class="header" href="#lifetime"><code>lifetime</code></a></h4>
 <p><em>default: <code>ping</code></em></p>
 <p>Defines the lifetime of the metric. Different lifetimes affect when the metrics value is reset.</p>
-<ul>
-<li><code>ping</code> (default): The metric is cleared each time it is submitted in the ping. This is the most common case, and should be used for metrics that are highly dynamic, such as things computed in response to the user's interaction with the application.</li>
-<li><code>application</code>: The metric is related to an application run, and is cleared after the application restarts and any Glean-owned ping, due at startup, is submitted. This should be used for things that are constant during the run of an application, such as the operating system version. In practice, these metrics are generally set during application startup. A common mistake---using the ping lifetime for these type of metrics---means that they will only be included in the first ping sent during a particular run of the application.</li>
-<li><code>user</code>: <strong>Reach out to the Glean team before using this.</strong>. The metric is part of the user's profile and will live as long as the profile lives. This is often not the best choice unless the metric records a value that <em>really</em> needs to be persisted for the full lifetime of the user profile, e.g. an identifier like the <code>client_id</code>, the day the product was first executed. It is rare to use this lifetime outside of some metrics that are built in to the Glean SDK.</li>
-</ul>
+<h5 id="ping-default"><a class="header" href="#ping-default"><code>ping</code> <em>(default)</em></a></h5>
+<p>The metric is cleared each time it is submitted in the ping. This is the most common case,
+and should be used for metrics that are highly dynamic, such as things computed
+in response to the user's interaction with the application.</p>
+<h5 id="application"><a class="header" href="#application"><code>application</code></a></h5>
+<p>The metric is related to an application run, and is cleared after the application restarts
+and any Glean-owned ping, due at startup, is submitted. This should be used for things
+that are constant during the run of an application, such as the operating system version.
+In practice, these metrics are generally set during application startup.  A common mistake---
+using the ping lifetime for these type of metrics---means that they will only be included
+in the first ping sent during a particular run of the application.</p>
+<h5 id="user"><a class="header" href="#user"><code>user</code></a></h5>
+<p><strong>Reach out to the Glean team before using this.</strong></p>
+<p>The metric is part of the user's profile and will live as long as the profile lives.
+This is often not the best choice unless the metric records a value that <em>really</em> needs
+to be persisted for the full lifetime of the user profile, e.g. an identifier like the <code>client_id</code>,
+the day the product was first executed. It is rare to use this lifetime outside of some metrics
+that are built in to the Glean SDK.</p>
 <h4 id="send_in_pings"><a class="header" href="#send_in_pings"><code>send_in_pings</code></a></h4>
 <p><em>default: <code>events</code>|<code>metrics</code></em></p>
 <p>Defines which pings the metric should be sent on.

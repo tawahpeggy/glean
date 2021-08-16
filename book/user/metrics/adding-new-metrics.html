@@ -237,11 +237,24 @@ Removing a metric does not affect the availability of data already collected by 
 </blockquote>
 <h2 id="when-should-the-glean-sdk-automatically-clear-the-measurement"><a class="header" href="#when-should-the-glean-sdk-automatically-clear-the-measurement">When should the Glean SDK automatically clear the measurement?</a></h2>
 <p>The <code>lifetime</code> parameter of a metric defines when its value will be cleared. There are three lifetime options available:</p>
-<ul>
-<li><code>ping</code> (default): The metric is cleared each time it is submitted in the ping. This is the most common case, and should be used for metrics that are highly dynamic, such as things computed in response to the user's interaction with the application.</li>
-<li><code>application</code>: The metric is related to an application run, and is cleared after the application restarts and any Glean-owned ping, due at startup, is submitted. This should be used for things that are constant during the run of an application, such as the operating system version. In practice, these metrics are generally set during application startup. A common mistake---using the ping lifetime for these type of metrics---means that they will only be included in the first ping sent during a particular run of the application.</li>
-<li><code>user</code>: <strong>Reach out to the Glean team before using this.</strong>. The metric is part of the user's profile and will live as long as the profile lives. This is often not the best choice unless the metric records a value that <em>really</em> needs to be persisted for the full lifetime of the user profile, e.g. an identifier like the <code>client_id</code>, the day the product was first executed. It is rare to use this lifetime outside of some metrics that are built in to the Glean SDK.</li>
-</ul>
+<h5 id="ping-default"><a class="header" href="#ping-default"><code>ping</code> <em>(default)</em></a></h5>
+<p>The metric is cleared each time it is submitted in the ping. This is the most common case,
+and should be used for metrics that are highly dynamic, such as things computed
+in response to the user's interaction with the application.</p>
+<h5 id="application"><a class="header" href="#application"><code>application</code></a></h5>
+<p>The metric is related to an application run, and is cleared after the application restarts
+and any Glean-owned ping, due at startup, is submitted. This should be used for things
+that are constant during the run of an application, such as the operating system version.
+In practice, these metrics are generally set during application startup.  A common mistake---
+using the ping lifetime for these type of metrics---means that they will only be included
+in the first ping sent during a particular run of the application.</p>
+<h5 id="user"><a class="header" href="#user"><code>user</code></a></h5>
+<p><strong>Reach out to the Glean team before using this.</strong></p>
+<p>The metric is part of the user's profile and will live as long as the profile lives.
+This is often not the best choice unless the metric records a value that <em>really</em> needs
+to be persisted for the full lifetime of the user profile, e.g. an identifier like the <code>client_id</code>,
+the day the product was first executed. It is rare to use this lifetime outside of some metrics
+that are built in to the Glean SDK.</p>
 <p>While lifetimes are important to understand for all metric types, they are particularly important for the metric types that record single values and don't aggregate on the client (<code>boolean</code>, <code>string</code>, <code>labeled_string</code>, <code>string_list</code>, <code>datetime</code> and <code>uuid</code>), since these metrics will send the &quot;last known&quot; value and missing the earlier values could be a form of unintended data loss.</p>
 <h3 id="a-lifetime-example"><a class="header" href="#a-lifetime-example">A lifetime example</a></h3>
 <p>Let's work through an example to see how these lifetimes play out in practice. Let's suppose we have a user preference, &quot;turbo mode&quot;, which defaults to <code>false</code>, but the user can turn it to <code>true</code> at any time.  We want to know when this flag is <code>true</code> so we can measure its affect on other metrics in the same ping.  In the following diagram, we look at a time period that sends 4 pings across two separate runs of the application. We assume here, that like the Glean SDK's built-in <a href="../pings/metrics.html">metrics ping</a>, the developer writing the metric isn't in control of when the ping is submitted.</p>

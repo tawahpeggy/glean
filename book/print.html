@@ -881,11 +881,24 @@ Removing a metric does not affect the availability of data already collected by 
 </blockquote>
 <h2 id="when-should-the-glean-sdk-automatically-clear-the-measurement"><a class="header" href="#when-should-the-glean-sdk-automatically-clear-the-measurement">When should the Glean SDK automatically clear the measurement?</a></h2>
 <p>The <code>lifetime</code> parameter of a metric defines when its value will be cleared. There are three lifetime options available:</p>
-<ul>
-<li><code>ping</code> (default): The metric is cleared each time it is submitted in the ping. This is the most common case, and should be used for metrics that are highly dynamic, such as things computed in response to the user's interaction with the application.</li>
-<li><code>application</code>: The metric is related to an application run, and is cleared after the application restarts and any Glean-owned ping, due at startup, is submitted. This should be used for things that are constant during the run of an application, such as the operating system version. In practice, these metrics are generally set during application startup. A common mistake---using the ping lifetime for these type of metrics---means that they will only be included in the first ping sent during a particular run of the application.</li>
-<li><code>user</code>: <strong>Reach out to the Glean team before using this.</strong>. The metric is part of the user's profile and will live as long as the profile lives. This is often not the best choice unless the metric records a value that <em>really</em> needs to be persisted for the full lifetime of the user profile, e.g. an identifier like the <code>client_id</code>, the day the product was first executed. It is rare to use this lifetime outside of some metrics that are built in to the Glean SDK.</li>
-</ul>
+<h5 id="ping-default"><a class="header" href="#ping-default"><code>ping</code> <em>(default)</em></a></h5>
+<p>The metric is cleared each time it is submitted in the ping. This is the most common case,
+and should be used for metrics that are highly dynamic, such as things computed
+in response to the user's interaction with the application.</p>
+<h5 id="application"><a class="header" href="#application"><code>application</code></a></h5>
+<p>The metric is related to an application run, and is cleared after the application restarts
+and any Glean-owned ping, due at startup, is submitted. This should be used for things
+that are constant during the run of an application, such as the operating system version.
+In practice, these metrics are generally set during application startup.  A common mistake---
+using the ping lifetime for these type of metrics---means that they will only be included
+in the first ping sent during a particular run of the application.</p>
+<h5 id="user"><a class="header" href="#user"><code>user</code></a></h5>
+<p><strong>Reach out to the Glean team before using this.</strong></p>
+<p>The metric is part of the user's profile and will live as long as the profile lives.
+This is often not the best choice unless the metric records a value that <em>really</em> needs
+to be persisted for the full lifetime of the user profile, e.g. an identifier like the <code>client_id</code>,
+the day the product was first executed. It is rare to use this lifetime outside of some metrics
+that are built in to the Glean SDK.</p>
 <p>While lifetimes are important to understand for all metric types, they are particularly important for the metric types that record single values and don't aggregate on the client (<code>boolean</code>, <code>string</code>, <code>labeled_string</code>, <code>string_list</code>, <code>datetime</code> and <code>uuid</code>), since these metrics will send the &quot;last known&quot; value and missing the earlier values could be a form of unintended data loss.</p>
 <h3 id="a-lifetime-example"><a class="header" href="#a-lifetime-example">A lifetime example</a></h3>
 <p>Let's work through an example to see how these lifetimes play out in practice. Let's suppose we have a user preference, &quot;turbo mode&quot;, which defaults to <code>false</code>, but the user can turn it to <code>true</code> at any time.  We want to know when this flag is <code>true</code> so we can measure its affect on other metrics in the same ping.  In the following diagram, we look at a time period that sends 4 pings across two separate runs of the application. We assume here, that like the Glean SDK's built-in <a href="user/metrics/../pings/metrics.html">metrics ping</a>, the developer writing the metric isn't in control of when the ping is submitted.</p>
@@ -1158,11 +1171,24 @@ Removing a metric does not affect the availability of data already collected by 
 </blockquote>
 <h2 id="when-should-the-glean-sdk-automatically-clear-the-measurement-1"><a class="header" href="#when-should-the-glean-sdk-automatically-clear-the-measurement-1">When should the Glean SDK automatically clear the measurement?</a></h2>
 <p>The <code>lifetime</code> parameter of a metric defines when its value will be cleared. There are three lifetime options available:</p>
-<ul>
-<li><code>ping</code> (default): The metric is cleared each time it is submitted in the ping. This is the most common case, and should be used for metrics that are highly dynamic, such as things computed in response to the user's interaction with the application.</li>
-<li><code>application</code>: The metric is related to an application run, and is cleared after the application restarts and any Glean-owned ping, due at startup, is submitted. This should be used for things that are constant during the run of an application, such as the operating system version. In practice, these metrics are generally set during application startup. A common mistake---using the ping lifetime for these type of metrics---means that they will only be included in the first ping sent during a particular run of the application.</li>
-<li><code>user</code>: <strong>Reach out to the Glean team before using this.</strong>. The metric is part of the user's profile and will live as long as the profile lives. This is often not the best choice unless the metric records a value that <em>really</em> needs to be persisted for the full lifetime of the user profile, e.g. an identifier like the <code>client_id</code>, the day the product was first executed. It is rare to use this lifetime outside of some metrics that are built in to the Glean SDK.</li>
-</ul>
+<h5 id="ping-default-1"><a class="header" href="#ping-default-1"><code>ping</code> <em>(default)</em></a></h5>
+<p>The metric is cleared each time it is submitted in the ping. This is the most common case,
+and should be used for metrics that are highly dynamic, such as things computed
+in response to the user's interaction with the application.</p>
+<h5 id="application-1"><a class="header" href="#application-1"><code>application</code></a></h5>
+<p>The metric is related to an application run, and is cleared after the application restarts
+and any Glean-owned ping, due at startup, is submitted. This should be used for things
+that are constant during the run of an application, such as the operating system version.
+In practice, these metrics are generally set during application startup.  A common mistake---
+using the ping lifetime for these type of metrics---means that they will only be included
+in the first ping sent during a particular run of the application.</p>
+<h5 id="user-1"><a class="header" href="#user-1"><code>user</code></a></h5>
+<p><strong>Reach out to the Glean team before using this.</strong></p>
+<p>The metric is part of the user's profile and will live as long as the profile lives.
+This is often not the best choice unless the metric records a value that <em>really</em> needs
+to be persisted for the full lifetime of the user profile, e.g. an identifier like the <code>client_id</code>,
+the day the product was first executed. It is rare to use this lifetime outside of some metrics
+that are built in to the Glean SDK.</p>
 <p>While lifetimes are important to understand for all metric types, they are particularly important for the metric types that record single values and don't aggregate on the client (<code>boolean</code>, <code>string</code>, <code>labeled_string</code>, <code>string_list</code>, <code>datetime</code> and <code>uuid</code>), since these metrics will send the &quot;last known&quot; value and missing the earlier values could be a form of unintended data loss.</p>
 <h3 id="a-lifetime-example-1"><a class="header" href="#a-lifetime-example-1">A lifetime example</a></h3>
 <p>Let's work through an example to see how these lifetimes play out in practice. Let's suppose we have a user preference, &quot;turbo mode&quot;, which defaults to <code>false</code>, but the user can turn it to <code>true</code> at any time.  We want to know when this flag is <code>true</code> so we can measure its affect on other metrics in the same ping.  In the following diagram, we look at a time period that sends 4 pings across two separate runs of the application. We assume here, that like the Glean SDK's built-in <a href="user/metrics/../pings/metrics.html">metrics ping</a>, the developer writing the metric isn't in control of when the ping is submitted.</p>
@@ -1765,43 +1791,125 @@ upgraded.</p>
 </tbody></table>
 <p>Data categories are <a href="https://wiki.mozilla.org/Firefox/Data_Collection">defined here</a>.</p>
 <!-- AUTOGENERATED BY glean_parser. DO NOT EDIT. -->
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/user/collected-metrics/metrics.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="glean-pings"><a class="header" href="#glean-pings">Glean Pings</a></h1>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/user/collected-metrics/metrics.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="pings-1"><a class="header" href="#pings-1">Pings</a></h1>
 <p>A ping is a bundle of related metrics, gathered in a payload to be transmitted.
-The ping payload will be encoded in JSON format and contains one or more of the <a href="user/pings/index.html#ping-sections">common sections</a> with shared information data.</p>
-<p>If data collection is enabled, the Glean SDK provides a set of <a href="user/pings/./sent-by-glean.html">built-in pings</a> that are assembled out of the box without any developer intervention.</p>
-<h2 id="ping-sections"><a class="header" href="#ping-sections">Ping sections</a></h2>
-<p>Every ping has the following keys at the top-level:</p>
+The ping payload is encoded in JSON format and contains one or more of the
+<a href="user/pings/index.html#payload-structure">common sections</a> with shared information data.</p>
+<p>If data collection is enabled, the chosen Glean SDK may provide a set of <a href="user/pings/./sent-by-glean.html">built-in pings</a>
+that are assembled out of the box without any developer intervention.</p>
+<h2 id="table-of-contents-2"><a class="header" href="#table-of-contents-2">Table of contents</a></h2>
+<ul>
+<li><a href="user/pings/index.html#payload-structure">Payload structure</a>
+<ul>
+<li><a href="user/pings/index.html#the-ping_info-section">The <code>ping_info</code> section</a>
+<ul>
+<li><a href="user/pings/index.html#seq"><code>seq</code></a></li>
+<li><a href="user/pings/index.html#start_time"><code>start_time</code></a></li>
+<li><a href="user/pings/index.html#end_time"><code>end_time</code></a></li>
+<li><a href="user/pings/index.html#reason-optional"><code>reason</code> (optional)</a></li>
+<li><a href="user/pings/index.html#experiments-optional"><code>experiments</code> (optional)</a></li>
+</ul>
+</li>
+<li><a href="user/pings/index.html#the-client_info-section">The <code>client_info</code> section</a>
+<ul>
+<li><a href="user/pings/index.html#app_build"><code>app_build</code></a></li>
+<li><a href="user/pings/index.html#app_channel-optional"><code>app_channel</code> (optional)</a></li>
+<li><a href="user/pings/index.html#app_display_version"><code>app_display_version</code></a></li>
+<li><a href="user/pings/index.html#architecture"><code>architecture</code></a></li>
+<li><a href="user/pings/index.html#client_id-optional"><code>client_id</code> (optional)</a></li>
+<li><a href="user/pings/index.html#device_manufacturer-optional"><code>device_manufacturer</code> (optional)</a></li>
+<li><a href="user/pings/index.html#device_model-optional"><code>device_model</code> (optional)</a></li>
+<li><a href="user/pings/index.html#first_run_date"><code>first_run_date</code></a></li>
+<li><a href="user/pings/index.html#os"><code>os</code></a></li>
+<li><a href="user/pings/index.html#os_version"><code>os_version</code></a></li>
+<li><a href="user/pings/index.html#android_sdk_version-optional"><code>android_sdk_version</code> (optional)</a></li>
+<li><a href="user/pings/index.html#telemetry_sdk_build"><code>telemetry_sdk_build</code></a></li>
+<li><a href="user/pings/index.html#locale-optional"><code>locale</code> (optional)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="user/pings/index.html#ping-submission">Ping submission</a>
+<ul>
+<li><a href="user/pings/index.html#url">URL</a></li>
+<li><a href="user/pings/index.html#limitations">Limitations</a>
+<ul>
+<li><a href="user/pings/index.html#rate-limiting">Rate limiting</a></li>
+<li><a href="user/pings/index.html#request-body-size-limiting">Request body size limiting</a></li>
+<li><a href="user/pings/index.html#storage-quota">Storage quota</a></li>
+</ul>
+</li>
+<li><a href="user/pings/index.html#submitted-headers">Submitted headers</a>
+<ul>
+<li><a href="user/pings/index.html#content-type"><code>Content-Type</code></a></li>
+<li><a href="user/pings/index.html#date"><code>Date</code></a></li>
+<li><a href="user/pings/index.html#user-agent"><code>User-Agent</code></a></li>
+<li><a href="user/pings/index.html#x-telemetry-agent"><code>X-Telemetry-Agent</code></a></li>
+<li><a href="user/pings/index.html#x-client-type"><code>X-Client-Type</code></a></li>
+<li><a href="user/pings/index.html#x-client-version"><code>X-Client-Version</code></a></li>
+<li><a href="user/pings/index.html#x-debug-id-optional"><code>X-Debug-Id</code> (optional)</a></li>
+<li><a href="user/pings/index.html#x-source-tags-optional"><code>X-Source-Tags</code> (optional)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="payload-structure"><a class="header" href="#payload-structure">Payload structure</a></h2>
+<p>Every ping payload has the following keys at the top-level:</p>
 <ul>
 <li>
-<p>The <a href="user/pings/index.html#the-ping_info-section"><code>ping_info</code> section</a> contains core metadata that is included in <strong>every</strong> ping.</p>
+<p>The <a href="user/pings/index.html#the-ping_info-section"><code>ping_info</code> section</a> contains core metadata
+that is included in <strong>every</strong> ping.</p>
 </li>
 <li>
 <p>The <a href="user/pings/index.html#the-client_info-section"><code>client_info</code> section</a> contains information that identifies the client.
-It is included in most pings (including all built-in pings), but may be excluded from pings where we don't want to connect client information with the other metrics in the ping.</p>
+It is included in most pings (including all built-in pings), but may be excluded from pings
+where we don't want to connect client information with the other metrics in the ping.</p>
 </li>
+</ul>
+<p>The following keys are only present if any metrics or events were recorded for the given ping:</p>
+<ul>
 <li>
-<p>The <code>metrics</code> section contains the submitted values for all metric types except for <a href="user/pings/../metrics/event.html">events</a>.
-It has keys for each of the metric types, under which is data for each metric.</p>
+<p>The <code>metrics</code> section contains the submitted values for all metric types
+except for <a href="user/pings/../metrics/event.html">events</a>. It has keys for each of the metric types,
+under which is data for each metric.</p>
 </li>
 <li>
 <p>The <code>events</code> section contains the events recorded in the ping.</p>
 </li>
 </ul>
-<p>See the <a href="user/pings/../../../dev/core/internal/payload.html">payload documentation</a> for more details for each metric type in the <code>metrics</code> and <code>events</code> section.</p>
+<p>See the <a href="user/pings/../../../dev/core/internal/payload.html">payload documentation</a>
+for more details for each metric type in the <code>metrics</code> and <code>events</code> section.</p>
 <h3 id="the-ping_info-section"><a class="header" href="#the-ping_info-section">The <code>ping_info</code> section</a></h3>
 <p>The following fields are included in the <code>ping_info</code> section, for every ping.
 Optional fields are marked accordingly.</p>
-<table><thead><tr><th>Field name</th><th>Type</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>seq</code></td><td>Counter</td><td>A running counter of the number of times pings of this type have been sent</td></tr>
-<tr><td><code>experiments</code></td><td>Object</td><td><em>Optional</em>. A dictionary of <a href="user/pings/index.html#the-experiments-object">active experiments</a></td></tr>
-<tr><td><code>start_time</code></td><td>Datetime</td><td>The time of the start of collection of the data in the ping, in local time and with minute precision, including timezone information.</td></tr>
-<tr><td><code>end_time</code></td><td>Datetime</td><td>The time of the end of collection of the data in the ping, in local time and with minute precision, including timezone information. This is also the time this ping was generated and is likely well before ping transmission time.</td></tr>
-<tr><td><code>reason</code></td><td>String</td><td><em>Optional</em>. The reason the ping was submitted. The specific set of values and their meanings are defined for each metric type in the <code>reasons</code> field in the <code>pings.yaml</code> file.</td></tr>
-</tbody></table>
-<p>All the metrics surviving application restarts (e.g. <code>seq</code>, ...) are removed once the application using the Glean SDK is uninstalled.</p>
-<h4 id="the-experiments-object"><a class="header" href="#the-experiments-object">The <code>experiments</code> object</a></h4>
-<p>This object (included in the <a href="user/pings/index.html#the-ping_info-section"><code>ping_info</code> section</a>) contains experiment annotations keyed by the experiment <code>id</code>. Each annotation contains the experiment <code>branch</code> the client is enrolled in and may contain a string to string map with additional data in the <code>extra</code> key. Both the <code>id</code> and <code>branch</code> are truncated to 30 characters.
-See <a href="user/pings/../experiments-api.html">Using the Experiments API</a> on how to record experiments data.</p>
+<h4 id="seq"><a class="header" href="#seq"><code>seq</code></a></h4>
+<p><em>Type: <a href="user/pings/../../reference/metrics/counter.html">Counter</a>,
+Lifetime: <a href="user/pings/../../reference/yaml/metrics.html#user">User</a></em></p>
+<p>A running counter of the number of times pings of this type have been sent.</p>
+<h4 id="start_time"><a class="header" href="#start_time"><code>start_time</code></a></h4>
+<p><em>Type: <a href="user/pings/../../reference/metrics/datetime.html">Datetime</a>,
+Lifetime: <a href="user/pings/../../reference/yaml/metrics.html#user">User</a></em></p>
+<p>The time of the start of collection of the data in the ping, in local time
+and with minute precision, including timezone information.</p>
+<h4 id="end_time"><a class="header" href="#end_time"><code>end_time</code></a></h4>
+<p><em>Type: <a href="user/pings/../../reference/metrics/datetime.html">Datetime</a>,
+Lifetime: <a href="user/pings/../../reference/yaml/metrics.html#ping-default">Ping</a></em></p>
+<p>The time of the end of collection of the data in the ping, in local time and with minute precision,
+including timezone information. This is also the time this ping was generated
+and is likely well before ping transmission time.</p>
+<h4 id="reason-optional"><a class="header" href="#reason-optional"><code>reason</code> <em>(optional)</em></a></h4>
+<p>The reason the ping was submitted. The specific set of values
+and their meanings are defined for each metric type in the <a href="user/pings/../../reference/yaml/pings.html#reasons"><code>reasons</code></a>
+field in the <code>pings.yaml</code> file.</p>
+<h4 id="experiments-optional"><a class="header" href="#experiments-optional"><code>experiments</code> <em>(optional)</em></a></h4>
+<p>A dictionary of active experiments.</p>
+<p>This object contains experiment annotations keyed by the experiment <code>id</code>.
+Each annotation contains the experiment <code>branch</code> the client is enrolled in
+and may contain a string to string map with additional data in the <code>extra</code> key.</p>
+<p>Both the <code>id</code> and <code>branch</code> are truncated to 30 characters.
+See <a href="user/pings/../../reference/general/experiments-api.html">Using the Experiments API</a>
+on how to record experiments data.</p>
 <pre><code class="language-json">{
   &quot;&lt;id&gt;&quot;: {
     &quot;branch&quot;: &quot;branch-id&quot;,
@@ -1814,26 +1922,75 @@ See <a href="user/pings/../experiments-api.html">Using the Experiments API</a> o
 <h3 id="the-client_info-section"><a class="header" href="#the-client_info-section">The <code>client_info</code> section</a></h3>
 <p>The following fields are included in the <code>client_info</code> section.
 Optional fields are marked accordingly.</p>
-<table><thead><tr><th>Field name</th><th>Type</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>app_build</code></td><td>String</td><td>The build identifier generated by the CI system (e.g. &quot;1234/A&quot;). For language bindings that provide automatic detection for this value, (e.g. Android/Kotlin), in the unlikely event that the build identifier can not be retrieved from the OS, it is set to <code>inaccessible</code>. For other language bindings, if the value was not provided through configuration, this metric gets set to <code>Unknown</code>.</td></tr>
-<tr><td><code>app_channel</code></td><td>String</td><td><em>Optional</em> The product-provided release channel (e.g. &quot;beta&quot;)</td></tr>
-<tr><td><code>app_display_version</code></td><td>String</td><td>The user-visible version string (e.g. &quot;1.0.3&quot;). The meaning of the string (e.g. whether semver or a git hash) is application-specific. In the unlikely event this value can not be obtained from the OS, it is set to &quot;inaccessible&quot;. If it is accessible, but not set by the application, it is set to &quot;Unknown&quot;.</td></tr>
-<tr><td><code>architecture</code></td><td>String</td><td>The architecture of the device (e.g. &quot;arm&quot;, &quot;x86&quot;)</td></tr>
-<tr><td><code>client_id</code></td><td>UUID</td><td><em>Optional</em> A UUID identifying a profile and allowing user-oriented correlation of data</td></tr>
-<tr><td><code>device_manufacturer</code></td><td>String</td><td><em>Optional</em> The manufacturer of the device</td></tr>
-<tr><td><code>device_model</code></td><td>String</td><td><em>Optional</em> The model name of the device. On Android, this is <a href="https://developer.android.com/reference/android/os/Build.html#MODEL"><code>Build.MODEL</code></a>, the user-visible name of the device.</td></tr>
-<tr><td><code>first_run_date</code></td><td>Datetime</td><td>The date of the first run of the application, in local time and with day precision, including timezone information.</td></tr>
-<tr><td><code>os</code></td><td>String</td><td>The name of the operating system (e.g. &quot;linux&quot;, &quot;Android&quot;, &quot;ios&quot;)</td></tr>
-<tr><td><code>os_version</code></td><td>String</td><td>The user-visible version of the operating system (e.g. &quot;1.2.3&quot;)</td></tr>
-<tr><td><code>android_sdk_version</code></td><td>String</td><td><em>Optional</em>. The Android specific SDK version of the software running on this hardware device (e.g. &quot;23&quot;)</td></tr>
-<tr><td><code>telemetry_sdk_build</code></td><td>String</td><td>The version of the Glean SDK</td></tr>
-<tr><td><code>locale</code></td><td>String</td><td><em>Optional</em>. The locale of the application during initialization (e.g. &quot;es-ES&quot;). If the locale can't be determined on the system, the value is &quot;und&quot;, to indicate &quot;undetermined&quot;.</td></tr>
-</tbody></table>
-<p>All the metrics surviving application restarts (e.g. <code>client_id</code>, ...) are removed once the application using the Glean SDK is uninstalled.</p>
+<h4 id="app_build"><a class="header" href="#app_build"><code>app_build</code></a></h4>
+<p><em>Type: <a href="user/pings/../../reference/metrics/counter.html">String</a>,
+Lifetime: <a href="user/pings/../../reference/yaml/metrics.html#ping-default">Ping</a></em></p>
+<p>The build identifier generated by the CI system (e.g. &quot;1234/A&quot;). For language bindings that provide
+automatic detection for this value, (e.g. Android/Kotlin), in the unlikely event that
+the build identifier can not be retrieved from the OS, it is set to <code>inaccessible</code>.
+For other language bindings, if the value was not provided through configuration,
+this metric gets set to <code>Unknown</code>.</p>
+<h4 id="app_channel-optional"><a class="header" href="#app_channel-optional"><code>app_channel</code> <em>(optional)</em></a></h4>
+<p><em>Type: <a href="user/pings/../../reference/metrics/counter.html">String</a>,
+Lifetime: <a href="user/pings/../../reference/yaml/metrics.html#ping-default">Ping</a></em></p>
+<p>The product-provided release channel (e.g. &quot;beta&quot;).</p>
+<h4 id="app_display_version"><a class="header" href="#app_display_version"><code>app_display_version</code></a></h4>
+<p><em>Type: <a href="user/pings/../../reference/metrics/counter.html">String</a>,
+Lifetime: <a href="user/pings/../../reference/yaml/metrics.html#ping-default">Ping</a></em></p>
+<p>The user-visible version string (e.g. &quot;1.0.3&quot;). The meaning of the string (e.g. whether semver
+or a git hash) is application-specific. In the unlikely event this value can not be obtained from the OS,
+it is set to &quot;inaccessible&quot;. If it is accessible, but not set by the application, it is set to &quot;Unknown&quot;.</p>
+<h4 id="architecture"><a class="header" href="#architecture"><code>architecture</code></a></h4>
+<p><em>Type: <a href="user/pings/../../reference/metrics/counter.html">String</a>,
+Lifetime: <a href="user/pings/../../reference/yaml/metrics.html#ping-default">Ping</a></em></p>
+<p>The architecture of the device (e.g. &quot;arm&quot;, &quot;x86&quot;).</p>
+<h4 id="client_id-optional"><a class="header" href="#client_id-optional"><code>client_id</code> <em>(optional)</em></a></h4>
+<p><em>Type: <a href="user/pings/../../reference/metrics/counter.html">String</a>,
+Lifetime: <a href="user/pings/../../reference/yaml/metrics.html#user">User</a></em></p>
+<p>A UUID identifying a profile and allowing user-oriented correlation of data.</p>
+<h4 id="device_manufacturer-optional"><a class="header" href="#device_manufacturer-optional"><code>device_manufacturer</code> <em>(optional)</em></a></h4>
+<p><em>Type: <a href="user/pings/../../reference/metrics/counter.html">String</a>,
+Lifetime: <a href="user/pings/../../reference/yaml/metrics.html#application">Application</a></em></p>
+<p>The model name of the device. On Android, this is <a href="https://developer.android.com/reference/android/os/Build.html#MODEL"><code>Build.MODEL</code></a>, the user-visible name of the device.</p>
+<h4 id="device_model-optional"><a class="header" href="#device_model-optional"><code>device_model</code> <em>(optional)</em></a></h4>
+<p><em>Type: <a href="user/pings/../../reference/metrics/counter.html">String</a>,
+Lifetime: <a href="user/pings/../../reference/yaml/metrics.html#application">Application</a></em></p>
+<p>The model of the device the application is running on.
+On Android, this is <code>Build.MODEL</code>, the user-visible marketing name, like &quot;Pixel 2 XL&quot;.</p>
+<p>Not set if the device model can't be determined (e.g. on Desktop).</p>
+<h4 id="first_run_date"><a class="header" href="#first_run_date"><code>first_run_date</code></a></h4>
+<p><em>Type: <a href="user/pings/../../reference/metrics/datetime.html">Datetime</a>,
+Lifetime: <a href="user/pings/../../reference/yaml/metrics.html#user">User</a></em></p>
+<p>The date of the first run of the application, in local time and with day precision,
+including timezone information.</p>
+<h4 id="os"><a class="header" href="#os"><code>os</code></a></h4>
+<p><em>Type: <a href="user/pings/../../reference/metrics/counter.html">String</a>,
+Lifetime: <a href="user/pings/../../reference/yaml/metrics.html#application">Application</a></em></p>
+<p>The name of the operating system (e.g. &quot;Linux&quot;, &quot;Android&quot;, &quot;iOS&quot;).</p>
+<h4 id="os_version"><a class="header" href="#os_version"><code>os_version</code></a></h4>
+<p><em>Type: <a href="user/pings/../../reference/metrics/counter.html">String</a>,
+Lifetime: <a href="user/pings/../../reference/yaml/metrics.html#application">Application</a></em></p>
+<p>The user-visible version of the operating system (e.g. &quot;1.2.3&quot;).</p>
+<h4 id="android_sdk_version-optional"><a class="header" href="#android_sdk_version-optional"><code>android_sdk_version</code> <em>(optional)</em></a></h4>
+<p><em>Type: <a href="user/pings/../../reference/metrics/counter.html">String</a>,
+Lifetime: <a href="user/pings/../../reference/yaml/metrics.html#application">Application</a></em></p>
+<p>The Android specific SDK version of the software running on this hardware device (e.g. &quot;23&quot;).</p>
+<h4 id="telemetry_sdk_build"><a class="header" href="#telemetry_sdk_build"><code>telemetry_sdk_build</code></a></h4>
+<p><em>Type: <a href="user/pings/../../reference/metrics/counter.html">String</a>,
+Lifetime: <a href="user/pings/../../reference/yaml/metrics.html#application">Application</a></em></p>
+<p>The version of the Glean SDK.</p>
+<h4 id="locale-optional"><a class="header" href="#locale-optional"><code>locale</code> <em>(optional)</em></a></h4>
+<p><em>Type: <a href="user/pings/../../reference/metrics/counter.html">String</a>,
+Lifetime: <a href="user/pings/../../reference/yaml/metrics.html#application">Application</a></em></p>
+<p>The locale of the application during initialization (e.g. &quot;es-ES&quot;).
+If the locale can't be determined on the system, the value is &quot;und&quot;, to indicate &quot;undetermined&quot;.</p>
 <h2 id="ping-submission"><a class="header" href="#ping-submission">Ping submission</a></h2>
-<p>The pings that the Glean SDK generates are submitted to the Mozilla servers at specific paths, in order to provide additional metadata without the need to unpack the ping payload.</p>
+<p>The pings that the Glean SDK generates are submitted to the Mozilla servers at specific paths,
+in order to provide additional metadata without the need to unpack the ping payload.</p>
+<h3 id="url"><a class="header" href="#url">URL</a></h3>
 <p>A typical submission URL looks like</p>
-<p><code>&quot;&lt;server-address&gt;/submit/&lt;application-id&gt;/&lt;doc-type&gt;/&lt;glean-schema-version&gt;/&lt;document-id&gt;&quot;</code></p>
+<pre><code>&quot;&lt;server-address&gt;/submit/&lt;application-id&gt;/&lt;doc-type&gt;/&lt;glean-schema-version&gt;/&lt;document-id&gt;&quot;
+</code></pre>
 <p>where:</p>
 <ul>
 <li><code>&lt;server-address&gt;</code>: the address of the server that receives the pings;</li>
@@ -1844,25 +2001,66 @@ Optional fields are marked accordingly.</p>
 </ul>
 <h3 id="limitations"><a class="header" href="#limitations">Limitations</a></h3>
 <p>To keep resource usage in check, the Glean SDK enforces some limitations on ping uploading and ping storage.</p>
-<ul>
-<li><strong>Rate limiting</strong>: only up to 10 ping submissions every 60 seconds are allowed. There are no exposed methods to change these rate limiting defaults yet, follow <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1647630">Bug 1647630</a> for updates.</li>
-<li><strong>Request body size limiting</strong>: the body of a ping request may have up to 1MB. Pings that exceed this size are discarded and don't get uploaded. Size and number of discarded pings are recorded on the internal Glean metric <a href="user/pings/../collected-metrics/metrics.html#metrics-1"><code>glean.upload.discarded_exceeding_pings_size</code></a>.</li>
-<li><strong>Storage quota</strong>: Pending pings are stored on disk. The storage directory is scanned every time Glean is initialized and upon scanning Glean checks its size. If this directory exceeds a size of 10MB or 250 pending ping files, pings are deleted to get the directory back to an accepted size. Pings are deleted oldest first, until the directory size is below the quota.
-The number of deleted pings due to exceeding storage quota is recorded on the metric <a href="user/pings/../collected-metrics/metrics.html#metrics-1"><code>glean.upload.deleted_pings_after_quota_hit</code></a> and the size of the pending pings directory is recorded (regardless on whether quota has been reached) on the metric <a href="user/pings/../collected-metrics/metrics.html#metrics-1"><code>glean.upload.pending_pings_directory_size</code></a>
-<strong>Note</strong> Deletion request pings are stored in a different directory, are not subject to this limitation and never get deleted.</li>
-</ul>
+<h4 id="rate-limiting"><a class="header" href="#rate-limiting">Rate limiting</a></h4>
+<p>Only up to 10 ping submissions every 60 seconds are allowed. There are no exposed methods
+to change these rate limiting defaults, follow <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1647630">Bug 1647630</a>
+for updates.</p>
+<p>Rate limiting is not implemented on the Glean JavaScript SDK yet,
+follow <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1712920">Bug 1712920</a> for updates.</p>
+<h4 id="request-body-size-limiting"><a class="header" href="#request-body-size-limiting">Request body size limiting</a></h4>
+<p>The body of a ping request may have up to 1MB (after compression). Pings that exceed this size are discarded
+and don't get uploaded. Size and number of discarded pings are recorded on the internal
+Glean metric <a href="user/pings/../collected-metrics/metrics.html#metrics-1"><code>glean.upload.discarded_exceeding_pings_size</code></a>.</p>
+<h4 id="storage-quota"><a class="header" href="#storage-quota">Storage quota</a></h4>
+<p>Pending pings are stored on disk. Storage is scanned every time Glean is initialized and upon scanning
+Glean checks its size. If it exceeds a size of 10MB or 250 pending pings, pings are deleted to get the
+storage back to an accepted size. Pings are deleted oldest first, until the storage size is below the quota.</p>
+<p>The number of deleted pings due to exceeding storage quota is recorded on the metric
+<a href="user/pings/../collected-metrics/metrics.html#metrics-1"><code>glean.upload.deleted_pings_after_quota_hit</code></a>
+and the size of the pending pings directory is recorded (regardless on whether quota has been reached)
+on the metric <a href="user/pings/../collected-metrics/metrics.html#metrics-1"><code>glean.upload.pending_pings_directory_size</code></a>.</p>
+<p>Deletion request pings are not subject to this limitation and never get deleted.</p>
 <h3 id="submitted-headers"><a class="header" href="#submitted-headers">Submitted headers</a></h3>
-<p>A pre-defined set of headers is additionally sent along with the submitted ping:</p>
-<table><thead><tr><th>Header</th><th>Value</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>Content-Type</code></td><td><code>application/json; charset=utf-8</code></td><td>Describes the data sent to the server</td></tr>
-<tr><td><code>User-Agent</code></td><td>Defaults to e.g. <code>Glean/0.40.0 (Kotlin on Android)</code>, where <code>0.40.0</code> is the Glean SDK version number and <code>Kotlin on Android</code> is the name of the language used by the binding that sent the request plus the name of the platform it is running on.</td><td>Describes the application sending the ping using the Glean SDK</td></tr>
-<tr><td><code>Date</code></td><td>e.g. <code>Mon, 23 Jan 2019 10:10:10 GMT+00:00</code></td><td>Submission date/time in GMT/UTC+0 offset</td></tr>
-<tr><td><code>X-Client-Type</code></td><td><code>Glean</code></td><td>Custom header to support handling of Glean pings in the legacy pipeline</td></tr>
-<tr><td><code>X-Client-Version</code></td><td>e.g. <code>0.40.0</code></td><td>The Glean SDK version, sent as a custom header to support handling of Glean pings in the legacy pipeline</td></tr>
-<tr><td><code>X-Debug-ID</code></td><td><em>Optional</em>, e.g. <code>test-tag</code></td><td>Debug header attached to Glean pings when using the <a href="user/pings/../../user/debugging/index.html">debug tools</a></td></tr>
-<tr><td><code>X-Source-Tags</code></td><td><em>Optional</em>, e.g. <code>automation, perf</code></td><td>A list of tags to associate with the ping, useful for clustering pings at analysis time, for example to tell data generated from CI from other data.</td></tr>
-</tbody></table>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/user/pings/index.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="custom-pings"><a class="header" href="#custom-pings">Custom pings</a></h1>
+<p>A pre-defined set of headers is additionally sent along with the submitted ping.</p>
+<h4 id="content-type"><a class="header" href="#content-type"><code>Content-Type</code></a></h4>
+<p>Describes the data sent to the server. Value is always <code>application/json; charset=utf-8</code>.</p>
+<h4 id="date"><a class="header" href="#date"><code>Date</code></a></h4>
+<p>Submission date/time in GMT/UTC+0 offset, e.g. <code>Mon, 23 Jan 2019 10:10:10 GMT+00:00</code>.</p>
+<h4 id="user-agent"><a class="header" href="#user-agent"><code>User-Agent</code></a></h4>
+<p>The Glean SDKs do not set this header<sup class="footnote-reference"><a href="#1">1</a></sup>, so it will contain whatever value was set
+by the underlying uploading mechanism. For example, when sending pings from browsers
+it will contain the characteristic <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent#syntax">browser UA string</a>.</p>
+<p>This header is parsed by the Glean pipeline and can be queried at analysis time through
+the <a href="https://docs.telemetry.mozilla.org/datasets/pings.html?highlight=metadata#ping-metadata"><code>metadata.user_agent.*</code></a>
+fields in the ping tables.</p>
+<h4 id="x-telemetry-agent"><a class="header" href="#x-telemetry-agent"><code>X-Telemetry-Agent</code></a></h4>
+<p>The Glean SDK version and platform this ping is sent from.
+Useful for debugging purposes when pings are sent to <a href="https://docs.telemetry.mozilla.org/concepts/pipeline/filtering.html?highlight=error%20stream#querying-the-error-stream">the error stream</a>.
+as it describes the application and the Glean SDK used for sending the ping.</p>
+<p>It's looks like <code>Glean/40.0.0 (Kotlin on Android)</code>, where <code>40.0.0</code> is the Glean SDK version number
+and <code>Kotlin on Android</code> is the name of the language used by the SDK that sent the request
+plus the name of the platform it is running on.</p>
+<p><em>This header is currently only sent by the Glean JavaScript SDK. See <a href="user/pings/index.html#1">note</a>.</em></p>
+<h4 id="x-client-type"><a class="header" href="#x-client-type"><code>X-Client-Type</code></a></h4>
+<p>Custom header to support handling of Glean pings in the legacy pipeline. Values is always <code>Glean</code>.</p>
+<h4 id="x-client-version"><a class="header" href="#x-client-version"><code>X-Client-Version</code></a></h4>
+<p>The Glean SDK version e.g. <code>0.40.0</code>, sent as a custom header to support handling of Glean pings in the legacy pipeline.</p>
+<h4 id="x-debug-id-optional"><a class="header" href="#x-debug-id-optional"><code>X-Debug-Id</code> <em>(optional)</em></a></h4>
+<p>Debug header attached to Glean pings by using the <a href="user/pings/../../reference/debug/debugViewTag.html">debug APIs</a>,
+e.g. <code>test-tag</code>.</p>
+<p>When this header is present, the ping is redirected to the
+<a href="user/pings/../debugging/index.html#glean-debug-view">Glean Debug View</a>.</p>
+<h4 id="x-source-tags-optional"><a class="header" href="#x-source-tags-optional"><code>X-Source-Tags</code> <em>(optional)</em></a></h4>
+<p>A list of tags to associate with the ping, useful for clustering pings at analysis time,
+for example to tell data generated from CI from other data e.g. <code>automation, perf</code>.</p>
+<p>This header is attached to Glean pings by using the <a href="user/pings/../../reference/debug/sourceTags.html">debug APIs</a>.</p>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>This is only true for the Glean JavaScript SDK at the moment. For the other SDKs this
+header is overwritten with the value that is described on the <code>X-Telemetry-Agent</code> header section.
+However, this feature will be implemented soon on all SDKs.
+Follow <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1711928">Bug 1711928</a> for updates.</p>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/user/pings/index.md">Edit this file on GitHub.</a></footer></div>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="custom-pings"><a class="header" href="#custom-pings">Custom pings</a></h1>
 <p>Applications can define metrics that are sent in custom pings. Unlike the built-in pings, custom pings are sent explicitly by the application.</p>
 <p>This is useful when the scheduling of the built-in pings (<a href="user/pings/metrics.html">metrics</a>, <a href="user/pings/baseline.html">baseline</a> and <a href="user/pings/events.html">events</a>) are not appropriate for your data.  Since the timing of the submission of custom pings is handled by the application, the measurement window is under the application's control.</p>
 <p>This is especially useful when metrics need to be tightly related to one another, for example when you need to measure the distribution of frame paint times when a particular rendering backend is in use.  If these metrics were in different pings, with different measurement windows, it is much harder to do that kind of reasoning with much certainty.</p>
@@ -2074,7 +2272,7 @@ means.</p>
 If no <code>baseline</code> ping is triggered when becoming inactive (e.g. the process is abruptly killed) a <code>baseline</code> ping with reason <code>dirty_startup</code> will be submitted on the next application startup. This only happens from the second application start onward.</p>
 <p>See also the <a href="user/pings/ping-schedules-and-timings.html">ping schedules and timing overview</a>.</p>
 <h2 id="contents"><a class="header" href="#contents">Contents</a></h2>
-<p>The <code>baseline</code> ping also includes the common <a href="user/pings/index.html#ping-sections">ping sections</a> found in all pings.</p>
+<p>The <code>baseline</code> ping also includes the common <a href="user/pings/index.html#payload-structure">ping sections</a> found in all pings.</p>
 <p>It also includes a number of <a href="user/pings/../collected-metrics/metrics.html#baseline">metrics defined in the Glean SDK itself</a>.</p>
 <h3 id="querying-ping-contents"><a class="header" href="#querying-ping-contents">Querying ping contents</a></h3>
 <p>A quick note about querying ping contents (i.e. for <a href="https://sql.telemetry.mozilla.org">sql.telemetry.mozilla.org</a>):  Each metric in the baseline ping is organized by its metric type, and uses a namespace of <code>glean.baseline</code>. For instance, in order to select <code>duration</code> you would use <code>metrics.timespan['glean.baseline.duration']</code>. If you were trying to select a String based metric such as <code>os</code>, then you would use <code>metrics.string['glean.baseline.os']</code></p>
@@ -2888,11 +3086,24 @@ This does not affect the availability of data already collected by the pipeline.
 <h4 id="lifetime"><a class="header" href="#lifetime"><code>lifetime</code></a></h4>
 <p><em>default: <code>ping</code></em></p>
 <p>Defines the lifetime of the metric. Different lifetimes affect when the metrics value is reset.</p>
-<ul>
-<li><code>ping</code> (default): The metric is cleared each time it is submitted in the ping. This is the most common case, and should be used for metrics that are highly dynamic, such as things computed in response to the user's interaction with the application.</li>
-<li><code>application</code>: The metric is related to an application run, and is cleared after the application restarts and any Glean-owned ping, due at startup, is submitted. This should be used for things that are constant during the run of an application, such as the operating system version. In practice, these metrics are generally set during application startup. A common mistake---using the ping lifetime for these type of metrics---means that they will only be included in the first ping sent during a particular run of the application.</li>
-<li><code>user</code>: <strong>Reach out to the Glean team before using this.</strong>. The metric is part of the user's profile and will live as long as the profile lives. This is often not the best choice unless the metric records a value that <em>really</em> needs to be persisted for the full lifetime of the user profile, e.g. an identifier like the <code>client_id</code>, the day the product was first executed. It is rare to use this lifetime outside of some metrics that are built in to the Glean SDK.</li>
-</ul>
+<h5 id="ping-default-2"><a class="header" href="#ping-default-2"><code>ping</code> <em>(default)</em></a></h5>
+<p>The metric is cleared each time it is submitted in the ping. This is the most common case,
+and should be used for metrics that are highly dynamic, such as things computed
+in response to the user's interaction with the application.</p>
+<h5 id="application-2"><a class="header" href="#application-2"><code>application</code></a></h5>
+<p>The metric is related to an application run, and is cleared after the application restarts
+and any Glean-owned ping, due at startup, is submitted. This should be used for things
+that are constant during the run of an application, such as the operating system version.
+In practice, these metrics are generally set during application startup.  A common mistake---
+using the ping lifetime for these type of metrics---means that they will only be included
+in the first ping sent during a particular run of the application.</p>
+<h5 id="user-2"><a class="header" href="#user-2"><code>user</code></a></h5>
+<p><strong>Reach out to the Glean team before using this.</strong></p>
+<p>The metric is part of the user's profile and will live as long as the profile lives.
+This is often not the best choice unless the metric records a value that <em>really</em> needs
+to be persisted for the full lifetime of the user profile, e.g. an identifier like the <code>client_id</code>,
+the day the product was first executed. It is rare to use this lifetime outside of some metrics
+that are built in to the Glean SDK.</p>
 <h4 id="send_in_pings"><a class="header" href="#send_in_pings"><code>send_in_pings</code></a></h4>
 <p><em>default: <code>events</code>|<code>metrics</code></em></p>
 <p>Defines which pings the metric should be sent on.
@@ -7621,7 +7832,7 @@ refer to the <a href="reference/metrics/../yaml/metrics.html">metrics YAML regis
 <li><a href="reference/metrics/../../../docs/glean/private/uuid/struct.UuidMetric.html">Rust API docs</a></li>
 <li><a href="https://mozilla.github.io/glean.js/classes/core_metrics_types_uuid.default.html#set">JavaScript API docs</a></li>
 </ul>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/metrics/uuid.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="url"><a class="header" href="#url">URL</a></h1>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/metrics/uuid.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="url-1"><a class="header" href="#url-1">URL</a></h1>
 <p>URL metrics allow recording URL-like<sup class="footnote-reference"><a href="#1">1</a></sup> strings.</p>
 <p>This metric type does not support recording <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs">data URLs</a> - please get in contact with the Glean SDK team if you're missing a type.</p>
 <div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
@@ -9203,7 +9414,7 @@ then the denominator should be defined as a <code>counter</code> and shared betw
 <ul>
 <li><a href="reference/metrics/../../../docs/glean/private/rate/struct.RateMetric.html">Rust API docs</a></li>
 </ul>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/metrics/rate.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="pings-1"><a class="header" href="#pings-1">Pings</a></h1>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/metrics/rate.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="pings-2"><a class="header" href="#pings-2">Pings</a></h1>
 <h2 id="submission-api"><a class="header" href="#submission-api">Submission API</a></h2>
 <h3 id="submit"><a class="header" href="#submit"><code>submit</code></a></h3>
 <p>Collect and queue a custom ping for eventual uploading.</p>
@@ -11785,7 +11996,7 @@ They could be release notes, documentation, hopes, dreams, or whatever: so long 
 <li>In which format to present it?</li>
 </ul>
 <p>This guide aims to provide context for answering both questions.</p>
-<h2 id="table-of-contents-2"><a class="header" href="#table-of-contents-2">Table of contents</a></h2>
+<h2 id="table-of-contents-3"><a class="header" href="#table-of-contents-3">Table of contents</a></h2>
 <ul>
 <li><a href="appendix/contribution-guidelines.html#where-to-add-new-content">Where to add new content?</a>
 <ul>

@@ -163,7 +163,7 @@
 If no <code>baseline</code> ping is triggered when becoming inactive (e.g. the process is abruptly killed) a <code>baseline</code> ping with reason <code>dirty_startup</code> will be submitted on the next application startup. This only happens from the second application start onward.</p>
 <p>See also the <a href="ping-schedules-and-timings.html">ping schedules and timing overview</a>.</p>
 <h2 id="contents"><a class="header" href="#contents">Contents</a></h2>
-<p>The <code>baseline</code> ping also includes the common <a href="index.html#ping-sections">ping sections</a> found in all pings.</p>
+<p>The <code>baseline</code> ping also includes the common <a href="index.html#payload-structure">ping sections</a> found in all pings.</p>
 <p>It also includes a number of <a href="../collected-metrics/metrics.html#baseline">metrics defined in the Glean SDK itself</a>.</p>
 <h3 id="querying-ping-contents"><a class="header" href="#querying-ping-contents">Querying ping contents</a></h3>
 <p>A quick note about querying ping contents (i.e. for <a href="https://sql.telemetry.mozilla.org">sql.telemetry.mozilla.org</a>):  Each metric in the baseline ping is organized by its metric type, and uses a namespace of <code>glean.baseline</code>. For instance, in order to select <code>duration</code> you would use <code>metrics.timespan['glean.baseline.duration']</code>. If you were trying to select a String based metric such as <code>os</code>, then you would use <code>metrics.string['glean.baseline.os']</code></p>
