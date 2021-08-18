@@ -101,28 +101,6 @@
 <span id="99"> 99</span>
 <span id="100">100</span>
 <span id="101">101</span>
-<span id="102">102</span>
-<span id="103">103</span>
-<span id="104">104</span>
-<span id="105">105</span>
-<span id="106">106</span>
-<span id="107">107</span>
-<span id="108">108</span>
-<span id="109">109</span>
-<span id="110">110</span>
-<span id="111">111</span>
-<span id="112">112</span>
-<span id="113">113</span>
-<span id="114">114</span>
-<span id="115">115</span>
-<span id="116">116</span>
-<span id="117">117</span>
-<span id="118">118</span>
-<span id="119">119</span>
-<span id="120">120</span>
-<span id="121">121</span>
-<span id="122">122</span>
-<span id="123">123</span>
 </pre><pre class="rust">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -146,8 +124,8 @@
     <span class="doccomment">/// Creates the client info with dummy values for all.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">unknown</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="ident">ClientInfoMetrics</span> {
-            <span class="ident">app_build</span>: <span class="string">&quot;unknown&quot;</span>.<span class="ident">to_string</span>(),
-            <span class="ident">app_display_version</span>: <span class="string">&quot;unknown&quot;</span>.<span class="ident">to_string</span>(),
+            <span class="ident">app_build</span>: <span class="string">&quot;Unknown&quot;</span>.<span class="ident">to_string</span>(),
+            <span class="ident">app_display_version</span>: <span class="string">&quot;Unknown&quot;</span>.<span class="ident">to_string</span>(),
         }
     }
 }
@@ -203,28 +181,6 @@
     <span class="kw">pub</span> <span class="kw">static</span> <span class="ident">architecture</span>: <span class="ident">Lazy</span><span class="op">&lt;</span><span class="ident">StringMetric</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Lazy::new</span>(<span class="op">|</span><span class="op">|</span> {
         <span class="ident">StringMetric::new</span>(<span class="ident">CommonMetricData</span> {
             <span class="ident">name</span>: <span class="string">&quot;architecture&quot;</span>.<span class="ident">into</span>(),
-            <span class="ident">category</span>: <span class="string">&quot;&quot;</span>.<span class="ident">into</span>(),
-            <span class="ident">send_in_pings</span>: <span class="macro">vec!</span>[<span class="string">&quot;glean_client_info&quot;</span>.<span class="ident">into</span>()],
-            <span class="ident">lifetime</span>: <span class="ident">Lifetime::Application</span>,
-            <span class="ident">disabled</span>: <span class="bool-val">false</span>,
-            ..<span class="ident">Default::default</span>()
-        })
-    });
-
-    <span class="kw">pub</span> <span class="kw">static</span> <span class="ident">device_manufacturer</span>: <span class="ident">Lazy</span><span class="op">&lt;</span><span class="ident">StringMetric</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Lazy::new</span>(<span class="op">|</span><span class="op">|</span> {
-        <span class="ident">StringMetric::new</span>(<span class="ident">CommonMetricData</span> {
-            <span class="ident">name</span>: <span class="string">&quot;device_manufacturer&quot;</span>.<span class="ident">into</span>(),
-            <span class="ident">category</span>: <span class="string">&quot;&quot;</span>.<span class="ident">into</span>(),
-            <span class="ident">send_in_pings</span>: <span class="macro">vec!</span>[<span class="string">&quot;glean_client_info&quot;</span>.<span class="ident">into</span>()],
-            <span class="ident">lifetime</span>: <span class="ident">Lifetime::Application</span>,
-            <span class="ident">disabled</span>: <span class="bool-val">false</span>,
-            ..<span class="ident">Default::default</span>()
-        })
-    });
-
-    <span class="kw">pub</span> <span class="kw">static</span> <span class="ident">device_model</span>: <span class="ident">Lazy</span><span class="op">&lt;</span><span class="ident">StringMetric</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Lazy::new</span>(<span class="op">|</span><span class="op">|</span> {
-        <span class="ident">StringMetric::new</span>(<span class="ident">CommonMetricData</span> {
-            <span class="ident">name</span>: <span class="string">&quot;device_model&quot;</span>.<span class="ident">into</span>(),
             <span class="ident">category</span>: <span class="string">&quot;&quot;</span>.<span class="ident">into</span>(),
             <span class="ident">send_in_pings</span>: <span class="macro">vec!</span>[<span class="string">&quot;glean_client_info&quot;</span>.<span class="ident">into</span>()],
             <span class="ident">lifetime</span>: <span class="ident">Lifetime::Application</span>,
