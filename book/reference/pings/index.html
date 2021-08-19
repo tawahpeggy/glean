@@ -207,7 +207,7 @@ pings::search.submit(pings::SearchReasonCodes::Performed);
 <div data-lang="JavaScript" class="tab">
 <pre><code class="language-js">import * as pings from &quot;./path/to/generated/files/pings.js&quot;;
 
-pings.search.submit(&quot;performed&quot;);
+pings.search.submit(pings.searchReasonCodes.Performed);
 </code></pre>
 </div>
 <div data-lang="Firefox Desktop" class="tab">
@@ -372,7 +372,28 @@ assert.doesNotThrow(await p);
 assert.ok(validatorRun);
 </code></pre>
 </div>
-<div data-lang="Firefox Desktop" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>JavaScript:</strong></p>
+<pre><code class="language-js">Glean.search.defaultEngine.add(5);
+let submitted = false;
+GleanPings.search.testBeforeNextSubmit(reason =&gt; {
+  submitted = true;
+  Assert.equal(5, Glean.search.defaultEngine.testGetValue());
+});
+GleanPings.search.submit();
+Assert.ok(submitted);
+</code></pre>
+<p><strong>C++:</strong></p>
+<pre><code class="language-cpp">mozilla::glean::search::default_engine.Add(5);
+bool submitted = false;
+mozilla::glean_pings::Search.TestBeforeNextSubmit([&amp;submitted](const nsACString&amp; aReason) {
+  submitted = true;
+  ASSERT_EQ(false, mozilla::glean::search::default_engine.TestGetValue().unwrap().ref());
+});
+mozilla::glean_pings::Search.Submit();
+ASSERT_TRUE(submitted);
+</code></pre>
+</div>
 </div>
 </div>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/pings/index.md">Edit this file on GitHub.</a></footer>
