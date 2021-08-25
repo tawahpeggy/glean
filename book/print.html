@@ -10064,12 +10064,15 @@ Each ping has its own schedule to gather all its locally saved metrics and creat
 <li><a href="appendix/changelog/./js.html">Glean.js</a></li>
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/appendix/changelog/index.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="unreleased-changes"><a class="header" href="#unreleased-changes">Unreleased changes</a></h1>
-<p><a href="https://github.com/mozilla/glean/compare/v40.0.0...main">Full changelog</a></p>
+<p><a href="https://github.com/mozilla/glean/compare/v40.1.0...main">Full changelog</a></p>
+<h1 id="v4010-2021-08-25"><a class="header" href="#v4010-2021-08-25">v40.1.0 (2021-08-25)</a></h1>
+<p><a href="https://github.com/mozilla/glean/compare/v40.0.0...v40.1.0">Full changelog</a></p>
 <ul>
 <li>Android
 <ul>
 <li>Updated to Kotlin 1.5, Android Gradle Plugin 4.2.2 and Gradle 6.7.1 (<a href="https://github.com/mozilla/glean/pull/1747">#1747</a>)</li>
 <li>The <code>glean-gradle-plugin</code> now forces a compile failure when multiple Glean versions are detected in the build (<a href="https://github.com/mozilla/glean/pull/1756">#1756</a>)</li>
+<li>The <code>glean-gradle-plugin</code> does not enable a <code>glean-native</code> capability on GeckoView anymore. That will be done by GeckoView directly (<a href="https://github.com/mozilla/glean/pull/1759">#1759</a>)</li>
 </ul>
 </li>
 </ul>
@@ -11722,6 +11725,7 @@ This is a major milestone in using a cross-platform implementation of Glean on t
 </ul>
 </li>
 <li><a href="https://github.com/mozilla/glean.js/pull/658">#658</a>: BUGFIX: Unblock ping uploading jobs after the maximum of upload failures are hit for a given uploading window.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/661">#661</a>: Include unminified version of library on Qt/QML builds.</li>
 </ul>
 <h1 id="v0181-2021-07-22"><a class="header" href="#v0181-2021-07-22">v0.18.1 (2021-07-22)</a></h1>
 <p><a href="https://github.com/mozilla/glean.js/compare/v0.18.0...v0.18.1">Full changelog</a></p>
