@@ -2829,7 +2829,7 @@ and how to enable them, see <a href="user/debugging/../../reference/debug/index.
 <li>Invalid commands will log an error and cause the entire URL to be ignored.</li>
 <li>Not all commands are required to be encoded in the URL, you can mix and match the commands that you need.</li>
 <li>Multiple instances of commands are not allowed in the same URL and, if present, will cause the entire URL to be ignored.</li>
-<li>The <code>logPings</code> command doesn't trigger ping submission and you won't see any output until a ping has been submitted. You can use the <code>sendPings</code> command to force a ping to be sent, but it could be more desirable to trigger the pings submission on their normal schedule. For instance, the <code>baseline</code> and <code>events</code> pings can be triggered by moving the app out of the foreground and the <code>metrics</code> ping can be triggered normally if it is overdue for the current calendar day. See the <a href="user/debugging/../pings/index.html">ping documentation</a> for more information on ping scheduling to learn when pings are sent.</li>
+<li>The <code>logPings</code> command doesn't trigger ping submission and you won't see any output until a ping has been submitted. You can use the <code>sendPing</code> command to force a ping to be sent, but it could be more desirable to trigger the pings submission on their normal schedule. For instance, the <code>baseline</code> and <code>events</code> pings can be triggered by moving the app out of the foreground and the <code>metrics</code> ping can be triggered normally if it is overdue for the current calendar day. See the <a href="user/debugging/../pings/index.html">ping documentation</a> for more information on ping scheduling to learn when pings are sent.</li>
 <li>Enabling debugging features through custom URLs overrides any debugging features set through environment variables.</li>
 </ul>
 <h3 id="instrumenting-the-application-for-glean-sdk-debug-functionality"><a class="header" href="#instrumenting-the-application-for-glean-sdk-debug-functionality">Instrumenting the application for Glean SDK debug functionality</a></h3>
@@ -11858,10 +11858,14 @@ This is a major milestone in using a cross-platform implementation of Glean on t
 <li><a href="https://github.com/mozilla/glean.js/pull/647">#647</a>: Implement the Text metric type.</li>
 <li><a href="https://github.com/mozilla/glean.js/pull/681">#681</a>: BUGFIX: Fix error in scanning events database upon initialization on Qt/QML.
 <ul>
-<li>This bug prevents the changes introduced in <a href="https://github.com/mozilla/glean.js/pull/526">#526</a> from working properly.</li>
+<li>This bug prevents the changes introduced in <a href="https://github.com/mozilla/glean.js/pull/526">#526</a> from working properly in Qt/QML.</li>
 </ul>
 </li>
-<li><a href="https://github.com/mozilla/glean.js/pull/614">#614</a>: Implement the String List metric type.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/692">#692</a>: BUGFIX: Ensure events database is initialized at a time Glean is already able to record metrics.
+<ul>
+<li>This bug also prevents the changes introduced in <a href="https://github.com/mozilla/glean.js/pull/526">#526</a> from working properly in all platforms.</li>
+</ul>
+</li>
 </ul>
 <h1 id="v0181-2021-07-22"><a class="header" href="#v0181-2021-07-22">v0.18.1 (2021-07-22)</a></h1>
 <p><a href="https://github.com/mozilla/glean.js/compare/v0.18.0...v0.18.1">Full changelog</a></p>

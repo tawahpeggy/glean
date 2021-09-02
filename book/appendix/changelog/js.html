@@ -168,10 +168,14 @@
 <li><a href="https://github.com/mozilla/glean.js/pull/647">#647</a>: Implement the Text metric type.</li>
 <li><a href="https://github.com/mozilla/glean.js/pull/681">#681</a>: BUGFIX: Fix error in scanning events database upon initialization on Qt/QML.
 <ul>
-<li>This bug prevents the changes introduced in <a href="https://github.com/mozilla/glean.js/pull/526">#526</a> from working properly.</li>
+<li>This bug prevents the changes introduced in <a href="https://github.com/mozilla/glean.js/pull/526">#526</a> from working properly in Qt/QML.</li>
 </ul>
 </li>
-<li><a href="https://github.com/mozilla/glean.js/pull/614">#614</a>: Implement the String List metric type.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/692">#692</a>: BUGFIX: Ensure events database is initialized at a time Glean is already able to record metrics.
+<ul>
+<li>This bug also prevents the changes introduced in <a href="https://github.com/mozilla/glean.js/pull/526">#526</a> from working properly in all platforms.</li>
+</ul>
+</li>
 </ul>
 <h1 id="v0181-2021-07-22"><a class="header" href="#v0181-2021-07-22">v0.18.1 (2021-07-22)</a></h1>
 <p><a href="https://github.com/mozilla/glean.js/compare/v0.18.0...v0.18.1">Full changelog</a></p>
