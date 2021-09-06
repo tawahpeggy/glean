@@ -197,7 +197,11 @@ search::engines.add(&quot;wikipedia&quot;.to_string());
 search::engines.add(&quot;duck duck go&quot;.to_string());
 </code></pre>
 </div>
-<div data-lang="JavaScript" class="tab"></div>
+<div data-lang="JavaScript" class="tab">
+<pre><code class="language-js">Glean.search.engines.add(&quot;wikipedia&quot;);
+Glean.search.engines.add(&quot;duck duck go&quot;);
+</code></pre>
+</div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
 <pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
@@ -256,7 +260,10 @@ metrics.search.engines.set([&quot;wikipedia&quot;, &quot;duck duck go&quot;])
 search::engines.set(vec![&quot;wikipedia&quot;.to_string(), &quot;duck duck go&quot;.to_string()])
 </code></pre>
 </div>
-<div data-lang="JavaScript" class="tab"></div>
+<div data-lang="JavaScript" class="tab">
+<pre><code class="language-js">Glean.search.engines.set([&quot;wikipedia&quot;, &quot;duck duck go&quot;]);
+</code></pre>
+</div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
 <pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
@@ -322,7 +329,13 @@ assert_eq!(
 );
 </code></pre>
 </div>
-<div data-lang="JavaScript" class="tab"></div>
+<div data-lang="JavaScript" class="tab">
+<pre><code class="language-js">// testGetValue will throw NS_ERROR_LOSS_OF_SIGNIFICANT_DATA on error.
+const engines = Glean.search.engines.testGetValue();
+Assert.ok(engines.includes(&quot;wikipedia&quot;));
+Assert.ok(engines.includes(&quot;duck duck go&quot;));
+</code></pre>
+</div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
 <pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;

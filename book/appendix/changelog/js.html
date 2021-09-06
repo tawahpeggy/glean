@@ -151,13 +151,26 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="unreleased-changes"><a class="header" href="#unreleased-changes">Unreleased changes</a></h1>
-<p><a href="https://github.com/mozilla/glean.js/compare/v0.18.1...main">Full changelog</a></p>
+<p><a href="https://github.com/mozilla/glean.js/compare/v0.19.0...main">Full changelog</a></p>
 <ul>
+<li><a href="https://github.com/mozilla/glean.js/pull/696">#696</a>: Expose Node.js entry point <code>@mozilla/glean/node</code>.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/695">#695</a>: Implement PlatformInfo module for the Node.js platform.</li>
+</ul>
+<h1 id="v0190-2021-09-03"><a class="header" href="#v0190-2021-09-03">v0.19.0 (2021-09-03)</a></h1>
+<p><a href="https://github.com/mozilla/glean.js/compare/v0.18.1...v0.19.0">Full changelog</a></p>
+<ul>
+<li><a href="https://github.com/mozilla/glean.js/pull/526">#526</a>: Implement mechanism to sort events reliably throughout restarts.
+<ul>
+<li>A new event (<code>glean.restarted</code>) will be included in the events payload of pings, in case there
+was a restart in the middle of the ping measurement window.</li>
+</ul>
+</li>
 <li><a href="https://github.com/mozilla/glean.js/pull/534">#534</a>: Expose <code>Uploader</code> base class through <code>@mozilla/glean/&lt;platform&gt;/uploader</code> entry point.</li>
 <li><a href="https://github.com/mozilla/glean.js/pull/580">#580</a>: Limit size of pings database to 250 pings or 10MB.</li>
 <li><a href="https://github.com/mozilla/glean.js/pull/580">#580</a>: BUGFIX: Pending pings at startup up are uploaded from oldest to newest.</li>
 <li><a href="https://github.com/mozilla/glean.js/pull/607">#607</a>: Record an error when incoherent timestamps are calculated for events after a restart.</li>
 <li><a href="https://github.com/mozilla/glean.js/pull/630">#630</a>: Accept booleans and numbers as event extras.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/647">#647</a>: Implement the Text metric type.</li>
 <li><a href="https://github.com/mozilla/glean.js/pull/658">#658</a>: Implement rate limiting for ping upload.
 <ul>
 <li>Only up to 15 ping submissions every 60 seconds are now allowed.</li>
@@ -165,7 +178,6 @@
 </li>
 <li><a href="https://github.com/mozilla/glean.js/pull/658">#658</a>: BUGFIX: Unblock ping uploading jobs after the maximum of upload failures are hit for a given uploading window.</li>
 <li><a href="https://github.com/mozilla/glean.js/pull/661">#661</a>: Include unminified version of library on Qt/QML builds.</li>
-<li><a href="https://github.com/mozilla/glean.js/pull/647">#647</a>: Implement the Text metric type.</li>
 <li><a href="https://github.com/mozilla/glean.js/pull/681">#681</a>: BUGFIX: Fix error in scanning events database upon initialization on Qt/QML.
 <ul>
 <li>This bug prevents the changes introduced in <a href="https://github.com/mozilla/glean.js/pull/526">#526</a> from working properly in Qt/QML.</li>
