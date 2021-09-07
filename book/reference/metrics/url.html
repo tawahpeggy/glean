@@ -189,11 +189,36 @@ search.template.set(&quot;https://mysearchengine.com/&quot;);
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
-<div data-lang="Kotlin" class="tab"></div>
-<div data-lang="Java" class="tab"></div>
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Search
+
+Search.template.set(&quot;https://mysearchengine.com/&quot;)
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Search;
+
+Search.INSTANCE.template.set(&quot;https://mysearchengine.com/&quot;);
+</code></pre>
+</div>
 <div data-lang="Swift" class="tab"></div>
-<div data-lang="Python" class="tab"></div>
-<div data-lang="Rust" class="tab"></div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+metrics.search.template.set(&quot;https://mysearchengine.com/&quot;)
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean_metrics;
+
+search::template.set(&quot;https://mysearchengine.com/&quot;);
+<span class="boring">}
+</span></code></pre></pre>
+</div>
 <div data-lang="JavaScript" class="tab">
 <pre><code class="language-js">import * as search from &quot;./path/to/generated/files/search.js&quot;;
 
@@ -223,15 +248,40 @@ search.template.setUrl(new URL(&quot;https://mysearchengine.com/&quot;));
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
-<div data-lang="Kotlin" class="tab"></div>
-<div data-lang="Java" class="tab"></div>
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Search
+
+assertEquals(&quot;https://mysearchengine.com/&quot;, Search.template.testGetValue())
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Search
+
+assertEquals(&quot;https://mysearchengine.com/&quot;, Search.INSTANCE.template.testGetValue());
+</code></pre>
+</div>
 <div data-lang="Swift" class="tab"></div>
-<div data-lang="Python" class="tab"></div>
-<div data-lang="Rust" class="tab"></div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+assert &quot;https://mysearchengine.com/&quot; == metrics.search.template.test_get_value()
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean_metrics;
+
+assert_eq!(&quot;https://mysearchengine.com/&quot;, search::template.test_get_value(None).unwrap());
+<span class="boring">}
+</span></code></pre></pre>
+</div>
 <div data-lang="JavaScript" class="tab">
 <pre><code class="language-js">import * as search from &quot;./path/to/generated/files/search.js&quot;;
 
-assert.strictEqual(, await search.template.testGetValue());
+assert.strictEqual(&quot;https://mysearchengine.com/&quot;, await search.template.testGetValue());
 </code></pre>
 </div>
 <div data-lang="Firefox Desktop" class="tab"></div>
@@ -242,11 +292,70 @@ assert.strictEqual(, await search.template.testGetValue());
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
-<div data-lang="Kotlin" class="tab"></div>
-<div data-lang="Java" class="tab"></div>
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Search
+
+assertEquals(0, Search.template.testGetNumRecordedErrors(ErrorType.InvalidValue))
+
+assertEquals(0, Search.template.testGetNumRecordedErrors(ErrorType.InvalidOverflow))
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Search;
+
+assertEquals(
+    0,
+    Search.INSTANCE.template.testGetNumRecordedErrors(
+        ErrorType.InvalidValue
+    )
+);
+
+assertEquals(
+    0,
+    Search.INSTANCE.template.testGetNumRecordedErrors(
+        ErrorType.InvalidOverflow
+    )
+);
+</code></pre>
+</div>
 <div data-lang="Swift" class="tab"></div>
-<div data-lang="Python" class="tab"></div>
-<div data-lang="Rust" class="tab"></div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+assert 0 == metrics.search.template.test_get_num_recorded_errors(
+    ErrorType.INVALID_VALUE
+)
+
+assert 0 == metrics.search.template.test_get_num_recorded_errors(
+    ErrorType.INVALID_OVERFLOW
+)
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean::ErrorType;
+
+use glean_metrics;
+
+assert_eq!(
+  0,
+  search::template.test_get_num_recorded_errors(
+    ErrorType::InvalidValue
+  )
+);
+
+assert_eq!(
+  0,
+  search::template.test_get_num_recorded_errors(
+    ErrorType::InvalidOverflow
+  )
+);
+<span class="boring">}
+</span></code></pre></pre>
+</div>
 <div data-lang="JavaScript" class="tab">
 <pre><code class="language-js">import * as search from &quot;./path/to/generated/files/search.js&quot;;
 import { ErrorType } from &quot;@mozilla/glean/&lt;platform&gt;&quot;;

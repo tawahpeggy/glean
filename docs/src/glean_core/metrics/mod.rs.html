@@ -195,6 +195,12 @@
 <span id="193">193</span>
 <span id="194">194</span>
 <span id="195">195</span>
+<span id="196">196</span>
+<span id="197">197</span>
+<span id="198">198</span>
+<span id="199">199</span>
+<span id="200">200</span>
+<span id="201">201</span>
 </pre><pre class="rust">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -227,6 +233,7 @@
 <span class="kw">mod</span> <span class="ident">time_unit</span>;
 <span class="kw">mod</span> <span class="ident">timespan</span>;
 <span class="kw">mod</span> <span class="ident">timing_distribution</span>;
+<span class="kw">mod</span> <span class="ident">url</span>;
 <span class="kw">mod</span> <span class="ident">uuid</span>;
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::event_database::RecordedEvent</span>;
@@ -261,6 +268,7 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span><span class="ident">::timespan::TimespanMetric</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span><span class="ident">::timing_distribution::TimerId</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span><span class="ident">::timing_distribution::TimingDistributionMetric</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span><span class="ident">::url::UrlMetric</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span><span class="ident">::uuid::UuidMetric</span>;
 
 <span class="doccomment">/// A snapshot of all buckets and the accumulated sum of a distribution.</span>
@@ -319,6 +327,8 @@
     <span class="ident">Jwe</span>(<span class="ident">String</span>),
     <span class="doccomment">/// A rate metric. See [`RateMetric`] for more information.</span>
     <span class="ident">Rate</span>(<span class="ident">i32</span>, <span class="ident">i32</span>),
+    <span class="doccomment">/// A URL metric. See [`UrlMetric`] for more information.</span>
+    <span class="ident">Url</span>(<span class="ident">String</span>),
 }
 
 <span class="doccomment">/// A [`MetricType`] describes common behavior across all metrics.</span>
@@ -358,6 +368,7 @@
             <span class="ident">Metric::StringList</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;string_list&quot;</span>,
             <span class="ident">Metric::Timespan</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;timespan&quot;</span>,
             <span class="ident">Metric::TimingDistribution</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;timing_distribution&quot;</span>,
+            <span class="ident">Metric::Url</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;url&quot;</span>,
             <span class="ident">Metric::Uuid</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;uuid&quot;</span>,
             <span class="ident">Metric::MemoryDistribution</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;memory_distribution&quot;</span>,
             <span class="ident">Metric::Jwe</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;jwe&quot;</span>,
@@ -385,6 +396,7 @@
                 <span class="macro">json!</span>({<span class="string">&quot;value&quot;</span>: <span class="ident">time_unit</span>.<span class="ident">duration_convert</span>(<span class="kw-2">*</span><span class="ident">time</span>), <span class="string">&quot;time_unit&quot;</span>: <span class="ident">time_unit</span>})
             }
             <span class="ident">Metric::TimingDistribution</span>(<span class="ident">hist</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">json!</span>(<span class="ident">timing_distribution::snapshot</span>(<span class="ident">hist</span>)),
+            <span class="ident">Metric::Url</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">json!</span>(<span class="ident">s</span>),
             <span class="ident">Metric::Uuid</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">json!</span>(<span class="ident">s</span>),
             <span class="ident">Metric::MemoryDistribution</span>(<span class="ident">hist</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">json!</span>(<span class="ident">memory_distribution::snapshot</span>(<span class="ident">hist</span>)),
             <span class="ident">Metric::Jwe</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">json!</span>(<span class="ident">s</span>),
