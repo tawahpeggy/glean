@@ -1731,6 +1731,71 @@
 <span id="1731">1731</span>
 <span id="1732">1732</span>
 <span id="1733">1733</span>
+<span id="1734">1734</span>
+<span id="1735">1735</span>
+<span id="1736">1736</span>
+<span id="1737">1737</span>
+<span id="1738">1738</span>
+<span id="1739">1739</span>
+<span id="1740">1740</span>
+<span id="1741">1741</span>
+<span id="1742">1742</span>
+<span id="1743">1743</span>
+<span id="1744">1744</span>
+<span id="1745">1745</span>
+<span id="1746">1746</span>
+<span id="1747">1747</span>
+<span id="1748">1748</span>
+<span id="1749">1749</span>
+<span id="1750">1750</span>
+<span id="1751">1751</span>
+<span id="1752">1752</span>
+<span id="1753">1753</span>
+<span id="1754">1754</span>
+<span id="1755">1755</span>
+<span id="1756">1756</span>
+<span id="1757">1757</span>
+<span id="1758">1758</span>
+<span id="1759">1759</span>
+<span id="1760">1760</span>
+<span id="1761">1761</span>
+<span id="1762">1762</span>
+<span id="1763">1763</span>
+<span id="1764">1764</span>
+<span id="1765">1765</span>
+<span id="1766">1766</span>
+<span id="1767">1767</span>
+<span id="1768">1768</span>
+<span id="1769">1769</span>
+<span id="1770">1770</span>
+<span id="1771">1771</span>
+<span id="1772">1772</span>
+<span id="1773">1773</span>
+<span id="1774">1774</span>
+<span id="1775">1775</span>
+<span id="1776">1776</span>
+<span id="1777">1777</span>
+<span id="1778">1778</span>
+<span id="1779">1779</span>
+<span id="1780">1780</span>
+<span id="1781">1781</span>
+<span id="1782">1782</span>
+<span id="1783">1783</span>
+<span id="1784">1784</span>
+<span id="1785">1785</span>
+<span id="1786">1786</span>
+<span id="1787">1787</span>
+<span id="1788">1788</span>
+<span id="1789">1789</span>
+<span id="1790">1790</span>
+<span id="1791">1791</span>
+<span id="1792">1792</span>
+<span id="1793">1793</span>
+<span id="1794">1794</span>
+<span id="1795">1795</span>
+<span id="1796">1796</span>
+<span id="1797">1797</span>
+<span id="1798">1798</span>
 </pre><pre class="rust">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -2377,7 +2442,7 @@
             <span class="ident">ping_lifetime_data</span>
                 .<span class="ident">write</span>()
                 .<span class="ident">expect</span>(<span class="string">&quot;Can&#39;t access ping lifetime data as writable&quot;</span>)
-                .<span class="ident">clear</span>();
+                .<span class="ident">retain</span>(<span class="op">|</span><span class="ident">metric_id</span>, <span class="kw">_</span><span class="op">|</span> <span class="op">!</span><span class="ident">metric_id</span>.<span class="ident">starts_with</span>(<span class="ident">storage_name</span>));
         }
 
         <span class="self">self</span>.<span class="ident">write_with_store</span>(<span class="ident">Lifetime::Ping</span>, <span class="op">|</span><span class="kw-2">mut</span> <span class="ident">writer</span>, <span class="ident">store</span><span class="op">|</span> {
@@ -3052,6 +3117,71 @@
                 .<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">reader</span>, <span class="macro">format!</span>(<span class="string">&quot;{}#{}&quot;</span>, <span class="ident">test_storage</span>, <span class="ident">test_metric_id</span>))
                 .<span class="ident">unwrap_or</span>(<span class="prelude-val">None</span>)
                 .<span class="ident">is_some</span>());
+        }
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_delayed_ping_lifetime_clear</span>() {
+        <span class="comment">// Init the database in a temporary directory.</span>
+        <span class="kw">let</span> <span class="ident">dir</span> <span class="op">=</span> <span class="ident">tempdir</span>().<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">Database::new</span>(<span class="ident">dir</span>.<span class="ident">path</span>(), <span class="bool-val">true</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">test_storage</span> <span class="op">=</span> <span class="string">&quot;test-storage&quot;</span>;
+
+        <span class="macro">assert!</span>(<span class="ident">db</span>.<span class="ident">ping_lifetime_data</span>.<span class="ident">is_some</span>());
+
+        <span class="comment">// Attempt to record a known value.</span>
+        <span class="kw">let</span> <span class="ident">test_value1</span> <span class="op">=</span> <span class="string">&quot;test-value1&quot;</span>;
+        <span class="kw">let</span> <span class="ident">test_metric_id1</span> <span class="op">=</span> <span class="string">&quot;telemetry_test.test_name1&quot;</span>;
+        <span class="ident">db</span>.<span class="ident">record_per_lifetime</span>(
+            <span class="ident">Lifetime::Ping</span>,
+            <span class="ident">test_storage</span>,
+            <span class="ident">test_metric_id1</span>,
+            <span class="kw-2">&amp;</span><span class="ident">Metric::String</span>(<span class="ident">test_value1</span>.<span class="ident">to_string</span>()),
+        )
+        .<span class="ident">unwrap</span>();
+
+        {
+            <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">db</span>.<span class="ident">ping_lifetime_data</span> {
+                <span class="prelude-val">Some</span>(<span class="ident">ping_lifetime_data</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ping_lifetime_data</span>,
+                <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic!</span>(<span class="string">&quot;Expected `ping_lifetime_data` to exist here!&quot;</span>),
+            };
+            <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">data</span>.<span class="ident">read</span>().<span class="ident">unwrap</span>();
+            <span class="comment">// Verify that test_value1 is in memory.</span>
+            <span class="macro">assert!</span>(<span class="ident">data</span>
+                .<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;{}#{}&quot;</span>, <span class="ident">test_storage</span>, <span class="ident">test_metric_id1</span>))
+                .<span class="ident">is_some</span>());
+        }
+
+        <span class="comment">// Clear ping lifetime storage for a storage that isn&#39;t test_storage.</span>
+        <span class="comment">// Doesn&#39;t matter what it&#39;s called, just that it isn&#39;t test_storage.</span>
+        <span class="ident">db</span>.<span class="ident">clear_ping_lifetime_storage</span>(<span class="kw-2">&amp;</span>(<span class="ident">test_storage</span>.<span class="ident">to_owned</span>() <span class="op">+</span> <span class="string">&quot;x&quot;</span>))
+            .<span class="ident">unwrap</span>();
+
+        {
+            <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">db</span>.<span class="ident">ping_lifetime_data</span> {
+                <span class="prelude-val">Some</span>(<span class="ident">ping_lifetime_data</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ping_lifetime_data</span>,
+                <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic!</span>(<span class="string">&quot;Expected `ping_lifetime_data` to exist here!&quot;</span>),
+            };
+            <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">data</span>.<span class="ident">read</span>().<span class="ident">unwrap</span>();
+            <span class="comment">// Verify that test_value1 is still in memory.</span>
+            <span class="macro">assert!</span>(<span class="ident">data</span>
+                .<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;{}#{}&quot;</span>, <span class="ident">test_storage</span>, <span class="ident">test_metric_id1</span>))
+                .<span class="ident">is_some</span>());
+        }
+
+        <span class="comment">// Clear test_storage&#39;s ping lifetime storage.</span>
+        <span class="ident">db</span>.<span class="ident">clear_ping_lifetime_storage</span>(<span class="ident">test_storage</span>).<span class="ident">unwrap</span>();
+
+        {
+            <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">db</span>.<span class="ident">ping_lifetime_data</span> {
+                <span class="prelude-val">Some</span>(<span class="ident">ping_lifetime_data</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ping_lifetime_data</span>,
+                <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic!</span>(<span class="string">&quot;Expected `ping_lifetime_data` to exist here!&quot;</span>),
+            };
+            <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">data</span>.<span class="ident">read</span>().<span class="ident">unwrap</span>();
+            <span class="comment">// Verify that test_value1 is no longer in memory.</span>
+            <span class="macro">assert!</span>(<span class="ident">data</span>
+                .<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;{}#{}&quot;</span>, <span class="ident">test_storage</span>, <span class="ident">test_metric_id1</span>))
+                .<span class="ident">is_none</span>());
         }
     }
 
