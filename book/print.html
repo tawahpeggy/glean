@@ -10298,7 +10298,17 @@ Each ping has its own schedule to gather all its locally saved metrics and creat
 <li><a href="appendix/changelog/./js.html">Glean.js</a></li>
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/appendix/changelog/index.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="unreleased-changes"><a class="header" href="#unreleased-changes">Unreleased changes</a></h1>
-<p><a href="https://github.com/mozilla/glean/compare/v41.0.0...main">Full changelog</a></p>
+<p><a href="https://github.com/mozilla/glean/compare/v41.1.0...main">Full changelog</a></p>
+<h1 id="v4110-2021-09-16"><a class="header" href="#v4110-2021-09-16">v41.1.0 (2021-09-16)</a></h1>
+<p><a href="https://github.com/mozilla/glean/compare/v41.0.0...v41.1.0">Full changelog</a></p>
+<ul>
+<li>Rust
+<ul>
+<li>BUGFIX: Ensure RLB persists ping lifetime data on shutdown (<a href="https://github.com/mozilla/glean/pull/1793">#1793</a>)</li>
+<li>Expose <code>persist_ping_lifetime_data</code> in the RLB. Consumers can call this to persist data at convenient times, data is also persisted on shutdown (<a href="https://github.com/mozilla/glean/pull/1793">#1793</a>)</li>
+</ul>
+</li>
+</ul>
 <h1 id="v4100-2021-09-13"><a class="header" href="#v4100-2021-09-13">v41.0.0 (2021-09-13)</a></h1>
 <p><a href="https://github.com/mozilla/glean/compare/v40.2.0...v41.0.0">Full changelog</a></p>
 <ul>
@@ -11999,6 +12009,7 @@ This is a major milestone in using a cross-platform implementation of Glean on t
 <ul>
 <li><a href="https://github.com/mozilla/glean.js/pull/696">#696</a>: Expose Node.js entry point <code>@mozilla/glean/node</code>.</li>
 <li><a href="https://github.com/mozilla/glean.js/pull/695">#695</a>: Implement PlatformInfo module for the Node.js platform.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/730">#695</a>: Implement Uploader module for the Node.js platform.</li>
 </ul>
 <h1 id="v0190-2021-09-03"><a class="header" href="#v0190-2021-09-03">v0.19.0 (2021-09-03)</a></h1>
 <p><a href="https://github.com/mozilla/glean.js/compare/v0.18.1...v0.19.0">Full changelog</a></p>
