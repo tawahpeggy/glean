@@ -170,25 +170,6 @@ all the validations performed are the ones listed in the
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
-<div data-lang="Kotlin" class="tab"></div>
-<div data-lang="Java" class="tab"></div>
-<div data-lang="Swift" class="tab"></div>
-<div data-lang="Python" class="tab"></div>
-<div data-lang="Rust" class="tab"></div>
-<div data-lang="JavaScript" class="tab">
-<pre><code class="language-js">import * as search from &quot;./path/to/generated/files/search.js&quot;;
-
-search.template.set(&quot;https://mysearchengine.com/&quot;);
-</code></pre>
-</div>
-<div data-lang="Firefox Desktop" class="tab"></div>
-</div>
-</div>
-<h3 id="seturl"><a class="header" href="#seturl"><code>setUrl</code></a></h3>
-<p>Set a URL metric to a specific URL value.</p>
-<div class="tabs">
-<div class="tabbar"></div>
-<div class="tabcontents">
 <div data-lang="Kotlin" class="tab">
 <pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Search
 
@@ -201,7 +182,14 @@ Search.template.set(&quot;https://mysearchengine.com/&quot;)
 Search.INSTANCE.template.set(&quot;https://mysearchengine.com/&quot;);
 </code></pre>
 </div>
-<div data-lang="Swift" class="tab"></div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">Search.template.set(&quot;https://mysearchengine.com&quot;)
+
+// Swift's URL type is supported
+let url = URL(string: &quot;https://mysearchengine.com&quot;)!
+Search.template.set(url: url)
+</code></pre>
+</div>
 <div data-lang="Python" class="tab">
 <pre><code class="language-Python">from glean import load_metrics
 metrics = load_metrics(&quot;metrics.yaml&quot;)
@@ -219,6 +207,25 @@ search::template.set(&quot;https://mysearchengine.com/&quot;);
 <span class="boring">}
 </span></code></pre></pre>
 </div>
+<div data-lang="JavaScript" class="tab">
+<pre><code class="language-js">import * as search from &quot;./path/to/generated/files/search.js&quot;;
+
+search.template.set(&quot;https://mysearchengine.com/&quot;);
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h3 id="seturl"><a class="header" href="#seturl"><code>setUrl</code></a></h3>
+<p>Set a URL metric to a specific URL value.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab"></div>
+<div data-lang="Java" class="tab"></div>
+<div data-lang="Swift" class="tab"></div>
+<div data-lang="Python" class="tab"></div>
+<div data-lang="Rust" class="tab"></div>
 <div data-lang="JavaScript" class="tab">
 <pre><code class="language-js">import * as search from &quot;./path/to/generated/files/search.js&quot;;
 
@@ -260,7 +267,12 @@ assertEquals(&quot;https://mysearchengine.com/&quot;, Search.template.testGetVal
 assertEquals(&quot;https://mysearchengine.com/&quot;, Search.INSTANCE.template.testGetValue());
 </code></pre>
 </div>
-<div data-lang="Swift" class="tab"></div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+XCTAssertEqual(&quot;https://mysearchengine.com/&quot;, try Search.template.testGetValue())
+</code></pre>
+</div>
 <div data-lang="Python" class="tab">
 <pre><code class="language-Python">from glean import load_metrics
 metrics = load_metrics(&quot;metrics.yaml&quot;)
@@ -284,6 +296,41 @@ assert_eq!(&quot;https://mysearchengine.com/&quot;, search::template.test_get_va
 assert.strictEqual(&quot;https://mysearchengine.com/&quot;, await search.template.testGetValue());
 </code></pre>
 </div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h3 id="testhasvalue"><a class="header" href="#testhasvalue"><code>testHasValue</code></a></h3>
+<p>Whether or not <strong>any</strong> value was recorded for a given UUID metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Search
+
+assertTrue(Search.template.testHasValue())
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Search
+
+assertTrue(Search.INSTANCE.template.testHasValue());
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+XCTAssert(try Search.template.testHasValue())
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+assert metrics.search.template.test_has_value()
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab"></div>
+<div data-lang="JavaScript" class="tab"></div>
 <div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
@@ -318,7 +365,13 @@ assertEquals(
 );
 </code></pre>
 </div>
-<div data-lang="Swift" class="tab"></div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+XCTAssertEqual(0, Search.template.testGetNumRecordedErrors(.invalidValue))
+XCTAssertEqual(0, Search.template.testGetNumRecordedErrors(.invalidOverflow))
+</code></pre>
+</div>
 <div data-lang="Python" class="tab">
 <pre><code class="language-Python">from glean import load_metrics
 metrics = load_metrics(&quot;metrics.yaml&quot;)
