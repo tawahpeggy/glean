@@ -579,8 +579,6 @@
 <span id="579">579</span>
 <span id="580">580</span>
 <span id="581">581</span>
-<span id="582">582</span>
-<span id="583">583</span>
 </pre><pre class="rust">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -740,7 +738,7 @@
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">block_on_queue</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+    <span class="kw">fn</span> <span class="ident">block_on_queue</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">DispatchError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> (<span class="ident">tx</span>, <span class="ident">rx</span>) <span class="op">=</span> <span class="ident">crossbeam_channel::bounded</span>(<span class="number">0</span>);
 
         <span class="comment">// We explicitly don&#39;t use `self.launch` here.</span>
@@ -752,12 +750,10 @@
             <span class="ident">tx</span>.<span class="ident">send</span>(())
                 .<span class="ident">expect</span>(<span class="string">&quot;(worker) Can&#39;t send message on single-use channel&quot;</span>);
         }));
-        <span class="self">self</span>.<span class="ident">sender</span>
-            .<span class="ident">send</span>(<span class="ident">task</span>)
-            .<span class="ident">expect</span>(<span class="string">&quot;Failed to launch the blocking task&quot;</span>);
+        <span class="self">self</span>.<span class="ident">sender</span>.<span class="ident">send</span>(<span class="ident">task</span>)<span class="question-mark">?</span>;
 
-        <span class="ident">rx</span>.<span class="ident">recv</span>()
-            .<span class="ident">expect</span>(<span class="string">&quot;Failed to receive message on single-use channel&quot;</span>);
+        <span class="ident">rx</span>.<span class="ident">recv</span>()<span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(())
     }
 
     <span class="kw">fn</span> <span class="ident">kill</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">DispatchError</span><span class="op">&gt;</span> {
@@ -910,7 +906,7 @@
         <span class="self">self</span>.<span class="ident">guard</span>.<span class="ident">clone</span>()
     }
 
-    <span class="kw">fn</span> <span class="ident">block_on_queue</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+    <span class="kw">fn</span> <span class="ident">block_on_queue</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">DispatchError</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">guard</span>().<span class="ident">block_on_queue</span>()
     }
 
@@ -974,7 +970,7 @@
             })
             .<span class="ident">expect</span>(<span class="string">&quot;Failed to dispatch the test task&quot;</span>);
 
-        <span class="ident">dispatcher</span>.<span class="ident">block_on_queue</span>();
+        <span class="ident">dispatcher</span>.<span class="ident">block_on_queue</span>().<span class="ident">unwrap</span>();
         <span class="macro">assert!</span>(<span class="ident">thread_canary</span>.<span class="ident">load</span>(<span class="ident">Ordering::SeqCst</span>));
         <span class="macro">assert_eq!</span>(<span class="ident">main_thread_id</span>, <span class="ident">thread::current</span>().<span class="ident">id</span>());
     }
@@ -1042,7 +1038,7 @@
                 .<span class="ident">unwrap</span>();
         }
 
-        <span class="ident">dispatcher</span>.<span class="ident">block_on_queue</span>();
+        <span class="ident">dispatcher</span>.<span class="ident">block_on_queue</span>().<span class="ident">unwrap</span>();
 
         <span class="comment">// This additionally checks that tasks were executed in order.</span>
         <span class="macro">assert_eq!</span>(
@@ -1115,7 +1111,7 @@
                 .<span class="ident">unwrap</span>();
         }
 
-        <span class="ident">dispatcher</span>.<span class="ident">block_on_queue</span>();
+        <span class="ident">dispatcher</span>.<span class="ident">block_on_queue</span>().<span class="ident">unwrap</span>();
 
         <span class="macro">assert_eq!</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">result</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>(), <span class="kw-2">&amp;</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">20</span>]);
     }

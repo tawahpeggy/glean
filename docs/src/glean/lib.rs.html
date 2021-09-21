@@ -807,6 +807,10 @@
 <span id="807">807</span>
 <span id="808">808</span>
 <span id="809">809</span>
+<span id="810">810</span>
+<span id="811">811</span>
+<span id="812">812</span>
+<span id="813">813</span>
 </pre><pre class="rust">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -1234,7 +1238,7 @@
         <span class="ident">was_initialize_called</span>(),
         <span class="string">&quot;initialize was never called. Can&#39;t block on the dispatcher queue.&quot;</span>
     );
-    <span class="ident">dispatcher::block_on_queue</span>()
+    <span class="ident">dispatcher::block_on_queue</span>().<span class="ident">unwrap</span>();
 }
 
 <span class="doccomment">/// Checks if [`initialize`] was ever called.</span>
@@ -1610,7 +1614,11 @@
         });
         <span class="prelude-val">Ok</span>(())
     } <span class="kw">else</span> {
-        <span class="ident">block_on_dispatcher</span>();
+        <span class="comment">// Calling the dispatcher directly to not panic on errors.</span>
+        <span class="comment">// Blocking on the queue will fail when the queue is already shutdown,</span>
+        <span class="comment">// which is equivalent to Glean not being initialized</span>
+        <span class="comment">// (In production Glean can&#39;t be re-initialized).</span>
+        <span class="ident">dispatcher::block_on_queue</span>().<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">Error::not_initialized</span>())<span class="question-mark">?</span>;
         <span class="ident">with_glean</span>(<span class="op">|</span><span class="ident">glean</span><span class="op">|</span> <span class="ident">glean</span>.<span class="ident">persist_ping_lifetime_data</span>())
     }
 }
