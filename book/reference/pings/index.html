@@ -151,18 +151,20 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="pings"><a class="header" href="#pings">Pings</a></h1>
-<h2 id="submission-api"><a class="header" href="#submission-api">Submission API</a></h2>
-<h3 id="submit"><a class="header" href="#submit"><code>submit</code></a></h3>
-<p>Collect and queue a custom ping for eventual uploading.</p>
 <div class="special-quote special-quote-info fa fa-info-circle"></div>
-<h5 id="glean-owned-pings-are-submitted-automatically"><a class="header" href="#glean-owned-pings-are-submitted-automatically">Glean-owned pings are submitted automatically</a></h5>
+<h4 id="glean-owned-pings-are-submitted-automatically"><a class="header" href="#glean-owned-pings-are-submitted-automatically">Glean-owned pings are submitted automatically</a></h4>
 <blockquote>
 <p>Products do not need to submit Glean built-in pings,
 as their scheduling is managed internally. The APIs
 on this page are only relevant for products defining
 <a href="../../user/pings/custom.html#defining-a-custom-ping">custom pings</a>.</p>
 </blockquote>
-<p>By default, if the ping doesn't currently have any events or metrics set, <code>submit</code> will do nothing.  However, if the <code>send_if_empty</code> flag is set to true in the ping definition, it will always be submitted.</p>
+<h2 id="submission-api"><a class="header" href="#submission-api">Submission API</a></h2>
+<h3 id="submit"><a class="header" href="#submit"><code>submit</code></a></h3>
+<p>Collect and queue a custom ping for eventual uploading.</p>
+<p>By default, if the ping doesn't currently have any events or metrics set, <code>submit</code> will do nothing. However, if the <code>send_if_empty</code> flag is set to true in the ping definition, it will always be submitted.</p>
+<p>It is not necessary for the caller to check if Glean is disabled before calling <code>submit</code>.
+If Glean is disabled <code>submit</code> is a no-op.</p>
 <p>For example, to submit the custom ping defined in <a href="../../user/pings/custom.html#defining-a-custom-ping">Adding new custom pings</a>:</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -220,7 +222,6 @@ pings.search.submit(pings.searchReasonCodes.Performed);
 </div>
 </div>
 </div>
-<p>If none of the metrics for the ping contain data the ping is not sent (unless <code>send_if_empty</code> is set to true in the definition file)</p>
 <h2 id="testing-api"><a class="header" href="#testing-api">Testing API</a></h2>
 <h3 id="testbeforenextsubmit"><a class="header" href="#testbeforenextsubmit"><code>testBeforeNextSubmit</code></a></h3>
 <p>Runs a validation function before the ping is collected.</p>
