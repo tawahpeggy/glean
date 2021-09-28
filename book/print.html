@@ -856,7 +856,7 @@ Having a telemetry plan (see above) will help to identify this work early.</p>
 <p>If the value is true or false, use a <a href="user/metrics/../../reference/metrics/boolean.html">boolean metric</a>.</p>
 <p>If the value is a string, use a <a href="user/metrics/../../reference/metrics/string.html">string metric</a>. For example, to record the name of the default search engine.</p>
 <blockquote>
-<p><strong>Beware:</strong> string metrics are exceedingly general, and you are probably best served by selecting the most specific metric for the job, since you'll get better error checking and richer analysis tools for free. For example, avoid storing a number in a string metric --- you probably want a [counter metric]../..(/reference/metrics/counter.html) instead.</p>
+<p><strong>Beware:</strong> string metrics are exceedingly general, and you are probably best served by selecting the most specific metric for the job, since you'll get better error checking and richer analysis tools for free. For example, avoid storing a number in a string metric --- you probably want a <a href="user/metrics/../../reference/metrics/counter.html">counter metric</a> instead.</p>
 </blockquote>
 <p>If you need to store multiple string values in a metric, use a <a href="user/metrics/../../reference/metrics/string_list.html">string list metric</a>. For example, you may want to record the list of other Mozilla products installed on the device.</p>
 <!-- TODO: If you do know the list of values you might store and you just want to record their presence, consider using a [labeled boolean](../../reference/metrics/labeled_boolean.html) instead. -->
@@ -876,9 +876,6 @@ Note that this metric should only be used to measure time on a single thread. If
 <p>If you need to know the time between multiple distinct actions that aren't a simple &quot;begin&quot; and &quot;end&quot; pair, consider using an <a href="user/metrics/../../reference/metrics/event.html">event</a>.</p>
 <h3 id="do-you-need-to-know-the-order-of-events-relative-to-other-events"><a class="header" href="#do-you-need-to-know-the-order-of-events-relative-to-other-events">Do you need to know the order of events relative to other events?</a></h3>
 <p>If you need to know the order of actions relative to other actions, such as, the user performed tasks A, B, and then C, and this is meaningfully different from the user performing tasks A, C and then B, (in other words, the order is meaningful beyond just the <em>fact</em> that a set of tasks were performed), use an <a href="user/metrics/../../reference/metrics/event.html">event metric</a>.</p>
-<blockquote>
-<p><strong>Important:</strong> events are the most expensive metric type to record, transmit, store and analyze, so they should be used sparingly, and only when none of the other metric types are sufficient for answering your question.</p>
-</blockquote>
 <h2 id="for-how-long-do-you-need-to-collect-this-data"><a class="header" href="#for-how-long-do-you-need-to-collect-this-data">For how long do you need to collect this data?</a></h2>
 <p>Think carefully about how long the metric will be needed, and set the <code>expires</code> parameter to disable the metric at the earliest possible time.
 This is an important component of Mozilla's <a href="https://www.mozilla.org/en-US/about/policy/lean-data/stay-lean/">lean data practices</a>.</p>
@@ -1146,7 +1143,7 @@ mozilla::glean::compound_category::metric_name...
 <p>If the value is true or false, use a <a href="user/metrics/../../reference/metrics/boolean.html">boolean metric</a>.</p>
 <p>If the value is a string, use a <a href="user/metrics/../../reference/metrics/string.html">string metric</a>. For example, to record the name of the default search engine.</p>
 <blockquote>
-<p><strong>Beware:</strong> string metrics are exceedingly general, and you are probably best served by selecting the most specific metric for the job, since you'll get better error checking and richer analysis tools for free. For example, avoid storing a number in a string metric --- you probably want a [counter metric]../..(/reference/metrics/counter.html) instead.</p>
+<p><strong>Beware:</strong> string metrics are exceedingly general, and you are probably best served by selecting the most specific metric for the job, since you'll get better error checking and richer analysis tools for free. For example, avoid storing a number in a string metric --- you probably want a <a href="user/metrics/../../reference/metrics/counter.html">counter metric</a> instead.</p>
 </blockquote>
 <p>If you need to store multiple string values in a metric, use a <a href="user/metrics/../../reference/metrics/string_list.html">string list metric</a>. For example, you may want to record the list of other Mozilla products installed on the device.</p>
 <!-- TODO: If you do know the list of values you might store and you just want to record their presence, consider using a [labeled boolean](../../reference/metrics/labeled_boolean.html) instead. -->
@@ -1166,9 +1163,6 @@ Note that this metric should only be used to measure time on a single thread. If
 <p>If you need to know the time between multiple distinct actions that aren't a simple &quot;begin&quot; and &quot;end&quot; pair, consider using an <a href="user/metrics/../../reference/metrics/event.html">event</a>.</p>
 <h3 id="do-you-need-to-know-the-order-of-events-relative-to-other-events-1"><a class="header" href="#do-you-need-to-know-the-order-of-events-relative-to-other-events-1">Do you need to know the order of events relative to other events?</a></h3>
 <p>If you need to know the order of actions relative to other actions, such as, the user performed tasks A, B, and then C, and this is meaningfully different from the user performing tasks A, C and then B, (in other words, the order is meaningful beyond just the <em>fact</em> that a set of tasks were performed), use an <a href="user/metrics/../../reference/metrics/event.html">event metric</a>.</p>
-<blockquote>
-<p><strong>Important:</strong> events are the most expensive metric type to record, transmit, store and analyze, so they should be used sparingly, and only when none of the other metric types are sufficient for answering your question.</p>
-</blockquote>
 <h2 id="for-how-long-do-you-need-to-collect-this-data-1"><a class="header" href="#for-how-long-do-you-need-to-collect-this-data-1">For how long do you need to collect this data?</a></h2>
 <p>Think carefully about how long the metric will be needed, and set the <code>expires</code> parameter to disable the metric at the earliest possible time.
 This is an important component of Mozilla's <a href="https://www.mozilla.org/en-US/about/policy/lean-data/stay-lean/">lean data practices</a>.</p>
@@ -8516,11 +8510,16 @@ say every time a view was open and from where.</p>
 <li>The name of the event.</li>
 <li>A set of key-value pairs, where the keys are predefined in the <code>extra_keys</code> metric parameter, and the values are strings.</li>
 </ul>
-<div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
-<h5 id="important-9"><a class="header" href="#important-9">Important</a></h5>
+<div class="special-quote special-quote-info fa fa-info-circle"></div>
+<h2 id="are-you-sure-you-need-an-event-metric"><a class="header" href="#are-you-sure-you-need-an-event-metric">Are you sure you need an event metric?</a></h2>
 <blockquote>
-<p>Events are the most expensive metric type to record, transmit, store and analyze,
-so they should be used sparingly, and only when none of the other metric types are sufficient for answering your question.</p>
+<p>Event metrics are able to carry a lot of information. As such, they can be used in place
+of other metric types. However, their complexity means they are an
+expensive metric type to record, transmit, store and, most importantly, analyze.</p>
+<p>Make sure to use events only when their complexity is unavoidable,
+e.g. when it is necessary to know the order of events relative to one another.</p>
+<p>When in doubt, refer to the
+<a href="reference/metrics/../../user/metrics/adding-new-metrics.html">metric type choosing guide</a>.</p>
 </blockquote>
 <h2 id="recording-api-11"><a class="header" href="#recording-api-11">Recording API</a></h2>
 <h3 id="recordobject"><a class="header" href="#recordobject"><code>record(object)</code></a></h3>
@@ -9602,7 +9601,7 @@ then the denominator should be defined as a <code>counter</code> and shared betw
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/metrics/rate.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="text"><a class="header" href="#text">Text</a></h1>
 <p>Records a single long Unicode text, used when the limits on <code>String</code> are too low.</p>
 <div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
-<h2 id="important-10"><a class="header" href="#important-10">Important</a></h2>
+<h2 id="important-9"><a class="header" href="#important-9">Important</a></h2>
 <blockquote>
 <p>This type should only be used in special cases when other metrics don't fit.
 See <a href="reference/metrics/text.html#limits">limitations</a> below.<br />

@@ -201,7 +201,7 @@
 <p>If the value is true or false, use a <a href="../../reference/metrics/boolean.html">boolean metric</a>.</p>
 <p>If the value is a string, use a <a href="../../reference/metrics/string.html">string metric</a>. For example, to record the name of the default search engine.</p>
 <blockquote>
-<p><strong>Beware:</strong> string metrics are exceedingly general, and you are probably best served by selecting the most specific metric for the job, since you'll get better error checking and richer analysis tools for free. For example, avoid storing a number in a string metric --- you probably want a [counter metric]../..(/reference/metrics/counter.html) instead.</p>
+<p><strong>Beware:</strong> string metrics are exceedingly general, and you are probably best served by selecting the most specific metric for the job, since you'll get better error checking and richer analysis tools for free. For example, avoid storing a number in a string metric --- you probably want a <a href="../../reference/metrics/counter.html">counter metric</a> instead.</p>
 </blockquote>
 <p>If you need to store multiple string values in a metric, use a <a href="../../reference/metrics/string_list.html">string list metric</a>. For example, you may want to record the list of other Mozilla products installed on the device.</p>
 <!-- TODO: If you do know the list of values you might store and you just want to record their presence, consider using a [labeled boolean](../../reference/metrics/labeled_boolean.html) instead. -->
@@ -221,9 +221,6 @@ Note that this metric should only be used to measure time on a single thread. If
 <p>If you need to know the time between multiple distinct actions that aren't a simple &quot;begin&quot; and &quot;end&quot; pair, consider using an <a href="../../reference/metrics/event.html">event</a>.</p>
 <h3 id="do-you-need-to-know-the-order-of-events-relative-to-other-events"><a class="header" href="#do-you-need-to-know-the-order-of-events-relative-to-other-events">Do you need to know the order of events relative to other events?</a></h3>
 <p>If you need to know the order of actions relative to other actions, such as, the user performed tasks A, B, and then C, and this is meaningfully different from the user performing tasks A, C and then B, (in other words, the order is meaningful beyond just the <em>fact</em> that a set of tasks were performed), use an <a href="../../reference/metrics/event.html">event metric</a>.</p>
-<blockquote>
-<p><strong>Important:</strong> events are the most expensive metric type to record, transmit, store and analyze, so they should be used sparingly, and only when none of the other metric types are sufficient for answering your question.</p>
-</blockquote>
 <h2 id="for-how-long-do-you-need-to-collect-this-data"><a class="header" href="#for-how-long-do-you-need-to-collect-this-data">For how long do you need to collect this data?</a></h2>
 <p>Think carefully about how long the metric will be needed, and set the <code>expires</code> parameter to disable the metric at the earliest possible time.
 This is an important component of Mozilla's <a href="https://www.mozilla.org/en-US/about/policy/lean-data/stay-lean/">lean data practices</a>.</p>

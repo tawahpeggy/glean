@@ -163,11 +163,16 @@ say every time a view was open and from where.</p>
 <li>The name of the event.</li>
 <li>A set of key-value pairs, where the keys are predefined in the <code>extra_keys</code> metric parameter, and the values are strings.</li>
 </ul>
-<div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
-<h5 id="important"><a class="header" href="#important">Important</a></h5>
+<div class="special-quote special-quote-info fa fa-info-circle"></div>
+<h2 id="are-you-sure-you-need-an-event-metric"><a class="header" href="#are-you-sure-you-need-an-event-metric">Are you sure you need an event metric?</a></h2>
 <blockquote>
-<p>Events are the most expensive metric type to record, transmit, store and analyze,
-so they should be used sparingly, and only when none of the other metric types are sufficient for answering your question.</p>
+<p>Event metrics are able to carry a lot of information. As such, they can be used in place
+of other metric types. However, their complexity means they are an
+expensive metric type to record, transmit, store and, most importantly, analyze.</p>
+<p>Make sure to use events only when their complexity is unavoidable,
+e.g. when it is necessary to know the order of events relative to one another.</p>
+<p>When in doubt, refer to the
+<a href="../../user/metrics/adding-new-metrics.html">metric type choosing guide</a>.</p>
 </blockquote>
 <h2 id="recording-api"><a class="header" href="#recording-api">Recording API</a></h2>
 <h3 id="recordobject"><a class="header" href="#recordobject"><code>record(object)</code></a></h3>
