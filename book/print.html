@@ -761,6 +761,17 @@ with a different output format, as shown below.</p>
 number of common mistakes in these files. To run the linter use the <code>glinter</code> command.</p>
 <pre><code class="language-bash">glean_parser glinter path/to/metrics.yaml path/to/pings.yaml
 </code></pre>
+<h2 id="debugging"><a class="header" href="#debugging">Debugging</a></h2>
+<p>By default, the Glean.js QML module uses a minified version of the Glean.js library.
+It may be useful to use the unminified version of the library in order to get proper
+line numbers and function names when debugging crashes.</p>
+<p>The bundle provided contains the unminified version of the library.
+In order to use it, open the <code>glean.js</code> file inside the included module and change the line:</p>
+<pre><code>.import &quot;glean.lib.js&quot; as Glean
+</code></pre>
+<p>to</p>
+<pre><code>.import &quot;glean.dev.js&quot; as Glean
+</code></pre>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/user/adding-glean-to-your-project/qt.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="integrating-glean-for-product-managers"><a class="header" href="#integrating-glean-for-product-managers">Integrating Glean for product managers</a></h1>
 <p>This chapter provides guidance for planning the work involved in integrating Glean into your product, for internal Mozilla customers.
 For a technical coding perspective, see <a href="user/adding-glean-to-your-project/index.html">adding Glean to your project</a>.</p>
@@ -3764,7 +3775,7 @@ is explicitly using the <code>webext</code> target.</p>
 <li><a href="reference/general/../../../docs/glean/fn.shutdown.html">Rust API docs</a></li>
 <li><a href="https://mozilla.github.io/glean.js/classes/core_glean.default.html#shutdown">JavaScript API docs</a></li>
 </ul>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/general/shutdown.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="debugging"><a class="header" href="#debugging">Debugging</a></h1>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/general/shutdown.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="debugging-1"><a class="header" href="#debugging-1">Debugging</a></h1>
 <p>Different platforms have different ways to enable each debug functionality. They may be
 enabled</p>
 <ul>
