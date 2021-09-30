@@ -153,7 +153,16 @@
                         <h1 id="adding-glean-to-your-javascript-project"><a class="header" href="#adding-glean-to-your-javascript-project">Adding Glean to your JavaScript project</a></h1>
 <p>This page provides a step-by-step guide on how to integrate the <a href="https://github.com/mozilla/glean.js/">Glean.js</a> library into a JavaScript project.</p>
 <p>Nevertheless this is just one of the required steps for integrating Glean successfully into a project. Check you the full <a href="./index.html">Glean integration checklist</a> for a comprehensive list of all the steps involved in doing so.</p>
-<p>Currently, these bindings support collecting data from <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions">Browser Extensions</a> (cross-browser) and <a href="https://doc.qt.io/qt-5/qtqml-index.html">Qt/QML applications</a>.</p>
+<p>Currently, these bindings support collecting data from <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions">Browser Extensions</a> (cross-browser), <a href="https://nodejs.org/en/">Node.js</a><sup class="footnote-reference"><a href="#1">1</a></sup> applications or scripts and <a href="https://doc.qt.io/qt-5/qtqml-index.html">Qt/QML applications</a><sup class="footnote-reference"><a href="#2">2</a></sup>.</p>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>The Node.js SDK does not have persistent storage yet. This means, Glean does not persist
+state throughout application runs. For updates on the implementation of this feature in Node.js,
+follow <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1728807">Bug 1728807</a>.</p>
+</div>
+<div class="footnote-definition" id="2"><sup class="footnote-definition-label">2</sup>
+<p>For information on adding Glean to a Qt/QML application, refer to the
+<a href="./qt.html">Qt specific documentation</a>.</p>
+</div>
 <h2 id="requirements"><a class="header" href="#requirements">Requirements</a></h2>
 <ul>
 <li>Node.js &gt;= 12.20.0</li>
@@ -193,27 +202,38 @@ an example on how to define the above permissions as well as how and where to lo
 the <code>webextension-polyfill</code> script.</p>
 </blockquote>
 <h2 id="setting-up-the-dependency"><a class="header" href="#setting-up-the-dependency">Setting up the dependency</a></h2>
-<p>The Glean.js package is distributed as an npm package <a href="https://www.npmjs.com/package/@mozilla/glean"><code>@mozilla/glean</code></a>.</p>
+<p>The Glean.js package is distributed as an npm package
+<a href="https://www.npmjs.com/package/@mozilla/glean"><code>@mozilla/glean</code></a>.</p>
 <p>Install Glean.js in your JavaScript project, by running:</p>
 <pre><code class="language-bash">npm install @mozilla/glean
 </code></pre>
 <p>Then import Glean into your project:</p>
-<pre><code class="language-js">// Glean.js for webextensions
+<pre><code class="language-js">// Glean.js for browser extensions
 //
 // esm
 import Glean from &quot;@mozilla/glean/webext&quot;;
 // cjs
 const { default: Glean } = require(&quot;@mozilla/glean/webext&quot;);
+
+// Glean.js for Node.js
+//
+// esm
+import Glean from &quot;@mozilla/glean/node&quot;;
+// cjs
+const { default: Glean } = require(&quot;@mozilla/glean/node&quot;);
 </code></pre>
 <p>The currently available entry points are:</p>
 <ul>
 <li><code>@mozilla/glean/webext</code></li>
+<li><code>@mozilla/glean/node</code></li>
 </ul>
 <div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
-<h3 id="security-considerations"><a class="header" href="#security-considerations">Security considerations</a></h3>
+<h3 id="browser-extension-security-considerations"><a class="header" href="#browser-extension-security-considerations">Browser extension security considerations</a></h3>
 <blockquote>
-<p>In case of privilege-escalation attack into the context of the web extension using Glean, the malicious scripts would be able to call Glean APIs or use the <code>browser.storage.local</code> APIs directly.
-That would be a risk to Glean data, but not caused by Glean. Glean-using extensions should be careful not to relax the default Content-Security-Policy that generally prevents these attacks.</p>
+<p>In case of privilege-escalation attack into the context of the web extension using Glean,
+the malicious scripts would be able to call Glean APIs or use the <code>browser.storage.local</code> APIs directly.
+That would be a risk to Glean data, but not caused by Glean. Glean-using extensions should be careful
+not to relax the default Content-Security-Policy that generally prevents these attacks.</p>
 </blockquote>
 <h3 id="common-import-errors"><a class="header" href="#common-import-errors">Common import errors</a></h3>
 <h4 id="cannot-find-module-mozillaglean"><a class="header" href="#cannot-find-module-mozillaglean">&quot;Cannot find module '@mozilla/glean'&quot;</a></h4>
