@@ -2937,11 +2937,11 @@ logging.basicConfig(level=logging.DEBUG)
 </code></pre>
 <p>See the <a href="https://docs.python.org/3.8/library/logging.html">Python logging documentation</a> for more information.</p>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/user/debugging/python.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="debugging-javascript-applications-using-gleanjs"><a class="header" href="#debugging-javascript-applications-using-gleanjs">Debugging JavaScript applications using Glean.js</a></h1>
-<p>Debugging features in Python can be enabled through APIs exposed on the Glean object.
+<p>Debugging features in JavaScript can be enabled through APIs exposed on the Glean object.
 For more information on the available features and how to enable them,
 see the <a href="user/debugging/../../reference/debug/index.html">Debugging API reference</a>.</p>
 <h2 id="sending-pings-1"><a class="header" href="#sending-pings-1">Sending pings</a></h2>
-<p>Unlike other platforms, Python doesn't expose convenience methods to send pings on demand.</p>
+<p>Unlike other platforms, JavaScript doesn't expose convenience methods to send pings on demand.</p>
 <p>In case that is necessary, calling the <code>submit</code> function for a given ping,
 such as <code>pings.customPing.submit()</code>, will send it.</p>
 <p>Note that this method is only effective for custom pings.
