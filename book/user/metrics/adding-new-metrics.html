@@ -157,9 +157,9 @@
 <li><a href="#choosing-a-metric-type">Choosing a metric type</a>
 <ul>
 <li><a href="#is-it-a-single-measurement">Is it a single measurement?</a></li>
+<li><a href="#are-you-measuring-user-behavior">Are you measuring user behavior?</a></li>
 <li><a href="#are-you-counting-things">Are you counting things?</a></li>
 <li><a href="#are-you-measuring-time">Are you measuring time?</a></li>
-<li><a href="#do-you-need-to-know-the-order-of-events-relative-to-other-events">Do you need to know the order of events relative to other events?</a></li>
 </ul>
 </li>
 <li><a href="#for-how-long-do-you-need-to-collect-this-data">For how long do you need to collect this data?</a></li>
@@ -207,6 +207,9 @@
 <!-- TODO: If you do know the list of values you might store and you just want to record their presence, consider using a [labeled boolean](../../reference/metrics/labeled_boolean.html) instead. -->
 <!-- If you have a related set of metrics that you want to record strings for, and you don't know the things the strings relate to at build time, use a [labeled string metric](../../reference/metrics/labeled_strings.html). -->
 <p>For all of the metric types in this section that measure single values, it is especially important to consider how the lifetime of the value relates to the ping it is being sent in. Since these metrics don't perform any aggregation on the client side, when a ping containing the metric is submitted, it will contain only the &quot;last known&quot; value for the metric, potentially resulting in <strong>data loss</strong>.  There is further discussion of <a href="#when-should-the-glean-sdk-automatically-clear-the-measurement">metric lifetimes</a> below.</p>
+<h3 id="are-you-measuring-user-behavior"><a class="header" href="#are-you-measuring-user-behavior">Are you measuring user behavior?</a></h3>
+<p>For tracking user behavior, it is usually meaningful to know the over of events that lead to the use of a feature.  Therefore, for user behavior, an <a href="../../reference/metrics/event.html">event metric</a> is usually the best choice.</p>
+<p>Be aware, however, that events can be particularly expensive to transmit, store and analyze, so should not be used for higher-frequency measurements.</p>
 <h3 id="are-you-counting-things"><a class="header" href="#are-you-counting-things">Are you counting things?</a></h3>
 <p>If you want to know how many times something happened, use a <a href="../../reference/metrics/counter.html">counter metric</a>.  If you are counting a group of related things, or you don't know what all of the things to count are at build time, use a <a href="../../reference/metrics/labeled_counters.html">labeled counter metric</a>.</p>
 <p>If you need to know how many times something happened relative to the number of times something else happened,
@@ -219,8 +222,6 @@ use a <a href="../../reference/metrics/rate.html">rate metric</a>.</p>
 Note that this metric should only be used to measure time on a single thread. If multiple overlapping timespans are measured for the same metric, an invalid state error is recorded.</p>
 <p>If you need to measure the relative occurrences of many timings, use a <a href="../../reference/metrics/timing_distribution.html">timing distribution</a>. It builds a histogram of timing measurements, and is safe to record multiple concurrent timespans on different threads.</p>
 <p>If you need to know the time between multiple distinct actions that aren't a simple &quot;begin&quot; and &quot;end&quot; pair, consider using an <a href="../../reference/metrics/event.html">event</a>.</p>
-<h3 id="do-you-need-to-know-the-order-of-events-relative-to-other-events"><a class="header" href="#do-you-need-to-know-the-order-of-events-relative-to-other-events">Do you need to know the order of events relative to other events?</a></h3>
-<p>If you need to know the order of actions relative to other actions, such as, the user performed tasks A, B, and then C, and this is meaningfully different from the user performing tasks A, C and then B, (in other words, the order is meaningful beyond just the <em>fact</em> that a set of tasks were performed), use an <a href="../../reference/metrics/event.html">event metric</a>.</p>
 <h2 id="for-how-long-do-you-need-to-collect-this-data"><a class="header" href="#for-how-long-do-you-need-to-collect-this-data">For how long do you need to collect this data?</a></h2>
 <p>Think carefully about how long the metric will be needed, and set the <code>expires</code> parameter to disable the metric at the earliest possible time.
 This is an important component of Mozilla's <a href="https://www.mozilla.org/en-US/about/policy/lean-data/stay-lean/">lean data practices</a>.</p>
