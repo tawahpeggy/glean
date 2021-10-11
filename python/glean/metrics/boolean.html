@@ -72,10 +72,6 @@ class BooleanMetricType:
             disabled,
         )
 
-    def __del__(self):
-        if getattr(self, &#34;_handle&#34;, 0) != 0:
-            _ffi.lib.glean_destroy_boolean_metric(self._handle)
-
     def set(self, value: bool) -&gt; None:
         &#34;&#34;&#34;
         Set a boolean value.
@@ -191,10 +187,6 @@ previously registered in the metrics.yaml file.</p>
             lifetime.value,
             disabled,
         )
-
-    def __del__(self):
-        if getattr(self, &#34;_handle&#34;, 0) != 0:
-            _ffi.lib.glean_destroy_boolean_metric(self._handle)
 
     def set(self, value: bool) -&gt; None:
         &#34;&#34;&#34;

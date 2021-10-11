@@ -155,7 +155,9 @@ class EventMetricType:
         if getattr(self, &#34;_handle&#34;, 0) != 0:
             _ffi.lib.glean_destroy_event_metric(self._handle)
 
-    def record(self, extra: Optional[Union[Dict[int, str], EventExtras]] = None) -&gt; None:
+    def record(
+        self, extra: Optional[Union[Dict[int, str], EventExtras]] = None
+    ) -&gt; None:
         &#34;&#34;&#34;
         Record an event by using the information provided by the instance of
         this class.
@@ -374,7 +376,9 @@ enforced.</p></div>
         if getattr(self, &#34;_handle&#34;, 0) != 0:
             _ffi.lib.glean_destroy_event_metric(self._handle)
 
-    def record(self, extra: Optional[Union[Dict[int, str], EventExtras]] = None) -&gt; None:
+    def record(
+        self, extra: Optional[Union[Dict[int, str], EventExtras]] = None
+    ) -&gt; None:
         &#34;&#34;&#34;
         Record an event by using the information provided by the instance of
         this class.
@@ -542,7 +546,9 @@ The maximum length for values is 100.</dd>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def record(self, extra: Optional[Union[Dict[int, str], EventExtras]] = None) -&gt; None:
+<pre><code class="python">def record(
+    self, extra: Optional[Union[Dict[int, str], EventExtras]] = None
+) -&gt; None:
     &#34;&#34;&#34;
     Record an event by using the information provided by the instance of
     this class.

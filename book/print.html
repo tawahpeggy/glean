@@ -10383,6 +10383,13 @@ Each ping has its own schedule to gather all its locally saved metrics and creat
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/appendix/changelog/index.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="unreleased-changes"><a class="header" href="#unreleased-changes">Unreleased changes</a></h1>
 <p><a href="https://github.com/mozilla/glean/compare/v42.0.0...main">Full changelog</a></p>
+<ul>
+<li>General
+<ul>
+<li>BUGFIX: Avoid a crash when accessing labeled metrics by caching created objects (<a href="https://github.com/mozilla/glean/pull/1823">#1823</a>).</li>
+</ul>
+</li>
+</ul>
 <h1 id="v4200-2021-10-06"><a class="header" href="#v4200-2021-10-06">v42.0.0 (2021-10-06)</a></h1>
 <p><a href="https://github.com/mozilla/glean/compare/v41.1.1...v42.0.0">Full changelog</a></p>
 <ul>
@@ -10402,6 +10409,11 @@ Each ping has its own schedule to gather all its locally saved metrics and creat
 <ul>
 <li>BUGFIX: No panic if trying to flush ping-lifetime data after shutdown (<a href="https://github.com/mozilla/glean/pull/1800">#1800</a>)</li>
 <li>BREAKING CHANGE: <code>glean::persist_ping_lifetime_data</code> is now async (<a href="https://github.com/mozilla/glean/pull/1812">#1812</a>)</li>
+</ul>
+</li>
+<li>Python
+<ul>
+<li>Glean now officially supports Python 3.10</li>
 </ul>
 </li>
 </ul>
@@ -10491,8 +10503,8 @@ Each ping has its own schedule to gather all its locally saved metrics and creat
 <p>Android</p>
 <ul>
 <li>
-<p><strong>Breaking Change</strong>: Split the Glean Kotlin SDK into two packages: <code>glean</code> and <code>glean-native</code> (<a href="https://github.com/mozilla/glean/pull/1595">#1595</a>).<br />
-Consumers will need to switch to <code>org.mozilla.telemetry:glean-native-forUnitTests</code>.<br />
+<p><strong>Breaking Change</strong>: Split the Glean Kotlin SDK into two packages: <code>glean</code> and <code>glean-native</code> (<a href="https://github.com/mozilla/glean/pull/1595">#1595</a>).
+Consumers will need to switch to <code>org.mozilla.telemetry:glean-native-forUnitTests</code>.
 Old code in <code>build.gradle</code>:</p>
 <pre><code>testImplementation &quot;org.mozilla.telemetry:glean-forUnitTests:${project.ext.glean_version}&quot;
 </code></pre>
