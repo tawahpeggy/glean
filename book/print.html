@@ -12133,8 +12133,15 @@ This is a major milestone in using a cross-platform implementation of Glean on t
 <h3 id="general"><a class="header" href="#general">General</a></h3>
 <p>First testing release.</p>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/appendix/changelog/sdk.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="unreleased-changes-1"><a class="header" href="#unreleased-changes-1">Unreleased changes</a></h1>
-<p><a href="https://github.com/mozilla/glean.js/compare/v0.22.0...main">Full changelog</a></p>
+<p><a href="https://github.com/mozilla/glean.js/compare/v0.23.0...main">Full changelog</a></p>
+<h1 id="v0230-2021-10-12"><a class="header" href="#v0230-2021-10-12">v0.23.0 (2021-10-12)</a></h1>
+<p><a href="https://github.com/mozilla/glean.js/compare/v0.22.0...v0.23.0">Full changelog</a></p>
 <ul>
+<li><a href="https://github.com/mozilla/glean.js/pull/755">#755</a>: Only allow calling of <code>test*</code> functions in &quot;test mode&quot;.
+<ul>
+<li>Glean is put in &quot;test mode&quot; once the <code>Glean.testResetGlean</code> API called.</li>
+</ul>
+</li>
 <li><a href="https://github.com/mozilla/glean.js/pull/811">#811</a>: Apply various fixes to the Qt entry point file.
 <ul>
 <li>Expose <code>ErrorType</code>. This is only useful for testing purposes;</li>
@@ -12143,6 +12150,8 @@ This is a major milestone in using a cross-platform implementation of Glean on t
 <li>Expose the <code>Glean.testRestGlean</code> API.</li>
 </ul>
 </li>
+<li><a href="https://github.com/mozilla/glean.js/pull/822">#822</a>: Fix API reference docs build step.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/825">#825</a>: Accept <code>architecture</code> and <code>osVersion</code> as initialization parameters in Qt. In Qt these values are not easily available from the environment.</li>
 </ul>
 <h1 id="v0220-2021-10-06"><a class="header" href="#v0220-2021-10-06">v0.22.0 (2021-10-06)</a></h1>
 <p><a href="https://github.com/mozilla/glean.js/compare/v0.21.1...v0.22.0">Full changelog</a></p>
@@ -12167,8 +12176,18 @@ This is a major milestone in using a cross-platform implementation of Glean on t
 <h1 id="v0210-2021-09-30"><a class="header" href="#v0210-2021-09-30">v0.21.0 (2021-09-30)</a></h1>
 <p><a href="https://github.com/mozilla/glean.js/compare/v0.20.0...v0.21.0">Full changelog</a></p>
 <ul>
-<li><a href="https://github.com/mozilla/glean.js/pull/754">#754</a>: Change target ECMAScript target from 2015 to 2016 when building for Qt.</li>
-<li><a href="https://github.com/mozilla/glean.js/pull/779">#779</a>: Add a number of workarounds for the Qt Javascript engine.</li>
+<li>
+<p><a href="https://github.com/mozilla/glean.js/pull/754">#754</a>: Change target ECMAScript target from 2015 to 2016 when building for Qt.</p>
+</li>
+<li>
+<p><a href="https://github.com/mozilla/glean.js/pull/779">#779</a>: Add a number of workarounds for the Qt Javascript engine.</p>
+</li>
+<li>
+<p><a href="https://github.com/mozilla/glean.js/pull/775">#775</a>: Disallow calling test only methods outside of test mode.</p>
+<ul>
+<li>NOTE: Test mode is set once the API <code>Glean.testResetGlean</code> is called.</li>
+</ul>
+</li>
 </ul>
 <h1 id="v0200-2021-09-17"><a class="header" href="#v0200-2021-09-17">v0.20.0 (2021-09-17)</a></h1>
 <p><a href="https://github.com/mozilla/glean.js/compare/v0.19.0...v0.20.0">Full changelog</a></p>
