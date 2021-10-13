@@ -715,7 +715,8 @@ To run the linter use the <code>glinter</code> command.</p>
 <p>Nevertheless this is just one of the required steps for integrating Glean successfully into a project. Check you the full <a href="user/adding-glean-to-your-project/./index.html">Glean integration checklist</a> for a comprehensive list of all the steps involved in doing so.</p>
 <h2 id="requirements-2"><a class="header" href="#requirements-2">Requirements</a></h2>
 <ul>
-<li>Python &gt;= 3.6.</li>
+<li>Python &gt;= 3.6</li>
+<li>Qt &gt;= 5.15.2</li>
 </ul>
 <h2 id="setting-up-the-dependency-4"><a class="header" href="#setting-up-the-dependency-4">Setting up the dependency</a></h2>
 <p>Glean.js' Qt/QML build is distributed as an asset with every Glean.js release. In order to download
@@ -792,6 +793,14 @@ In order to use it, open the <code>glean.js</code> file inside the included modu
 <p>to</p>
 <pre><code>.import &quot;glean.dev.js&quot; as Glean
 </code></pre>
+<h2 id="troubleshooting"><a class="header" href="#troubleshooting">Troubleshooting</a></h2>
+<h3 id="submitping-may-cause-crashes-when-debugging-ios-devices"><a class="header" href="#submitping-may-cause-crashes-when-debugging-ios-devices"><code>submitPing</code> may cause crashes when debugging iOS devices</a></h3>
+<p>The <a href="user/adding-glean-to-your-project/../../reference/pings/index.html"><code>submitPing</code></a> function hits a
+<a href="https://bugreports.qt.io/browse/QTBUG-96788">known bug</a> in the Qt JavaScript interpreter.</p>
+<p>This bug is only reproduced in iOS devices, it does not happen in emulators. It also
+<strong>only happens when using the Qt debug library for iOS</strong>.</p>
+<p>There is no way around this bug other than avoiding the Qt debug library for iOS altogether until
+it is fixed. Refer to the <a href="https://doc.qt.io/qt-5/debug.html#debugging-in-macos-and-xcode">the Qt debugging documentation</a> on how to do that.</p>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/user/adding-glean-to-your-project/qt.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="integrating-glean-for-product-managers"><a class="header" href="#integrating-glean-for-product-managers">Integrating Glean for product managers</a></h1>
 <p>This chapter provides guidance for planning the work involved in integrating Glean into your product, for internal Mozilla customers.
 For a technical coding perspective, see <a href="user/adding-glean-to-your-project/index.html">adding Glean to your project</a>.</p>
@@ -2717,7 +2726,7 @@ The next ping is scheduled for 04:00 the next calendar day (reason code <code>re
 <p>This data is what actually arrives in our data pipeline, shown in a web
 interface that is automatically updated when new data arrives. Any data sent from a Glean-instrumented application usually shows up within 10 seconds,
 updating the pages automatically. Pings are retained for 3 weeks.</p>
-<h4 id="troubleshooting"><a class="header" href="#troubleshooting">Troubleshooting</a></h4>
+<h4 id="troubleshooting-1"><a class="header" href="#troubleshooting-1">Troubleshooting</a></h4>
 <p>If nothing is showing up on the dashboard after you set a <code>debugViewTag</code> and you see
 <code>Glean must be enabled before sending pings.</code> in the logs, Glean is disabled. Check with
 the application author on how to re-enable it.</p>
