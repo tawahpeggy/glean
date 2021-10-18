@@ -12236,6 +12236,11 @@ This is a major milestone in using a cross-platform implementation of Glean on t
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/appendix/changelog/sdk.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="unreleased-changes-1"><a class="header" href="#unreleased-changes-1">Unreleased changes</a></h1>
 <p><a href="https://github.com/mozilla/glean.js/compare/v0.23.0...main">Full changelog</a></p>
 <ul>
+<li><a href="https://github.com/mozilla/glean.js/pull/860">#856</a>: Implement the <code>PlatformInfo</code> module for the web platform.
+<ul>
+<li>Out of <code>os</code>, <code>os_version</code>, <code>architecture</code> and <code>locale</code>, on the web platform, we can only retrive <code>os</code> and <code>locale</code> information. The other information will default to the known value <code>Unknown</code> for all pings coming from this platform.</li>
+</ul>
+</li>
 <li><a href="https://github.com/mozilla/glean.js/pull/856">#856</a>: Expose the <code>@mozilla/glean/web</code> entry point for using Glean.js in websites.</li>
 </ul>
 <h1 id="v0230-2021-10-12"><a class="header" href="#v0230-2021-10-12">v0.23.0 (2021-10-12)</a></h1>
