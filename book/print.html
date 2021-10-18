@@ -3524,7 +3524,15 @@ When re-enabling, core Glean metrics will be recomputed at that time.</p>
 <p>The experiment annotations set through this API are not persisted by the Glean SDK.
 The application or consuming library is responsible for setting the relevant experiment annotations at each run.</p>
 </blockquote>
-<h2 id="api"><a class="header" href="#api">API</a></h2>
+<div class="special-quote special-quote-info fa fa-info-circle"></div>
+<h5 id="its-not-required-to-define-experiment-ids-and-branches"><a class="header" href="#its-not-required-to-define-experiment-ids-and-branches">It's not required to define experiment IDs and branches</a></h5>
+<blockquote>
+<p>Experiment IDs and branches don't need to be pre-defined in the Glean SDK registry files.
+Please also note that the <code>extra</code> map is a non-nested arbitrary <code>String</code> to <code>String</code> map. It also has limits on the size of the keys and values defined below.</p>
+</blockquote>
+<h2 id="recording-api"><a class="header" href="#recording-api">Recording API</a></h2>
+<h3 id="setexperimentactive"><a class="header" href="#setexperimentactive"><code>setExperimentActive</code></a></h3>
+<p>Annotates Glean pings with experiment data.</p>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
@@ -3537,25 +3545,9 @@ Glean.setExperimentActive(
     &quot;buttonLabel&quot; to &quot;test&quot;
   )
 )
-// After the experiment terminates, the annotation
-// can be removed.
-Glean.setExperimentInactive(&quot;blue-button-effective&quot;)
-</code></pre>
-<div class="special-quote special-quote-info fa fa-info-circle"></div>
-<h5 id="its-not-required-to-define-experiment-ids-and-branches"><a class="header" href="#its-not-required-to-define-experiment-ids-and-branches">It's not required to define experiment IDs and branches</a></h5>
-<blockquote>
-<p>Experiment IDs and branches don't need to be pre-defined in the Glean SDK registry files.
-Please also note that the <code>extra</code> map is a non-nested arbitrary <code>String</code> to <code>String</code> map. It also has limits on the size of the keys and values defined below.</p>
-</blockquote>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Kotlin">// Was the experiment annotated in Glean pings?
-assertTrue(Glean.testIsExperimentActive(&quot;blue-button-effective&quot;))
-// Was the correct branch reported?
-assertEquals(
-  &quot;branch-with-blue-button&quot;, Glean.testGetExperimentData(&quot;blue-button-effective&quot;)?.branch
-)
 </code></pre>
 </div>
+<div data-lang="Java" class="tab"></div>
 <div data-lang="Swift" class="tab">
 <pre><code class="language-Swift">// Annotate Glean pings with experiments data.
 Glean.shared.setExperimentActive(
@@ -3563,21 +3555,150 @@ Glean.shared.setExperimentActive(
   branch: &quot;branch-with-blue-button&quot;,
   extra: [&quot;buttonLabel&quot;: &quot;test&quot;]
 )
-// After the experiment terminates, the annotation
-// can be removed.
-Glean.shared.setExperimentInactive(experimentId: &quot;blue-button-effective&quot;)
 </code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import Glean
+
+Glean.set_experiment_active(
+  experiment_id=&quot;blue-button-effective&quot;,
+  branch=&quot;branch-with-blue-button&quot;,
+  extra={
+    &quot;buttonLabel&quot;: &quot;test&quot;
+  }
+)
+</code></pre>
+</div>
+<div data-lang="JavaScript" class="tab"></div>
+<div data-lang="Rust" class="tab">
+<pre><code class="language-Rust">let mut extra = HashMap::new();
+extra.insert(&quot;buttonLabel&quot;.to_string(), &quot;test&quot;.to_string());
+glean::set_experiment_active(
+    &quot;blue-button-effective&quot;.to_string(),
+    &quot;branch-with-blue-button&quot;.to_string(),
+    Some(extra),
+);
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
 <div class="special-quote special-quote-info fa fa-info-circle"></div>
-<h5 id="its-not-required-to-define-experiment-ids-and-branches-1"><a class="header" href="#its-not-required-to-define-experiment-ids-and-branches-1">It's not required to define experiment IDs and branches</a></h5>
+<h5 id="at-present-there-is-no-dedicated-c-experiments-api-for-firefox-desktop"><a class="header" href="#at-present-there-is-no-dedicated-c-experiments-api-for-firefox-desktop">At present there is no dedicated C++ Experiments API for Firefox Desktop</a></h5>
 <blockquote>
-<p>Experiment IDs and branch don't need to be pre-defined in the Glean SDK registry files.
-Please also note that the <code>extra</code> is a non-nested <code>Dictionary</code> of type <code>[String: String]</code>.</p>
+<p>If you require one, please <a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Toolkit&amp;component=Telemetry">file a bug</a>.</p>
 </blockquote>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Swift">// Was the experiment annotated in Glean pings?
-XCTAssertTrue(Glean.shared.testIsExperimentActive(experimentId: &quot;blue-button-effective&quot;))
-// Was the correct branch reported?
-XCTAssertEqual(
+<p><strong>JavaScript</strong></p>
+<pre><code class="language-js">let FOG = Cc[&quot;@mozilla.org/toolkit/glean;1&quot;].createInstance(Ci.nsIFOG);
+FOG.setExperimentActive(
+  &quot;blue-button-effective&quot;,
+  &quot;branch-with-blue-button&quot;,
+  {&quot;buttonLabel&quot;: &quot;test&quot;}
+);
+</code></pre>
+</div>
+</div>
+</div>
+<h4 id="limits"><a class="header" href="#limits">Limits</a></h4>
+<ul>
+<li><code>experimentId</code>, <code>branch</code>, and the keys and values of the <code>extra</code>
+field are fixed at a maximum length of 100 bytes.
+Longer strings are truncated.
+(Specifically, length is measured in the number of bytes when the string is encoded in UTF-8.)</li>
+<li><code>extra</code> map is limited to 20 entries.
+If passed a map which contains more elements than this, it is truncated to 20 elements.
+<strong>WARNING</strong> Which items are truncated is nondeterministic due to the unordered nature of maps.
+What's left may not necessarily be the first elements added.</li>
+</ul>
+<h4 id="recorded-errors"><a class="header" href="#recorded-errors">Recorded errors</a></h4>
+<ul>
+<li><a href="reference/general/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>:
+If the values of <code>experimentId</code> or <code>branch</code> are truncated for length,
+if the keys or values in the <code>extra</code> map are truncated for length,
+or if the <code>extra</code> map is truncated for the number of elements.</li>
+</ul>
+<h3 id="setexperimentinactive"><a class="header" href="#setexperimentinactive"><code>setExperimentInactive</code></a></h3>
+<p>Removes the experiment annotation.
+Should be called when the experiment ends.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">Glean.setExperimentInactive(&quot;blue-button-effective&quot;)
+</code></pre>
+</div>
+<div data-lang="Java" class="tab"></div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">Glean.shared.setExperimentInactive(experimentId: &quot;blue-button-effective&quot;)
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import Glean
+
+Glean.set_experiment_inactive(&quot;blue-button-effective&quot;)
+</code></pre>
+</div>
+<div data-lang="JavaScript" class="tab"></div>
+<div data-lang="Rust" class="tab">
+<pre><code class="language-Rust">glean::set_experiment_inactive(&quot;blue-button-effective&quot;.to_string());
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<div class="special-quote special-quote-info fa fa-info-circle"></div>
+<h5 id="at-present-there-is-no-dedicated-c-experiments-api-for-firefox-desktop-1"><a class="header" href="#at-present-there-is-no-dedicated-c-experiments-api-for-firefox-desktop-1">At present there is no dedicated C++ Experiments API for Firefox Desktop</a></h5>
+<blockquote>
+<p>If you require one, please <a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Toolkit&amp;component=Telemetry">file a bug</a>.</p>
+</blockquote>
+<p><strong>JavaScript</strong></p>
+<pre><code class="language-js">let FOG = Cc[&quot;@mozilla.org/toolkit/glean;1&quot;].createInstance(Ci.nsIFOG);
+FOG.setExperimentInactive(&quot;blue-button-effective&quot;);
+</code></pre>
+</div>
+</div>
+</div>
+<h2 id="testing-api"><a class="header" href="#testing-api">Testing API</a></h2>
+<h3 id="testisexperimentactive"><a class="header" href="#testisexperimentactive"><code>testIsExperimentActive</code></a></h3>
+<p>Reveals if the experiment is annotated in Glean pings.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">assertTrue(Glean.testIsExperimentActive(&quot;blue-button-effective&quot;))
+</code></pre>
+</div>
+<div data-lang="Java" class="tab"></div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">XCTAssertTrue(Glean.shared.testIsExperimentActive(experimentId: &quot;blue-button-effective&quot;))
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import Glean
+
+assert Glean.test_is_experiment_active(&quot;blue-button-effective&quot;)
+</code></pre>
+</div>
+<div data-lang="JavaScript" class="tab"></div>
+<div data-lang="Rust" class="tab">
+<pre><code class="language-Rust">assert!(glean::test_is_experiment_active(&quot;blue-button-effective&quot;.to_string());
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h3 id="testgetexperimentdata"><a class="header" href="#testgetexperimentdata"><code>testGetExperimentData</code></a></h3>
+<p>Returns the recorded experiment data including branch and extras.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">assertEquals(
+  &quot;branch-with-blue-button&quot;, Glean.testGetExperimentData(&quot;blue-button-effective&quot;)?.branch
+)
+</code></pre>
+</div>
+<div data-lang="Java" class="tab"></div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">XCTAssertEqual(
   &quot;branch-with-blue-button&quot;,
   Glean.testGetExperimentData(experimentId: &quot;blue-button-effective&quot;)?.branch
 )
@@ -3586,84 +3707,46 @@ XCTAssertEqual(
 <div data-lang="Python" class="tab">
 <pre><code class="language-Python">from glean import Glean
 
-# Annotate Glean pings with experiments data.
-Glean.set_experiment_active(
-  experiment_id=&quot;blue-button-effective&quot;,
-  branch=&quot;branch-with-blue-button&quot;,
-  extra={
-    &quot;buttonLabel&quot;: &quot;test&quot;
-  }
-)
-
-# After the experiment terminates, the annotation
-# can be removed.
-Glean.set_experiment_inactive(&quot;blue-button-effective&quot;)
-</code></pre>
-<div class="special-quote special-quote-info fa fa-info-circle"></div>
-<h5 id="its-not-required-to-define-experiment-ids-and-branches-2"><a class="header" href="#its-not-required-to-define-experiment-ids-and-branches-2">It's not required to define experiment IDs and branches</a></h5>
-<blockquote>
-<p>Experiment IDs and branch don't need to be pre-defined in the Glean SDK registry files.
-Please also note that the <code>extra</code> dict is non-nested arbitrary <code>str</code> to <code>str</code> mapping.</p>
-</blockquote>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Python">from glean import Glean
-
-# Was the experiment annotated in Glean pings?
-assert Glean.test_is_experiment_active(&quot;blue-button-effective&quot;)
-# Was the correct branch reported?
 assert (
     &quot;branch-with-blue-button&quot; ==
     Glean.test_get_experiment_data(&quot;blue-button-effective&quot;).branch
 )
 </code></pre>
 </div>
-<div data-lang="C#" class="tab">
-<pre><code class="language-C#">// Annotate Glean pings with experiments data.
-GleanInstance.SetExperimentActive(
-  experimentId: &quot;blue-button-effective&quot;,
-  branch: &quot;branch-with-blue-button&quot;,
-  extra: new Dictionary&lt;string, string&gt;() {
-    { &quot;buttonLabel&quot;, &quot;test&quot;}
-  }
+<div data-lang="JavaScript" class="tab"></div>
+<div data-lang="Rust" class="tab">
+<pre><code class="language-Rust">assert_eq!(
+    &quot;branch-with-blue-button&quot;,
+    glean::test_get_experiment_data(&quot;blue-button-effective&quot;.to_string()).branch,
 );
-// After the experiment terminates, the annotation
-// can be removed.
-GleanInstance.SetExperimentInactive(&quot;blue-button-effective&quot;);
 </code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
 <div class="special-quote special-quote-info fa fa-info-circle"></div>
-<h5 id="its-not-required-to-define-experiment-ids-and-branches-3"><a class="header" href="#its-not-required-to-define-experiment-ids-and-branches-3">It's not required to define experiment IDs and branches</a></h5>
+<h5 id="at-present-there-is-no-dedicated-c-experiments-api-for-firefox-desktop-2"><a class="header" href="#at-present-there-is-no-dedicated-c-experiments-api-for-firefox-desktop-2">At present there is no dedicated C++ Experiments API for Firefox Desktop</a></h5>
 <blockquote>
-<p>Experiment IDs and branches don't need to be pre-defined in the Glean SDK registry files.
-Please also note that the <code>extra</code> map is a non-nested arbitrary <code>string</code> to <code>string</code> dictionary. It also has limits on the size of the keys and values defined below.</p>
+<p>If you require one, please <a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Toolkit&amp;component=Telemetry">file a bug</a>.</p>
 </blockquote>
-<p>There are test APIs available too:</p>
-<pre><code class="language-C#">// Was the experiment annotated in Glean pings?
-Assert.True(GleanInstance.TestIsExperimentActive(&quot;blue-button-effective&quot;));
-// Was the correct branch reported?
-Assert.Equal(
-  &quot;branch-with-blue-button&quot;, GleanInstance.TestGetExperimentData(&quot;blue-button-effective&quot;).Branch
+<p><strong>JavaScript</strong></p>
+<pre><code class="language-js">let FOG = Cc[&quot;@mozilla.org/toolkit/glean;1&quot;].createInstance(Ci.nsIFOG);
+Assert.equals(
+  &quot;branch-with-blue-button&quot;,
+  FOG.testGetExperimentData(&quot;blue-button-effective&quot;).branch
 );
 </code></pre>
 </div>
 </div>
 </div>
-<h2 id="limits"><a class="header" href="#limits">Limits</a></h2>
-<ul>
-<li><code>experimentId</code>, <code>branch</code>, and the keys and values of the 'extra' field are fixed at a maximum length of 100 bytes. Longer strings used as ids, keys, or values are truncated to their respective maximum length. (Specifically, this is measured in the number of bytes when the string is encoded in UTF-8.)</li>
-<li><code>extra</code> map is limited to 20 entries. If passed a map which contains more elements than this, it is truncated to 20 elements.  <strong>WARNING</strong> Which items are truncated is nondeterministic due to the unordered nature of maps and what's left may not necessarily be the first elements added.</li>
-</ul>
-<div class="special-quote special-quote-info fa fa-info-circle"></div>
-<h5 id="value-truncation"><a class="header" href="#value-truncation">Value truncation</a></h5>
-<blockquote>
-<p>Any truncation that occurs when recording to the Experiments API will result in an <code>invalid_value</code> error being recorded. See <a href="reference/general/../../user/metrics/error-reporting.html">Error Reporting</a> for more information about this type of error.</p>
-</blockquote>
 <h2 id="reference"><a class="header" href="#reference">Reference</a></h2>
 <ul>
-<li><a href="reference/general/../../../python/glean/glean.html">Python API docs</a></li>
+<li><a href="reference/general/../../../swift/Classes/QuantityMetricType.html">Swift API docs</a></li>
+<li><a href="reference/general/../../../python/glean/metrics/quantity.html">Python API docs</a></li>
+<li><a href="reference/general/../../../docs/glean/private/quantity/struct.QuantityMetric.html">Rust API docs</a></li>
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/general/experiments-api.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="registering-custom-pings"><a class="header" href="#registering-custom-pings">Registering custom pings</a></h1>
 <p>After defining <a href="reference/general/../../user/pings/custom.html">custom pings</a> The Glean SDK build generates code from <code>pings.yaml</code> in a <code>Pings</code> object, which must be instantiated so Glean can send pings by name.</p>
-<h2 id="api-1"><a class="header" href="#api-1">API</a></h2>
+<h2 id="api"><a class="header" href="#api">API</a></h2>
 <h3 id="registerpings"><a class="header" href="#registerpings"><code>registerPings</code></a></h3>
 <p>Loads custom ping metadata into your application or library</p>
 <div class="tabs">
@@ -3750,7 +3833,7 @@ completion of each of these tasks.</p>
 thread for all other SDKs.</p>
 </div>
 </blockquote>
-<h2 id="api-2"><a class="header" href="#api-2">API</a></h2>
+<h2 id="api-1"><a class="header" href="#api-1">API</a></h2>
 <h3 id="shutdown"><a class="header" href="#shutdown"><code>shutdown</code></a></h3>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -3841,7 +3924,7 @@ on how to view the logs on the platform you are on.</p>
 <ul>
 <li>The accepted values are <code>true</code> or <code>false</code>. Any other value will be ignored.</li>
 </ul>
-<h2 id="api-3"><a class="header" href="#api-3">API</a></h2>
+<h2 id="api-2"><a class="header" href="#api-2">API</a></h2>
 <h3 id="setlogpings"><a class="header" href="#setlogpings"><code>setLogPings</code></a></h3>
 <p>Enables or disables ping logging.</p>
 <p>This API can safely be called before <code>Glean.initialize</code>.
@@ -3916,7 +3999,7 @@ will contain the <code>X-Debug-Id</code> header with the given tag.</p>
 <li>Any valid HTTP header value is a valid debug view tag (e.g. any value that matches the
 regex <code>[a-zA-Z0-9-]{1,20}</code>). Invalid values will be ignored.</li>
 </ul>
-<h2 id="api-4"><a class="header" href="#api-4">API</a></h2>
+<h2 id="api-3"><a class="header" href="#api-3">API</a></h2>
 <h3 id="setdebugviewtag"><a class="header" href="#setdebugviewtag"><code>setDebugViewTag</code></a></h3>
 <p>Sets the Debug View Tag to a given value.</p>
 <p>This API can safely be called before <code>Glean.initialize</code>.
@@ -3995,7 +4078,7 @@ the whole list will be ignored.</li>
 <li>The special value <code>automation</code> is meant for tagging pings generated on automation: such pings will
 be specially handled on the pipeline (i.e. discarded from <a href="https://docs.telemetry.mozilla.org/cookbooks/bigquery/querying.html#table-layout-and-naming">non-live views</a>).</li>
 </ul>
-<h2 id="api-5"><a class="header" href="#api-5">API</a></h2>
+<h2 id="api-4"><a class="header" href="#api-4">API</a></h2>
 <h3 id="setsourcetags"><a class="header" href="#setsourcetags"><code>setSourceTags</code></a></h3>
 <p>Sets the Source Tags to a given value.</p>
 <p>This API can safely be called before <code>Glean.initialize</code>.
@@ -4162,7 +4245,7 @@ Only the first 16 labels seen by the Glean SDK will be tracked. After that, any 
 </ol>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/metrics/index.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="boolean"><a class="header" href="#boolean">Boolean</a></h1>
 <p>Boolean metrics are used for reporting simple flags.</p>
-<h2 id="recording-api"><a class="header" href="#recording-api">Recording API</a></h2>
+<h2 id="recording-api-1"><a class="header" href="#recording-api-1">Recording API</a></h2>
 <h3 id="set"><a class="header" href="#set"><code>set</code></a></h3>
 <p>Sets a boolean metric to a specific value.</p>
 <div class="tabs">
@@ -4215,9 +4298,9 @@ mozilla::glean::flags::a11y_enabled.Set(false);
 </div>
 </div>
 </div>
-<h4 id="recorded-errors"><a class="header" href="#recorded-errors">Recorded errors</a></h4>
+<h4 id="recorded-errors-1"><a class="header" href="#recorded-errors-1">Recorded errors</a></h4>
 <p>N/A</p>
-<h2 id="testing-api"><a class="header" href="#testing-api">Testing API</a></h2>
+<h2 id="testing-api-1"><a class="header" href="#testing-api-1">Testing API</a></h2>
 <h3 id="testgetvalue"><a class="header" href="#testgetvalue"><code>testGetValue</code></a></h3>
 <p>Gets the recorded value for a given boolean metric.</p>
 <div class="tabs">
@@ -4339,7 +4422,7 @@ refer to the <a href="reference/metrics/../yaml/metrics.html">metrics YAML regis
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/metrics/boolean.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="labeled-booleans"><a class="header" href="#labeled-booleans">Labeled Booleans</a></h1>
 <p>Labeled booleans are used to record different related boolean flags.</p>
-<h2 id="recording-api-1"><a class="header" href="#recording-api-1">Recording API</a></h2>
+<h2 id="recording-api-2"><a class="header" href="#recording-api-2">Recording API</a></h2>
 <h3 id="set-1"><a class="header" href="#set-1"><code>set</code></a></h3>
 <p>Sets one of the labels in a labeled boolean metric to a specific value.</p>
 <div class="tabs">
@@ -4404,7 +4487,7 @@ Glean.accessibility.features[&quot;high_contrast&quot;].set(false);
 </div>
 </div>
 </div>
-<h4 id="recorded-errors-1"><a class="header" href="#recorded-errors-1">Recorded Errors</a></h4>
+<h4 id="recorded-errors-2"><a class="header" href="#recorded-errors-2">Recorded Errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_label</code></a>:
 <ul>
@@ -4413,7 +4496,7 @@ Glean.accessibility.features[&quot;high_contrast&quot;].set(false);
 </ul>
 </li>
 </ul>
-<h2 id="testing-api-1"><a class="header" href="#testing-api-1">Testing API</a></h2>
+<h2 id="testing-api-2"><a class="header" href="#testing-api-2">Testing API</a></h2>
 <h3 id="testgetvalue-1"><a class="header" href="#testgetvalue-1"><code>testGetValue</code></a></h3>
 <p>Gets the recorded value for a given label in a labeled boolean metric.</p>
 <div class="tabs">
@@ -4673,7 +4756,7 @@ Using your own variable for counting and setting the counter yourself could be p
 it will be difficult to reset the value at the exact moment that the value is sent in a ping.
 Instead, just use <code>counter.add</code> to increment the value and let Glean handle resetting the counter.</p>
 </blockquote>
-<h2 id="recording-api-2"><a class="header" href="#recording-api-2">Recording API</a></h2>
+<h2 id="recording-api-3"><a class="header" href="#recording-api-3">Recording API</a></h2>
 <h3 id="add"><a class="header" href="#add"><code>add</code></a></h3>
 <p>Increases the counter by a certain amount. If no amount is passed it defaults to <code>1</code>.</p>
 <div class="tabs">
@@ -4734,7 +4817,7 @@ Glean.controls.refreshPressed.add(5);
 </div>
 </div>
 </div>
-<h4 id="recorded-errors-2"><a class="header" href="#recorded-errors-2">Recorded errors</a></h4>
+<h4 id="recorded-errors-3"><a class="header" href="#recorded-errors-3">Recorded errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: If the counter is incremented by <code>0</code> or a negative value.</li>
 </ul>
@@ -4743,7 +4826,7 @@ Glean.controls.refreshPressed.add(5);
 <li>Only increments;</li>
 <li>Saturates at the largest value that can be represented as a 32-bit signed integer (<code>2147483647</code>).</li>
 </ul>
-<h2 id="testing-api-2"><a class="header" href="#testing-api-2">Testing API</a></h2>
+<h2 id="testing-api-3"><a class="header" href="#testing-api-3">Testing API</a></h2>
 <h3 id="testgetvalue-2"><a class="header" href="#testgetvalue-2"><code>testGetValue</code></a></h3>
 <p>Gets the recorded value for a given counter metric.</p>
 <div class="tabs">
@@ -4941,7 +5024,7 @@ Each counter always starts from <code>0</code>.
 Each time you record to a labeled counter, its value is incremented.
 Unless incremented by a positive value, a counter will not be reported in pings,
 that means: the value <code>0</code> is never sent in a ping.</p>
-<h2 id="recording-api-3"><a class="header" href="#recording-api-3">Recording API</a></h2>
+<h2 id="recording-api-4"><a class="header" href="#recording-api-4">Recording API</a></h2>
 <h3 id="add-1"><a class="header" href="#add-1"><code>add</code></a></h3>
 <p>Increases one of the labels in a labeled counter metric by a certain amount.
 If no amount is passed it defaults to <code>1</code>.</p>
@@ -5026,7 +5109,7 @@ Glean.stability.crashCount[&quot;native_code_crash&quot;].add(3);
 <li>Only increments;</li>
 <li>Saturates at the largest value that can be represented as a 32-bit signed integer.</li>
 </ul>
-<h2 id="testing-api-3"><a class="header" href="#testing-api-3">Testing API</a></h2>
+<h2 id="testing-api-4"><a class="header" href="#testing-api-4">Testing API</a></h2>
 <h3 id="testgetvalue-3"><a class="header" href="#testgetvalue-3"><code>testGetValue</code></a></h3>
 <p>Gets the recorded value for a given label in a labeled counter metric.</p>
 <div class="tabs">
@@ -5280,7 +5363,7 @@ index of the labels is used to report Gecko data through the Glean SDK.</p>
 <blockquote>
 <p>Be careful using arbitrary strings and make sure they can't accidentally contain identifying data (like directory paths or user input).</p>
 </blockquote>
-<h2 id="recording-api-4"><a class="header" href="#recording-api-4">Recording API</a></h2>
+<h2 id="recording-api-5"><a class="header" href="#recording-api-5">Recording API</a></h2>
 <h3 id="set-2"><a class="header" href="#set-2"><code>set</code></a></h3>
 <p>Set a string metric to a specific value.</p>
 <div class="tabs">
@@ -5359,11 +5442,11 @@ mozilla::glean::search_default::name.Set(&quot;wikipedia&quot;_ns);
 <ul>
 <li>Fixed maximum string length: 100. Longer strings are truncated. This is measured in the number of bytes when the string is encoded in UTF-8.</li>
 </ul>
-<h4 id="recorded-errors-3"><a class="header" href="#recorded-errors-3">Recorded errors</a></h4>
+<h4 id="recorded-errors-4"><a class="header" href="#recorded-errors-4">Recorded errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_overflow</code></a>: if the string is too long. (Prior to Glean 31.5.0, this recorded an <code>invalid_value</code>).</li>
 </ul>
-<h2 id="testing-api-4"><a class="header" href="#testing-api-4">Testing API</a></h2>
+<h2 id="testing-api-5"><a class="header" href="#testing-api-5">Testing API</a></h2>
 <h3 id="testgetvalue-4"><a class="header" href="#testgetvalue-4"><code>testGetValue</code></a></h3>
 <p>Get the recorded value for a given string metric.</p>
 <p>The recorded value may have been truncated. See <a href="reference/metrics/string.html#limits">&quot;Limits&quot;</a> section above.</p>
@@ -5585,7 +5668,7 @@ refer to the <a href="reference/metrics/../yaml/metrics.html">metrics YAML regis
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/metrics/string.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="labeled-strings"><a class="header" href="#labeled-strings">Labeled Strings</a></h1>
 <p>Labeled strings record multiple Unicode string values, each under a different label.</p>
-<h2 id="recording-api-5"><a class="header" href="#recording-api-5">Recording API</a></h2>
+<h2 id="recording-api-6"><a class="header" href="#recording-api-6">Recording API</a></h2>
 <h3 id="set-3"><a class="header" href="#set-3"><code>set</code></a></h3>
 <p>Sets one of the labels in a labeled string metric to a specific value.</p>
 <div class="tabs">
@@ -5646,7 +5729,7 @@ mozilla::glean::login::errors_by_stage.Get(&quot;server_auth&quot;_ns).Set(&quot
 <ul>
 <li>Fixed maximum string length: 100. Longer strings are truncated. This is measured in the number of bytes when the string is encoded in UTF-8.</li>
 </ul>
-<h4 id="recorded-errors-4"><a class="header" href="#recorded-errors-4">Recorded Errors</a></h4>
+<h4 id="recorded-errors-5"><a class="header" href="#recorded-errors-5">Recorded Errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_overflow</code></a>: if the string is too long. (Prior to Glean 31.5.0, this recorded an <code>invalid_value</code>).</li>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_label</code></a>:
@@ -5656,7 +5739,7 @@ mozilla::glean::login::errors_by_stage.Get(&quot;server_auth&quot;_ns).Set(&quot
 </ul>
 </li>
 </ul>
-<h2 id="testing-api-5"><a class="header" href="#testing-api-5">Testing API</a></h2>
+<h2 id="testing-api-6"><a class="header" href="#testing-api-6">Testing API</a></h2>
 <h3 id="testgetvalue-5"><a class="header" href="#testgetvalue-5"><code>testGetValue</code></a></h3>
 <p>Gets the recorded value for a given label in a labeled string metric.</p>
 <div class="tabs">
@@ -5894,7 +5977,7 @@ index of the labels is used to report Gecko data through the Glean SDK.</p>
 <blockquote>
 <p>Be careful using arbitrary strings and make sure they can't accidentally contain identifying data (like directory paths or user input).</p>
 </blockquote>
-<h2 id="recording-api-6"><a class="header" href="#recording-api-6">Recording API</a></h2>
+<h2 id="recording-api-7"><a class="header" href="#recording-api-7">Recording API</a></h2>
 <h3 id="add-2"><a class="header" href="#add-2"><code>add</code></a></h3>
 <p>Add a new string to the list.</p>
 <div class="tabs">
@@ -5953,7 +6036,7 @@ Glean.search.engines.add(&quot;duck duck go&quot;);
 </div>
 </div>
 </div>
-<h4 id="recorded-errors-5"><a class="header" href="#recorded-errors-5">Recorded errors</a></h4>
+<h4 id="recorded-errors-6"><a class="header" href="#recorded-errors-6">Recorded errors</a></h4>
 <ul>
 <li><code>invalid_overflow</code>: if the string is too long. (Prior to Glean 31.5.0, this recorded an <code>invalid_value</code>).</li>
 <li><code>invalid_value</code>: if the list is too long.</li>
@@ -6013,7 +6096,7 @@ mozilla::glean::search::engines.Set({&quot;wikipedia&quot;_ns, &quot;duck duck g
 </div>
 </div>
 </div>
-<h4 id="recorded-errors-6"><a class="header" href="#recorded-errors-6">Recorded errors</a></h4>
+<h4 id="recorded-errors-7"><a class="header" href="#recorded-errors-7">Recorded errors</a></h4>
 <ul>
 <li><code>invalid_overflow</code>: if the string is too long. (Prior to Glean 31.5.0, this recorded an <code>invalid_value</code>).</li>
 <li><code>invalid_value</code>: if the list is too long.</li>
@@ -6023,7 +6106,7 @@ mozilla::glean::search::engines.Set({&quot;wikipedia&quot;_ns, &quot;duck duck g
 <li>Fixed maximum string length: 50. Longer strings are truncated. This is measured in the number of bytes when the string is encoded in UTF-8.</li>
 <li>Fixed maximum list length: 20 items. Additional strings are dropped.</li>
 </ul>
-<h2 id="testing-api-6"><a class="header" href="#testing-api-6">Testing API</a></h2>
+<h2 id="testing-api-7"><a class="header" href="#testing-api-7">Testing API</a></h2>
 <h3 id="testgetvalue-6"><a class="header" href="#testgetvalue-6"><code>testGetValue</code></a></h3>
 <p>Gets the recorded value for a given string list metric.</p>
 <div class="tabs">
@@ -6211,7 +6294,7 @@ see <a href="reference/metrics/timing_distribution.html">Timing Distributions</a
 To record absolute times, see <a href="reference/metrics/datetime.html">Datetimes</a>.</p>
 <p>It is not recommended to use timespans in multiple threads,
 since calling <code>start</code> or <code>stop</code> out of order will be recorded as an <code>invalid_state</code> error.</p>
-<h2 id="recording-api-7"><a class="header" href="#recording-api-7">Recording API</a></h2>
+<h2 id="recording-api-8"><a class="header" href="#recording-api-8">Recording API</a></h2>
 <h3 id="start"><a class="header" href="#start"><code>start</code></a></h3>
 <p>Starts tracking time. Uses an internal monotonic timer.</p>
 <div class="tabs">
@@ -6290,7 +6373,7 @@ void OnShowLogin() {
 </div>
 </div>
 </div>
-<h4 id="recorded-errors-7"><a class="header" href="#recorded-errors-7">Recorded errors</a></h4>
+<h4 id="recorded-errors-8"><a class="header" href="#recorded-errors-8">Recorded errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_state</code></a>:
 If the metric is already tracking time (<code>start</code> has already been called and not <code>cancel</code>ed).</li>
@@ -6398,7 +6481,7 @@ void OnLogin() {
 </div>
 </div>
 </div>
-<h4 id="recorded-errors-8"><a class="header" href="#recorded-errors-8">Recorded errors</a></h4>
+<h4 id="recorded-errors-9"><a class="header" href="#recorded-errors-9">Recorded errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_state</code></a>:
 Calling <code>stop</code> without calling <code>start</code> first.</li>
@@ -6620,14 +6703,14 @@ void AfterLogin(uint32_t aDuration) {
 </div>
 </div>
 </div>
-<h4 id="recorded-errors-9"><a class="header" href="#recorded-errors-9">Recorded errors</a></h4>
+<h4 id="recorded-errors-10"><a class="header" href="#recorded-errors-10">Recorded errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>:
 If you attempt to record a negative elapsed duration.</li>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_state</code></a>:
 If you call this API after calling <code>start</code> or call this API multiple times.</li>
 </ul>
-<h2 id="testing-api-7"><a class="header" href="#testing-api-7">Testing API</a></h2>
+<h2 id="testing-api-8"><a class="header" href="#testing-api-8">Testing API</a></h2>
 <h3 id="testgetvalue-7"><a class="header" href="#testgetvalue-7"><code>testGetValue</code></a></h3>
 <p>Get the currently-stored value.</p>
 <div class="tabs">
@@ -6877,7 +6960,7 @@ controls the minimum and maximum values that will recorded:</p>
       Counts how long each page takes to load
     ...
 </code></pre>
-<h2 id="api-6"><a class="header" href="#api-6">API</a></h2>
+<h2 id="api-5"><a class="header" href="#api-5">API</a></h2>
 <p>Now you can use the timing distribution from the application's code.
 Starting a timer returns a timer ID that needs to be used to stop or cancel the timer at a later point.
 Multiple intervals can be measured concurrently.
@@ -7165,7 +7248,7 @@ Longer times will be truncated to the maximum value and an error will be recorde
 <ul>
 <li>How long does it take a page to load?</li>
 </ul>
-<h2 id="recorded-errors-10"><a class="header" href="#recorded-errors-10">Recorded errors</a></h2>
+<h2 id="recorded-errors-11"><a class="header" href="#recorded-errors-11">Recorded errors</a></h2>
 <ul>
 <li><code>invalid_value</code>: If recording a negative timespan.</li>
 <li><code>invalid_state</code>: If a non-existing/stopped timer is stopped again.</li>
@@ -7267,7 +7350,7 @@ power-of-2 units, so &quot;kilobyte&quot; is more correctly a &quot;kibibyte&quo
     memory_unit: kilobyte
     ...
 </code></pre>
-<h2 id="api-7"><a class="header" href="#api-7">API</a></h2>
+<h2 id="api-6"><a class="header" href="#api-6">API</a></h2>
 <p>Now you can use the memory distribution from the application's code.</p>
 <blockquote>
 <p><strong>Note</strong> The data <em>provided</em> to the <code>accumulate</code> method is in the configured memory unit specified in the <code>metrics.yaml</code> file. The data <em>recorded</em>, on the other hand, is always in <strong>bytes</strong>.</p>
@@ -7456,7 +7539,7 @@ Assert.equal(1, Object.entries(data.values).reduce(([bucket, count], sum) =&gt; 
 <ul>
 <li>What is the distribution of the size of heap allocations?</li>
 </ul>
-<h2 id="recorded-errors-11"><a class="header" href="#recorded-errors-11">Recorded errors</a></h2>
+<h2 id="recorded-errors-12"><a class="header" href="#recorded-errors-12">Recorded errors</a></h2>
 <ul>
 <li><code>invalid_value</code>: If recording a negative memory size.</li>
 <li><code>invalid_value</code>: If recording a size larger than 1TB.</li>
@@ -7535,7 +7618,7 @@ This means that, if the configured memory unit is not <code>byte</code>, the dat
 </blockquote>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/metrics/memory_distribution.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="uuid"><a class="header" href="#uuid">UUID</a></h1>
 <p>UUIDs metrics are used to record values that uniquely identify some entity, such as a client id.</p>
-<h2 id="recording-api-8"><a class="header" href="#recording-api-8">Recording API</a></h2>
+<h2 id="recording-api-9"><a class="header" href="#recording-api-9">Recording API</a></h2>
 <h3 id="generateandset"><a class="header" href="#generateandset"><code>generateAndSet</code></a></h3>
 <p>Sets a UUID metric to a randomly generated <a href="https://datatracker.ietf.org/doc/html/rfc4122">UUID</a> value (UUID v4) .</p>
 <div class="tabs">
@@ -7669,11 +7752,11 @@ Glean.user.clientId.set(uuid);
 </div>
 </div>
 </div>
-<h4 id="recorded-errors-12"><a class="header" href="#recorded-errors-12">Recorded errors</a></h4>
+<h4 id="recorded-errors-13"><a class="header" href="#recorded-errors-13">Recorded errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: if the value is set to a string that is not a UUID (only applies for dynamically-typed languages, such as Python).</li>
 </ul>
-<h2 id="testing-api-8"><a class="header" href="#testing-api-8">Testing API</a></h2>
+<h2 id="testing-api-9"><a class="header" href="#testing-api-9">Testing API</a></h2>
 <h3 id="testgetvalue-8"><a class="header" href="#testgetvalue-8"><code>testGetValue</code></a></h3>
 <p>Gets the recorded value for a given UUID metric.</p>
 <div class="tabs">
@@ -7895,7 +7978,7 @@ refer to the <a href="reference/metrics/../yaml/metrics.html">metrics YAML regis
 all the validations performed are the ones listed in the
 <a href="reference/metrics/url.html#recorded-errors">&quot;Recorded errors&quot;</a> section of this page.</p>
 </div>
-<h2 id="recording-api-9"><a class="header" href="#recording-api-9">Recording API</a></h2>
+<h2 id="recording-api-10"><a class="header" href="#recording-api-10">Recording API</a></h2>
 <h3 id="set-6"><a class="header" href="#set-6"><code>set</code></a></h3>
 <p>Set a URL metric to a specific string value.</p>
 <div class="tabs">
@@ -7966,7 +8049,7 @@ search.template.setUrl(new URL(&quot;https://mysearchengine.com/&quot;));
 <div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
-<h4 id="recorded-errors-13"><a class="header" href="#recorded-errors-13">Recorded errors</a></h4>
+<h4 id="recorded-errors-14"><a class="header" href="#recorded-errors-14">Recorded errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>:
 <ul>
@@ -7980,7 +8063,7 @@ search.template.setUrl(new URL(&quot;https://mysearchengine.com/&quot;));
 <ul>
 <li>Fixed maximum URL length: 2048. Longer URLs are dropped.</li>
 </ul>
-<h2 id="testing-api-9"><a class="header" href="#testing-api-9">Testing API</a></h2>
+<h2 id="testing-api-10"><a class="header" href="#testing-api-10">Testing API</a></h2>
 <h3 id="testgetvalue-9"><a class="header" href="#testgetvalue-9"><code>testGetValue</code></a></h3>
 <p>Gets the recorded value for a given URL metric as a (unencoded) string.</p>
 <div class="tabs">
@@ -8199,7 +8282,7 @@ for example the date and time that the application was first run.</p>
 <p>The device's offset from UTC is recorded and sent with the Datetime value in the ping.</p>
 <p>To record a single elapsed time, see <a href="reference/metrics/timespan.html">Timespan</a>.
 To measure the distribution of multiple timespans, see <a href="reference/metrics/timing_distribution.html">Timing Distributions</a>.</p>
-<h2 id="recording-api-10"><a class="header" href="#recording-api-10">Recording API</a></h2>
+<h2 id="recording-api-11"><a class="header" href="#recording-api-11">Recording API</a></h2>
 <h3 id="set-7"><a class="header" href="#set-7"><code>set</code></a></h3>
 <p>Sets a datetime metric to a specific date value. Defaults to now.</p>
 <div class="tabs">
@@ -8269,11 +8352,11 @@ Glean.install.firstRun.set(value.getTime() * 1000);
 </div>
 </div>
 </div>
-<h4 id="recorded-errors-14"><a class="header" href="#recorded-errors-14">Recorded errors</a></h4>
+<h4 id="recorded-errors-15"><a class="header" href="#recorded-errors-15">Recorded errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: Setting the date time to an invalid value.</li>
 </ul>
-<h2 id="testing-api-10"><a class="header" href="#testing-api-10">Testing API</a></h2>
+<h2 id="testing-api-11"><a class="header" href="#testing-api-11">Testing API</a></h2>
 <h3 id="testgetvalue-10"><a class="header" href="#testgetvalue-10"><code>testGetValue</code></a></h3>
 <p>Get the recorded value for a given datetime metric as a language-specific Date object.</p>
 <div class="tabs">
@@ -8549,7 +8632,7 @@ say every time a view was open and from where.</p>
 <p>When in doubt, refer to the
 <a href="reference/metrics/../../user/metrics/adding-new-metrics.html">metric type choosing guide</a>.</p>
 </blockquote>
-<h2 id="recording-api-11"><a class="header" href="#recording-api-11">Recording API</a></h2>
+<h2 id="recording-api-12"><a class="header" href="#recording-api-12">Recording API</a></h2>
 <h3 id="recordobject"><a class="header" href="#recordobject"><code>record(object)</code></a></h3>
 <p><em>Added in: <a href="reference/metrics/../../appendix/changelog/sdk.html#v3800-2021-05-12">v38.0.0</a></em></p>
 <p>Record a new event, with optional typed extra values.
@@ -8663,11 +8746,11 @@ views.loginOpened.record({ sourceOfLogin: &quot;toolbar&quot; });
 <div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
-<h4 id="recorded-errors-15"><a class="header" href="#recorded-errors-15">Recorded errors</a></h4>
+<h4 id="recorded-errors-16"><a class="header" href="#recorded-errors-16">Recorded errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_overflow</code></a>: if any of the values in the <code>extras</code> object are greater than 50 bytes in length.  (Prior to Glean 31.5.0, this recorded an <code>invalid_value</code>).</li>
 </ul>
-<h2 id="testing-api-11"><a class="header" href="#testing-api-11">Testing API</a></h2>
+<h2 id="testing-api-12"><a class="header" href="#testing-api-12">Testing API</a></h2>
 <h3 id="testgetvalue-11"><a class="header" href="#testgetvalue-11"><code>testGetValue</code></a></h3>
 <p>Get the list of recorded events.</p>
 <div class="tabs">
@@ -8906,7 +8989,7 @@ Otherwise, look at the standard distribution metric types:</p>
 <blockquote>
 <p><strong>Note</strong>: Custom distributions are currently not universally supported. See below for available APIs.</p>
 </blockquote>
-<h2 id="recording-api-12"><a class="header" href="#recording-api-12">Recording API</a></h2>
+<h2 id="recording-api-13"><a class="header" href="#recording-api-13">Recording API</a></h2>
 <h3 id="accumulatesamples"><a class="header" href="#accumulatesamples"><code>accumulateSamples</code></a></h3>
 <p>Accumulate the provided samples in the metric.</p>
 <div class="tabs">
@@ -8945,11 +9028,11 @@ mozilla::glean::graphics::checkerboard_peak.AccumulateSamples({ 23 });
 <li>The maximum value of <code>bucket_count</code> is 100.</li>
 <li>Only non-negative values may be recorded (<code>&gt;= 0</code>).</li>
 </ul>
-<h4 id="recorded-errors-16"><a class="header" href="#recorded-errors-16">Recorded errors</a></h4>
+<h4 id="recorded-errors-17"><a class="header" href="#recorded-errors-17">Recorded errors</a></h4>
 <ul>
 <li><code>invalid_value</code>: If recording a negative value.</li>
 </ul>
-<h2 id="testing-api-12"><a class="header" href="#testing-api-12">Testing API</a></h2>
+<h2 id="testing-api-13"><a class="header" href="#testing-api-13">Testing API</a></h2>
 <h3 id="testgetvalue-12"><a class="header" href="#testgetvalue-12"><code>testGetValue</code></a></h3>
 <p>Gets the recorded value for a given counter metric.</p>
 <div class="tabs">
@@ -9154,7 +9237,7 @@ For example, the width of the display in pixels.</p>
 <p>If you need to <em>count</em> something (e.g. the number of times a button is pressed)
 prefer using the <a href="reference/metrics/./counter.html">Counter</a> metric type, which has a specific API for counting things.</p>
 </blockquote>
-<h2 id="recording-api-13"><a class="header" href="#recording-api-13">Recording API</a></h2>
+<h2 id="recording-api-14"><a class="header" href="#recording-api-14">Recording API</a></h2>
 <h3 id="set-8"><a class="header" href="#set-8"><code>set</code></a></h3>
 <p>Sets a quantity metric to a specific value.</p>
 <div class="tabs">
@@ -9215,11 +9298,11 @@ mozilla::glean::display::width.Set(innerHeight);
 <ul>
 <li>Quantities must be non-negative integers or 0.</li>
 </ul>
-<h4 id="recorded-errors-17"><a class="header" href="#recorded-errors-17">Recorded errors</a></h4>
+<h4 id="recorded-errors-18"><a class="header" href="#recorded-errors-18">Recorded errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: If a negative value is passed in.</li>
 </ul>
-<h2 id="testing-api-13"><a class="header" href="#testing-api-13">Testing API</a></h2>
+<h2 id="testing-api-14"><a class="header" href="#testing-api-14">Testing API</a></h2>
 <h3 id="testgetvalue-13"><a class="header" href="#testgetvalue-13"><code>testGetValue</code></a></h3>
 <p>Gets the recorded value for a given quantity metric.</p>
 <div class="tabs">
@@ -9444,7 +9527,7 @@ Using your own variable for counting and setting the metric yourself could be pr
 ping scheduling will make it difficult to ensure the metric is at the correct value at the correct time.
 Instead, count to the numerator and denominator as you go.</p>
 </blockquote>
-<h2 id="recording-api-14"><a class="header" href="#recording-api-14">Recording API</a></h2>
+<h2 id="recording-api-15"><a class="header" href="#recording-api-15">Recording API</a></h2>
 <h3 id="addtonumerator--addtodenominator"><a class="header" href="#addtonumerator--addtodenominator"><code>addToNumerator</code> / <code>addToDenominator</code></a></h3>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -9495,7 +9578,7 @@ Glean.network.httpConnectionError.addToDenominator(1);
 </div>
 </div>
 </div>
-<h4 id="recorded-errors-18"><a class="header" href="#recorded-errors-18">Recorded errors</a></h4>
+<h4 id="recorded-errors-19"><a class="header" href="#recorded-errors-19">Recorded errors</a></h4>
 <ul>
 <li><code>invalid_value</code>: If either numerator or denominator is incremented by a negative value.</li>
 </ul>
@@ -9504,7 +9587,7 @@ Glean.network.httpConnectionError.addToDenominator(1);
 <li>Numerator and Denominator only increment.</li>
 <li>Numerator and Denominator saturate at the largest value that can be represented as a 32-bit signed integer (<code>2147483647</code>).</li>
 </ul>
-<h2 id="testing-api-14"><a class="header" href="#testing-api-14">Testing API</a></h2>
+<h2 id="testing-api-15"><a class="header" href="#testing-api-15">Testing API</a></h2>
 <h3 id="testgetvalue-14"><a class="header" href="#testgetvalue-14"><code>testGetValue</code></a></h3>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -9635,7 +9718,7 @@ then the denominator should be defined as a <code>counter</code> and shared betw
 See <a href="reference/metrics/text.html#limits">limitations</a> below.<br />
 Reach out to the Glean team before using this.</p>
 </blockquote>
-<h2 id="recording-api-15"><a class="header" href="#recording-api-15">Recording API</a></h2>
+<h2 id="recording-api-16"><a class="header" href="#recording-api-16">Recording API</a></h2>
 <h3 id="set-9"><a class="header" href="#set-9"><code>set</code></a></h3>
 <p>Sets a text metric to a specific value.</p>
 <div class="tabs">
@@ -9663,11 +9746,11 @@ article.content.set(extractedText);
 <li>Fixed maximum text length: 200 kilobytes.
 Longer text is truncated. This is measured in the number of bytes when the string is encoded in UTF-8.</li>
 </ul>
-<h4 id="recorded-errors-19"><a class="header" href="#recorded-errors-19">Recorded errors</a></h4>
+<h4 id="recorded-errors-20"><a class="header" href="#recorded-errors-20">Recorded errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_overflow</code></a>: if the text is too long.</li>
 </ul>
-<h2 id="testing-api-15"><a class="header" href="#testing-api-15">Testing API</a></h2>
+<h2 id="testing-api-16"><a class="header" href="#testing-api-16">Testing API</a></h2>
 <h3 id="testgetvalue-15"><a class="header" href="#testgetvalue-15"><code>testGetValue</code></a></h3>
 <p>Gets the recorded value for a given text metric.</p>
 <div class="tabs">
@@ -9808,7 +9891,7 @@ pings.search.submit(pings.searchReasonCodes.Performed);
 </div>
 </div>
 </div>
-<h2 id="testing-api-16"><a class="header" href="#testing-api-16">Testing API</a></h2>
+<h2 id="testing-api-17"><a class="header" href="#testing-api-17">Testing API</a></h2>
 <h3 id="testbeforenextsubmit"><a class="header" href="#testbeforenextsubmit"><code>testBeforeNextSubmit</code></a></h3>
 <p>Runs a validation function before the ping is collected.</p>
 <div class="tabs">
@@ -10391,6 +10474,13 @@ Each ping has its own schedule to gather all its locally saved metrics and creat
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/appendix/changelog/index.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="unreleased-changes"><a class="header" href="#unreleased-changes">Unreleased changes</a></h1>
 <p><a href="https://github.com/mozilla/glean/compare/v42.0.1...main">Full changelog</a></p>
+<ul>
+<li>Rust
+<ul>
+<li>Backwards-compatible API Change: Make experiment test APIs public. (<a href="https://github.com/mozilla/glean/pull/1834">#1834</a>)</li>
+</ul>
+</li>
+</ul>
 <h1 id="v4201-2021-10-11"><a class="header" href="#v4201-2021-10-11">v42.0.1 (2021-10-11)</a></h1>
 <p><a href="https://github.com/mozilla/glean/compare/v42.0.0...v42.0.1">Full changelog</a></p>
 <ul>

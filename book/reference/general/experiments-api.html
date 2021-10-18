@@ -158,7 +158,15 @@
 <p>The experiment annotations set through this API are not persisted by the Glean SDK.
 The application or consuming library is responsible for setting the relevant experiment annotations at each run.</p>
 </blockquote>
-<h2 id="api"><a class="header" href="#api">API</a></h2>
+<div class="special-quote special-quote-info fa fa-info-circle"></div>
+<h5 id="its-not-required-to-define-experiment-ids-and-branches"><a class="header" href="#its-not-required-to-define-experiment-ids-and-branches">It's not required to define experiment IDs and branches</a></h5>
+<blockquote>
+<p>Experiment IDs and branches don't need to be pre-defined in the Glean SDK registry files.
+Please also note that the <code>extra</code> map is a non-nested arbitrary <code>String</code> to <code>String</code> map. It also has limits on the size of the keys and values defined below.</p>
+</blockquote>
+<h2 id="recording-api"><a class="header" href="#recording-api">Recording API</a></h2>
+<h3 id="setexperimentactive"><a class="header" href="#setexperimentactive"><code>setExperimentActive</code></a></h3>
+<p>Annotates Glean pings with experiment data.</p>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
@@ -171,25 +179,9 @@ Glean.setExperimentActive(
     &quot;buttonLabel&quot; to &quot;test&quot;
   )
 )
-// After the experiment terminates, the annotation
-// can be removed.
-Glean.setExperimentInactive(&quot;blue-button-effective&quot;)
-</code></pre>
-<div class="special-quote special-quote-info fa fa-info-circle"></div>
-<h5 id="its-not-required-to-define-experiment-ids-and-branches"><a class="header" href="#its-not-required-to-define-experiment-ids-and-branches">It's not required to define experiment IDs and branches</a></h5>
-<blockquote>
-<p>Experiment IDs and branches don't need to be pre-defined in the Glean SDK registry files.
-Please also note that the <code>extra</code> map is a non-nested arbitrary <code>String</code> to <code>String</code> map. It also has limits on the size of the keys and values defined below.</p>
-</blockquote>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Kotlin">// Was the experiment annotated in Glean pings?
-assertTrue(Glean.testIsExperimentActive(&quot;blue-button-effective&quot;))
-// Was the correct branch reported?
-assertEquals(
-  &quot;branch-with-blue-button&quot;, Glean.testGetExperimentData(&quot;blue-button-effective&quot;)?.branch
-)
 </code></pre>
 </div>
+<div data-lang="Java" class="tab"></div>
 <div data-lang="Swift" class="tab">
 <pre><code class="language-Swift">// Annotate Glean pings with experiments data.
 Glean.shared.setExperimentActive(
@@ -197,21 +189,150 @@ Glean.shared.setExperimentActive(
   branch: &quot;branch-with-blue-button&quot;,
   extra: [&quot;buttonLabel&quot;: &quot;test&quot;]
 )
-// After the experiment terminates, the annotation
-// can be removed.
-Glean.shared.setExperimentInactive(experimentId: &quot;blue-button-effective&quot;)
 </code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import Glean
+
+Glean.set_experiment_active(
+  experiment_id=&quot;blue-button-effective&quot;,
+  branch=&quot;branch-with-blue-button&quot;,
+  extra={
+    &quot;buttonLabel&quot;: &quot;test&quot;
+  }
+)
+</code></pre>
+</div>
+<div data-lang="JavaScript" class="tab"></div>
+<div data-lang="Rust" class="tab">
+<pre><code class="language-Rust">let mut extra = HashMap::new();
+extra.insert(&quot;buttonLabel&quot;.to_string(), &quot;test&quot;.to_string());
+glean::set_experiment_active(
+    &quot;blue-button-effective&quot;.to_string(),
+    &quot;branch-with-blue-button&quot;.to_string(),
+    Some(extra),
+);
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
 <div class="special-quote special-quote-info fa fa-info-circle"></div>
-<h5 id="its-not-required-to-define-experiment-ids-and-branches-1"><a class="header" href="#its-not-required-to-define-experiment-ids-and-branches-1">It's not required to define experiment IDs and branches</a></h5>
+<h5 id="at-present-there-is-no-dedicated-c-experiments-api-for-firefox-desktop"><a class="header" href="#at-present-there-is-no-dedicated-c-experiments-api-for-firefox-desktop">At present there is no dedicated C++ Experiments API for Firefox Desktop</a></h5>
 <blockquote>
-<p>Experiment IDs and branch don't need to be pre-defined in the Glean SDK registry files.
-Please also note that the <code>extra</code> is a non-nested <code>Dictionary</code> of type <code>[String: String]</code>.</p>
+<p>If you require one, please <a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Toolkit&amp;component=Telemetry">file a bug</a>.</p>
 </blockquote>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Swift">// Was the experiment annotated in Glean pings?
-XCTAssertTrue(Glean.shared.testIsExperimentActive(experimentId: &quot;blue-button-effective&quot;))
-// Was the correct branch reported?
-XCTAssertEqual(
+<p><strong>JavaScript</strong></p>
+<pre><code class="language-js">let FOG = Cc[&quot;@mozilla.org/toolkit/glean;1&quot;].createInstance(Ci.nsIFOG);
+FOG.setExperimentActive(
+  &quot;blue-button-effective&quot;,
+  &quot;branch-with-blue-button&quot;,
+  {&quot;buttonLabel&quot;: &quot;test&quot;}
+);
+</code></pre>
+</div>
+</div>
+</div>
+<h4 id="limits"><a class="header" href="#limits">Limits</a></h4>
+<ul>
+<li><code>experimentId</code>, <code>branch</code>, and the keys and values of the <code>extra</code>
+field are fixed at a maximum length of 100 bytes.
+Longer strings are truncated.
+(Specifically, length is measured in the number of bytes when the string is encoded in UTF-8.)</li>
+<li><code>extra</code> map is limited to 20 entries.
+If passed a map which contains more elements than this, it is truncated to 20 elements.
+<strong>WARNING</strong> Which items are truncated is nondeterministic due to the unordered nature of maps.
+What's left may not necessarily be the first elements added.</li>
+</ul>
+<h4 id="recorded-errors"><a class="header" href="#recorded-errors">Recorded errors</a></h4>
+<ul>
+<li><a href="../../user/metrics/error-reporting.html"><code>invalid_value</code></a>:
+If the values of <code>experimentId</code> or <code>branch</code> are truncated for length,
+if the keys or values in the <code>extra</code> map are truncated for length,
+or if the <code>extra</code> map is truncated for the number of elements.</li>
+</ul>
+<h3 id="setexperimentinactive"><a class="header" href="#setexperimentinactive"><code>setExperimentInactive</code></a></h3>
+<p>Removes the experiment annotation.
+Should be called when the experiment ends.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">Glean.setExperimentInactive(&quot;blue-button-effective&quot;)
+</code></pre>
+</div>
+<div data-lang="Java" class="tab"></div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">Glean.shared.setExperimentInactive(experimentId: &quot;blue-button-effective&quot;)
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import Glean
+
+Glean.set_experiment_inactive(&quot;blue-button-effective&quot;)
+</code></pre>
+</div>
+<div data-lang="JavaScript" class="tab"></div>
+<div data-lang="Rust" class="tab">
+<pre><code class="language-Rust">glean::set_experiment_inactive(&quot;blue-button-effective&quot;.to_string());
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<div class="special-quote special-quote-info fa fa-info-circle"></div>
+<h5 id="at-present-there-is-no-dedicated-c-experiments-api-for-firefox-desktop-1"><a class="header" href="#at-present-there-is-no-dedicated-c-experiments-api-for-firefox-desktop-1">At present there is no dedicated C++ Experiments API for Firefox Desktop</a></h5>
+<blockquote>
+<p>If you require one, please <a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Toolkit&amp;component=Telemetry">file a bug</a>.</p>
+</blockquote>
+<p><strong>JavaScript</strong></p>
+<pre><code class="language-js">let FOG = Cc[&quot;@mozilla.org/toolkit/glean;1&quot;].createInstance(Ci.nsIFOG);
+FOG.setExperimentInactive(&quot;blue-button-effective&quot;);
+</code></pre>
+</div>
+</div>
+</div>
+<h2 id="testing-api"><a class="header" href="#testing-api">Testing API</a></h2>
+<h3 id="testisexperimentactive"><a class="header" href="#testisexperimentactive"><code>testIsExperimentActive</code></a></h3>
+<p>Reveals if the experiment is annotated in Glean pings.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">assertTrue(Glean.testIsExperimentActive(&quot;blue-button-effective&quot;))
+</code></pre>
+</div>
+<div data-lang="Java" class="tab"></div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">XCTAssertTrue(Glean.shared.testIsExperimentActive(experimentId: &quot;blue-button-effective&quot;))
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import Glean
+
+assert Glean.test_is_experiment_active(&quot;blue-button-effective&quot;)
+</code></pre>
+</div>
+<div data-lang="JavaScript" class="tab"></div>
+<div data-lang="Rust" class="tab">
+<pre><code class="language-Rust">assert!(glean::test_is_experiment_active(&quot;blue-button-effective&quot;.to_string());
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h3 id="testgetexperimentdata"><a class="header" href="#testgetexperimentdata"><code>testGetExperimentData</code></a></h3>
+<p>Returns the recorded experiment data including branch and extras.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">assertEquals(
+  &quot;branch-with-blue-button&quot;, Glean.testGetExperimentData(&quot;blue-button-effective&quot;)?.branch
+)
+</code></pre>
+</div>
+<div data-lang="Java" class="tab"></div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">XCTAssertEqual(
   &quot;branch-with-blue-button&quot;,
   Glean.testGetExperimentData(experimentId: &quot;blue-button-effective&quot;)?.branch
 )
@@ -220,80 +341,42 @@ XCTAssertEqual(
 <div data-lang="Python" class="tab">
 <pre><code class="language-Python">from glean import Glean
 
-# Annotate Glean pings with experiments data.
-Glean.set_experiment_active(
-  experiment_id=&quot;blue-button-effective&quot;,
-  branch=&quot;branch-with-blue-button&quot;,
-  extra={
-    &quot;buttonLabel&quot;: &quot;test&quot;
-  }
-)
-
-# After the experiment terminates, the annotation
-# can be removed.
-Glean.set_experiment_inactive(&quot;blue-button-effective&quot;)
-</code></pre>
-<div class="special-quote special-quote-info fa fa-info-circle"></div>
-<h5 id="its-not-required-to-define-experiment-ids-and-branches-2"><a class="header" href="#its-not-required-to-define-experiment-ids-and-branches-2">It's not required to define experiment IDs and branches</a></h5>
-<blockquote>
-<p>Experiment IDs and branch don't need to be pre-defined in the Glean SDK registry files.
-Please also note that the <code>extra</code> dict is non-nested arbitrary <code>str</code> to <code>str</code> mapping.</p>
-</blockquote>
-<p>There are test APIs available too:</p>
-<pre><code class="language-Python">from glean import Glean
-
-# Was the experiment annotated in Glean pings?
-assert Glean.test_is_experiment_active(&quot;blue-button-effective&quot;)
-# Was the correct branch reported?
 assert (
     &quot;branch-with-blue-button&quot; ==
     Glean.test_get_experiment_data(&quot;blue-button-effective&quot;).branch
 )
 </code></pre>
 </div>
-<div data-lang="C#" class="tab">
-<pre><code class="language-C#">// Annotate Glean pings with experiments data.
-GleanInstance.SetExperimentActive(
-  experimentId: &quot;blue-button-effective&quot;,
-  branch: &quot;branch-with-blue-button&quot;,
-  extra: new Dictionary&lt;string, string&gt;() {
-    { &quot;buttonLabel&quot;, &quot;test&quot;}
-  }
+<div data-lang="JavaScript" class="tab"></div>
+<div data-lang="Rust" class="tab">
+<pre><code class="language-Rust">assert_eq!(
+    &quot;branch-with-blue-button&quot;,
+    glean::test_get_experiment_data(&quot;blue-button-effective&quot;.to_string()).branch,
 );
-// After the experiment terminates, the annotation
-// can be removed.
-GleanInstance.SetExperimentInactive(&quot;blue-button-effective&quot;);
 </code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
 <div class="special-quote special-quote-info fa fa-info-circle"></div>
-<h5 id="its-not-required-to-define-experiment-ids-and-branches-3"><a class="header" href="#its-not-required-to-define-experiment-ids-and-branches-3">It's not required to define experiment IDs and branches</a></h5>
+<h5 id="at-present-there-is-no-dedicated-c-experiments-api-for-firefox-desktop-2"><a class="header" href="#at-present-there-is-no-dedicated-c-experiments-api-for-firefox-desktop-2">At present there is no dedicated C++ Experiments API for Firefox Desktop</a></h5>
 <blockquote>
-<p>Experiment IDs and branches don't need to be pre-defined in the Glean SDK registry files.
-Please also note that the <code>extra</code> map is a non-nested arbitrary <code>string</code> to <code>string</code> dictionary. It also has limits on the size of the keys and values defined below.</p>
+<p>If you require one, please <a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Toolkit&amp;component=Telemetry">file a bug</a>.</p>
 </blockquote>
-<p>There are test APIs available too:</p>
-<pre><code class="language-C#">// Was the experiment annotated in Glean pings?
-Assert.True(GleanInstance.TestIsExperimentActive(&quot;blue-button-effective&quot;));
-// Was the correct branch reported?
-Assert.Equal(
-  &quot;branch-with-blue-button&quot;, GleanInstance.TestGetExperimentData(&quot;blue-button-effective&quot;).Branch
+<p><strong>JavaScript</strong></p>
+<pre><code class="language-js">let FOG = Cc[&quot;@mozilla.org/toolkit/glean;1&quot;].createInstance(Ci.nsIFOG);
+Assert.equals(
+  &quot;branch-with-blue-button&quot;,
+  FOG.testGetExperimentData(&quot;blue-button-effective&quot;).branch
 );
 </code></pre>
 </div>
 </div>
 </div>
-<h2 id="limits"><a class="header" href="#limits">Limits</a></h2>
-<ul>
-<li><code>experimentId</code>, <code>branch</code>, and the keys and values of the 'extra' field are fixed at a maximum length of 100 bytes. Longer strings used as ids, keys, or values are truncated to their respective maximum length. (Specifically, this is measured in the number of bytes when the string is encoded in UTF-8.)</li>
-<li><code>extra</code> map is limited to 20 entries. If passed a map which contains more elements than this, it is truncated to 20 elements.  <strong>WARNING</strong> Which items are truncated is nondeterministic due to the unordered nature of maps and what's left may not necessarily be the first elements added.</li>
-</ul>
-<div class="special-quote special-quote-info fa fa-info-circle"></div>
-<h5 id="value-truncation"><a class="header" href="#value-truncation">Value truncation</a></h5>
-<blockquote>
-<p>Any truncation that occurs when recording to the Experiments API will result in an <code>invalid_value</code> error being recorded. See <a href="../../user/metrics/error-reporting.html">Error Reporting</a> for more information about this type of error.</p>
-</blockquote>
 <h2 id="reference"><a class="header" href="#reference">Reference</a></h2>
 <ul>
-<li><a href="../../../python/glean/glean.html">Python API docs</a></li>
+<li><a href="../../../swift/Classes/QuantityMetricType.html">Swift API docs</a></li>
+<li><a href="../../../python/glean/metrics/quantity.html">Python API docs</a></li>
+<li><a href="../../../docs/glean/private/quantity/struct.QuantityMetric.html">Rust API docs</a></li>
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/general/experiments-api.md">Edit this file on GitHub.</a></footer>
                     </main>

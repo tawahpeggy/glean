@@ -796,8 +796,6 @@
 <span id="796">796</span>
 <span id="797">797</span>
 <span id="798">798</span>
-<span id="799">799</span>
-<span id="800">800</span>
 </pre><pre class="rust">
 <span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -853,7 +851,7 @@
     <span class="ident">metrics</span>::{<span class="ident">Datetime</span>, <span class="ident">DistributionData</span>, <span class="ident">MemoryUnit</span>, <span class="ident">RecordedEvent</span>, <span class="ident">TimeUnit</span>, <span class="ident">TimerId</span>},
     <span class="ident">traits</span>, <span class="ident">CommonMetricData</span>, <span class="ident">Error</span>, <span class="ident">ErrorType</span>, <span class="ident">Glean</span>, <span class="ident">HistogramType</span>, <span class="ident">Lifetime</span>, <span class="prelude-ty">Result</span>,
 };
-<span class="kw">use</span> <span class="ident">private::RecordedExperimentData</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">private::RecordedExperimentData</span>;
 
 <span class="kw">mod</span> <span class="ident">configuration</span>;
 <span class="kw">mod</span> <span class="ident">core_metrics</span>;
@@ -1447,8 +1445,7 @@
 
 <span class="doccomment">/// TEST ONLY FUNCTION.</span>
 <span class="doccomment">/// Checks if an experiment is currently active.</span>
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">test_is_experiment_active</span>(<span class="ident">experiment_id</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_is_experiment_active</span>(<span class="ident">experiment_id</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
     <span class="ident">block_on_dispatcher</span>();
     <span class="ident">with_glean</span>(<span class="op">|</span><span class="ident">glean</span><span class="op">|</span> <span class="ident">glean</span>.<span class="ident">test_is_experiment_active</span>(<span class="ident">experiment_id</span>.<span class="ident">to_owned</span>()))
 }
@@ -1456,8 +1453,7 @@
 <span class="doccomment">/// TEST ONLY FUNCTION.</span>
 <span class="doccomment">/// Returns the [`RecordedExperimentData`] for the given `experiment_id` or panics if</span>
 <span class="doccomment">/// the id isn&#39;t found.</span>
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">test_get_experiment_data</span>(<span class="ident">experiment_id</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">RecordedExperimentData</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_get_experiment_data</span>(<span class="ident">experiment_id</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">RecordedExperimentData</span> {
     <span class="ident">block_on_dispatcher</span>();
     <span class="ident">with_glean</span>(<span class="op">|</span><span class="ident">glean</span><span class="op">|</span> {
         <span class="kw">let</span> <span class="ident">json_data</span> <span class="op">=</span> <span class="ident">glean</span>
