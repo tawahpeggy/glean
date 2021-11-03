@@ -1005,7 +1005,7 @@ TODO: This will be a good place to talk about the product telemetry health
 dashboard when that's ready
 -->
 <h2 id="adding-the-metric-to-the-metricsyaml-file"><a class="header" href="#adding-the-metric-to-the-metricsyaml-file">Adding the metric to the <code>metrics.yaml</code> file</a></h2>
-<p>The <a href="https://mozilla.github.io/glean_parser/metrics-yaml.html"><code>metrics.yaml</code> file</a> defines the metrics your application or library will send.
+<p>The <a href="user/metrics/../../reference/yaml/metrics.html"><code>metrics.yaml</code> file</a> defines the metrics your application or library will send.
 They are organized into categories.
 The overall organization is:</p>
 <pre><code class="language-YAML"># Required to indicate this is a `metrics.yaml` file
@@ -1293,7 +1293,7 @@ TODO: This will be a good place to talk about the product telemetry health
 dashboard when that's ready
 -->
 <h2 id="adding-the-metric-to-the-metricsyaml-file-1"><a class="header" href="#adding-the-metric-to-the-metricsyaml-file-1">Adding the metric to the <code>metrics.yaml</code> file</a></h2>
-<p>The <a href="https://mozilla.github.io/glean_parser/metrics-yaml.html"><code>metrics.yaml</code> file</a> defines the metrics your application or library will send.
+<p>The <a href="user/metrics/../../reference/yaml/metrics.html"><code>metrics.yaml</code> file</a> defines the metrics your application or library will send.
 They are organized into categories.
 The overall organization is:</p>
 <pre><code class="language-YAML"># Required to indicate this is a `metrics.yaml` file
@@ -2098,7 +2098,7 @@ Follow <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1711928">Bug 171192
 <p>This is useful when the scheduling of the built-in pings (<a href="user/pings/metrics.html">metrics</a>, <a href="user/pings/baseline.html">baseline</a> and <a href="user/pings/events.html">events</a>) are not appropriate for your data.  Since the timing of the submission of custom pings is handled by the application, the measurement window is under the application's control.</p>
 <p>This is especially useful when metrics need to be tightly related to one another, for example when you need to measure the distribution of frame paint times when a particular rendering backend is in use.  If these metrics were in different pings, with different measurement windows, it is much harder to do that kind of reasoning with much certainty.</p>
 <h2 id="defining-a-custom-ping"><a class="header" href="#defining-a-custom-ping">Defining a custom ping</a></h2>
-<p>Custom pings must be defined in a <a href="https://mozilla.github.io/glean_parser/pings-yaml.html"><code>pings.yaml</code> file</a>, placed in the same directory alongside your app's <code>metrics.yaml</code> file.</p>
+<p>Custom pings must be defined in a <a href="user/pings/../../reference/yaml/pings.html"><code>pings.yaml</code> file</a>, placed in the same directory alongside your app's <code>metrics.yaml</code> file.</p>
 <p>For example, to define a custom ping called <code>search</code> specifically for search information:</p>
 <pre><code class="language-YAML">$schema: moz://mozilla.org/schemas/glean/pings/2-0-0
 
@@ -2531,7 +2531,7 @@ The next ping is scheduled for 04:00 the next calendar day (reason code <code>re
 <p>More <a href="user/pings/metrics.html#scheduling-examples">scheduling examples</a> are included below.</p>
 <p>See also the <a href="user/pings/ping-schedules-and-timings.html">ping schedules and timing overview</a>.</p>
 <h2 id="contents-3"><a class="header" href="#contents-3">Contents</a></h2>
-<p>The <code>metrics</code> ping contains all of the metrics defined in <code>metrics.yaml</code> (except events) that don't specify a ping or where <code>default</code> is specified in their <a href="https://mozilla.github.io/glean_parser/metrics-yaml.html#send-in-pings"><code>send in pings</code></a> property.</p>
+<p>The <code>metrics</code> ping contains all of the metrics defined in <code>metrics.yaml</code> (except events) that don't specify a ping or where <code>default</code> is specified in their <a href="user/pings/../../reference/yaml/metrics.html#send_in_pings"><code>send in pings</code></a> property.</p>
 <p>Additionally, error metrics in the <code>glean.error</code> category are included in the <code>metrics</code> ping.</p>
 <p>The <code>metrics</code> ping shall also include the common <a href="user/pings/index.html#the-ping_info-section"><code>ping_info</code></a> and <a href="user/pings/index.html#the-client_info-section">'client_info'</a> sections.  It also includes a number of <a href="user/pings/../collected-metrics/metrics.html#metrics-1">metrics defined in the Glean SDK itself</a>.</p>
 <h3 id="querying-ping-contents-1"><a class="header" href="#querying-ping-contents-1">Querying ping contents</a></h3>
@@ -10452,7 +10452,7 @@ The source code is available at <a href="https://github.com/mozilla/glean">https
 </ul>
 <h2 id="metric"><a class="header" href="#metric">Metric</a></h2>
 <p>Metrics are the individual things being measured using Glean.
-They are defined in <a href="https://mozilla.github.io/glean_parser/metrics-yaml.html">metrics.yaml</a> files, also known as <em>registry files</em>.</p>
+They are defined in <a href="appendix/../reference/yaml/metrics.html">metrics.yaml</a> files, also known as <em>registry files</em>.</p>
 <p>Glean itself provides <a href="appendix/../user/collected-metrics/metrics.html">some metrics out of the box</a>.</p>
 <h2 id="ping"><a class="header" href="#ping">Ping</a></h2>
 <p>A ping is a bundle of related metrics, gathered in a payload to be transmitted.

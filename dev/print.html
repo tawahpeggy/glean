@@ -1105,7 +1105,7 @@ It also includes integrations into the iOS platform.</p>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/dev/ios/index.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="setup-the-ios-build-environment"><a class="header" href="#setup-the-ios-build-environment">Setup the iOS Build Environment</a></h1>
 <h2 id="prepare-your-build-environment-1"><a class="header" href="#prepare-your-build-environment-1">Prepare your build environment</a></h2>
 <ol>
-<li>Install Xcode 12.4</li>
+<li>Install Xcode 13.0 or higher.</li>
 <li>Install <a href="https://github.com/Carthage/Carthage">Carthage</a>: <code>brew install carthage</code></li>
 <li>Ensure you have Python 3 installed: <code>brew install python</code></li>
 <li>Install linting and formatting tools: <code>brew install swiftlint</code></li>
@@ -1121,18 +1121,8 @@ It also includes integrations into the iOS platform.</p>
 <p>Platform specific toolchains need to be installed for Rust. This can be
 done using the <code>rustup target</code> command. In order to enable building to real
 devices and iOS emulators, the following targets need to be installed:</p>
-<pre><code>rustup target add aarch64-apple-ios x86_64-apple-ios
+<pre><code>rustup target add aarch64-apple-ios x86_64-apple-ios aarch64-apple-ios-sim
 </code></pre>
-<p>Install helper tools:</p>
-<pre><code>cargo install cargo-lipo
-</code></pre>
-<h3 id="building-on-m1-hardware"><a class="header" href="#building-on-m1-hardware">Building on M1 hardware</a></h3>
-<p>If you are on M1-powered Mac hardware (also known as &quot;Apple Silicon&quot; or &quot;macOS aarch64&quot;) you will need Rust Nightly to build Glean for iOS.</p>
-<p>Install the toolchain using the following commands:</p>
-<pre><code>rustup toolchain add nightly
-rustup component add rust-src --toolchain nightly
-</code></pre>
-<p>The build system will auto-detect your machine architecture and build for the appropriate targets.</p>
 <h2 id="building-1"><a class="header" href="#building-1">Building</a></h2>
 <p>This should be relatively straightforward and painless:</p>
 <ol>
