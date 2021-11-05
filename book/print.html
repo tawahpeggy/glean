@@ -270,6 +270,7 @@ can be found on the specific integration guides:</p>
 <li><a href="user/adding-glean-to-your-project/./kotlin.html">Kotlin</a></li>
 <li><a href="user/adding-glean-to-your-project/./python.html">Python</a></li>
 <li><a href="user/adding-glean-to-your-project/./swift.html">Swift</a></li>
+<li><a href="user/adding-glean-to-your-project/./qt.html">Qt/QML</a></li>
 </ul>
 </blockquote>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/user/adding-glean-to-your-project/index.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="adding-glean-to-your-kotlin-project"><a class="header" href="#adding-glean-to-your-kotlin-project">Adding Glean to your Kotlin project</a></h1>
@@ -573,18 +574,11 @@ The Glean Python SDK can not wait to finish its work in a <code>multiprocessing<
 Therefore, if the Glean Python SDK detects that it is running in a <code>multiprocessing</code> subprocess, all of its work that would normally run on a worker thread will run on the main thread.
 In practice, this should not be a performance issue: since the work is already in a subprocess, it will not block the main process of your application.</p>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/user/adding-glean-to-your-project/python.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="adding-glean-to-your-javascript-project"><a class="header" href="#adding-glean-to-your-javascript-project">Adding Glean to your JavaScript project</a></h1>
-<p>This page provides a step-by-step guide on how to integrate the <a href="https://github.com/mozilla/glean.js/">Glean.js</a> library into a JavaScript project.</p>
+<p>This page provides a step-by-step guide on how to integrate
+the Glean JavaScript SDK into a JavaScript project.</p>
 <p>Nevertheless this is just one of the required steps for integrating Glean successfully into a project. Check you the full <a href="user/adding-glean-to-your-project/./index.html">Glean integration checklist</a> for a comprehensive list of all the steps involved in doing so.</p>
-<p>Currently, this SDK supports collecting data from <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions">Browser Extensions</a> (cross-browser), <a href="https://nodejs.org/en/">Node.js</a><sup class="footnote-reference"><a href="#1">1</a></sup> applications or scripts and <a href="https://doc.qt.io/qt-5/qtqml-index.html">Qt/QML applications</a><sup class="footnote-reference"><a href="#2">2</a></sup>.</p>
-<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
-<p>The Node.js SDK does not have persistent storage yet. This means, Glean does not persist
-state throughout application runs. For updates on the implementation of this feature in Node.js,
-follow <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1728807">Bug 1728807</a>.</p>
-</div>
-<div class="footnote-definition" id="2"><sup class="footnote-definition-label">2</sup>
-<p>For information on adding Glean to a Qt/QML application, refer to the
-<a href="user/adding-glean-to-your-project/./qt.html">Qt specific documentation</a>.</p>
-</div>
+<p>The Glean JavaScript SDK allows integration with three distinct JavaScript environments:
+<strong>websites, web extension and Node.js.</strong></p>
 <h2 id="requirements-1"><a class="header" href="#requirements-1">Requirements</a></h2>
 <ul>
 <li>Node.js &gt;= 12.20.0</li>
@@ -624,31 +618,44 @@ an example on how to define the above permissions as well as how and where to lo
 the <code>webextension-polyfill</code> script.</p>
 </blockquote>
 <h2 id="setting-up-the-dependency-3"><a class="header" href="#setting-up-the-dependency-3">Setting up the dependency</a></h2>
-<p>The Glean.js package is distributed as an npm package
+<p>The Glean JavaScript SDK is distributed as an npm package
 <a href="https://www.npmjs.com/package/@mozilla/glean"><code>@mozilla/glean</code></a>.</p>
-<p>Install Glean.js in your JavaScript project, by running:</p>
+<p>This package has different entry points to access the different SDKs.</p>
+<ul>
+<li><code>@mozilla/glean/web</code> gives access to the websites SDK</li>
+<li><code>@mozilla/glean/webext</code> gives access to the web extension SDK</li>
+<li><code>@mozilla/glean/node</code> gives access to the Node.js SDK<sup class="footnote-reference"><a href="#1">1</a></sup></li>
+</ul>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>The Node.js SDK does not have persistent storage yet. This means, Glean does not persist
+state throughout application runs. For updates on the implementation of this feature in Node.js,
+follow <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1728807">Bug 1728807</a>.</p>
+</div>
+<p>Install Glean in your JavaScript project, by running:</p>
 <pre><code class="language-bash">npm install @mozilla/glean
 </code></pre>
 <p>Then import Glean into your project:</p>
-<pre><code class="language-js">// Glean.js for browser extensions
+<pre><code class="language-js">// Importing the Glean JavaScript SDK for use in **web extensions**
 //
 // esm
 import Glean from &quot;@mozilla/glean/webext&quot;;
 // cjs
 const { default: Glean } = require(&quot;@mozilla/glean/webext&quot;);
 
-// Glean.js for Node.js
+// Importing the Glean JavaScript SDK for use in **websites**
+//
+// esm
+import Glean from &quot;@mozilla/glean/web&quot;;
+// cjs
+const { default: Glean } = require(&quot;@mozilla/glean/web&quot;);
+
+// Importing the Glean JavaScript SDK for use in **Node.js**
 //
 // esm
 import Glean from &quot;@mozilla/glean/node&quot;;
 // cjs
 const { default: Glean } = require(&quot;@mozilla/glean/node&quot;);
 </code></pre>
-<p>The currently available entry points are:</p>
-<ul>
-<li><code>@mozilla/glean/webext</code></li>
-<li><code>@mozilla/glean/node</code></li>
-</ul>
 <div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
 <h3 id="browser-extension-security-considerations"><a class="header" href="#browser-extension-security-considerations">Browser extension security considerations</a></h3>
 <blockquote>
@@ -690,7 +697,8 @@ The <code>@mozilla/glean</code> package exposes <a href="https://github.com/mozi
 <div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
 <h4 id="prefer-using-the-glean-dictionary"><a class="header" href="#prefer-using-the-glean-dictionary">Prefer using the Glean Dictionary</a></h4>
 <blockquote>
-<p>While it is still possible to generate Markdown documentation, if working on a public Mozilla project rely on the <a href="https://dictionary.telemetry.mozilla.org">Glean Dictionary</a> for documentation.
+<p>While it is still possible to generate Markdown documentation,
+if working on a public Mozilla project rely on the <a href="https://dictionary.telemetry.mozilla.org">Glean Dictionary</a> for documentation.
 Your product will be automatically indexed by the Glean Dictionary after it gets enabled in the pipeline.</p>
 </blockquote>
 <p>One of the commands provided by <code>glean_parser</code> allows users to generate Markdown documentation based on the contents of their YAML registry files.
