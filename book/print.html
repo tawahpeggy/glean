@@ -3646,7 +3646,7 @@ Glean.set_experiment_active(
 )
 </code></pre>
 </div>
-<div data-lang="JavaScript" class="tab"></div>
+<div data-lang="JavaScript" class="tab" data-bug="1741583"></div>
 <div data-lang="Rust" class="tab">
 <pre><code class="language-Rust">let mut extra = HashMap::new();
 extra.insert(&quot;buttonLabel&quot;.to_string(), &quot;test&quot;.to_string());
@@ -3714,7 +3714,7 @@ Should be called when the experiment ends.</p>
 Glean.set_experiment_inactive(&quot;blue-button-effective&quot;)
 </code></pre>
 </div>
-<div data-lang="JavaScript" class="tab"></div>
+<div data-lang="JavaScript" class="tab" data-bug="1741583"></div>
 <div data-lang="Rust" class="tab">
 <pre><code class="language-Rust">glean::set_experiment_inactive(&quot;blue-button-effective&quot;.to_string());
 </code></pre>
@@ -3754,7 +3754,7 @@ FOG.setExperimentInactive(&quot;blue-button-effective&quot;);
 assert Glean.test_is_experiment_active(&quot;blue-button-effective&quot;)
 </code></pre>
 </div>
-<div data-lang="JavaScript" class="tab"></div>
+<div data-lang="JavaScript" class="tab" data-bug="1741583"></div>
 <div data-lang="Rust" class="tab">
 <pre><code class="language-Rust">assert!(glean::test_is_experiment_active(&quot;blue-button-effective&quot;.to_string());
 </code></pre>
@@ -3790,7 +3790,7 @@ assert (
 )
 </code></pre>
 </div>
-<div data-lang="JavaScript" class="tab"></div>
+<div data-lang="JavaScript" class="tab" data-bug="1741583"></div>
 <div data-lang="Rust" class="tab">
 <pre><code class="language-Rust">assert_eq!(
     &quot;branch-with-blue-button&quot;,
