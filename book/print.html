@@ -959,7 +959,7 @@ that are built in to the Glean SDK.</p>
 <h3 id="a-lifetime-example"><a class="header" href="#a-lifetime-example">A lifetime example</a></h3>
 <p>Let's work through an example to see how these lifetimes play out in practice. Let's suppose we have a user preference, &quot;turbo mode&quot;, which defaults to <code>false</code>, but the user can turn it to <code>true</code> at any time.  We want to know when this flag is <code>true</code> so we can measure its affect on other metrics in the same ping.  In the following diagram, we look at a time period that sends 4 pings across two separate runs of the application. We assume here, that like the Glean SDK's built-in <a href="user/metrics/../pings/metrics.html">metrics ping</a>, the developer writing the metric isn't in control of when the ping is submitted.</p>
 <p>In this diagram, the ping measurement windows are represented as rectangles, but the moment the ping is &quot;submitted&quot; is represented by its right edge. The user changes the &quot;turbo mode&quot; setting from <code>false</code> to <code>true</code> in the first run, and then toggles it again twice in the second run.</p>
-<p><img src="user/metrics/metric-lifetime-timeline.svg" alt="Metric lifetime timeline" /></p>
+<p><img src="user/metrics/../metric-lifetime-timeline.svg" alt="Metric lifetime timeline" /></p>
 <ul>
 <li>
 <p><strong>A. Ping lifetime, set on change</strong>: The value isn't included in Ping 1, because Glean doesn't know about it yet.  It is included in the first ping after being recorded (Ping 2), which causes it to be cleared.</p>
@@ -1250,7 +1250,7 @@ that are built in to the Glean SDK.</p>
 <h3 id="a-lifetime-example-1"><a class="header" href="#a-lifetime-example-1">A lifetime example</a></h3>
 <p>Let's work through an example to see how these lifetimes play out in practice. Let's suppose we have a user preference, &quot;turbo mode&quot;, which defaults to <code>false</code>, but the user can turn it to <code>true</code> at any time.  We want to know when this flag is <code>true</code> so we can measure its affect on other metrics in the same ping.  In the following diagram, we look at a time period that sends 4 pings across two separate runs of the application. We assume here, that like the Glean SDK's built-in <a href="user/metrics/../pings/metrics.html">metrics ping</a>, the developer writing the metric isn't in control of when the ping is submitted.</p>
 <p>In this diagram, the ping measurement windows are represented as rectangles, but the moment the ping is &quot;submitted&quot; is represented by its right edge. The user changes the &quot;turbo mode&quot; setting from <code>false</code> to <code>true</code> in the first run, and then toggles it again twice in the second run.</p>
-<p><img src="user/metrics/metric-lifetime-timeline.svg" alt="Metric lifetime timeline" /></p>
+<p><img src="user/metrics/../metric-lifetime-timeline.svg" alt="Metric lifetime timeline" /></p>
 <ul>
 <li>
 <p><strong>A. Ping lifetime, set on change</strong>: The value isn't included in Ping 1, because Glean doesn't know about it yet.  It is included in the first ping after being recorded (Ping 2), which causes it to be cleared.</p>
