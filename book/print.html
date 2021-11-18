@@ -12386,6 +12386,14 @@ This is a major milestone in using a cross-platform implementation of Glean on t
 <p>First testing release.</p>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/appendix/changelog/sdk.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="unreleased-changes-1"><a class="header" href="#unreleased-changes-1">Unreleased changes</a></h1>
 <p><a href="https://github.com/mozilla/glean.js/compare/v0.25.0...main">Full changelog</a></p>
+<ul>
+<li><a href="https://github.com/mozilla/glean.js/pull/965">#965</a>: Attempt to infer the Python virtualenv folder from the environment before falling back to the default <code>.venv</code>.
+<ul>
+<li>Users may provide a folder name through the <code>VIRTUAL_ENV</code> environment variable.</li>
+<li>If the user is inside an active virtualenv the <code>VIRTUAL_ENV</code> environment variable is already set by Python. See: https://docs.python.org/3/library/venv.html.</li>
+</ul>
+</li>
+</ul>
 <h1 id="v0250-2021-11-15"><a class="header" href="#v0250-2021-11-15">v0.25.0 (2021-11-15)</a></h1>
 <p><a href="https://github.com/mozilla/glean.js/compare/v0.24.0...v0.25.0">Full changelog</a></p>
 <ul>
