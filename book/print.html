@@ -2064,9 +2064,9 @@ in order to provide additional metadata without the need to unpack the ping payl
 <h3 id="limitations"><a class="header" href="#limitations">Limitations</a></h3>
 <p>To keep resource usage in check, the Glean SDK enforces some limitations on ping uploading and ping storage.</p>
 <h4 id="rate-limiting"><a class="header" href="#rate-limiting">Rate limiting</a></h4>
-<p>Only up to 15 ping submissions every 60 seconds are allowed. </p>
-<p>There are no exposed methods to change these rate limiting defaults, follow <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1647630">Bug 1647630</a>
-and <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1727069">Bug 1727069</a> for updates.</p>
+<p>Only up to 15 ping submissions every 60 seconds are allowed.</p>
+<p>For the JavaScript SDK that limit is higher
+and up to 40 ping submissions every 60 seconds are allowed.</p>
 <h4 id="request-body-size-limiting"><a class="header" href="#request-body-size-limiting">Request body size limiting</a></h4>
 <p>The body of a ping request may have up to 1MB (after compression). Pings that exceed this size are discarded
 and don't get uploaded. Size and number of discarded pings are recorded on the internal
@@ -12390,6 +12390,7 @@ This is a major milestone in using a cross-platform implementation of Glean on t
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/appendix/changelog/sdk.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="unreleased-changes-1"><a class="header" href="#unreleased-changes-1">Unreleased changes</a></h1>
 <p><a href="https://github.com/mozilla/glean.js/compare/v0.26.0...main">Full changelog</a></p>
 <ul>
+<li><a href="https://github.com/mozilla/glean.js/pull/981">#981</a>: Update rate limits for ping submission from 15 pings/minute to 40 pings/minute.</li>
 <li><a href="https://github.com/mozilla/glean.js/pull/967">#967</a>: <strong>BREAKING CHANGE</strong>: Remove <code>debug</code> option from Glean configuration option.
 <ul>
 <li>The <code>Glean.setDebugViewTag</code>, <code>Glean.setSourceTags</code> and <code>Glean.setLogPings</code> should be used instead. Note that these APIs can safely be called prior to initialization.</li>

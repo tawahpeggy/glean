@@ -360,9 +360,9 @@ in order to provide additional metadata without the need to unpack the ping payl
 <h3 id="limitations"><a class="header" href="#limitations">Limitations</a></h3>
 <p>To keep resource usage in check, the Glean SDK enforces some limitations on ping uploading and ping storage.</p>
 <h4 id="rate-limiting"><a class="header" href="#rate-limiting">Rate limiting</a></h4>
-<p>Only up to 15 ping submissions every 60 seconds are allowed. </p>
-<p>There are no exposed methods to change these rate limiting defaults, follow <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1647630">Bug 1647630</a>
-and <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1727069">Bug 1727069</a> for updates.</p>
+<p>Only up to 15 ping submissions every 60 seconds are allowed.</p>
+<p>For the JavaScript SDK that limit is higher
+and up to 40 ping submissions every 60 seconds are allowed.</p>
 <h4 id="request-body-size-limiting"><a class="header" href="#request-body-size-limiting">Request body size limiting</a></h4>
 <p>The body of a ping request may have up to 1MB (after compression). Pings that exceed this size are discarded
 and don't get uploaded. Size and number of discarded pings are recorded on the internal
