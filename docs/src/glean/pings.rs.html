@@ -101,7 +101,7 @@
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_upper_case_globals</span>)]</span>
     <span class="kw">pub</span> <span class="kw">static</span> <span class="ident">events</span>: <span class="ident">Lazy</span><span class="op">&lt;</span><span class="ident">PingType</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Lazy::new</span>(<span class="op">|</span><span class="op">|</span> {
         <span class="ident">PingType::new</span>(
-            <span class="string">&quot;metrics&quot;</span>,
+            <span class="string">&quot;events&quot;</span>,
             <span class="bool-val">true</span>,
             <span class="bool-val">false</span>,
             <span class="macro">vec!</span>[

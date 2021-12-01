@@ -151,7 +151,17 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="unreleased-changes"><a class="header" href="#unreleased-changes">Unreleased changes</a></h1>
-<p><a href="https://github.com/mozilla/glean.js/compare/v0.26.0...main">Full changelog</a></p>
+<p><a href="https://github.com/mozilla/glean.js/compare/v0.27.0...main">Full changelog</a></p>
+<ul>
+<li><a href="https://github.com/mozilla/glean.js/pull/984">#984</a>: BUGFIX: Return correct upload result in case an error happens while building a ping request.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/988">#988</a>: BUGFIX: Enforce rate limitation at upload time, not at ping submission time.
+<ul>
+<li>Note: This change required a big refactoring of the internal uploading logic.</li>
+</ul>
+</li>
+</ul>
+<h1 id="v0270-2021-11-22"><a class="header" href="#v0270-2021-11-22">v0.27.0 (2021-11-22)</a></h1>
+<p><a href="https://github.com/mozilla/glean.js/compare/v0.26.0...v0.27.0">Full changelog</a></p>
 <ul>
 <li><a href="https://github.com/mozilla/glean.js/pull/981">#981</a>: Update rate limits for ping submission from 15 pings/minute to 40 pings/minute.</li>
 <li><a href="https://github.com/mozilla/glean.js/pull/967">#967</a>: <strong>BREAKING CHANGE</strong>: Remove <code>debug</code> option from Glean configuration option.
