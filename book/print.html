@@ -10613,16 +10613,25 @@ Each ping has its own schedule to gather all its locally saved metrics and creat
 <li><a href="appendix/changelog/./js.html"><code>mozilla/glean.js</code></a></li>
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/appendix/changelog/index.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="unreleased-changes"><a class="header" href="#unreleased-changes">Unreleased changes</a></h1>
-<p><a href="https://github.com/mozilla/glean/compare/v42.2.0...main">Full changelog</a></p>
+<p><a href="https://github.com/mozilla/glean/compare/v42.3.0...main">Full changelog</a></p>
+<h1 id="v4230-2021-12-07"><a class="header" href="#v4230-2021-12-07">v42.3.0 (2021-12-07)</a></h1>
+<p><a href="https://github.com/mozilla/glean/compare/v42.2.0...v42.3.0">Full changelog</a></p>
 <ul>
 <li>Rust
 <ul>
 <li>BUGFIX: Correct category &amp; name for <code>preinit_tasks_overflow</code> metric. Previously it would have been wrongly recorded as <code>preinit_tasks_overflow.glean.error</code> (<a href="https://github.com/mozilla/glean/pull/1887">#1887</a>)</li>
+<li>BUGFIX: Fix to name given to the events ping when instantiated (<a href="https://github.com/mozilla/glean/pull/1885">#1885</a>)</li>
 </ul>
 </li>
 <li>iOS
 <ul>
+<li>BUGFIX: Make fields of <code>RecordedEventData</code> publicly accessible (<a href="https://github.com/mozilla/glean/pull/1867">#1867</a>)</li>
 <li>Skip code generation in <code>indexbuild</code> build (<a href="https://github.com/mozilla/glean/pull/1889">#1889</a>)</li>
+</ul>
+</li>
+<li>Python
+<ul>
+<li>Don't let environment affect subprocess module search path (<a href="https://github.com/mozilla/glean/pull/1542">#1542</a>)</li>
 </ul>
 </li>
 </ul>
