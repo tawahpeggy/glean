@@ -2189,7 +2189,7 @@ The first event is timestamp <code>0</code> and the second event happens one sec
 so it has timestamp <code>1000</code>.</p>
 <p>The application is restarted one hour after the first event and a <code>glean.restarted</code> event is
 recorded, timestamp <code>3600000</code>. Finally, an event is recorded during the second application run
-two seconds after restart, timestamp <code>3800000</code>.</p>
+two seconds after restart, timestamp <code>3602000</code>.</p>
 <pre><code class="language-json">{
   ...
   &quot;events&quot;: [
@@ -2209,7 +2209,7 @@ two seconds after restart, timestamp <code>3800000</code>.</p>
       &quot;name&quot;: &quot;restarted&quot;
     },
     {
-      &quot;timestamp&quot;: 3800000,
+      &quot;timestamp&quot;: 3602000,
       &quot;category&quot;: &quot;examples&quot;,
       &quot;name&quot;: &quot;event_example&quot;
     },
@@ -12426,6 +12426,7 @@ This is a major milestone in using a cross-platform implementation of Glean on t
 <li>Note: This change required a big refactoring of the internal uploading logic.</li>
 </ul>
 </li>
+<li><a href="https://github.com/mozilla/glean.js/pull/1015">#1015</a>: BUGFIX: Make attempting to call the <code>setUploadEnabled</code> API before initializing Glean a no-op.</li>
 </ul>
 <h1 id="v0270-2021-11-22"><a class="header" href="#v0270-2021-11-22">v0.27.0 (2021-11-22)</a></h1>
 <p><a href="https://github.com/mozilla/glean.js/compare/v0.26.0...v0.27.0">Full changelog</a></p>
