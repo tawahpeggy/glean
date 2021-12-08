@@ -3177,9 +3177,15 @@ that are built in to the Glean SDK.</p>
 <h4 id="send_in_pings"><a class="header" href="#send_in_pings"><code>send_in_pings</code></a></h4>
 <p><em>default: <code>events</code>|<code>metrics</code></em></p>
 <p>Defines which pings the metric should be sent on.
-If not specified, the metric is sent on the &quot;default ping&quot;,
+If not specified, the metric is sent on the default ping,
 which is the <code>events</code> ping for events and the <code>metrics</code> ping for everything else.</p>
 <p>Most metrics don't need to specify this unless they are sent on <a href="reference/yaml/../../user/pings/custom.html">custom pings</a>.</p>
+<p>The special value <code>default</code> may be used, in case it's required for a metric to be sent
+on the default ping as well as in a custom ping.</p>
+<pre><code class="language-yaml">send_in_pings:
+  - my-custom-ping
+  - default
+</code></pre>
 <h4 id="disabled"><a class="header" href="#disabled"><code>disabled</code></a></h4>
 <p><em>default: <code>false</code></em></p>
 <p>Data collection for this metric is disabled.</p>
@@ -3265,7 +3271,7 @@ ping names on generated code.</p>
 <div class="special-quote special-quote-info fa fa-info-circle"></div>
 <h3 id="reserved-ping-names"><a class="header" href="#reserved-ping-names">Reserved ping names</a></h3>
 <blockquote>
-<p>The names <code>baseline</code>, <code>metrics</code>, <code>events</code>, <code>deletion-request</code> and <code>all-pings</code> are reserved
+<p>The names <code>baseline</code>, <code>metrics</code>, <code>events</code>, <code>deletion-request</code>, <code>default</code> and <code>all-pings</code> are reserved
 and may not be used as the name of a custom ping.</p>
 </blockquote>
 <h2 id="ping-parameters"><a class="header" href="#ping-parameters">Ping parameters</a></h2>
@@ -12426,7 +12432,14 @@ This is a major milestone in using a cross-platform implementation of Glean on t
 <li>Note: This change required a big refactoring of the internal uploading logic.</li>
 </ul>
 </li>
+<li><a href="https://github.com/mozilla/glean.js/pull/994">#994</a>: Automatically restart ping upload once the rate limit window is ended.
+<ul>
+<li>Prior to this change, ping uploading would only be resumed once the <code>.submit()</code> API was called again, even if Glean was not throttled anymore.</li>
+<li><strong>Note</strong>: this change does not apply to QML. We used the <code>setTimeout</code>/<code>clearTimeout</code> APIs in this feature and those are not available on the QML platform. Follow <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1743140">Bug 1743140</a> for updates.</li>
+</ul>
+</li>
 <li><a href="https://github.com/mozilla/glean.js/pull/1015">#1015</a>: BUGFIX: Make attempting to call the <code>setUploadEnabled</code> API before initializing Glean a no-op.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/1016">#1016</a>: BUGFIX: Make shutdown a no-op in case Glean is not initialized.</li>
 </ul>
 <h1 id="v0270-2021-11-22"><a class="header" href="#v0270-2021-11-22">v0.27.0 (2021-11-22)</a></h1>
 <p><a href="https://github.com/mozilla/glean.js/compare/v0.26.0...v0.27.0">Full changelog</a></p>

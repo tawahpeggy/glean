@@ -305,9 +305,15 @@ that are built in to the Glean SDK.</p>
 <h4 id="send_in_pings"><a class="header" href="#send_in_pings"><code>send_in_pings</code></a></h4>
 <p><em>default: <code>events</code>|<code>metrics</code></em></p>
 <p>Defines which pings the metric should be sent on.
-If not specified, the metric is sent on the &quot;default ping&quot;,
+If not specified, the metric is sent on the default ping,
 which is the <code>events</code> ping for events and the <code>metrics</code> ping for everything else.</p>
 <p>Most metrics don't need to specify this unless they are sent on <a href="../../user/pings/custom.html">custom pings</a>.</p>
+<p>The special value <code>default</code> may be used, in case it's required for a metric to be sent
+on the default ping as well as in a custom ping.</p>
+<pre><code class="language-yaml">send_in_pings:
+  - my-custom-ping
+  - default
+</code></pre>
 <h4 id="disabled"><a class="header" href="#disabled"><code>disabled</code></a></h4>
 <p><em>default: <code>false</code></em></p>
 <p>Data collection for this metric is disabled.</p>
