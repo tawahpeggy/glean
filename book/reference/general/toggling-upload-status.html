@@ -151,50 +151,106 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="toggling-upload-status"><a class="header" href="#toggling-upload-status">Toggling upload status</a></h1>
+<p>The Glean SDKs provide an API for toggling Glean's upload status after initialization.</p>
+<p>Applications instrumented with Glean
+<a href="../../user/adding-glean-to-your-project/index.html#glean-integration-checklist">are expected to</a>
+provide some form of user interface to allow for toggling the upload status.</p>
+<h2 id="disabling-upload"><a class="header" href="#disabling-upload">Disabling upload</a></h2>
+<p>When upload is disabled, the Glean SDK will perform the following tasks:</p>
+<ol>
+<li>Submit a <a href="../../user/pings/deletion_request.html"><code>deletion-request</code></a> ping.</li>
+<li>Cancel scheduled ping uploads.</li>
+<li>Clear metrics and pings data from the client, except for the
+<a href="../../user/pings/index.html#the-client_info-section"><code>first_run_date</code> and <code>first_run_hour</code></a> metrics.</li>
+</ol>
+<p>While upload is disabled, metrics aren't recorded and no data is uploaded.</p>
+<h2 id="enabling-upload"><a class="header" href="#enabling-upload">Enabling upload</a></h2>
+<p>When upload is enabled, the Glean SDK will re-initialize its <a href="../../user/collected-metrics/metrics.html">core metrics</a>.
+The only core metrics that are not re-initialized are the <a href="../../user/pings/index.html#the-client_info-section"><code>first_run_date</code> and <code>first_run_hour</code></a> metrics.</p>
+<p>While upload is enabled all metrics are recorded as expected
+and pings are sent to the telemetry servers.</p>
+<h2 id="api"><a class="header" href="#api">API</a></h2>
+<h3 id="gleansetuploadenabledboolean"><a class="header" href="#gleansetuploadenabledboolean"><code>Glean.setUploadEnabled(boolean)</code></a></h3>
+<p>Enables or disables upload.</p>
+<p>If called prior to initialize this function is a no-op.</p>
+<p>If the upload state is not actually changed in between calls to this function, it is also a no-op.</p>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
 <div data-lang="Kotlin" class="tab">
-<p><code>Glean.setUploadEnabled()</code> should be called in response to the user enabling or disabling telemetry.</p>
-<div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
-<h5 id="do-not-call-setuploadenabled-before-initializing"><a class="header" href="#do-not-call-setuploadenabled-before-initializing">Do not call <code>setUploadEnabled</code> before initializing</a></h5>
-<blockquote>
-<p>If called before <code>Glean.initialize()</code> the call to <code>Glean.setUploadEnabled()</code> will be ignored.
-Set the initial state using <code>uploadEnabled</code> on <code>Glean.initialize()</code>.</p>
-</blockquote>
+<pre><code class="language-Kotlin">import mozilla.telemetry.glean.Glean
+
+open class MainActivity : AppCompatActivity() {
+    override fun onCreate() {
+        // ...
+
+        uploadSwitch.setOnCheckedChangeListener { _, isChecked -&gt;
+            if (isChecked) {
+                Glean.setUploadEnabled(true)
+            } else {
+                Glean.setUploadEnabled(false)
+            }
+        }
+    }
+}
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import mozilla.telemetry.glean.Glean
+
+Glean.INSTANCE.setUploadEnabled(false);
+</code></pre>
 </div>
 <div data-lang="Swift" class="tab">
-<p><code>Glean.shared.setUploadEnabled()</code> should be called in response to the user enabling or disabling telemetry.</p>
-<div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
-<h5 id="do-not-call-setuploadenabled-before-initializing-1"><a class="header" href="#do-not-call-setuploadenabled-before-initializing-1">Do not call <code>setUploadEnabled</code> before initializing</a></h5>
-<blockquote>
-<p>If called before <code>Glean.shared.initialize()</code> the call to <code>Glean.shared.setUploadEnabled()</code> will be ignored.
-Set the initial state using <code>uploadEnabled</code> on <code>Glean.shared.initialize()</code>.</p>
-</blockquote>
+<pre><code class="language-Swift">import Glean
+import UIKit
+
+class ViewController: UIViewController {
+    @IBOutlet var enableSwitch: UISwitch!
+
+    // ...
+
+    @IBAction func enableToggled(_: Any) {
+        Glean.shared.setUploadEnabled(enableSwitch.isOn)
+    }
+}
+</code></pre>
 </div>
 <div data-lang="Python" class="tab">
-<p><code>Glean.set_upload_enabled()</code> should be called in response to the user enabling or disabling telemetry.</p>
-<div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
-<h5 id="do-not-call-set_upload_enabled-before-initializing"><a class="header" href="#do-not-call-set_upload_enabled-before-initializing">Do not call <code>set_upload_enabled</code> before initializing</a></h5>
-<blockquote>
-<p>If called before <code>Glean.initialize()</code> the call to <code>Glean.set_upload_enabled()</code> will be ignored.
-Set the initial state using <code>upload_enabled</code> on <code>Glean.initialize()</code>.</p>
-</blockquote>
+<pre><code class="language-python">from glean import Glean
+
+Glean.set_upload_enabled(false)
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><code class="language-Rust">use glean;
+
+glean::set_upload_enabled(false);
+</code></pre>
 </div>
 <div data-lang="JavaScript" class="tab">
-<p><code>Glean.setUploadEnabled()</code> should be called in response to the user enabling or disabling telemetry.</p>
-<div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
-<h5 id="do-not-call-setuploadenabled-before-initializing-2"><a class="header" href="#do-not-call-setuploadenabled-before-initializing-2">Do not call <code>setUploadEnabled</code> before initializing</a></h5>
-<blockquote>
-<p>If called before <code>Glean.initialize()</code> the call to <code>Glean.setUploadEnabled()</code> will be ignored.
-Set the initial state using <code>uploadEnabled</code> on <code>Glean.initialize()</code>.</p>
-</blockquote>
+<pre><code class="language-js">import Glean from &quot;@mozilla/glean/web&quot;;
+
+const uploadSwitch = document.querySelector(&quot;input[type=checkbox].upload-switch&quot;);
+uploadSwitch.addEventListener(&quot;change&quot;, event =&gt; {
+    if (event.target.checked) {
+        Glean.setUploadEnabled(true);
+    } else {
+        Glean.setUploadEnabled(false);
+    }
+});
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab" data-info="On Firefox Desktop data collection is toggled internally."></div>
 </div>
 </div>
-</div>
-<p>The application should provide some form of user interface to call this method.</p>
-<p>When going from enabled to disabled, all pending events, metrics and pings are cleared, except for <a href="../../user/pings/index.html#the-client_info-section"><code>first_run_date</code> and <code>first_run_hour</code></a>.
-When re-enabling, core Glean metrics will be recomputed at that time.</p>
+<h2 id="reference"><a class="header" href="#reference">Reference</a></h2>
+<ul>
+<li><a href="../../../swift/Classes/Glean.html#/s:5GleanAAC16setUploadEnabledyySbF">Swift API docs</a></li>
+<li><a href="../../../python/glean/index.html#glean.Glean.set_upload_enabled">Python API docs</a></li>
+<li><a href="../../../docs/glean/fn.set_upload_enabled.html">Rust API docs</a></li>
+<li><a href="https://mozilla.github.io/glean.js/classes/core_glean.default.html#setUploadEnabled">JavaScript API docs</a></li>
+</ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/general/toggling-upload-status.md">Edit this file on GitHub.</a></footer>
                     </main>
 

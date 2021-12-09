@@ -3557,50 +3557,106 @@ The number of recordings dropped, if any, is recorded in the <code>glean.error.p
 Collection and upload of the custom ping is delayed until Glean is initialized.
 Built-in pings are only available after initialization.</p>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/general/initializing.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="toggling-upload-status"><a class="header" href="#toggling-upload-status">Toggling upload status</a></h1>
+<p>The Glean SDKs provide an API for toggling Glean's upload status after initialization.</p>
+<p>Applications instrumented with Glean
+<a href="reference/general/../../user/adding-glean-to-your-project/index.html#glean-integration-checklist">are expected to</a>
+provide some form of user interface to allow for toggling the upload status.</p>
+<h2 id="disabling-upload"><a class="header" href="#disabling-upload">Disabling upload</a></h2>
+<p>When upload is disabled, the Glean SDK will perform the following tasks:</p>
+<ol>
+<li>Submit a <a href="reference/general/../../user/pings/deletion_request.html"><code>deletion-request</code></a> ping.</li>
+<li>Cancel scheduled ping uploads.</li>
+<li>Clear metrics and pings data from the client, except for the
+<a href="reference/general/../../user/pings/index.html#the-client_info-section"><code>first_run_date</code> and <code>first_run_hour</code></a> metrics.</li>
+</ol>
+<p>While upload is disabled, metrics aren't recorded and no data is uploaded.</p>
+<h2 id="enabling-upload"><a class="header" href="#enabling-upload">Enabling upload</a></h2>
+<p>When upload is enabled, the Glean SDK will re-initialize its <a href="reference/general/../../user/collected-metrics/metrics.html">core metrics</a>.
+The only core metrics that are not re-initialized are the <a href="reference/general/../../user/pings/index.html#the-client_info-section"><code>first_run_date</code> and <code>first_run_hour</code></a> metrics.</p>
+<p>While upload is enabled all metrics are recorded as expected
+and pings are sent to the telemetry servers.</p>
+<h2 id="api"><a class="header" href="#api">API</a></h2>
+<h3 id="gleansetuploadenabledboolean"><a class="header" href="#gleansetuploadenabledboolean"><code>Glean.setUploadEnabled(boolean)</code></a></h3>
+<p>Enables or disables upload.</p>
+<p>If called prior to initialize this function is a no-op.</p>
+<p>If the upload state is not actually changed in between calls to this function, it is also a no-op.</p>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
 <div data-lang="Kotlin" class="tab">
-<p><code>Glean.setUploadEnabled()</code> should be called in response to the user enabling or disabling telemetry.</p>
-<div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
-<h5 id="do-not-call-setuploadenabled-before-initializing"><a class="header" href="#do-not-call-setuploadenabled-before-initializing">Do not call <code>setUploadEnabled</code> before initializing</a></h5>
-<blockquote>
-<p>If called before <code>Glean.initialize()</code> the call to <code>Glean.setUploadEnabled()</code> will be ignored.
-Set the initial state using <code>uploadEnabled</code> on <code>Glean.initialize()</code>.</p>
-</blockquote>
+<pre><code class="language-Kotlin">import mozilla.telemetry.glean.Glean
+
+open class MainActivity : AppCompatActivity() {
+    override fun onCreate() {
+        // ...
+
+        uploadSwitch.setOnCheckedChangeListener { _, isChecked -&gt;
+            if (isChecked) {
+                Glean.setUploadEnabled(true)
+            } else {
+                Glean.setUploadEnabled(false)
+            }
+        }
+    }
+}
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import mozilla.telemetry.glean.Glean
+
+Glean.INSTANCE.setUploadEnabled(false);
+</code></pre>
 </div>
 <div data-lang="Swift" class="tab">
-<p><code>Glean.shared.setUploadEnabled()</code> should be called in response to the user enabling or disabling telemetry.</p>
-<div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
-<h5 id="do-not-call-setuploadenabled-before-initializing-1"><a class="header" href="#do-not-call-setuploadenabled-before-initializing-1">Do not call <code>setUploadEnabled</code> before initializing</a></h5>
-<blockquote>
-<p>If called before <code>Glean.shared.initialize()</code> the call to <code>Glean.shared.setUploadEnabled()</code> will be ignored.
-Set the initial state using <code>uploadEnabled</code> on <code>Glean.shared.initialize()</code>.</p>
-</blockquote>
+<pre><code class="language-Swift">import Glean
+import UIKit
+
+class ViewController: UIViewController {
+    @IBOutlet var enableSwitch: UISwitch!
+
+    // ...
+
+    @IBAction func enableToggled(_: Any) {
+        Glean.shared.setUploadEnabled(enableSwitch.isOn)
+    }
+}
+</code></pre>
 </div>
 <div data-lang="Python" class="tab">
-<p><code>Glean.set_upload_enabled()</code> should be called in response to the user enabling or disabling telemetry.</p>
-<div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
-<h5 id="do-not-call-set_upload_enabled-before-initializing"><a class="header" href="#do-not-call-set_upload_enabled-before-initializing">Do not call <code>set_upload_enabled</code> before initializing</a></h5>
-<blockquote>
-<p>If called before <code>Glean.initialize()</code> the call to <code>Glean.set_upload_enabled()</code> will be ignored.
-Set the initial state using <code>upload_enabled</code> on <code>Glean.initialize()</code>.</p>
-</blockquote>
+<pre><code class="language-python">from glean import Glean
+
+Glean.set_upload_enabled(false)
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><code class="language-Rust">use glean;
+
+glean::set_upload_enabled(false);
+</code></pre>
 </div>
 <div data-lang="JavaScript" class="tab">
-<p><code>Glean.setUploadEnabled()</code> should be called in response to the user enabling or disabling telemetry.</p>
-<div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
-<h5 id="do-not-call-setuploadenabled-before-initializing-2"><a class="header" href="#do-not-call-setuploadenabled-before-initializing-2">Do not call <code>setUploadEnabled</code> before initializing</a></h5>
-<blockquote>
-<p>If called before <code>Glean.initialize()</code> the call to <code>Glean.setUploadEnabled()</code> will be ignored.
-Set the initial state using <code>uploadEnabled</code> on <code>Glean.initialize()</code>.</p>
-</blockquote>
+<pre><code class="language-js">import Glean from &quot;@mozilla/glean/web&quot;;
+
+const uploadSwitch = document.querySelector(&quot;input[type=checkbox].upload-switch&quot;);
+uploadSwitch.addEventListener(&quot;change&quot;, event =&gt; {
+    if (event.target.checked) {
+        Glean.setUploadEnabled(true);
+    } else {
+        Glean.setUploadEnabled(false);
+    }
+});
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab" data-info="On Firefox Desktop data collection is toggled internally."></div>
 </div>
 </div>
-</div>
-<p>The application should provide some form of user interface to call this method.</p>
-<p>When going from enabled to disabled, all pending events, metrics and pings are cleared, except for <a href="reference/general/../../user/pings/index.html#the-client_info-section"><code>first_run_date</code> and <code>first_run_hour</code></a>.
-When re-enabling, core Glean metrics will be recomputed at that time.</p>
+<h2 id="reference"><a class="header" href="#reference">Reference</a></h2>
+<ul>
+<li><a href="reference/general/../../../swift/Classes/Glean.html#/s:5GleanAAC16setUploadEnabledyySbF">Swift API docs</a></li>
+<li><a href="reference/general/../../../python/glean/index.html#glean.Glean.set_upload_enabled">Python API docs</a></li>
+<li><a href="reference/general/../../../docs/glean/fn.set_upload_enabled.html">Rust API docs</a></li>
+<li><a href="https://mozilla.github.io/glean.js/classes/core_glean.default.html#setUploadEnabled">JavaScript API docs</a></li>
+</ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/general/toggling-upload-status.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="using-the-experiments-api"><a class="header" href="#using-the-experiments-api">Using the experiments API</a></h1>
 <p>The Glean SDKs support tagging all their pings with experiments annotations. The annotations are useful to report that experiments were active at the time the measurement were collected. The annotations are reported in the optional <code>experiments</code> entry in the <a href="reference/general/../../user/pings/index.html"><code>ping_info</code> section</a> of all pings.</p>
 <div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
@@ -3823,7 +3879,7 @@ Assert.equals(
 </div>
 </div>
 </div>
-<h2 id="reference"><a class="header" href="#reference">Reference</a></h2>
+<h2 id="reference-1"><a class="header" href="#reference-1">Reference</a></h2>
 <ul>
 <li><a href="reference/general/../../../swift/Classes/QuantityMetricType.html">Swift API docs</a></li>
 <li><a href="reference/general/../../../python/glean/metrics/quantity.html">Python API docs</a></li>
@@ -3832,7 +3888,7 @@ Assert.equals(
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/general/experiments-api.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="registering-custom-pings"><a class="header" href="#registering-custom-pings">Registering custom pings</a></h1>
 <p>After defining <a href="reference/general/../../user/pings/custom.html">custom pings</a> <code>glean_parser</code> is able to generate code from
 <code>pings.yaml</code> files in a <code>Pings</code> object, which must be instantiated so Glean can send pings by name.</p>
-<h2 id="api"><a class="header" href="#api">API</a></h2>
+<h2 id="api-1"><a class="header" href="#api-1">API</a></h2>
 <h3 id="registerpings"><a class="header" href="#registerpings"><code>registerPings</code></a></h3>
 <p>Loads custom ping metadata into your application or library.</p>
 <div class="tabs">
@@ -3919,7 +3975,7 @@ completion of each of these tasks.</p>
 thread for all other SDKs.</p>
 </div>
 </blockquote>
-<h2 id="api-1"><a class="header" href="#api-1">API</a></h2>
+<h2 id="api-2"><a class="header" href="#api-2">API</a></h2>
 <h3 id="shutdown"><a class="header" href="#shutdown"><code>shutdown</code></a></h3>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -3964,7 +4020,7 @@ is explicitly using the <code>webext</code> target.</p>
 <div data-lang="Firefox Desktop" class="tab" data-info="On application shutdown Glean will automatically wait for the dispatcher thread to finish."></div>
 </div>
 </div>
-<h2 id="reference-1"><a class="header" href="#reference-1">Reference</a></h2>
+<h2 id="reference-2"><a class="header" href="#reference-2">Reference</a></h2>
 <ul>
 <li><a href="reference/general/../../../docs/glean/fn.shutdown.html">Rust API docs</a></li>
 <li><a href="https://mozilla.github.io/glean.js/classes/core_glean.default.html#shutdown">JavaScript API docs</a></li>
@@ -4010,7 +4066,7 @@ on how to view the logs on the platform you are on.</p>
 <ul>
 <li>The accepted values are <code>true</code> or <code>false</code>. Any other value will be ignored.</li>
 </ul>
-<h2 id="api-2"><a class="header" href="#api-2">API</a></h2>
+<h2 id="api-3"><a class="header" href="#api-3">API</a></h2>
 <h3 id="setlogpings"><a class="header" href="#setlogpings"><code>setLogPings</code></a></h3>
 <p>Enables or disables ping logging.</p>
 <p>This API can safely be called before <code>Glean.initialize</code>.
@@ -4085,7 +4141,7 @@ will contain the <code>X-Debug-Id</code> header with the given tag.</p>
 <li>Any valid HTTP header value is a valid debug view tag (e.g. any value that matches the
 regex <code>[a-zA-Z0-9-]{1,20}</code>). Invalid values will be ignored.</li>
 </ul>
-<h2 id="api-3"><a class="header" href="#api-3">API</a></h2>
+<h2 id="api-4"><a class="header" href="#api-4">API</a></h2>
 <h3 id="setdebugviewtag"><a class="header" href="#setdebugviewtag"><code>setDebugViewTag</code></a></h3>
 <p>Sets the Debug View Tag to a given value.</p>
 <p>This API can safely be called before <code>Glean.initialize</code>.
@@ -4164,7 +4220,7 @@ the whole list will be ignored.</li>
 <li>The special value <code>automation</code> is meant for tagging pings generated on automation: such pings will
 be specially handled on the pipeline (i.e. discarded from <a href="https://docs.telemetry.mozilla.org/cookbooks/bigquery/querying.html#table-layout-and-naming">non-live views</a>).</li>
 </ul>
-<h2 id="api-4"><a class="header" href="#api-4">API</a></h2>
+<h2 id="api-5"><a class="header" href="#api-5">API</a></h2>
 <h3 id="setsourcetags"><a class="header" href="#setsourcetags"><code>setSourceTags</code></a></h3>
 <p>Sets the Source Tags to a given value.</p>
 <p>This API can safely be called before <code>Glean.initialize</code>.
@@ -4503,7 +4559,7 @@ refer to the <a href="reference/metrics/../yaml/metrics.html">metrics YAML regis
 <ul>
 <li>Is accessibility enabled?</li>
 </ul>
-<h2 id="reference-2"><a class="header" href="#reference-2">Reference</a></h2>
+<h2 id="reference-3"><a class="header" href="#reference-3">Reference</a></h2>
 <ul>
 <li><a href="reference/metrics/../../../swift/Classes/BooleanMetricType.html">Swift API docs</a></li>
 <li><a href="reference/metrics/../../../python/glean/metrics/boolean.html">Python API docs</a></li>
@@ -4823,7 +4879,7 @@ index of the labels is used to report Gecko data through the Glean SDK.</p>
 <ul>
 <li>Which accessibility features are enabled?</li>
 </ul>
-<h2 id="reference-3"><a class="header" href="#reference-3">Reference</a></h2>
+<h2 id="reference-4"><a class="header" href="#reference-4">Reference</a></h2>
 <ul>
 <li>Swift API docs: <a href="reference/metrics/../../../swift/Classes/LabeledMetricType.html"><code>LabeledMetricType</code></a>, <a href="reference/metrics/../../../swift/Classes/BooleanMetricType.html"><code>BooleanMetricType</code></a></li>
 <li>Python API docs: <a href="reference/metrics/../../../python/glean/metrics/labeled.html"><code>LabeledMetricBase</code></a>, <a href="reference/metrics/../../../python/glean/metrics/boolean.html"><code>BooleanMetricType</code></a></li>
@@ -5101,7 +5157,7 @@ refer to the <a href="reference/metrics/../yaml/metrics.html">metrics YAML regis
 <ul>
 <li>How often was a certain button pressed?</li>
 </ul>
-<h2 id="reference-4"><a class="header" href="#reference-4">Reference</a></h2>
+<h2 id="reference-5"><a class="header" href="#reference-5">Reference</a></h2>
 <ul>
 <li><a href="reference/metrics/../../../swift/Classes/CounterMetricType.html">Swift API docs</a></li>
 <li><a href="reference/metrics/../../../python/glean/metrics/counter.html">Python API docs</a></li>
@@ -5438,7 +5494,7 @@ index of the labels is used to report Gecko data through the Glean SDK.</p>
 <ul>
 <li>How many times did different types of crashes occur?</li>
 </ul>
-<h2 id="reference-5"><a class="header" href="#reference-5">Reference</a></h2>
+<h2 id="reference-6"><a class="header" href="#reference-6">Reference</a></h2>
 <ul>
 <li>Swift API docs: <a href="reference/metrics/../../../swift/Classes/LabeledMetricType.html"><code>LabeledMetricType</code></a>, <a href="reference/metrics/../../../swift/Classes/CounterMetricType.html"><code>CounterMetricType</code></a></li>
 <li>Python API docs: <a href="reference/metrics/../../../python/glean/metrics/labeled.html"><code>LabeledMetricBase</code></a>, <a href="reference/metrics/../../../python/glean/metrics/counter.html"><code>CounterMetricType</code></a></li>
@@ -5752,7 +5808,7 @@ refer to the <a href="reference/metrics/../yaml/metrics.html">metrics YAML regis
 <p>Recording the device model with a value of <code>&quot;SAMSUNG-SGH-I997&quot;</code>.</p>
 </li>
 </ul>
-<h2 id="reference-6"><a class="header" href="#reference-6">Reference</a></h2>
+<h2 id="reference-7"><a class="header" href="#reference-7">Reference</a></h2>
 <ul>
 <li><a href="reference/metrics/../../../swift/Classes/StringMetricType.html">Swift API docs</a></li>
 <li><a href="reference/metrics/../../../python/glean/metrics/string.html">Python API docs</a></li>
@@ -6056,7 +6112,7 @@ index of the labels is used to report Gecko data through the Glean SDK.</p>
 <ul>
 <li>What kinds of errors occurred at each step in the login process?</li>
 </ul>
-<h2 id="reference-7"><a class="header" href="#reference-7">Reference</a></h2>
+<h2 id="reference-8"><a class="header" href="#reference-8">Reference</a></h2>
 <ul>
 <li>Swift API docs: <a href="reference/metrics/../../../swift/Classes/LabeledMetricType.html"><code>LabeledMetricType</code></a>, <a href="reference/metrics/../../../swift/Classes/StringMetricType.html"><code>StringMetricType</code></a></li>
 <li>Python API docs: <a href="reference/metrics/../../../python/glean/metrics/labeled.html"><code>LabeledMetricBase</code></a>, <a href="reference/metrics/../../../python/glean/metrics/string.html"><code>StringMetricType</code></a></li>
@@ -6374,7 +6430,7 @@ refer to the <a href="reference/metrics/../yaml/metrics.html">metrics YAML regis
 <ul>
 <li>Which search engines are enabled?</li>
 </ul>
-<h2 id="reference-8"><a class="header" href="#reference-8">Reference</a></h2>
+<h2 id="reference-9"><a class="header" href="#reference-9">Reference</a></h2>
 <ul>
 <li><a href="reference/metrics/../../../swift/Classes/StringListMetricType.html">Swift API docs</a></li>
 <li><a href="reference/metrics/../../../python/glean/metrics/string_list.html">Python API docs</a></li>
@@ -7014,7 +7070,7 @@ Therefore, a measurement of 500 nanoseconds will be truncated to 0 microseconds.
 <ul>
 <li>How long did it take for the user to log in?</li>
 </ul>
-<h2 id="reference-9"><a class="header" href="#reference-9">Reference</a></h2>
+<h2 id="reference-10"><a class="header" href="#reference-10">Reference</a></h2>
 <ul>
 <li><a href="reference/metrics/../../../swift/Classes/TimespanMetricType.html">Swift API docs</a></li>
 <li><a href="reference/metrics/../../../python/glean/metrics/timespan.html">Python API docs</a></li>
@@ -7053,7 +7109,7 @@ controls the minimum and maximum values that will recorded:</p>
       Counts how long each page takes to load
     ...
 </code></pre>
-<h2 id="api-5"><a class="header" href="#api-5">API</a></h2>
+<h2 id="api-6"><a class="header" href="#api-6">API</a></h2>
 <p>Now you can use the timing distribution from the application's code.
 Starting a timer returns a timer ID that needs to be used to stop or cancel the timer at a later point.
 Multiple intervals can be measured concurrently.
@@ -7347,7 +7403,7 @@ Longer times will be truncated to the maximum value and an error will be recorde
 <li><code>invalid_state</code>: If a non-existing/stopped timer is stopped again.</li>
 <li><code>invalid_overflow</code>: If recording a time longer than the maximum for the given unit.</li>
 </ul>
-<h2 id="reference-10"><a class="header" href="#reference-10">Reference</a></h2>
+<h2 id="reference-11"><a class="header" href="#reference-11">Reference</a></h2>
 <ul>
 <li><a href="reference/metrics/../../../swift/Classes/TimingDistributionMetricType.html">Swift API docs</a></li>
 <li><a href="reference/metrics/../../../python/glean/metrics/timing_distribution.html">Python API docs</a></li>
@@ -7443,7 +7499,7 @@ power-of-2 units, so &quot;kilobyte&quot; is more correctly a &quot;kibibyte&quo
     memory_unit: kilobyte
     ...
 </code></pre>
-<h2 id="api-6"><a class="header" href="#api-6">API</a></h2>
+<h2 id="api-7"><a class="header" href="#api-7">API</a></h2>
 <p>Now you can use the memory distribution from the application's code.</p>
 <blockquote>
 <p><strong>Note</strong> The data <em>provided</em> to the <code>accumulate</code> method is in the configured memory unit specified in the <code>metrics.yaml</code> file. The data <em>recorded</em>, on the other hand, is always in <strong>bytes</strong>.</p>
@@ -7637,7 +7693,7 @@ Assert.equal(1, Object.entries(data.values).reduce(([bucket, count], sum) =&gt; 
 <li><code>invalid_value</code>: If recording a negative memory size.</li>
 <li><code>invalid_value</code>: If recording a size larger than 1TB.</li>
 </ul>
-<h2 id="reference-11"><a class="header" href="#reference-11">Reference</a></h2>
+<h2 id="reference-12"><a class="header" href="#reference-12">Reference</a></h2>
 <ul>
 <li><a href="reference/metrics/../../../swift/Classes/MemoryDistributionMetricType.html">Swift API docs</a></li>
 <li><a href="reference/metrics/../../../python/glean/metrics/timing_distribution.html">Python API docs</a></li>
@@ -8050,7 +8106,7 @@ refer to the <a href="reference/metrics/../yaml/metrics.html">metrics YAML regis
 <ul>
 <li>A unique identifier for the client.</li>
 </ul>
-<h2 id="reference-12"><a class="header" href="#reference-12">Reference</a></h2>
+<h2 id="reference-13"><a class="header" href="#reference-13">Reference</a></h2>
 <ul>
 <li><a href="reference/metrics/../../../swift/Classes/UuidMetricType.html">Swift API docs</a></li>
 <li><a href="reference/metrics/../../../python/glean/metrics/uuid.html">Python API docs</a></li>
@@ -8365,7 +8421,7 @@ refer to the metrics <a href="reference/metrics/../yaml/index.html">YAML format<
 <ul>
 <li>What is the base URL used to build the search query for the search engine?</li>
 </ul>
-<h2 id="reference-13"><a class="header" href="#reference-13">Reference</a></h2>
+<h2 id="reference-14"><a class="header" href="#reference-14">Reference</a></h2>
 <ul>
 <li><a href="https://mozilla.github.io/glean.js/classes/core_metrics_types_url.default.html">JavaScript API docs</a></li>
 </ul>
@@ -8697,7 +8753,7 @@ refer to the <a href="reference/metrics/../yaml/metrics.html">metrics YAML regis
 <ul>
 <li>When did the user first run the application?</li>
 </ul>
-<h2 id="reference-14"><a class="header" href="#reference-14">Reference</a></h2>
+<h2 id="reference-15"><a class="header" href="#reference-15">Reference</a></h2>
 <ul>
 <li><a href="reference/metrics/../../../swift/Classes/DatetimeMetricType.html">Swift API docs</a></li>
 <li><a href="reference/metrics/../../../python/glean/metrics/datetime.html">Python API docs</a></li>
@@ -9064,7 +9120,7 @@ A maximum of 10 extra keys is allowed.</p>
 <li>The keys in the <code>extra_keys</code> list must be in dotted snake case, with a maximum length of 40 bytes, when encoded as UTF-8.</li>
 <li>The values in the <code>extras</code> object have a maximum length of 100 bytes, when serialized and encoded as UTF-8.</li>
 </ul>
-<h2 id="reference-15"><a class="header" href="#reference-15">Reference</a></h2>
+<h2 id="reference-16"><a class="header" href="#reference-16">Reference</a></h2>
 <ul>
 <li><a href="reference/metrics/../../../swift/Classes/EventMetricType.html">Swift API docs</a></li>
 <li><a href="reference/metrics/../../../python/glean/metrics/event.html">Python API docs</a></li>
@@ -9263,7 +9319,7 @@ assert_eq!(
 It is the name of the Gecko metric to accumulate the data from,
 when using a Glean SDK in a product using GeckoView.</li>
 </ul>
-<h2 id="reference-16"><a class="header" href="#reference-16">Reference</a></h2>
+<h2 id="reference-17"><a class="header" href="#reference-17">Reference</a></h2>
 <ul>
 <li><a href="reference/metrics/../../../docs/glean/private/struct.CustomDistributionMetric.html">Rust API docs</a></li>
 </ul>
@@ -9597,7 +9653,7 @@ refer to the <a href="reference/metrics/../yaml/metrics.html">metrics YAML regis
 <ul>
 <li>What is the width of the display, in pixels?</li>
 </ul>
-<h2 id="reference-17"><a class="header" href="#reference-17">Reference</a></h2>
+<h2 id="reference-18"><a class="header" href="#reference-18">Reference</a></h2>
 <ul>
 <li><a href="reference/metrics/../../../swift/Classes/QuantityMetricType.html">Swift API docs</a></li>
 <li><a href="reference/metrics/../../../python/glean/metrics/quantity.html">Python API docs</a></li>
@@ -9798,7 +9854,7 @@ then the denominator should be defined as a <code>counter</code> and shared betw
 <li>How often did an HTTP connection error?</li>
 <li>How many documents used a given CSS Property?</li>
 </ul>
-<h2 id="reference-18"><a class="header" href="#reference-18">Reference</a></h2>
+<h2 id="reference-19"><a class="header" href="#reference-19">Reference</a></h2>
 <ul>
 <li><a href="reference/metrics/../../../docs/glean/private/rate/struct.RateMetric.html">Rust API docs</a></li>
 </ul>
