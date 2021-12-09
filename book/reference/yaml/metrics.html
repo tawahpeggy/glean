@@ -223,13 +223,12 @@ This defines which operations are valid for the metric,
 how it is stored and how data analysis tooling displays it.
 See the list of <a href="../metrics/index.html">supported metric types</a>.</p>
 <div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
-<h5 id="types-should-not-be-changed-after-release"><a class="header" href="#types-should-not-be-changed-after-release">Types should not be changed after release</a></h5>
+<h5 id="types-must-not-be-changed-after-release"><a class="header" href="#types-must-not-be-changed-after-release">Types must not be changed after release</a></h5>
 <blockquote>
-<p>Once a metric is released in a product, its <code>type</code> should not be changed.
-If any data was collected locally with the older <code>type</code>, and hasn't yet been sent in a ping,
-recording data with the new <code>type</code> may cause any old persisted data to be lost for that metric.
-See <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1621757#c1">this comment</a> for an extended
-explanation of the different scenarios.</p>
+<p>Once a metric is defined in a product, its <code>type</code> must not be changed.
+The ingestion pipeline will not be able to handle such a change.
+If a type change is required a new metric must be added with a new name and the new type.
+This will require an additional data review, in which you can also reference the old data review.</p>
 </blockquote>
 <h4 id="description"><a class="header" href="#description"><code>description</code></a></h4>
 <p>A textual description of the metric for humans.

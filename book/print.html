@@ -3095,13 +3095,12 @@ This defines which operations are valid for the metric,
 how it is stored and how data analysis tooling displays it.
 See the list of <a href="reference/yaml/../metrics/index.html">supported metric types</a>.</p>
 <div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
-<h5 id="types-should-not-be-changed-after-release"><a class="header" href="#types-should-not-be-changed-after-release">Types should not be changed after release</a></h5>
+<h5 id="types-must-not-be-changed-after-release"><a class="header" href="#types-must-not-be-changed-after-release">Types must not be changed after release</a></h5>
 <blockquote>
-<p>Once a metric is released in a product, its <code>type</code> should not be changed.
-If any data was collected locally with the older <code>type</code>, and hasn't yet been sent in a ping,
-recording data with the new <code>type</code> may cause any old persisted data to be lost for that metric.
-See <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1621757#c1">this comment</a> for an extended
-explanation of the different scenarios.</p>
+<p>Once a metric is defined in a product, its <code>type</code> must not be changed.
+The ingestion pipeline will not be able to handle such a change.
+If a type change is required a new metric must be added with a new name and the new type.
+This will require an additional data review, in which you can also reference the old data review.</p>
 </blockquote>
 <h4 id="description-4"><a class="header" href="#description-4"><code>description</code></a></h4>
 <p>A textual description of the metric for humans.
@@ -12424,7 +12423,9 @@ This is a major milestone in using a cross-platform implementation of Glean on t
 <h3 id="general"><a class="header" href="#general">General</a></h3>
 <p>First testing release.</p>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/appendix/changelog/sdk.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="unreleased-changes-1"><a class="header" href="#unreleased-changes-1">Unreleased changes</a></h1>
-<p><a href="https://github.com/mozilla/glean.js/compare/v0.27.0...main">Full changelog</a></p>
+<p><a href="https://github.com/mozilla/glean.js/compare/v0.28.0...main">Full changelog</a></p>
+<h1 id="v0280-2021-12-08"><a class="header" href="#v0280-2021-12-08">v0.28.0 (2021-12-08)</a></h1>
+<p><a href="https://github.com/mozilla/glean.js/compare/v0.27.0...v0.28.0">Full changelog</a></p>
 <ul>
 <li><a href="https://github.com/mozilla/glean.js/pull/984">#984</a>: BUGFIX: Return correct upload result in case an error happens while building a ping request.</li>
 <li><a href="https://github.com/mozilla/glean.js/pull/988">#988</a>: BUGFIX: Enforce rate limitation at upload time, not at ping submission time.
