@@ -152,18 +152,19 @@
                     <main>
                         <h1 id="timing-distribution"><a class="header" href="#timing-distribution">Timing Distribution</a></h1>
 <p>Timing distributions are used to accumulate and store time measurement, for analyzing distributions of the timing data.</p>
-<p>To measure the distribution of single timespans, see <a href="timespan.html">Timespans</a>. To record absolute times, see <a href="datetime.html">Datetimes</a>.</p>
+<p>To measure the distribution of single timespans, see <a href="timespan.html">Timespans</a>.
+To record absolute times, see <a href="datetime.html">Datetimes</a>.</p>
 <p>Timing distributions are recorded in a histogram where the buckets have an exponential distribution, specifically with 8 buckets for every power of 2.
 That is, the function from a value \( x \) to a bucket index is:</p>
 <p>\[ \lfloor 8 \log_2(x) \rfloor \]</p>
 <p>This makes them suitable for measuring timings on a number of time scales without any configuration.</p>
 <blockquote>
-<p><strong>Note</strong> Check out how this bucketing algorithm would behave on the <a href="#simulator">Simulator</a></p>
+<p><strong>Note</strong> Check out how this bucketing algorithm would behave on the <a href="#simulator">Simulator</a>.</p>
 </blockquote>
 <p>Timings always span the full length between <code>start</code> and <code>stopAndAccumulate</code>.
 If the Glean upload is disabled when calling <code>start</code>, the timer is still started.
 If the Glean upload is disabled at the time <code>stopAndAccumulate</code> is called, nothing is recorded.</p>
-<p>Multiple concurrent timespans in different threads may be measured at the same time.</p>
+<p>Multiple concurrent timings in different threads may be measured at the same time.</p>
 <p>Timings are always stored and sent in the payload as nanoseconds. However, the <code>time_unit</code> parameter
 controls the minimum and maximum values that will recorded:</p>
 <ul>
@@ -171,22 +172,16 @@ controls the minimum and maximum values that will recorded:</p>
 <li><code>microsecond</code>: 1μs &lt;= x &lt;= ~6.94 days</li>
 <li><code>millisecond</code>: 1ms &lt;= x &lt;= ~19 years</li>
 </ul>
-<p>Overflowing this range is considered an error and is reported through the error reporting mechanism. Underflowing this range is not an error and the value is silently truncated to the minimum value.</p>
-<p>Additionally, when a metric comes from GeckoView (the <code>geckoview_datapoint</code> parameter is present), the <code>time_unit</code> parameter specifies the unit that the samples are in when passed to Glean. Glean will convert all of the incoming samples to nanoseconds internally.</p>
-<h2 id="configuration"><a class="header" href="#configuration">Configuration</a></h2>
-<p>If you wanted to create a timing distribution to measure page load times, first you need to add an entry for it to the <code>metrics.yaml</code> file:</p>
-<pre><code class="language-YAML">pages:
-  page_load:
-    type: timing_distribution
-    description: &gt;
-      Counts how long each page takes to load
-    ...
-</code></pre>
-<h2 id="api"><a class="header" href="#api">API</a></h2>
-<p>Now you can use the timing distribution from the application's code.
-Starting a timer returns a timer ID that needs to be used to stop or cancel the timer at a later point.
-Multiple intervals can be measured concurrently.
-For example, to measure page load time on a number of tabs that are loading at the same time, each tab object needs to store the running timer ID.</p>
+<p>Overflowing this range is considered an error and is reported through the error reporting mechanism.
+Underflowing this range is not an error and the value is silently truncated to the minimum value.</p>
+<p>Additionally, when a metric comes from GeckoView (the <code>geckoview_datapoint</code> parameter is present),
+the <code>time_unit</code> parameter specifies the unit that the samples are in when passed to Glean.
+Glean will convert all of the incoming samples to nanoseconds internally.</p>
+<h2 id="recording-api"><a class="header" href="#recording-api">Recording API</a></h2>
+<h3 id="start"><a class="header" href="#start"><code>start</code></a></h3>
+<p>Start tracking time for the provided metric.
+Multiple timers can run simultaneously.
+Returns a unique <code>TimerId</code> for the new timer.</p>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
@@ -199,31 +194,6 @@ val timerId : GleanTimerId
 fun onPageStart(e: Event) {
     timerId = Pages.pageLoad.start()
 }
-
-fun onPageLoaded(e: Event) {
-    Pages.pageLoad.stopAndAccumulate(timerId)
-}
-</code></pre>
-<p>For convenience one can measure the time of a function or block of code:</p>
-<pre><code class="language-Kotlin">Pages.pageLoad.measure {
-    // Load a page
-}
-</code></pre>
-<p>There are test APIs available too.  For convenience, properties <code>sum</code> and <code>count</code> are exposed to facilitate validating that data was recorded correctly.</p>
-<p>Continuing the <code>pageLoad</code> example above, at this point the metric should have a <code>sum == 11</code> and a <code>count == 2</code>:</p>
-<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Pages
-
-// Was anything recorded?
-assertTrue(Pages.pageLoad.testHasValue())
-
-// Get snapshot.
-val snapshot = Pages.pageLoad.testGetValue()
-
-// Usually you don't know the exact timing values, but how many should have been recorded.
-assertEquals(1L, snapshot.count)
-
-// Assert that no errors were recorded.
-assertEquals(0, Pages.pageLoad.testGetNumRecordedErrors(ErrorType.InvalidValue))
 </code></pre>
 </div>
 <div data-lang="Java" class="tab">
@@ -233,33 +203,8 @@ import org.mozilla.yourApplication.GleanMetrics.Pages;
 GleanTimerId timerId;
 
 void onPageStart(Event e) {
-    timerId = Pages.INSTANCE.pageLoad.start();
+    timerId = Pages.INSTANCE.pageLoad().start();
 }
-
-void onPageLoaded(Event e) {
-    Pages.INSTANCE.pageLoad.stopAndAccumulate(timerId);
-}
-</code></pre>
-<p>There are test APIs available too.  For convenience, properties <code>sum</code> and <code>count</code> are exposed to facilitate validating that data was recorded correctly.</p>
-<p>Continuing the <code>pageLoad</code> example above, at this point the metric should have a <code>sum == 11</code> and a <code>count == 2</code>:</p>
-<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Pages;
-
-// Was anything recorded?
-assertTrue(pages.INSTANCE.pageLoad.testHasValue());
-
-// Get snapshot.
-DistributionData snapshot = pages.INSTANCE.pageLoad.testGetValue();
-
-// Usually you don't know the exact timing values, but how many should have been recorded.
-assertEquals(1L, snapshot.getCount);
-
-// Assert that no errors were recorded.
-assertEquals(
-    0,
-    pages.INSTANCE.pageLoad.testGetNumRecordedErrors(
-        ErrorType.InvalidValue
-    )
-);
 </code></pre>
 </div>
 <div data-lang="Swift" class="tab">
@@ -270,31 +215,6 @@ var timerId : GleanTimerId
 func onPageStart() {
     timerId = Pages.pageLoad.start()
 }
-
-func onPageLoaded() {
-    Pages.pageLoad.stopAndAccumulate(timerId)
-}
-</code></pre>
-<p>For convenience one can measure the time of a function or block of code:</p>
-<pre><code class="language-Swift">Pages.pageLoad.measure {
-    // Load a page
-}
-</code></pre>
-<p>There are test APIs available too.  For convenience, properties <code>sum</code> and <code>count</code> are exposed to facilitate validating that data was recorded correctly.</p>
-<p>Continuing the <code>pageLoad</code> example above, at this point the metric should have a <code>sum == 11</code> and a <code>count == 2</code>:</p>
-<pre><code class="language-Swift">@testable import Glean
-
-// Was anything recorded?
-XCTAssert(pages.pageLoad.testHasValue())
-
-// Get snapshot.
-let snapshot = try! pages.pageLoad.testGetValue()
-
-// Usually you don't know the exact timing values, but how many should have been recorded.
-XCTAssertEqual(1, snapshot.count)
-
-// Assert that no errors were recorded.
-XCTAssertEqual(0, pages.pageLoad.testGetNumRecordedErrors(.invalidValue))
 </code></pre>
 </div>
 <div data-lang="Python" class="tab">
@@ -306,27 +226,351 @@ class PageHandler:
         self.timer_id = None
 
     def on_page_start(self, event):
-        # ...
         self.timer_id = metrics.pages.page_load.start()
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean_metrics::pages;
 
+fn on_page_start() {
+    self.timer_id = pages::page_load.start();
+}
+<span class="boring">}
+</span></code></pre></pre>
+</div>
+<div data-lang="JavaScript" class="tab" data-bug="1716954"></div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+auto timerId = mozilla::glean::pages::page_load.Start();
+</code></pre>
+<p><strong>JavaScript</strong></p>
+<pre><code class="language-js">let timerId = Glean.pages.pageLoad.start();
+</code></pre>
+</div>
+</div>
+</div>
+<h3 id="stopandaccumulate"><a class="header" href="#stopandaccumulate"><code>stopAndAccumulate</code></a></h3>
+<p>Stops tracking time for the provided metric and associated timer id.</p>
+<p>Adds a count to the corresponding bucket in the timing distribution.
+This will record an error if <code>start</code> was not called.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Pages
+
+fun onPageLoaded(e: Event) {
+    Pages.pageLoad.stopAndAccumulate(timerId)
+}
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Pages;
+
+void onPageLoaded(Event e) {
+    Pages.INSTANCE.pageLoad().stopAndAccumulate(timerId);
+}
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">import Glean
+
+func onPageLoaded() {
+    Pages.pageLoad.stopAndAccumulate(timerId)
+}
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+class PageHandler:
     def on_page_loaded(self, event):
-        # ...
         metrics.pages.page_load.stop_and_accumulate(self.timer_id)
 </code></pre>
-<p>The Python SDK also has a context manager for measuring time:</p>
-<pre><code class="language-Python">with metrics.pages.page_load.measure():
-    # Load a page ...
+</div>
+<div data-lang="Rust" class="tab">
+<pre><code class="language-Rust">use glean_metrics::pages;
+
+fn on_page_loaded() {
+    pages::page_load.stop_and_accumulate(self.timer_id);
+}
 </code></pre>
-<p>There are test APIs available too.  For convenience, properties <code>sum</code> and <code>count</code> are exposed to facilitate validating that data was recorded correctly.</p>
-<p>Continuing the <code>page_load</code> example above, at this point the metric should have a <code>sum == 11</code> and a <code>count == 2</code>:</p>
-<pre><code class="language-Python"># Was anything recorded?
-assert metrics.pages.page_load.test_has_value()
+</div>
+<div data-lang="JavaScript" class="tab" data-bug="1716954"></div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+mozilla::glean::pages::page_load.StopAndAccumulate(std::move(timerId));
+</code></pre>
+<p><strong>JavaScript</strong></p>
+<pre><code class="language-js">Glean.pages.pageLoad.stopAndAccumulate(timerId);
+</code></pre>
+</div>
+</div>
+</div>
+<h4 id="recorded-errors"><a class="header" href="#recorded-errors">Recorded errors</a></h4>
+<ul>
+<li><a href="../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: If recording a negative timespan.</li>
+<li><a href="../../user/metrics/error-reporting.html"><code>invalid_state</code></a>: If a non-existing/stopped timer is stopped again.</li>
+<li><a href="../../user/metrics/error-reporting.html"><code>invalid_overflow</code></a>: If recording a time longer than the maximum for the given unit.</li>
+</ul>
+<h3 id="measure"><a class="header" href="#measure"><code>measure</code></a></h3>
+<p>For convenience one can measure the time of a function or block of code.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Pages
+
+Pages.pageLoad.measure {
+    // Load a page
+}
+</code></pre>
+</div>
+<div data-lang="Java" class="tab"></div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">import Glean
+
+Pages.pageLoad.measure {
+    // Load a page
+}
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+with metrics.pages.page_load.measure():
+    # Load a page
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab"></div>
+<div data-lang="JavaScript" class="tab" data-bug="1716954"></div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h3 id="cancel"><a class="header" href="#cancel"><code>cancel</code></a></h3>
+<p>Aborts a previous <code>start</code> call.
+No error is recorded if <code>start</code> was not called.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Pages
+
+fun onPageError(e: Event) {
+    Pages.pageLoad.cancel(timerId)
+}
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Pages;
+
+fun onPageError(e: Event) {
+    Pages.INSTANCE.pageLoad().cancel(timerId);
+}
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">import Glean
+
+func onPageError() {
+    Pages.pageLoad.cancel(timerId)
+}
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+class PageHandler:
+    def on_page_error(self, event):
+        metrics.pages.page_load.cancel(self.timer_id)
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><code class="language-Rust">use glean_metrics::pages;
+
+fn on_page_error() {
+    pages::page_load.cancel(self.timer_id);
+}
+</code></pre>
+</div>
+<div data-lang="JavaScript" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+mozilla::glean::pages::page_load.Cancel(std::move(timerId));
+</code></pre>
+<p><strong>JavaScript</strong></p>
+<pre><code class="language-js">Glean.pages.pageLoad.cancel(timerId);
+</code></pre>
+</div>
+</div>
+</div>
+<h2 id="testing-api"><a class="header" href="#testing-api">Testing API</a></h2>
+<h3 id="testgetvalue"><a class="header" href="#testgetvalue"><code>testGetValue</code></a></h3>
+<p>Gets the recorded value for a given timing distribution metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Pages
+
+// Get snapshot.
+val snapshot = Pages.pageLoad.testGetValue()
+
+// Usually you don't know the exact timing values,
+// but how many should have been recorded.
+assertEquals(1L, snapshot.count)
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Pages;
+
+// Get snapshot.
+DistributionData snapshot = pages.INSTANCE.pageLoad().testGetValue();
+
+// Usually you don't know the exact timing values,
+// but how many should have been recorded.
+assertEquals(1L, snapshot.getCount());
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+// Get snapshot.
+let snapshot = try! pages.pageLoad.testGetValue()
+
+// Usually you don't know the exact timing values,
+// but how many should have been recorded.
+XCTAssertEqual(1, snapshot.count)
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
 
 # Get snapshot.
 snapshot = metrics.pages.page_load.test_get_value()
 
-# Usually you don't know the exact timing values, but how many should have been recorded.
+# Usually you don't know the exact timing values,
+# but how many should have been recorded.
 assert 1 == snapshot.count
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean::ErrorType;
+use glean_metrics::pages;
+
+// Get snapshot
+let snapshot = pages::page_load.test_get_value(None).unwrap();
+
+// Usually you don't know the exact timing values,
+// but how many should have been recorded.
+assert_eq!(1, snapshot.values.len());
+<span class="boring">}
+</span></code></pre></pre>
+</div>
+<div data-lang="JavaScript" class="tab" data-bug="1716954"></div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+// Does it have an expected values?
+const data = mozilla::glean::pages::page_load.TestGetValue().value().unwrap();
+ASSERT_TRUE(data.sum &gt; 0);
+</code></pre>
+<p><strong>JavaScript</strong></p>
+<pre><code class="language-js">Assert.ok(Glean.pages.pageLoad.testGetValue().sum &gt; 0);
+</code></pre>
+</div>
+</div>
+</div>
+<h3 id="testhasvalue"><a class="header" href="#testhasvalue"><code>testHasValue</code></a></h3>
+<p>Whether or not <strong>any</strong> value was recorded for a given timing distribution metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Pages
+
+// Was anything recorded?
+assertTrue(Pages.pageLoad.testHasValue())
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Pages;
+
+// Was anything recorded?
+assertTrue(Pages.INSTANCE.pageLoad().testHasValue());
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+// Was anything recorded?
+XCTAssert(pages.pageLoad.testHasValue())
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+# Was anything recorded?
+assert metrics.pages.page_load.test_has_value()
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab"></div>
+<div data-lang="JavaScript" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h3 id="testgetnumrecordederrors"><a class="header" href="#testgetnumrecordederrors"><code>testGetNumRecordedErrors</code></a></h3>
+<p>Gets number of errors recorded for a given timing distribution metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Pages
+
+// Assert that no errors were recorded.
+assertEquals(0, Pages.pageLoad.testGetNumRecordedErrors(ErrorType.InvalidValue))
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Pages;
+
+// Assert that no errors were recorded.
+assertEquals(
+    0,
+    Pages.INSTANCE.pageLoad().testGetNumRecordedErrors(
+        ErrorType.InvalidValue
+    )
+);
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+// Assert that no errors were recorded.
+XCTAssertEqual(0, pages.pageLoad.testGetNumRecordedErrors(.invalidValue))
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
 
 # Assert that no errors were recorded.
 assert 0 == metrics.pages.page_load.test_get_num_recorded_errors(
@@ -334,112 +578,57 @@ assert 0 == metrics.pages.page_load.test_get_num_recorded_errors(
 )
 </code></pre>
 </div>
-<div data-lang="C#" class="tab">
-<pre><code class="language-C#">using static Mozilla.YourApplication.GleanMetrics.Pages;
-
-var timerId;
-
-void onPageStart(Event e) {
-    timerId = Pages.pageLoad.Start();
-}
-
-void onPageLoaded(Event e) {
-    Pages.pageLoad.StopAndAccumulate(timerId);
-}
-</code></pre>
-<p>There are test APIs available too.  For convenience, properties <code>sum</code> and <code>count</code> are exposed to facilitate validating that data was recorded correctly.</p>
-<p>Continuing the <code>pageLoad</code> example above, at this point the metric should have a <code>sum == 11</code> and a <code>count == 2</code>:</p>
-<pre><code class="language-C#">using static Mozilla.YourApplication.GleanMetrics.Pages;
-
-// Was anything recorded?
-Assert.True(Pages.pageLoad.TestHasValue());
-
-// Get snapshot.
-var snapshot = Pages.pageLoad.TestGetValue();
-
-// Usually you don't know the exact timing values, but how many should have been recorded.
-Assert.Equal(1, snapshot.Values.Count);
-
-// Assert that no errors were recorded.
-Assert.Equal(0, Pages.pageLoad.TestGetNumRecordedErrors(ErrorType.InvalidValue));
-</code></pre>
-</div>
 <div data-lang="Rust" class="tab">
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>use glean_metrics;
+<pre><code class="language-Rust">use glean::ErrorType;
+use glean_metrics::pages;
 
-fn on_page_start() {
-    self.timer_id = pages::page_load.start();
-}
-
-fn on_page_loaded() {
-    pages::page_load.stop_and_accumulate(self.timer_id);
-}
-<span class="boring">}
-</span></code></pre></pre>
-<p>There are test APIs available too.</p>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>use glean::ErrorType;
-use glean_metrics;
-
-// Was anything recorded?
-assert!(pages::page_load.test_get_value(None).is_some());
-
-// Assert no errors were recorded.
-let errors = [
-    ErrorType::InvalidValue,
-    ErrorType::InvalidState,
-    ErrorType::InvalidOverflow
-];
-for error in errors {
-    assert_eq!(0, pages::page_load.test_get_num_recorded_errors(error));
-}
-<span class="boring">}
-</span></code></pre></pre>
-</div>
-<div data-lang="C++" class="tab">
-<blockquote>
-<p><strong>Note</strong>: C++ APIs are only available in Firefox Desktop.</p>
-</blockquote>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
-
-auto timerId = mozilla::glean::pages::page_load.Start();
-PR_Sleep(PR_MillisecondsToInterval(10));
-mozilla::glean::pages::page_load.StopAndAccumulate(std::move(timerId));
-</code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
-
-// Does it have an expected values?
-const data = mozilla::glean::pages::page_load.TestGetValue().value().unwrap();
-ASSERT_TRUE(data.sum &gt; 0);
+assert_eq!(
+    0,
+    pages::page_load.test_get_num_recorded_errors(ErrorType::InvalidValue)
+);
 </code></pre>
 </div>
-<div data-lang="JS" class="tab">
-<blockquote>
-<p><strong>Note</strong>: JS APIs are only available in Firefox Desktop.</p>
-</blockquote>
-<pre><code class="language-js">const timerId = Glean.pages.pageLoad.start();
-await sleep(10);
-Glean.pages.pageLoad.stopAndAccumulate(timerId);
+<div data-lang="JavaScript" class="tab" data-bug="1716954"></div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h2 id="metric-parameters"><a class="header" href="#metric-parameters">Metric parameters</a></h2>
+<p>Example timing distribution metric definition:</p>
+<pre><code class="language-YAML">pages:
+  page_load:
+    type: timing_distribution
+    time_unit: millisecond
+    description: &gt;
+      Counts how long each page takes to load
+    bugs:
+      - https://bugzilla.mozilla.org/000000
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=000000#c3
+    notification_emails:
+      - me@mozilla.com
+    expires: 2020-10-01
 </code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-js">Assert.ok(Glean.pages.pageLoad.testGetValue().sum &gt; 0);
-</code></pre>
-</div>
-</div>
-</div>
+<h3 id="extra-metric-parameters"><a class="header" href="#extra-metric-parameters">Extra metric parameters</a></h3>
+<h4 id="time_unit"><a class="header" href="#time_unit"><code>time_unit</code></a></h4>
+<p>Timing distributions have a required <code>time_unit</code> parameter to specify the smallest unit of resolution that the timespan will record.
+The allowed values for <code>time_unit</code> are:</p>
+<ul>
+<li><code>nanosecond</code></li>
+<li><code>microsecond</code></li>
+<li><code>millisecond</code></li>
+<li><code>second</code></li>
+<li><code>minute</code></li>
+<li><code>hour</code></li>
+<li><code>day</code></li>
+</ul>
 <h2 id="limits"><a class="header" href="#limits">Limits</a></h2>
 <ul>
 <li>
 <p>Timings are recorded in nanoseconds.</p>
 <ul>
 <li>
-<p>On Android, the <a href="https://developer.android.com/reference/android/os/SystemClock.html#elapsedRealtimeNanos()"><code>SystemClock.elapsedRealtimeNanos()</code></a> function is used, so it is limited by the accuracy and performance of that timer. The time measurement includes time spent in sleep.</p>
+<p>On Android, the <a href="https://developer.android.com/reference/android/os/SystemClock.html#elapsedRealtimeNanos()"><code>SystemClock.elapsedRealtimeNanos()</code></a> function is used,
+so it is limited by the accuracy and performance of that timer. The time measurement includes time spent in sleep.</p>
 </li>
 <li>
 <p>On iOS, the <a href="https://developer.apple.com/library/archive/documentation/Darwin/Conceptual/KernelProgramming/services/services.html"><code>mach_absolute_time</code></a> function is used,
@@ -447,12 +636,12 @@ so it is limited by the accuracy and performance of that timer.
 The time measurement does not include time spent in sleep.</p>
 </li>
 <li>
-<p>On Python 3.7 and later, <a href="https://docs.python.org/3/library/time.html#time.monotonic_ns"><code>time.monotonic_ns()</code></a> is used.  On earlier versions of Python, <a href="https://docs.python.org/3/library/time.html#time.monotonic"><code>time.monotonics()</code></a> is used, which is not guaranteed to have nanosecond resolution.</p>
+<p>On Python 3.7 and later, <a href="https://docs.python.org/3/library/time.html#time.monotonic_ns"><code>time.monotonic_ns()</code></a> is used.
+On earlier versions of Python, <a href="https://docs.python.org/3/library/time.html#time.monotonic"><code>time.monotonics()</code></a> is used,
+which is not guaranteed to have nanosecond resolution.</p>
 </li>
 <li>
-<p>In Rust,
-<a href="https://docs.rs/time/0.1.42/time/fn.precise_time_ns.html"><code>time::precise_time_ns()</code></a>
-is used.</p>
+<p>In Rust, <a href="https://docs.rs/time/0.1.42/time/fn.precise_time_ns.html"><code>time::precise_time_ns()</code></a> is used.</p>
 </li>
 </ul>
 </li>
@@ -466,15 +655,9 @@ Longer times will be truncated to the maximum value and an error will be recorde
 </ul>
 </li>
 </ul>
-<h2 id="examples"><a class="header" href="#examples">Examples</a></h2>
+<h2 id="data-questions"><a class="header" href="#data-questions">Data questions</a></h2>
 <ul>
 <li>How long does it take a page to load?</li>
-</ul>
-<h2 id="recorded-errors"><a class="header" href="#recorded-errors">Recorded errors</a></h2>
-<ul>
-<li><code>invalid_value</code>: If recording a negative timespan.</li>
-<li><code>invalid_state</code>: If a non-existing/stopped timer is stopped again.</li>
-<li><code>invalid_overflow</code>: If recording a time longer than the maximum for the given unit.</li>
 </ul>
 <h2 id="reference"><a class="header" href="#reference">Reference</a></h2>
 <ul>

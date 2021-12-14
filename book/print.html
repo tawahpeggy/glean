@@ -7079,18 +7079,19 @@ Therefore, a measurement of 500 nanoseconds will be truncated to 0 microseconds.
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/metrics/timespan.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="timing-distribution"><a class="header" href="#timing-distribution">Timing Distribution</a></h1>
 <p>Timing distributions are used to accumulate and store time measurement, for analyzing distributions of the timing data.</p>
-<p>To measure the distribution of single timespans, see <a href="reference/metrics/timespan.html">Timespans</a>. To record absolute times, see <a href="reference/metrics/datetime.html">Datetimes</a>.</p>
+<p>To measure the distribution of single timespans, see <a href="reference/metrics/timespan.html">Timespans</a>.
+To record absolute times, see <a href="reference/metrics/datetime.html">Datetimes</a>.</p>
 <p>Timing distributions are recorded in a histogram where the buckets have an exponential distribution, specifically with 8 buckets for every power of 2.
 That is, the function from a value \( x \) to a bucket index is:</p>
 <p>\[ \lfloor 8 \log_2(x) \rfloor \]</p>
 <p>This makes them suitable for measuring timings on a number of time scales without any configuration.</p>
 <blockquote>
-<p><strong>Note</strong> Check out how this bucketing algorithm would behave on the <a href="reference/metrics/timing_distribution.html#simulator">Simulator</a></p>
+<p><strong>Note</strong> Check out how this bucketing algorithm would behave on the <a href="reference/metrics/timing_distribution.html#simulator">Simulator</a>.</p>
 </blockquote>
 <p>Timings always span the full length between <code>start</code> and <code>stopAndAccumulate</code>.
 If the Glean upload is disabled when calling <code>start</code>, the timer is still started.
 If the Glean upload is disabled at the time <code>stopAndAccumulate</code> is called, nothing is recorded.</p>
-<p>Multiple concurrent timespans in different threads may be measured at the same time.</p>
+<p>Multiple concurrent timings in different threads may be measured at the same time.</p>
 <p>Timings are always stored and sent in the payload as nanoseconds. However, the <code>time_unit</code> parameter
 controls the minimum and maximum values that will recorded:</p>
 <ul>
@@ -7098,22 +7099,16 @@ controls the minimum and maximum values that will recorded:</p>
 <li><code>microsecond</code>: 1μs &lt;= x &lt;= ~6.94 days</li>
 <li><code>millisecond</code>: 1ms &lt;= x &lt;= ~19 years</li>
 </ul>
-<p>Overflowing this range is considered an error and is reported through the error reporting mechanism. Underflowing this range is not an error and the value is silently truncated to the minimum value.</p>
-<p>Additionally, when a metric comes from GeckoView (the <code>geckoview_datapoint</code> parameter is present), the <code>time_unit</code> parameter specifies the unit that the samples are in when passed to Glean. Glean will convert all of the incoming samples to nanoseconds internally.</p>
-<h2 id="configuration"><a class="header" href="#configuration">Configuration</a></h2>
-<p>If you wanted to create a timing distribution to measure page load times, first you need to add an entry for it to the <code>metrics.yaml</code> file:</p>
-<pre><code class="language-YAML">pages:
-  page_load:
-    type: timing_distribution
-    description: &gt;
-      Counts how long each page takes to load
-    ...
-</code></pre>
-<h2 id="api-6"><a class="header" href="#api-6">API</a></h2>
-<p>Now you can use the timing distribution from the application's code.
-Starting a timer returns a timer ID that needs to be used to stop or cancel the timer at a later point.
-Multiple intervals can be measured concurrently.
-For example, to measure page load time on a number of tabs that are loading at the same time, each tab object needs to store the running timer ID.</p>
+<p>Overflowing this range is considered an error and is reported through the error reporting mechanism.
+Underflowing this range is not an error and the value is silently truncated to the minimum value.</p>
+<p>Additionally, when a metric comes from GeckoView (the <code>geckoview_datapoint</code> parameter is present),
+the <code>time_unit</code> parameter specifies the unit that the samples are in when passed to Glean.
+Glean will convert all of the incoming samples to nanoseconds internally.</p>
+<h2 id="recording-api-9"><a class="header" href="#recording-api-9">Recording API</a></h2>
+<h3 id="start-1"><a class="header" href="#start-1"><code>start</code></a></h3>
+<p>Start tracking time for the provided metric.
+Multiple timers can run simultaneously.
+Returns a unique <code>TimerId</code> for the new timer.</p>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
@@ -7126,31 +7121,6 @@ val timerId : GleanTimerId
 fun onPageStart(e: Event) {
     timerId = Pages.pageLoad.start()
 }
-
-fun onPageLoaded(e: Event) {
-    Pages.pageLoad.stopAndAccumulate(timerId)
-}
-</code></pre>
-<p>For convenience one can measure the time of a function or block of code:</p>
-<pre><code class="language-Kotlin">Pages.pageLoad.measure {
-    // Load a page
-}
-</code></pre>
-<p>There are test APIs available too.  For convenience, properties <code>sum</code> and <code>count</code> are exposed to facilitate validating that data was recorded correctly.</p>
-<p>Continuing the <code>pageLoad</code> example above, at this point the metric should have a <code>sum == 11</code> and a <code>count == 2</code>:</p>
-<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Pages
-
-// Was anything recorded?
-assertTrue(Pages.pageLoad.testHasValue())
-
-// Get snapshot.
-val snapshot = Pages.pageLoad.testGetValue()
-
-// Usually you don't know the exact timing values, but how many should have been recorded.
-assertEquals(1L, snapshot.count)
-
-// Assert that no errors were recorded.
-assertEquals(0, Pages.pageLoad.testGetNumRecordedErrors(ErrorType.InvalidValue))
 </code></pre>
 </div>
 <div data-lang="Java" class="tab">
@@ -7160,33 +7130,8 @@ import org.mozilla.yourApplication.GleanMetrics.Pages;
 GleanTimerId timerId;
 
 void onPageStart(Event e) {
-    timerId = Pages.INSTANCE.pageLoad.start();
+    timerId = Pages.INSTANCE.pageLoad().start();
 }
-
-void onPageLoaded(Event e) {
-    Pages.INSTANCE.pageLoad.stopAndAccumulate(timerId);
-}
-</code></pre>
-<p>There are test APIs available too.  For convenience, properties <code>sum</code> and <code>count</code> are exposed to facilitate validating that data was recorded correctly.</p>
-<p>Continuing the <code>pageLoad</code> example above, at this point the metric should have a <code>sum == 11</code> and a <code>count == 2</code>:</p>
-<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Pages;
-
-// Was anything recorded?
-assertTrue(pages.INSTANCE.pageLoad.testHasValue());
-
-// Get snapshot.
-DistributionData snapshot = pages.INSTANCE.pageLoad.testGetValue();
-
-// Usually you don't know the exact timing values, but how many should have been recorded.
-assertEquals(1L, snapshot.getCount);
-
-// Assert that no errors were recorded.
-assertEquals(
-    0,
-    pages.INSTANCE.pageLoad.testGetNumRecordedErrors(
-        ErrorType.InvalidValue
-    )
-);
 </code></pre>
 </div>
 <div data-lang="Swift" class="tab">
@@ -7197,31 +7142,6 @@ var timerId : GleanTimerId
 func onPageStart() {
     timerId = Pages.pageLoad.start()
 }
-
-func onPageLoaded() {
-    Pages.pageLoad.stopAndAccumulate(timerId)
-}
-</code></pre>
-<p>For convenience one can measure the time of a function or block of code:</p>
-<pre><code class="language-Swift">Pages.pageLoad.measure {
-    // Load a page
-}
-</code></pre>
-<p>There are test APIs available too.  For convenience, properties <code>sum</code> and <code>count</code> are exposed to facilitate validating that data was recorded correctly.</p>
-<p>Continuing the <code>pageLoad</code> example above, at this point the metric should have a <code>sum == 11</code> and a <code>count == 2</code>:</p>
-<pre><code class="language-Swift">@testable import Glean
-
-// Was anything recorded?
-XCTAssert(pages.pageLoad.testHasValue())
-
-// Get snapshot.
-let snapshot = try! pages.pageLoad.testGetValue()
-
-// Usually you don't know the exact timing values, but how many should have been recorded.
-XCTAssertEqual(1, snapshot.count)
-
-// Assert that no errors were recorded.
-XCTAssertEqual(0, pages.pageLoad.testGetNumRecordedErrors(.invalidValue))
 </code></pre>
 </div>
 <div data-lang="Python" class="tab">
@@ -7233,27 +7153,351 @@ class PageHandler:
         self.timer_id = None
 
     def on_page_start(self, event):
-        # ...
         self.timer_id = metrics.pages.page_load.start()
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean_metrics::pages;
 
+fn on_page_start() {
+    self.timer_id = pages::page_load.start();
+}
+<span class="boring">}
+</span></code></pre></pre>
+</div>
+<div data-lang="JavaScript" class="tab" data-bug="1716954"></div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+auto timerId = mozilla::glean::pages::page_load.Start();
+</code></pre>
+<p><strong>JavaScript</strong></p>
+<pre><code class="language-js">let timerId = Glean.pages.pageLoad.start();
+</code></pre>
+</div>
+</div>
+</div>
+<h3 id="stopandaccumulate"><a class="header" href="#stopandaccumulate"><code>stopAndAccumulate</code></a></h3>
+<p>Stops tracking time for the provided metric and associated timer id.</p>
+<p>Adds a count to the corresponding bucket in the timing distribution.
+This will record an error if <code>start</code> was not called.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Pages
+
+fun onPageLoaded(e: Event) {
+    Pages.pageLoad.stopAndAccumulate(timerId)
+}
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Pages;
+
+void onPageLoaded(Event e) {
+    Pages.INSTANCE.pageLoad().stopAndAccumulate(timerId);
+}
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">import Glean
+
+func onPageLoaded() {
+    Pages.pageLoad.stopAndAccumulate(timerId)
+}
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+class PageHandler:
     def on_page_loaded(self, event):
-        # ...
         metrics.pages.page_load.stop_and_accumulate(self.timer_id)
 </code></pre>
-<p>The Python SDK also has a context manager for measuring time:</p>
-<pre><code class="language-Python">with metrics.pages.page_load.measure():
-    # Load a page ...
+</div>
+<div data-lang="Rust" class="tab">
+<pre><code class="language-Rust">use glean_metrics::pages;
+
+fn on_page_loaded() {
+    pages::page_load.stop_and_accumulate(self.timer_id);
+}
 </code></pre>
-<p>There are test APIs available too.  For convenience, properties <code>sum</code> and <code>count</code> are exposed to facilitate validating that data was recorded correctly.</p>
-<p>Continuing the <code>page_load</code> example above, at this point the metric should have a <code>sum == 11</code> and a <code>count == 2</code>:</p>
-<pre><code class="language-Python"># Was anything recorded?
-assert metrics.pages.page_load.test_has_value()
+</div>
+<div data-lang="JavaScript" class="tab" data-bug="1716954"></div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+mozilla::glean::pages::page_load.StopAndAccumulate(std::move(timerId));
+</code></pre>
+<p><strong>JavaScript</strong></p>
+<pre><code class="language-js">Glean.pages.pageLoad.stopAndAccumulate(timerId);
+</code></pre>
+</div>
+</div>
+</div>
+<h4 id="recorded-errors-11"><a class="header" href="#recorded-errors-11">Recorded errors</a></h4>
+<ul>
+<li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: If recording a negative timespan.</li>
+<li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_state</code></a>: If a non-existing/stopped timer is stopped again.</li>
+<li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_overflow</code></a>: If recording a time longer than the maximum for the given unit.</li>
+</ul>
+<h3 id="measure-1"><a class="header" href="#measure-1"><code>measure</code></a></h3>
+<p>For convenience one can measure the time of a function or block of code.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Pages
+
+Pages.pageLoad.measure {
+    // Load a page
+}
+</code></pre>
+</div>
+<div data-lang="Java" class="tab"></div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">import Glean
+
+Pages.pageLoad.measure {
+    // Load a page
+}
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+with metrics.pages.page_load.measure():
+    # Load a page
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab"></div>
+<div data-lang="JavaScript" class="tab" data-bug="1716954"></div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h3 id="cancel-1"><a class="header" href="#cancel-1"><code>cancel</code></a></h3>
+<p>Aborts a previous <code>start</code> call.
+No error is recorded if <code>start</code> was not called.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Pages
+
+fun onPageError(e: Event) {
+    Pages.pageLoad.cancel(timerId)
+}
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Pages;
+
+fun onPageError(e: Event) {
+    Pages.INSTANCE.pageLoad().cancel(timerId);
+}
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">import Glean
+
+func onPageError() {
+    Pages.pageLoad.cancel(timerId)
+}
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+class PageHandler:
+    def on_page_error(self, event):
+        metrics.pages.page_load.cancel(self.timer_id)
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><code class="language-Rust">use glean_metrics::pages;
+
+fn on_page_error() {
+    pages::page_load.cancel(self.timer_id);
+}
+</code></pre>
+</div>
+<div data-lang="JavaScript" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+mozilla::glean::pages::page_load.Cancel(std::move(timerId));
+</code></pre>
+<p><strong>JavaScript</strong></p>
+<pre><code class="language-js">Glean.pages.pageLoad.cancel(timerId);
+</code></pre>
+</div>
+</div>
+</div>
+<h2 id="testing-api-9"><a class="header" href="#testing-api-9">Testing API</a></h2>
+<h3 id="testgetvalue-8"><a class="header" href="#testgetvalue-8"><code>testGetValue</code></a></h3>
+<p>Gets the recorded value for a given timing distribution metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Pages
+
+// Get snapshot.
+val snapshot = Pages.pageLoad.testGetValue()
+
+// Usually you don't know the exact timing values,
+// but how many should have been recorded.
+assertEquals(1L, snapshot.count)
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Pages;
+
+// Get snapshot.
+DistributionData snapshot = pages.INSTANCE.pageLoad().testGetValue();
+
+// Usually you don't know the exact timing values,
+// but how many should have been recorded.
+assertEquals(1L, snapshot.getCount());
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+// Get snapshot.
+let snapshot = try! pages.pageLoad.testGetValue()
+
+// Usually you don't know the exact timing values,
+// but how many should have been recorded.
+XCTAssertEqual(1, snapshot.count)
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
 
 # Get snapshot.
 snapshot = metrics.pages.page_load.test_get_value()
 
-# Usually you don't know the exact timing values, but how many should have been recorded.
+# Usually you don't know the exact timing values,
+# but how many should have been recorded.
 assert 1 == snapshot.count
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean::ErrorType;
+use glean_metrics::pages;
+
+// Get snapshot
+let snapshot = pages::page_load.test_get_value(None).unwrap();
+
+// Usually you don't know the exact timing values,
+// but how many should have been recorded.
+assert_eq!(1, snapshot.values.len());
+<span class="boring">}
+</span></code></pre></pre>
+</div>
+<div data-lang="JavaScript" class="tab" data-bug="1716954"></div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+// Does it have an expected values?
+const data = mozilla::glean::pages::page_load.TestGetValue().value().unwrap();
+ASSERT_TRUE(data.sum &gt; 0);
+</code></pre>
+<p><strong>JavaScript</strong></p>
+<pre><code class="language-js">Assert.ok(Glean.pages.pageLoad.testGetValue().sum &gt; 0);
+</code></pre>
+</div>
+</div>
+</div>
+<h3 id="testhasvalue-8"><a class="header" href="#testhasvalue-8"><code>testHasValue</code></a></h3>
+<p>Whether or not <strong>any</strong> value was recorded for a given timing distribution metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Pages
+
+// Was anything recorded?
+assertTrue(Pages.pageLoad.testHasValue())
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Pages;
+
+// Was anything recorded?
+assertTrue(Pages.INSTANCE.pageLoad().testHasValue());
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+// Was anything recorded?
+XCTAssert(pages.pageLoad.testHasValue())
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+# Was anything recorded?
+assert metrics.pages.page_load.test_has_value()
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab"></div>
+<div data-lang="JavaScript" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h3 id="testgetnumrecordederrors-7"><a class="header" href="#testgetnumrecordederrors-7"><code>testGetNumRecordedErrors</code></a></h3>
+<p>Gets number of errors recorded for a given timing distribution metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Pages
+
+// Assert that no errors were recorded.
+assertEquals(0, Pages.pageLoad.testGetNumRecordedErrors(ErrorType.InvalidValue))
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Pages;
+
+// Assert that no errors were recorded.
+assertEquals(
+    0,
+    Pages.INSTANCE.pageLoad().testGetNumRecordedErrors(
+        ErrorType.InvalidValue
+    )
+);
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+// Assert that no errors were recorded.
+XCTAssertEqual(0, pages.pageLoad.testGetNumRecordedErrors(.invalidValue))
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
 
 # Assert that no errors were recorded.
 assert 0 == metrics.pages.page_load.test_get_num_recorded_errors(
@@ -7261,112 +7505,57 @@ assert 0 == metrics.pages.page_load.test_get_num_recorded_errors(
 )
 </code></pre>
 </div>
-<div data-lang="C#" class="tab">
-<pre><code class="language-C#">using static Mozilla.YourApplication.GleanMetrics.Pages;
-
-var timerId;
-
-void onPageStart(Event e) {
-    timerId = Pages.pageLoad.Start();
-}
-
-void onPageLoaded(Event e) {
-    Pages.pageLoad.StopAndAccumulate(timerId);
-}
-</code></pre>
-<p>There are test APIs available too.  For convenience, properties <code>sum</code> and <code>count</code> are exposed to facilitate validating that data was recorded correctly.</p>
-<p>Continuing the <code>pageLoad</code> example above, at this point the metric should have a <code>sum == 11</code> and a <code>count == 2</code>:</p>
-<pre><code class="language-C#">using static Mozilla.YourApplication.GleanMetrics.Pages;
-
-// Was anything recorded?
-Assert.True(Pages.pageLoad.TestHasValue());
-
-// Get snapshot.
-var snapshot = Pages.pageLoad.TestGetValue();
-
-// Usually you don't know the exact timing values, but how many should have been recorded.
-Assert.Equal(1, snapshot.Values.Count);
-
-// Assert that no errors were recorded.
-Assert.Equal(0, Pages.pageLoad.TestGetNumRecordedErrors(ErrorType.InvalidValue));
-</code></pre>
-</div>
 <div data-lang="Rust" class="tab">
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>use glean_metrics;
+<pre><code class="language-Rust">use glean::ErrorType;
+use glean_metrics::pages;
 
-fn on_page_start() {
-    self.timer_id = pages::page_load.start();
-}
-
-fn on_page_loaded() {
-    pages::page_load.stop_and_accumulate(self.timer_id);
-}
-<span class="boring">}
-</span></code></pre></pre>
-<p>There are test APIs available too.</p>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>use glean::ErrorType;
-use glean_metrics;
-
-// Was anything recorded?
-assert!(pages::page_load.test_get_value(None).is_some());
-
-// Assert no errors were recorded.
-let errors = [
-    ErrorType::InvalidValue,
-    ErrorType::InvalidState,
-    ErrorType::InvalidOverflow
-];
-for error in errors {
-    assert_eq!(0, pages::page_load.test_get_num_recorded_errors(error));
-}
-<span class="boring">}
-</span></code></pre></pre>
-</div>
-<div data-lang="C++" class="tab">
-<blockquote>
-<p><strong>Note</strong>: C++ APIs are only available in Firefox Desktop.</p>
-</blockquote>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
-
-auto timerId = mozilla::glean::pages::page_load.Start();
-PR_Sleep(PR_MillisecondsToInterval(10));
-mozilla::glean::pages::page_load.StopAndAccumulate(std::move(timerId));
-</code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
-
-// Does it have an expected values?
-const data = mozilla::glean::pages::page_load.TestGetValue().value().unwrap();
-ASSERT_TRUE(data.sum &gt; 0);
+assert_eq!(
+    0,
+    pages::page_load.test_get_num_recorded_errors(ErrorType::InvalidValue)
+);
 </code></pre>
 </div>
-<div data-lang="JS" class="tab">
-<blockquote>
-<p><strong>Note</strong>: JS APIs are only available in Firefox Desktop.</p>
-</blockquote>
-<pre><code class="language-js">const timerId = Glean.pages.pageLoad.start();
-await sleep(10);
-Glean.pages.pageLoad.stopAndAccumulate(timerId);
+<div data-lang="JavaScript" class="tab" data-bug="1716954"></div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h2 id="metric-parameters-9"><a class="header" href="#metric-parameters-9">Metric parameters</a></h2>
+<p>Example timing distribution metric definition:</p>
+<pre><code class="language-YAML">pages:
+  page_load:
+    type: timing_distribution
+    time_unit: millisecond
+    description: &gt;
+      Counts how long each page takes to load
+    bugs:
+      - https://bugzilla.mozilla.org/000000
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=000000#c3
+    notification_emails:
+      - me@mozilla.com
+    expires: 2020-10-01
 </code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-js">Assert.ok(Glean.pages.pageLoad.testGetValue().sum &gt; 0);
-</code></pre>
-</div>
-</div>
-</div>
+<h3 id="extra-metric-parameters-8"><a class="header" href="#extra-metric-parameters-8">Extra metric parameters</a></h3>
+<h4 id="time_unit-1"><a class="header" href="#time_unit-1"><code>time_unit</code></a></h4>
+<p>Timing distributions have a required <code>time_unit</code> parameter to specify the smallest unit of resolution that the timespan will record.
+The allowed values for <code>time_unit</code> are:</p>
+<ul>
+<li><code>nanosecond</code></li>
+<li><code>microsecond</code></li>
+<li><code>millisecond</code></li>
+<li><code>second</code></li>
+<li><code>minute</code></li>
+<li><code>hour</code></li>
+<li><code>day</code></li>
+</ul>
 <h2 id="limits-11"><a class="header" href="#limits-11">Limits</a></h2>
 <ul>
 <li>
 <p>Timings are recorded in nanoseconds.</p>
 <ul>
 <li>
-<p>On Android, the <a href="https://developer.android.com/reference/android/os/SystemClock.html#elapsedRealtimeNanos()"><code>SystemClock.elapsedRealtimeNanos()</code></a> function is used, so it is limited by the accuracy and performance of that timer. The time measurement includes time spent in sleep.</p>
+<p>On Android, the <a href="https://developer.android.com/reference/android/os/SystemClock.html#elapsedRealtimeNanos()"><code>SystemClock.elapsedRealtimeNanos()</code></a> function is used,
+so it is limited by the accuracy and performance of that timer. The time measurement includes time spent in sleep.</p>
 </li>
 <li>
 <p>On iOS, the <a href="https://developer.apple.com/library/archive/documentation/Darwin/Conceptual/KernelProgramming/services/services.html"><code>mach_absolute_time</code></a> function is used,
@@ -7374,12 +7563,12 @@ so it is limited by the accuracy and performance of that timer.
 The time measurement does not include time spent in sleep.</p>
 </li>
 <li>
-<p>On Python 3.7 and later, <a href="https://docs.python.org/3/library/time.html#time.monotonic_ns"><code>time.monotonic_ns()</code></a> is used.  On earlier versions of Python, <a href="https://docs.python.org/3/library/time.html#time.monotonic"><code>time.monotonics()</code></a> is used, which is not guaranteed to have nanosecond resolution.</p>
+<p>On Python 3.7 and later, <a href="https://docs.python.org/3/library/time.html#time.monotonic_ns"><code>time.monotonic_ns()</code></a> is used.
+On earlier versions of Python, <a href="https://docs.python.org/3/library/time.html#time.monotonic"><code>time.monotonics()</code></a> is used,
+which is not guaranteed to have nanosecond resolution.</p>
 </li>
 <li>
-<p>In Rust,
-<a href="https://docs.rs/time/0.1.42/time/fn.precise_time_ns.html"><code>time::precise_time_ns()</code></a>
-is used.</p>
+<p>In Rust, <a href="https://docs.rs/time/0.1.42/time/fn.precise_time_ns.html"><code>time::precise_time_ns()</code></a> is used.</p>
 </li>
 </ul>
 </li>
@@ -7393,15 +7582,9 @@ Longer times will be truncated to the maximum value and an error will be recorde
 </ul>
 </li>
 </ul>
-<h2 id="examples"><a class="header" href="#examples">Examples</a></h2>
+<h2 id="data-questions-8"><a class="header" href="#data-questions-8">Data questions</a></h2>
 <ul>
 <li>How long does it take a page to load?</li>
-</ul>
-<h2 id="recorded-errors-11"><a class="header" href="#recorded-errors-11">Recorded errors</a></h2>
-<ul>
-<li><code>invalid_value</code>: If recording a negative timespan.</li>
-<li><code>invalid_state</code>: If a non-existing/stopped timer is stopped again.</li>
-<li><code>invalid_overflow</code>: If recording a time longer than the maximum for the given unit.</li>
 </ul>
 <h2 id="reference-11"><a class="header" href="#reference-11">Reference</a></h2>
 <ul>
@@ -7480,31 +7663,11 @@ That is, the function from a value \( x \) to a bucket index is:</p>
 <p>\[ \lfloor 16 \log_2(x) \rfloor \]</p>
 <p>This makes them suitable for measuring memory sizes on a number of different scales without any configuration.</p>
 <blockquote>
-<p><strong>Note</strong> Check out how this bucketing algorithm would behave on the <a href="reference/metrics/memory_distribution.html#simulator">Simulator</a></p>
+<p><strong>Note</strong> Check out how this bucketing algorithm would behave on the <a href="reference/metrics/memory_distribution.html#simulator">Simulator</a>.</p>
 </blockquote>
-<h2 id="configuration-1"><a class="header" href="#configuration-1">Configuration</a></h2>
-<p>Memory distributions have a required <code>memory_unit</code> parameter, which specifies
-the unit the incoming memory size values are recorded in. The units are the
-power-of-2 units, so &quot;kilobyte&quot; is more correctly a &quot;kibibyte&quot;.</p>
-<pre><code>- kilobyte == 2^10 ==         1,024 bytes
-- megabyte == 2^20 ==     1,048,576 bytes
-- gigabyte == 2^30 == 1,073,741,824 bytes
-</code></pre>
-<p>If you wanted to create a memory distribution to measure the amount of heap memory allocated, first you need to add an entry for it to the <code>metrics.yaml</code> file:</p>
-<pre><code class="language-YAML">memory:
-  heap_allocated:
-    type: memory_distribution
-    description: &gt;
-      The heap memory allocated
-    memory_unit: kilobyte
-    ...
-</code></pre>
-<h2 id="api-7"><a class="header" href="#api-7">API</a></h2>
-<p>Now you can use the memory distribution from the application's code.</p>
-<blockquote>
-<p><strong>Note</strong> The data <em>provided</em> to the <code>accumulate</code> method is in the configured memory unit specified in the <code>metrics.yaml</code> file. The data <em>recorded</em>, on the other hand, is always in <strong>bytes</strong>.</p>
-</blockquote>
-<p>For example, to measure the distribution of heap allocations:</p>
+<h2 id="recording-api-10"><a class="header" href="#recording-api-10">Recording API</a></h2>
+<h3 id="accumulate"><a class="header" href="#accumulate"><code>accumulate</code></a></h3>
+<p>Accumulates the provided sample in the metric.</p>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
@@ -7516,50 +7679,23 @@ fun allocateMemory(nbytes: Int) {
     Memory.heapAllocated.accumulate(nbytes / 1024)
 }
 </code></pre>
-<p>There are test APIs available too.  For convenience, properties <code>sum</code> and <code>count</code> are exposed to facilitate validating that data was recorded correctly.</p>
-<p>Continuing the <code>heapAllocated</code> example above, at this point the metric should have a <code>sum == 11</code> and a <code>count == 2</code>:</p>
-<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Memory
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Memory;
 
-// Was anything recorded?
-assertTrue(Memory.heapAllocated.testHasValue())
-
-// Get snapshot
-val snapshot = Memory.heapAllocated.testGetValue()
-
-// Does the sum have the expected value?
-assertEquals(11, snapshot.sum)
-
-// Usually you don't know the exact memory values, but how many should have been recorded.
-assertEquals(2L, snapshot.count)
-
-// Did this record a negative value?
-assertEquals(1, Memory.heapAllocated.testGetNumRecordedErrors(ErrorType.InvalidValue))
+fun allocateMemory(nbytes: Int) {
+    // ...
+    Memory.INSTANCE.heapAllocated().accumulate(nbytes / 1024);
+}
 </code></pre>
 </div>
 <div data-lang="Swift" class="tab">
-<pre><code class="language-Swift">func allocateMemory(nbytes: UInt64) {
+<pre><code class="language-Swift">import Glean
+
+func allocateMemory(nbytes: UInt64) {
     // ...
     Memory.heapAllocated.accumulate(nbytes / 1024)
 }
-</code></pre>
-<p>There are test APIs available too.  For convenience, properties <code>sum</code> and <code>count</code> are exposed to facilitate validating that data was recorded correctly.</p>
-<p>Continuing the <code>heapAllocated</code> example above, at this point the metric should have a <code>sum == 11</code> and a <code>count == 2</code>:</p>
-<pre><code class="language-Swift">@testable import Glean
-
-// Was anything recorded?
-XCTAssert(Memory.heapAllocated.testHasValue())
-
-// Get snapshot
-let snapshot = try! Memory.heapAllocated.testGetValue()
-
-// Does the sum have the expected value?
-XCTAssertEqual(11, snapshot.sum)
-
-// Usually you don't know the exact memory values, but how many should have been recorded.
-XCTAssertEqual(2, snapshot.count)
-
-// Did this record a negative value?
-XCTAssertEqual(1, Memory.heapAllocated.testGetNumRecordedErrors(.invalidValue))
 </code></pre>
 </div>
 <div data-lang="Python" class="tab">
@@ -7570,128 +7706,268 @@ def allocate_memory(nbytes):
     # ...
     metrics.memory.heap_allocated.accumulate(nbytes / 1024)
 </code></pre>
-<p>There are test APIs available too.  For convenience, properties <code>sum</code> and <code>count</code> are exposed to facilitate validating that data was recorded correctly.</p>
-<p>Continuing the <code>heapAllocated</code> example above, at this point the metric should have a <code>sum == 11</code> and a <code>count == 2</code>:</p>
-<pre><code class="language-Python"># Was anything recorded?
-assert metrics.memory.head_allocated.test_has_value()
+</div>
+<div data-lang="Rust" class="tab">
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use glean_metrics::memory;
 
-# Get snapshot
+fn allocate_memory(bytes: u64) {
+    // ...
+    memory::heap_allocated.accumulate(bytes / 1024);
+}
+<span class="boring">}
+</span></code></pre></pre>
+</div>
+<div data-lang="JavaScript" class="tab" data-bug="1716952"></div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+
+mozilla::glean::memory::heap_allocated.Accumulate(bytes / 1024);
+</code></pre>
+<p><strong>JavaScript</strong></p>
+<pre><code class="language-js">Glean.memory.heapAllocated.accumulate(bytes / 1024);
+</code></pre>
+</div>
+</div>
+</div>
+<h4 id="recorded-errors-12"><a class="header" href="#recorded-errors-12">Recorded errors</a></h4>
+<ul>
+<li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: If recording a negative memory size.</li>
+<li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: If recording a size larger than 1 TB.</li>
+</ul>
+<h2 id="testing-api-10"><a class="header" href="#testing-api-10">Testing API</a></h2>
+<h3 id="testgetvalue-9"><a class="header" href="#testgetvalue-9"><code>testGetValue</code></a></h3>
+<p>Gets the recorded value for a given memory distribution metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Memory
+
+// Get snapshot
+val snapshot = Memory.heapAllocated.testGetValue()
+
+// Does the sum have the expected value?
+assertEquals(11, snapshot.sum)
+
+// Usually you don't know the exact memory values,
+// but how many should have been recorded.
+assertEquals(2L, snapshot.count)
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Memory;
+
+// Get snapshot
+val snapshot = Memory.INSTANCE.heapAllocated().testGetValue();
+
+// Does the sum have the expected value?
+assertEquals(11, snapshot.sum);
+
+// Usually you don't know the exact memory values,
+// but how many should have been recorded.
+assertEquals(2L, snapshot.getCount());
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+// Get snapshot
+let snapshot = try! Memory.heapAllocated.testGetValue()
+
+// Does the sum have the expected value?
+XCTAssertEqual(11, snapshot.sum)
+
+// Usually you don't know the exact memory values,
+// but how many should have been recorded.
+XCTAssertEqual(2, snapshot.count)
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+# Get snapshot.
 snapshot = metrics.memory.heap_allocated.test_get_value()
 
 # Does the sum have the expected value?
 assert 11 == snapshot.sum
 
-# Usually you don't know the exact memory values, but how many should have been recorded.
+# Usually you don't know the exact memory values,
+# but how many should have been recorded.
 assert 2 == snapshot.count
-
-# Did this record a negative value?
-assert 1 == metrics.memory.heap_allocated.test_get_num_recorded_errors(
-    ErrorType.INVALID_VALUE
-)
-</code></pre>
-</div>
-<div data-lang="C#" class="tab">
-<pre><code class="language-C#">using static Mozilla.YourApplication.GleanMetrics.Memory;
-
-fun allocateMemory(ulong nbytes) {
-    // ...
-    Memory.heapAllocated.Accumulate(nbytes / 1024);
-}
-</code></pre>
-<p>There are test APIs available too.  For convenience, properties <code>Sum</code> and <code>Count</code> are exposed to facilitate validating that data was recorded correctly.</p>
-<p>Continuing the <code>heapAllocated</code> example above, at this point the metric should have a <code>Sum == 11</code> and a <code>Count == 2</code>:</p>
-<pre><code class="language-C#">using static Mozilla.YourApplication.GleanMetrics.Memory;
-
-// Was anything recorded?
-Assert.True(Memory.heapAllocated.TestHasValue());
-
-// Get snapshot
-var snapshot = Memory.heapAllocated.TestGetValue();
-
-// Does the sum have the expected value?
-Assert.Equal(11, snapshot.Sum);
-
-// Usually you don't know the exact memory values, but how many should have been recorded.
-Assert.Equal(2L, snapshot.Count);
-
-// Did this record a negative value?
-Assert.Equal(1, Memory.heapAllocated.TestGetNumRecordedErrors(ErrorType.InvalidValue));
 </code></pre>
 </div>
 <div data-lang="Rust" class="tab">
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>use glean_metrics;
+</span>use glean::ErrorType;
+use glean_metrics::memory;
 
-fn allocate_memory(bytes: u64) {
-    memory::heap_allocated.accumulate(bytes / 1024);
-}
-<span class="boring">}
-</span></code></pre></pre>
-<p>There are test APIs available too:</p>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>use glean::{DistributionData, ErrorType};
-use glean_metrics;
+// Get snapshot
+let snapshot = memory::heap_allocated.test_get_value(None).unwrap();
 
-// Was anything recorded?
-assert!(memory::heap_allocated.test_get_value(None).is_some());
+// Does the sum have the expected value?
+assert_eq!(11, snapshot.sum);
 
-// Is the sum as expected?
-let data = memory::heap_allocated.test_get_value(None).unwrap();
-assert_eq!(11, data.sum)
-// The actual buckets and counts live in `data.values`.
-
-// Were there any errors?
-assert_eq!(1, memory::heap_allocated.test_get_num_recorded_errors(InvalidValue));
-
+// Usually you don't know the exact timing values,
+// but how many should have been recorded.
+assert_eq!(2, snapshot.values.len());
 <span class="boring">}
 </span></code></pre></pre>
 </div>
-<div data-lang="C++" class="tab">
-<blockquote>
-<p><strong>Note</strong>: C++ APIs are only available in Firefox Desktop.</p>
-</blockquote>
+<div data-lang="JavaScript" class="tab"  data-bug="1716952"></div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
 <pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
 
-mozilla::glean::memory::heap_allocated.Accumulate(bytes / 1024);
+// Does it have an expected values?
+const data = mozilla::glean::memory::heap_allocated.TestGetValue().value().unwrap()
+ASSERT_EQ(11 * 1024, data.sum);
 </code></pre>
-<p>There are test APIs available too:</p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
-
-// Does it have the expected value?
-ASSERT_EQ(11 * 1024, mozilla::glean::memory::heap_allocated.TestGetValue().unwrap().value().sum);
-</code></pre>
-</div>
-<div data-lang="JS" class="tab">
-<blockquote>
-<p><strong>Note</strong>: JS APIs are only available in Firefox Desktop.</p>
-</blockquote>
-<pre><code class="language-js">Glean.memory.heapAllocated.accumulate(bytes / 1024);
-</code></pre>
-<p>There are test APIs available too:</p>
+<p><strong>JavaScript</strong></p>
 <pre><code class="language-js">const data = Glean.memory.heapAllocated.testGetValue();
 Assert.equal(11 * 1024, data.sum);
-// Does it have the right number of samples?
-Assert.equal(1, Object.entries(data.values).reduce(([bucket, count], sum) =&gt; count + sum, 0));
 </code></pre>
 </div>
 </div>
 </div>
+<h3 id="testhasvalue-9"><a class="header" href="#testhasvalue-9"><code>testHasValue</code></a></h3>
+<p>Whether or not <strong>any</strong> value was recorded for a given memory distribution metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Pages
+
+// Get snapshot
+assertTrue(Memory.heapAllocated.testHasValue())
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Pages;
+
+// Was anything recorded?
+assertTrue(Memory.INSTANCE.heapAllocated().testHasValue());
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+// Was anything recorded?
+XCTAssert(Memory.heapAllocated.testHasValue())
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+# Was anything recorded?
+assert metrics.memory.head_allocated.test_has_value()
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab"></div>
+<div data-lang="JavaScript" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h3 id="testgetnumrecordederrors-8"><a class="header" href="#testgetnumrecordederrors-8"><code>testGetNumRecordedErrors</code></a></h3>
+<p>Gets number of errors recorded for a given memory distribution metric.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.Memory
+
+// Did this record a negative value?
+assertEquals(
+    0,
+    Memory.heapAllocated.testGetNumRecordedErrors(ErrorType.InvalidValue)
+)
+</code></pre>
+</div>
+<div data-lang="Java" class="tab">
+<pre><code class="language-Java">import org.mozilla.yourApplication.GleanMetrics.Memory;
+
+// Assert that no errors were recorded.
+assertEquals(
+    0,
+    Memory.INSTANCE.heapAllocated().testGetNumRecordedErrors(
+        ErrorType.InvalidValue
+    )
+);
+</code></pre>
+</div>
+<div data-lang="Swift" class="tab">
+<pre><code class="language-Swift">@testable import Glean
+
+// Did this record a negative value?
+XCTAssertEqual(0, Memory.heapAllocated.testGetNumRecordedErrors(.invalidValue))
+</code></pre>
+</div>
+<div data-lang="Python" class="tab">
+<pre><code class="language-Python">from glean import load_metrics
+metrics = load_metrics(&quot;metrics.yaml&quot;)
+
+# Did this record a negative value?
+assert 0 == metrics.memory.heap_allocated.test_get_num_recorded_errors(
+    ErrorType.INVALID_VALUE
+)
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab">
+<pre><code class="language-Rust">use glean::ErrorType;
+use glean_metrics::pages;
+
+assert_eq!(
+    0,
+    pages::page_load.test_get_num_recorded_errors(ErrorType::InvalidValue)
+);
+</code></pre>
+</div>
+<div data-lang="JavaScript" class="tab"  data-bug="1716952"></div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h2 id="metric-parameters-10"><a class="header" href="#metric-parameters-10">Metric parameters</a></h2>
+<p>Example memory distribution metric definition:</p>
+<pre><code class="language-YAML">memory:
+  heap_allocated:
+    type: memory_distribution
+    memory_unit: kilobyte
+    description: &gt;
+      The heap memory allocated
+    bugs:
+      - https://bugzilla.mozilla.org/000000
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=000000#c3
+    notification_emails:
+      - me@mozilla.com
+    expires: 2020-10-01
+</code></pre>
+<h3 id="extra-metric-parameters-9"><a class="header" href="#extra-metric-parameters-9">Extra metric parameters</a></h3>
+<h4 id="memory_unit"><a class="header" href="#memory_unit"><code>memory_unit</code></a></h4>
+<p>Memory distributions have a required <code>memory_unit</code> parameter,
+which specifies the unit the incoming memory size values are recorded in.
+The allowed values for <code>time_unit</code> are:</p>
+<ul>
+<li><code>byte</code></li>
+<li><code>kilobyte</code> (<code>= 2^10 = 1,024 bytes</code>)</li>
+<li><code>megabyte</code> (<code>= 2^20 = 1,048,576 bytes</code>)</li>
+<li><code>gigabyte</code> (<code>= 2^30 = 1,073,741,824 bytes</code>)</li>
+</ul>
 <h2 id="limits-12"><a class="header" href="#limits-12">Limits</a></h2>
 <ul>
-<li>The maximum memory size that can be recorded is 1 Terabyte (2<sup>40</sup> bytes). Larger sizes will be truncated to 1 Terabyte.</li>
+<li>The maximum memory size that can be recorded is 1 Terabyte (2<sup>40</sup> bytes).
+Larger sizes will be truncated to 1 Terabyte.</li>
 </ul>
-<h2 id="examples-1"><a class="header" href="#examples-1">Examples</a></h2>
+<h2 id="data-questions-9"><a class="header" href="#data-questions-9">Data questions</a></h2>
 <ul>
 <li>What is the distribution of the size of heap allocations?</li>
-</ul>
-<h2 id="recorded-errors-12"><a class="header" href="#recorded-errors-12">Recorded errors</a></h2>
-<ul>
-<li><code>invalid_value</code>: If recording a negative memory size.</li>
-<li><code>invalid_value</code>: If recording a size larger than 1TB.</li>
 </ul>
 <h2 id="reference-12"><a class="header" href="#reference-12">Reference</a></h2>
 <ul>
@@ -7767,7 +8043,7 @@ This means that, if the configured memory unit is not <code>byte</code>, the dat
 </blockquote>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/metrics/memory_distribution.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="uuid"><a class="header" href="#uuid">UUID</a></h1>
 <p>UUIDs metrics are used to record values that uniquely identify some entity, such as a client id.</p>
-<h2 id="recording-api-9"><a class="header" href="#recording-api-9">Recording API</a></h2>
+<h2 id="recording-api-11"><a class="header" href="#recording-api-11">Recording API</a></h2>
 <h3 id="generateandset"><a class="header" href="#generateandset"><code>generateAndSet</code></a></h3>
 <p>Sets a UUID metric to a randomly generated <a href="https://datatracker.ietf.org/doc/html/rfc4122">UUID</a> value (UUID v4) .</p>
 <div class="tabs">
@@ -7905,8 +8181,8 @@ Glean.user.clientId.set(uuid);
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: if the value is set to a string that is not a UUID (only applies for dynamically-typed languages, such as Python).</li>
 </ul>
-<h2 id="testing-api-9"><a class="header" href="#testing-api-9">Testing API</a></h2>
-<h3 id="testgetvalue-8"><a class="header" href="#testgetvalue-8"><code>testGetValue</code></a></h3>
+<h2 id="testing-api-11"><a class="header" href="#testing-api-11">Testing API</a></h2>
+<h3 id="testgetvalue-10"><a class="header" href="#testgetvalue-10"><code>testGetValue</code></a></h3>
 <p>Gets the recorded value for a given UUID metric.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -7977,7 +8253,7 @@ Assert.equal(Glean.user.clientId.testGetValue(), uuid);
 </div>
 </div>
 </div>
-<h3 id="testhasvalue-8"><a class="header" href="#testhasvalue-8"><code>testHasValue</code></a></h3>
+<h3 id="testhasvalue-10"><a class="header" href="#testhasvalue-10"><code>testHasValue</code></a></h3>
 <p>Whether or not <strong>any</strong> value was recorded for a given UUID metric.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -8016,7 +8292,7 @@ assert metrics.user.client_id.test_has_value()
 <div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
-<h3 id="testgetnumrecordederrors-7"><a class="header" href="#testgetnumrecordederrors-7"><code>testGetNumRecordedErrors</code></a></h3>
+<h3 id="testgetnumrecordederrors-9"><a class="header" href="#testgetnumrecordederrors-9"><code>testGetNumRecordedErrors</code></a></h3>
 <p>Gets number of errors recorded for a given UUID metric.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -8083,7 +8359,7 @@ assert.strictEqual(
 <div data-lang="Firefox Desktop" class="tab" data-info="Firefox Desktop uses testGetValue to communicate errors"></div>
 </div>
 </div>
-<h2 id="metric-parameters-9"><a class="header" href="#metric-parameters-9">Metric Parameters</a></h2>
+<h2 id="metric-parameters-11"><a class="header" href="#metric-parameters-11">Metric Parameters</a></h2>
 <p>You first need to add an entry for it to the <code>metrics.yaml</code> file:</p>
 <pre><code class="language-YAML">user:
   client_id:
@@ -8100,9 +8376,9 @@ assert.strictEqual(
 </code></pre>
 <p>For a full reference on metrics parameters common to all metric types,
 refer to the <a href="reference/metrics/../yaml/metrics.html">metrics YAML registry format</a> reference page.</p>
-<h3 id="extra-metric-parameters-8"><a class="header" href="#extra-metric-parameters-8">Extra metric parameters</a></h3>
+<h3 id="extra-metric-parameters-10"><a class="header" href="#extra-metric-parameters-10">Extra metric parameters</a></h3>
 <p>N/A</p>
-<h2 id="data-questions-8"><a class="header" href="#data-questions-8">Data questions</a></h2>
+<h2 id="data-questions-10"><a class="header" href="#data-questions-10">Data questions</a></h2>
 <ul>
 <li>A unique identifier for the client.</li>
 </ul>
@@ -8127,7 +8403,7 @@ refer to the <a href="reference/metrics/../yaml/metrics.html">metrics YAML regis
 all the validations performed are the ones listed in the
 <a href="reference/metrics/url.html#recorded-errors">&quot;Recorded errors&quot;</a> section of this page.</p>
 </div>
-<h2 id="recording-api-10"><a class="header" href="#recording-api-10">Recording API</a></h2>
+<h2 id="recording-api-12"><a class="header" href="#recording-api-12">Recording API</a></h2>
 <h3 id="set-6"><a class="header" href="#set-6"><code>set</code></a></h3>
 <p>Set a URL metric to a specific string value.</p>
 <div class="tabs">
@@ -8212,8 +8488,8 @@ search.template.setUrl(new URL(&quot;https://mysearchengine.com/&quot;));
 <ul>
 <li>Fixed maximum URL length: 2048. Longer URLs are dropped.</li>
 </ul>
-<h2 id="testing-api-10"><a class="header" href="#testing-api-10">Testing API</a></h2>
-<h3 id="testgetvalue-9"><a class="header" href="#testgetvalue-9"><code>testGetValue</code></a></h3>
+<h2 id="testing-api-12"><a class="header" href="#testing-api-12">Testing API</a></h2>
+<h3 id="testgetvalue-11"><a class="header" href="#testgetvalue-11"><code>testGetValue</code></a></h3>
 <p>Gets the recorded value for a given URL metric as a (unencoded) string.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -8262,7 +8538,7 @@ assert.strictEqual(&quot;https://mysearchengine.com/&quot;, await search.templat
 <div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
-<h3 id="testhasvalue-9"><a class="header" href="#testhasvalue-9"><code>testHasValue</code></a></h3>
+<h3 id="testhasvalue-11"><a class="header" href="#testhasvalue-11"><code>testHasValue</code></a></h3>
 <p>Whether or not <strong>any</strong> value was recorded for a given UUID metric.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -8297,7 +8573,7 @@ assert metrics.search.template.test_has_value()
 <div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
-<h3 id="testgetnumrecordederrors-8"><a class="header" href="#testgetnumrecordederrors-8"><code>testGetNumRecordedErrors</code></a></h3>
+<h3 id="testgetnumrecordederrors-10"><a class="header" href="#testgetnumrecordederrors-10"><code>testGetNumRecordedErrors</code></a></h3>
 <p>Gets number of errors recorded for a given counter metric.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -8389,7 +8665,7 @@ assert.strictEqual(
 <div data-lang="Firefox Desktop" class="tab" data-info="Firefox Desktop uses testGetValue to communicate errors"></div>
 </div>
 </div>
-<h2 id="metric-parameters-10"><a class="header" href="#metric-parameters-10">Metric parameters</a></h2>
+<h2 id="metric-parameters-12"><a class="header" href="#metric-parameters-12">Metric parameters</a></h2>
 <p>Example URL metric definition:</p>
 <pre><code class="language-yaml">search:
   template:
@@ -8415,9 +8691,9 @@ refer to the metrics <a href="reference/metrics/../yaml/index.html">YAML format<
 <a href="reference/metrics/../yaml/metrics.html#category-3-web-activity-data-web_activity">&quot;Web activity data&quot;</a> or
 <a href="reference/metrics/../yaml/metrics.html#category-4-highly-sensitive-data-highly_sensitive">&quot;Highly sensitive data&quot;</a>.</p>
 </blockquote>
-<h3 id="extra-metric-parameters-9"><a class="header" href="#extra-metric-parameters-9">Extra metric parameters</a></h3>
+<h3 id="extra-metric-parameters-11"><a class="header" href="#extra-metric-parameters-11">Extra metric parameters</a></h3>
 <p>N/A</p>
-<h2 id="data-questions-9"><a class="header" href="#data-questions-9">Data questions</a></h2>
+<h2 id="data-questions-11"><a class="header" href="#data-questions-11">Data questions</a></h2>
 <ul>
 <li>What is the base URL used to build the search query for the search engine?</li>
 </ul>
@@ -8431,7 +8707,7 @@ for example the date and time that the application was first run.</p>
 <p>The device's offset from UTC is recorded and sent with the Datetime value in the ping.</p>
 <p>To record a single elapsed time, see <a href="reference/metrics/timespan.html">Timespan</a>.
 To measure the distribution of multiple timespans, see <a href="reference/metrics/timing_distribution.html">Timing Distributions</a>.</p>
-<h2 id="recording-api-11"><a class="header" href="#recording-api-11">Recording API</a></h2>
+<h2 id="recording-api-13"><a class="header" href="#recording-api-13">Recording API</a></h2>
 <h3 id="set-7"><a class="header" href="#set-7"><code>set</code></a></h3>
 <p>Sets a datetime metric to a specific date value. Defaults to now.</p>
 <div class="tabs">
@@ -8505,8 +8781,8 @@ Glean.install.firstRun.set(value.getTime() * 1000);
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: Setting the date time to an invalid value.</li>
 </ul>
-<h2 id="testing-api-11"><a class="header" href="#testing-api-11">Testing API</a></h2>
-<h3 id="testgetvalue-10"><a class="header" href="#testgetvalue-10"><code>testGetValue</code></a></h3>
+<h2 id="testing-api-13"><a class="header" href="#testing-api-13">Testing API</a></h2>
+<h3 id="testgetvalue-12"><a class="header" href="#testgetvalue-12"><code>testGetValue</code></a></h3>
 <p>Get the recorded value for a given datetime metric as a language-specific Date object.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -8623,7 +8899,7 @@ assert.strictEqual(&quot;2019-03-25-05:00&quot;, await install.firstRun.testGetV
 <div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
-<h3 id="testhasvalue-10"><a class="header" href="#testhasvalue-10"><code>testHasValue</code></a></h3>
+<h3 id="testhasvalue-12"><a class="header" href="#testhasvalue-12"><code>testHasValue</code></a></h3>
 <p>Whether or not <strong>any</strong> value was recorded for a given datetime metric.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -8658,7 +8934,7 @@ assert metrics.install.first_run.test_has_value()
 <div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
-<h3 id="testgetnumrecordederrors-9"><a class="header" href="#testgetnumrecordederrors-9"><code>testGetNumRecordedErrors</code></a></h3>
+<h3 id="testgetnumrecordederrors-11"><a class="header" href="#testgetnumrecordederrors-11"><code>testGetNumRecordedErrors</code></a></h3>
 <p>Get number of errors recorded for a given datetime metric.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -8718,7 +8994,7 @@ assert.strictEqual(
 <div data-lang="Firefox Desktop" class="tab" data-info="Firefox Desktop uses testGetValue to communicate errors"></div>
 </div>
 </div>
-<h2 id="metric-parameters-11"><a class="header" href="#metric-parameters-11">Metric parameters</a></h2>
+<h2 id="metric-parameters-13"><a class="header" href="#metric-parameters-13">Metric parameters</a></h2>
 <p>Example datetime metric definition:</p>
 <pre><code class="language-yaml">install:
   first_run:
@@ -8736,8 +9012,8 @@ assert.strictEqual(
 </code></pre>
 <p>For a full reference on metrics parameters common to all metric types,
 refer to the <a href="reference/metrics/../yaml/metrics.html">metrics YAML registry format</a> reference page.</p>
-<h3 id="extra-metric-parameters-10"><a class="header" href="#extra-metric-parameters-10">Extra metric parameters</a></h3>
-<h4 id="time_unit-1"><a class="header" href="#time_unit-1"><code>time_unit</code></a></h4>
+<h3 id="extra-metric-parameters-12"><a class="header" href="#extra-metric-parameters-12">Extra metric parameters</a></h3>
+<h4 id="time_unit-2"><a class="header" href="#time_unit-2"><code>time_unit</code></a></h4>
 <p>Datetimes have a required <code>time_unit</code> parameter to specify the smallest unit of resolution that the metric will record. The allowed values for <code>time_unit</code> are:</p>
 <ul>
 <li><code>nanosecond</code></li>
@@ -8749,7 +9025,7 @@ refer to the <a href="reference/metrics/../yaml/metrics.html">metrics YAML regis
 <li><code>day</code></li>
 </ul>
 <p>Carefully consider the required resolution for recording your metric, and choose the coarsest resolution possible.</p>
-<h2 id="data-questions-10"><a class="header" href="#data-questions-10">Data questions</a></h2>
+<h2 id="data-questions-12"><a class="header" href="#data-questions-12">Data questions</a></h2>
 <ul>
 <li>When did the user first run the application?</li>
 </ul>
@@ -8781,7 +9057,7 @@ say every time a view was open and from where.</p>
 <p>When in doubt, refer to the
 <a href="reference/metrics/../../user/metrics/adding-new-metrics.html">metric type choosing guide</a>.</p>
 </blockquote>
-<h2 id="recording-api-12"><a class="header" href="#recording-api-12">Recording API</a></h2>
+<h2 id="recording-api-14"><a class="header" href="#recording-api-14">Recording API</a></h2>
 <h3 id="recordobject"><a class="header" href="#recordobject"><code>record(object)</code></a></h3>
 <p><em>Added in: <a href="reference/metrics/../../appendix/changelog/sdk.html#v3800-2021-05-12">v38.0.0</a></em></p>
 <p>Record a new event, with optional typed extra values.
@@ -8900,8 +9176,8 @@ views.loginOpened.record({ sourceOfLogin: &quot;toolbar&quot; });
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_overflow</code></a>: if any of the values in the <code>extras</code> object are greater than 50 bytes in length.  (Prior to Glean 31.5.0, this recorded an <code>invalid_value</code>).</li>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: if there is an attempt to record to an extra key which is not allowed i.e. an extra key that has not been listed in the YAML registry file.</li>
 </ul>
-<h2 id="testing-api-12"><a class="header" href="#testing-api-12">Testing API</a></h2>
-<h3 id="testgetvalue-11"><a class="header" href="#testgetvalue-11"><code>testGetValue</code></a></h3>
+<h2 id="testing-api-14"><a class="header" href="#testing-api-14">Testing API</a></h2>
+<h3 id="testgetvalue-13"><a class="header" href="#testgetvalue-13"><code>testGetValue</code></a></h3>
 <p>Get the list of recorded events.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -8975,7 +9251,7 @@ Assert.equal(&quot;login_opened&quot;, events[0].name);
 </div>
 </div>
 </div>
-<h3 id="testhasvalue-11"><a class="header" href="#testhasvalue-11"><code>testHasValue</code></a></h3>
+<h3 id="testhasvalue-13"><a class="header" href="#testhasvalue-13"><code>testHasValue</code></a></h3>
 <p>Whether or not any event was recorded for a given event metric.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -9010,7 +9286,7 @@ assert metrics.views.login_opened.test_has_value()
 <div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
-<h3 id="testgetnumrecordederrors-10"><a class="header" href="#testgetnumrecordederrors-10"><code>testGetNumRecordedErrors</code></a></h3>
+<h3 id="testgetnumrecordederrors-12"><a class="header" href="#testgetnumrecordederrors-12"><code>testGetNumRecordedErrors</code></a></h3>
 <p>Get the number of errors recorded for a given event metric.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -9068,7 +9344,7 @@ assert.strictEqual(
 <div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
-<h2 id="metric-parameters-12"><a class="header" href="#metric-parameters-12">Metric parameters</a></h2>
+<h2 id="metric-parameters-14"><a class="header" href="#metric-parameters-14">Metric parameters</a></h2>
 <p>Example event metric definition:</p>
 <pre><code class="language-yaml">views:
   login_opened:
@@ -9096,7 +9372,7 @@ refer to the <a href="reference/metrics/../yaml/metrics.html">metrics YAML regis
 They cannot be persisted longer.
 The <code>glean_parser</code> will reject any other lifetime.</p>
 </blockquote>
-<h3 id="extra-metric-parameters-11"><a class="header" href="#extra-metric-parameters-11">Extra metric parameters</a></h3>
+<h3 id="extra-metric-parameters-13"><a class="header" href="#extra-metric-parameters-13">Extra metric parameters</a></h3>
 <h4 id="extra_keys"><a class="header" href="#extra_keys"><code>extra_keys</code></a></h4>
 <p>The acceptable keys on the &quot;extra&quot; object sent with events.
 A maximum of 10 extra keys is allowed.</p>
@@ -9110,7 +9386,7 @@ A maximum of 10 extra keys is allowed.</p>
 <strong>Note</strong>: If not specified only the legacy API on <code>record</code> is available.</p>
 </li>
 </ul>
-<h2 id="data-questions-11"><a class="header" href="#data-questions-11">Data questions</a></h2>
+<h2 id="data-questions-13"><a class="header" href="#data-questions-13">Data questions</a></h2>
 <ul>
 <li>When and from where was the login view opened?</li>
 </ul>
@@ -9139,7 +9415,7 @@ Otherwise, look at the standard distribution metric types:</p>
 <blockquote>
 <p><strong>Note</strong>: Custom distributions are currently not universally supported. See below for available APIs.</p>
 </blockquote>
-<h2 id="recording-api-13"><a class="header" href="#recording-api-13">Recording API</a></h2>
+<h2 id="recording-api-15"><a class="header" href="#recording-api-15">Recording API</a></h2>
 <h3 id="accumulatesamples"><a class="header" href="#accumulatesamples"><code>accumulateSamples</code></a></h3>
 <p>Accumulate the provided samples in the metric.</p>
 <div class="tabs">
@@ -9182,8 +9458,8 @@ mozilla::glean::graphics::checkerboard_peak.AccumulateSamples({ 23 });
 <ul>
 <li><code>invalid_value</code>: If recording a negative value.</li>
 </ul>
-<h2 id="testing-api-13"><a class="header" href="#testing-api-13">Testing API</a></h2>
-<h3 id="testgetvalue-12"><a class="header" href="#testgetvalue-12"><code>testGetValue</code></a></h3>
+<h2 id="testing-api-15"><a class="header" href="#testing-api-15">Testing API</a></h2>
+<h3 id="testgetvalue-14"><a class="header" href="#testgetvalue-14"><code>testGetValue</code></a></h3>
 <p>Gets the recorded value for a given counter metric.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -9227,7 +9503,7 @@ Assert.equal(23, data.sum);
 </div>
 </div>
 </div>
-<h3 id="testhasvalue-12"><a class="header" href="#testhasvalue-12"><code>testHasValue</code></a></h3>
+<h3 id="testhasvalue-14"><a class="header" href="#testhasvalue-14"><code>testHasValue</code></a></h3>
 <p>Whether or not <strong>any</strong> value was recorded for a given counter metric.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -9247,7 +9523,7 @@ assertTrue(Graphics.checkerboardPeak.testHasValue())
 <div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
-<h3 id="testgetnumrecordederrors-11"><a class="header" href="#testgetnumrecordederrors-11"><code>testGetNumRecordedErrors</code></a></h3>
+<h3 id="testgetnumrecordederrors-13"><a class="header" href="#testgetnumrecordederrors-13"><code>testGetNumRecordedErrors</code></a></h3>
 <p>Gets number of errors recorded for a given counter metric.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -9276,7 +9552,7 @@ assert_eq!(
 <div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
-<h2 id="metric-parameters-13"><a class="header" href="#metric-parameters-13">Metric Parameters</a></h2>
+<h2 id="metric-parameters-15"><a class="header" href="#metric-parameters-15">Metric Parameters</a></h2>
 <p>Example custom distribution metric definition:</p>
 <pre><code class="language-YAML">graphics:
   checkerboard_peak:
@@ -9297,7 +9573,7 @@ assert_eq!(
       - me@mozilla.com
     expires: 2020-10-01
 </code></pre>
-<h3 id="extra-metric-parameters-12"><a class="header" href="#extra-metric-parameters-12">Extra metric parameters</a></h3>
+<h3 id="extra-metric-parameters-14"><a class="header" href="#extra-metric-parameters-14">Extra metric parameters</a></h3>
 <p>Custom distributions have the following required parameters:</p>
 <ul>
 <li><code>range_min</code>: (Integer) The minimum value of the first bucket</li>
@@ -9387,7 +9663,7 @@ For example, the width of the display in pixels.</p>
 <p>If you need to <em>count</em> something (e.g. the number of times a button is pressed)
 prefer using the <a href="reference/metrics/./counter.html">Counter</a> metric type, which has a specific API for counting things.</p>
 </blockquote>
-<h2 id="recording-api-14"><a class="header" href="#recording-api-14">Recording API</a></h2>
+<h2 id="recording-api-16"><a class="header" href="#recording-api-16">Recording API</a></h2>
 <h3 id="set-8"><a class="header" href="#set-8"><code>set</code></a></h3>
 <p>Sets a quantity metric to a specific value.</p>
 <div class="tabs">
@@ -9452,8 +9728,8 @@ mozilla::glean::display::width.Set(innerHeight);
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: If a negative value is passed in.</li>
 </ul>
-<h2 id="testing-api-14"><a class="header" href="#testing-api-14">Testing API</a></h2>
-<h3 id="testgetvalue-13"><a class="header" href="#testgetvalue-13"><code>testGetValue</code></a></h3>
+<h2 id="testing-api-16"><a class="header" href="#testing-api-16">Testing API</a></h2>
+<h3 id="testgetvalue-15"><a class="header" href="#testgetvalue-15"><code>testGetValue</code></a></h3>
 <p>Gets the recorded value for a given quantity metric.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -9520,7 +9796,7 @@ Assert.equal(433, Glean.display.width.testGetValue());
 </div>
 </div>
 </div>
-<h3 id="testhasvalue-13"><a class="header" href="#testhasvalue-13"><code>testHasValue</code></a></h3>
+<h3 id="testhasvalue-15"><a class="header" href="#testhasvalue-15"><code>testHasValue</code></a></h3>
 <p>Whether or not <strong>any</strong> value was recorded for a given quantity metric.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -9560,7 +9836,7 @@ assert metrics.display.width.test_has_value()
 <div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
-<h3 id="testgetnumrecordederrors-12"><a class="header" href="#testgetnumrecordederrors-12"><code>testGetNumRecordedErrors</code></a></h3>
+<h3 id="testgetnumrecordederrors-14"><a class="header" href="#testgetnumrecordederrors-14"><code>testGetNumRecordedErrors</code></a></h3>
 <p>Gets number of errors recorded for a given quantity metric.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -9629,7 +9905,7 @@ assert_eq!(
 <div data-lang="Firefox Desktop" class="tab" data-info="Firefox Desktop uses testGetValue to communicate errors"></div>
 </div>
 </div>
-<h2 id="metric-parameters-14"><a class="header" href="#metric-parameters-14">Metric parameters</a></h2>
+<h2 id="metric-parameters-16"><a class="header" href="#metric-parameters-16">Metric parameters</a></h2>
 <p>Example quantity metric definition:</p>
 <pre><code class="language-yaml">controls:
   refresh_pressed:
@@ -9647,10 +9923,10 @@ assert_eq!(
 </code></pre>
 <p>For a full reference on metrics parameters common to all metric types,
 refer to the <a href="reference/metrics/../yaml/metrics.html">metrics YAML registry format</a> reference page.</p>
-<h3 id="extra-metric-parameters-13"><a class="header" href="#extra-metric-parameters-13">Extra metric parameters</a></h3>
+<h3 id="extra-metric-parameters-15"><a class="header" href="#extra-metric-parameters-15">Extra metric parameters</a></h3>
 <h4 id="unit"><a class="header" href="#unit"><code>unit</code></a></h4>
 <p>Quantities have the required <code>unit</code> parameter, which is a free-form string for documentation purposes.</p>
-<h2 id="data-questions-12"><a class="header" href="#data-questions-12">Data questions</a></h2>
+<h2 id="data-questions-14"><a class="header" href="#data-questions-14">Data questions</a></h2>
 <ul>
 <li>What is the width of the display, in pixels?</li>
 </ul>
@@ -9677,7 +9953,7 @@ Using your own variable for counting and setting the metric yourself could be pr
 ping scheduling will make it difficult to ensure the metric is at the correct value at the correct time.
 Instead, count to the numerator and denominator as you go.</p>
 </blockquote>
-<h2 id="recording-api-15"><a class="header" href="#recording-api-15">Recording API</a></h2>
+<h2 id="recording-api-17"><a class="header" href="#recording-api-17">Recording API</a></h2>
 <h3 id="addtonumerator--addtodenominator"><a class="header" href="#addtonumerator--addtodenominator"><code>addToNumerator</code> / <code>addToDenominator</code></a></h3>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -9737,8 +10013,8 @@ Glean.network.httpConnectionError.addToDenominator(1);
 <li>Numerator and Denominator only increment.</li>
 <li>Numerator and Denominator saturate at the largest value that can be represented as a 32-bit signed integer (<code>2147483647</code>).</li>
 </ul>
-<h2 id="testing-api-15"><a class="header" href="#testing-api-15">Testing API</a></h2>
-<h3 id="testgetvalue-14"><a class="header" href="#testgetvalue-14"><code>testGetValue</code></a></h3>
+<h2 id="testing-api-17"><a class="header" href="#testing-api-17">Testing API</a></h2>
+<h3 id="testgetvalue-16"><a class="header" href="#testgetvalue-16"><code>testGetValue</code></a></h3>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
@@ -9771,7 +10047,7 @@ Assert.deepEqual(
 </div>
 </div>
 </div>
-<h3 id="testhasvalue-14"><a class="header" href="#testhasvalue-14"><code>testHasValue</code></a></h3>
+<h3 id="testhasvalue-16"><a class="header" href="#testhasvalue-16"><code>testHasValue</code></a></h3>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
@@ -9784,7 +10060,7 @@ Assert.deepEqual(
 <div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
-<h3 id="testgetnumrecordederrors-13"><a class="header" href="#testgetnumrecordederrors-13"><code>testGetNumRecordedErrors</code></a></h3>
+<h3 id="testgetnumrecordederrors-15"><a class="header" href="#testgetnumrecordederrors-15"><code>testGetNumRecordedErrors</code></a></h3>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
@@ -9808,7 +10084,7 @@ assert_eq!(
 <div data-lang="Firefox Desktop" class="tab" data-info="Firefox Desktop uses testGetValue to communicate errors"></div>
 </div>
 </div>
-<h2 id="metric-parameters-15"><a class="header" href="#metric-parameters-15">Metric parameters</a></h2>
+<h2 id="metric-parameters-17"><a class="header" href="#metric-parameters-17">Metric parameters</a></h2>
 <p>Example rate metric definition:</p>
 <pre><code class="language-YAML">network:
   http_connection_error:
@@ -9850,7 +10126,7 @@ then the denominator should be defined as a <code>counter</code> and shared betw
     denominator_metric: network.http_connections
     ...
 </code></pre>
-<h2 id="data-questions-13"><a class="header" href="#data-questions-13">Data Questions</a></h2>
+<h2 id="data-questions-15"><a class="header" href="#data-questions-15">Data Questions</a></h2>
 <ul>
 <li>How often did an HTTP connection error?</li>
 <li>How many documents used a given CSS Property?</li>
@@ -9868,7 +10144,7 @@ then the denominator should be defined as a <code>counter</code> and shared betw
 See <a href="reference/metrics/text.html#limits">limitations</a> below.<br />
 Reach out to the Glean team before using this.</p>
 </blockquote>
-<h2 id="recording-api-16"><a class="header" href="#recording-api-16">Recording API</a></h2>
+<h2 id="recording-api-18"><a class="header" href="#recording-api-18">Recording API</a></h2>
 <h3 id="set-9"><a class="header" href="#set-9"><code>set</code></a></h3>
 <p>Sets a text metric to a specific value.</p>
 <div class="tabs">
@@ -9900,8 +10176,8 @@ Longer text is truncated. This is measured in the number of bytes when the strin
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_overflow</code></a>: if the text is too long.</li>
 </ul>
-<h2 id="testing-api-16"><a class="header" href="#testing-api-16">Testing API</a></h2>
-<h3 id="testgetvalue-15"><a class="header" href="#testgetvalue-15"><code>testGetValue</code></a></h3>
+<h2 id="testing-api-18"><a class="header" href="#testing-api-18">Testing API</a></h2>
+<h3 id="testgetvalue-17"><a class="header" href="#testgetvalue-17"><code>testGetValue</code></a></h3>
 <p>Gets the recorded value for a given text metric.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -9920,7 +10196,7 @@ assert.strictEqual(&quot;some content&quot;, await article.content.testGetValue(
 <div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
-<h3 id="testgetnumrecordederrors-14"><a class="header" href="#testgetnumrecordederrors-14"><code>testGetNumRecordedErrors</code></a></h3>
+<h3 id="testgetnumrecordederrors-16"><a class="header" href="#testgetnumrecordederrors-16"><code>testGetNumRecordedErrors</code></a></h3>
 <p>Gets number of errors recorded for a given text metric.</p>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -9943,7 +10219,7 @@ assert.strictEqual(
 <div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
-<h2 id="metric-parameters-16"><a class="header" href="#metric-parameters-16">Metric parameters</a></h2>
+<h2 id="metric-parameters-18"><a class="header" href="#metric-parameters-18">Metric parameters</a></h2>
 <p>Example text metric definition:</p>
 <pre><code class="language-yaml">article:
   content:
@@ -9965,7 +10241,7 @@ assert.strictEqual(
 </code></pre>
 <p>For a full reference on metrics parameters common to all metric types,
 refer to the <a href="reference/metrics/../yaml/metrics.html">metrics YAML registry format</a> reference page.</p>
-<h2 id="data-questions-14"><a class="header" href="#data-questions-14">Data questions</a></h2>
+<h2 id="data-questions-16"><a class="header" href="#data-questions-16">Data questions</a></h2>
 <ul>
 <li>What article content was displayed to the user?</li>
 </ul>
@@ -10041,7 +10317,7 @@ pings.search.submit(pings.searchReasonCodes.Performed);
 </div>
 </div>
 </div>
-<h2 id="testing-api-17"><a class="header" href="#testing-api-17">Testing API</a></h2>
+<h2 id="testing-api-19"><a class="header" href="#testing-api-19">Testing API</a></h2>
 <h3 id="testbeforenextsubmit"><a class="header" href="#testbeforenextsubmit"><code>testBeforeNextSubmit</code></a></h3>
 <p>Runs a validation function before the ping is collected.</p>
 <div class="tabs">
