@@ -8898,6 +8898,7 @@ views.loginOpened.record({ sourceOfLogin: &quot;toolbar&quot; });
 <h4 id="recorded-errors-16"><a class="header" href="#recorded-errors-16">Recorded errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_overflow</code></a>: if any of the values in the <code>extras</code> object are greater than 50 bytes in length.  (Prior to Glean 31.5.0, this recorded an <code>invalid_value</code>).</li>
+<li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: if there is an attempt to record to an extra key which is not allowed i.e. an extra key that has not been listed in the YAML registry file.</li>
 </ul>
 <h2 id="testing-api-12"><a class="header" href="#testing-api-12">Testing API</a></h2>
 <h3 id="testgetvalue-11"><a class="header" href="#testgetvalue-11"><code>testGetValue</code></a></h3>
@@ -12480,6 +12481,9 @@ This is a major milestone in using a cross-platform implementation of Glean on t
 <p>First testing release.</p>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/appendix/changelog/sdk.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="unreleased-changes-1"><a class="header" href="#unreleased-changes-1">Unreleased changes</a></h1>
 <p><a href="https://github.com/mozilla/glean.js/compare/v0.28.0...main">Full changelog</a></p>
+<ul>
+<li><a href="https://github.com/mozilla/glean.js/pull/1006">#1006</a>: Implement the rate metric.</li>
+</ul>
 <h1 id="v0280-2021-12-08"><a class="header" href="#v0280-2021-12-08">v0.28.0 (2021-12-08)</a></h1>
 <p><a href="https://github.com/mozilla/glean.js/compare/v0.27.0...v0.28.0">Full changelog</a></p>
 <ul>
