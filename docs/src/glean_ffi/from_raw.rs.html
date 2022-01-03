@@ -367,7 +367,7 @@
 <span class="doccomment">/// * FfiStr checks each individual char pointer for validity (non-null).</span>
 <span class="doccomment">/// * We discard invalid char pointers (null pointer).</span>
 <span class="doccomment">/// * Invalid UTF-8 in any string will return an error from this function.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_raw_string_array</span>(<span class="ident">arr</span>: <span class="ident">RawStringArray</span>, <span class="ident">len</span>: <span class="ident">i32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">glean_core::Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_raw_string_array</span>(<span class="ident">arr</span>: <span class="ident">RawStringArray</span>, <span class="ident">len</span>: <span class="ident">i32</span>) -&gt; <span class="ident">glean_core::Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span> {
     <span class="kw">unsafe</span> {
         <span class="kw">if</span> <span class="ident">arr</span>.<span class="ident">is_null</span>() <span class="op">|</span><span class="op">|</span> <span class="ident">len</span> <span class="op">&lt;</span><span class="op">=</span> <span class="number">0</span> {
             <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="macro">vec!</span>[]);
@@ -398,7 +398,7 @@
     <span class="ident">keys</span>: <span class="ident">RawIntArray</span>,
     <span class="ident">values</span>: <span class="ident">RawStringArray</span>,
     <span class="ident">len</span>: <span class="ident">i32</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">glean_core::Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">i32</span>, <span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+) -&gt; <span class="ident">glean_core::Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">i32</span>, <span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> {
     <span class="kw">unsafe</span> {
         <span class="kw">if</span> <span class="ident">keys</span>.<span class="ident">is_null</span>() <span class="op">|</span><span class="op">|</span> <span class="ident">values</span>.<span class="ident">is_null</span>() <span class="op">|</span><span class="op">|</span> <span class="ident">len</span> <span class="op">&lt;</span><span class="op">=</span> <span class="number">0</span> {
             <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>);
@@ -430,7 +430,7 @@
     <span class="ident">keys</span>: <span class="ident">RawStringArray</span>,
     <span class="ident">values</span>: <span class="ident">RawStringArray</span>,
     <span class="ident">len</span>: <span class="ident">i32</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">glean_core::Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+) -&gt; <span class="ident">glean_core::Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> {
     <span class="kw">unsafe</span> {
         <span class="kw">if</span> <span class="ident">keys</span>.<span class="ident">is_null</span>() <span class="op">|</span><span class="op">|</span> <span class="ident">values</span>.<span class="ident">is_null</span>() <span class="op">|</span><span class="op">|</span> <span class="ident">len</span> <span class="op">&lt;</span><span class="op">=</span> <span class="number">0</span> {
             <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>);
@@ -461,7 +461,7 @@
 <span class="doccomment">/// # Safety</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// * We check the array pointer for validity (non-null).</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_raw_int64_array</span>(<span class="ident">values</span>: <span class="ident">RawInt64Array</span>, <span class="ident">len</span>: <span class="ident">i32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_raw_int64_array</span>(<span class="ident">values</span>: <span class="ident">RawInt64Array</span>, <span class="ident">len</span>: <span class="ident">i32</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span> {
     <span class="kw">unsafe</span> {
         <span class="kw">if</span> <span class="ident">values</span>.<span class="ident">is_null</span>() <span class="op">|</span><span class="op">|</span> <span class="ident">len</span> <span class="op">&lt;</span><span class="op">=</span> <span class="number">0</span> {
             <span class="kw">return</span> <span class="macro">vec!</span>[];

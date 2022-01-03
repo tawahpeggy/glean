@@ -244,7 +244,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">CoreMetrics</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CoreMetrics</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="ident">CoreMetrics</span> {
         <span class="ident">CoreMetrics</span> {
             <span class="ident">client_id</span>: <span class="ident">UuidMetric::new</span>(<span class="ident">CommonMetricData</span> {
                 <span class="ident">name</span>: <span class="string">&quot;client_id&quot;</span>.<span class="ident">into</span>(),
@@ -292,7 +292,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">AdditionalMetrics</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">AdditionalMetrics</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="ident">AdditionalMetrics</span> {
         <span class="ident">AdditionalMetrics</span> {
             <span class="ident">io_errors</span>: <span class="ident">CounterMetric::new</span>(<span class="ident">CommonMetricData</span> {
                 <span class="ident">name</span>: <span class="string">&quot;io&quot;</span>.<span class="ident">into</span>(),
@@ -337,7 +337,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">UploadMetrics</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">UploadMetrics</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="ident">UploadMetrics</span> {
         <span class="ident">UploadMetrics</span> {
             <span class="ident">ping_upload_failure</span>: <span class="ident">LabeledMetric::new</span>(
                 <span class="ident">CounterMetric::new</span>(<span class="ident">CommonMetricData</span> {
@@ -408,7 +408,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">DatabaseMetrics</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DatabaseMetrics</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="ident">DatabaseMetrics</span> {
         <span class="ident">DatabaseMetrics</span> {
             <span class="ident">size</span>: <span class="ident">MemoryDistributionMetric::new</span>(
                 <span class="ident">CommonMetricData</span> {

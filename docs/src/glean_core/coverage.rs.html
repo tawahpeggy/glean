@@ -74,10 +74,10 @@
 <span class="kw">static</span> <span class="ident">COVERAGE_FILE</span>: <span class="ident">Lazy</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">File</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Lazy::new</span>(<span class="op">|</span><span class="op">|</span> {
     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">filename</span>) <span class="op">=</span> <span class="ident">env::var_os</span>(<span class="string">&quot;GLEAN_TEST_COVERAGE&quot;</span>) {
         <span class="kw">match</span> <span class="ident">OpenOptions::new</span>().<span class="ident">append</span>(<span class="bool-val">true</span>).<span class="ident">create</span>(<span class="bool-val">true</span>).<span class="ident">open</span>(<span class="ident">filename</span>) {
-            <span class="prelude-val">Ok</span>(<span class="ident">file</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Ok</span>(<span class="ident">file</span>) =&gt; {
                 <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="ident">Mutex::new</span>(<span class="ident">file</span>));
             }
-            <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Err</span>(<span class="ident">err</span>) =&gt; {
                 <span class="macro">log::error!</span>(<span class="string">&quot;Couldn&#39;t open file for coverage results: {:?}&quot;</span>, <span class="ident">err</span>);
             }
         }

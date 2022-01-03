@@ -76,10 +76,10 @@
     <span class="ident">Lifetime</span>, <span class="ident">RawInt64Array</span>,
 };
 
-<span class="macro">define_metric!</span>(<span class="ident">CustomDistributionMetric</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">CUSTOM_DISTRIBUTION_METRICS</span> {
-    <span class="ident">new</span>           <span class="op">-</span><span class="op">&gt;</span> <span class="ident">glean_new_custom_distribution_metric</span>(<span class="ident">range_min</span>: <span class="ident">u64</span>, <span class="ident">range_max</span>: <span class="ident">u64</span>, <span class="ident">bucket_count</span>: <span class="ident">u64</span>, <span class="ident">histogram_type</span>: <span class="ident">i32</span>),
-    <span class="ident">test_get_num_recorded_errors</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">glean_custom_distribution_test_get_num_recorded_errors</span>,
-    <span class="ident">destroy</span>       <span class="op">-</span><span class="op">&gt;</span> <span class="ident">glean_destroy_custom_distribution_metric</span>,
+<span class="macro">define_metric!</span>(<span class="ident">CustomDistributionMetric</span> =&gt; <span class="ident">CUSTOM_DISTRIBUTION_METRICS</span> {
+    <span class="ident">new</span>           -&gt; <span class="ident">glean_new_custom_distribution_metric</span>(<span class="ident">range_min</span>: <span class="ident">u64</span>, <span class="ident">range_max</span>: <span class="ident">u64</span>, <span class="ident">bucket_count</span>: <span class="ident">u64</span>, <span class="ident">histogram_type</span>: <span class="ident">i32</span>),
+    <span class="ident">test_get_num_recorded_errors</span> -&gt; <span class="ident">glean_custom_distribution_test_get_num_recorded_errors</span>,
+    <span class="ident">destroy</span>       -&gt; <span class="ident">glean_destroy_custom_distribution_metric</span>,
 });
 
 <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
@@ -105,7 +105,7 @@
 <span class="kw">pub</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">glean_custom_distribution_test_has_value</span>(
     <span class="ident">metric_id</span>: <span class="ident">u64</span>,
     <span class="ident">storage_name</span>: <span class="ident">FfiStr</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u8</span> {
+) -&gt; <span class="ident">u8</span> {
     <span class="ident">with_glean_value</span>(<span class="op">|</span><span class="ident">glean</span><span class="op">|</span> {
         <span class="ident">CUSTOM_DISTRIBUTION_METRICS</span>.<span class="ident">call_infallible</span>(<span class="ident">metric_id</span>, <span class="op">|</span><span class="ident">metric</span><span class="op">|</span> {
             <span class="ident">metric</span>
@@ -119,7 +119,7 @@
 <span class="kw">pub</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">glean_custom_distribution_test_get_value_as_json_string</span>(
     <span class="ident">metric_id</span>: <span class="ident">u64</span>,
     <span class="ident">storage_name</span>: <span class="ident">FfiStr</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_char</span> {
+) -&gt; <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_char</span> {
     <span class="ident">with_glean_value</span>(<span class="op">|</span><span class="ident">glean</span><span class="op">|</span> {
         <span class="ident">CUSTOM_DISTRIBUTION_METRICS</span>.<span class="ident">call_infallible</span>(<span class="ident">metric_id</span>, <span class="op">|</span><span class="ident">metric</span><span class="op">|</span> {
             <span class="ident">metric</span>

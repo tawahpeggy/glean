@@ -345,16 +345,16 @@
 
 <span class="doccomment">/// Generates a pipeline-friendly string</span>
 <span class="doccomment">/// that replaces non alphanumeric characters with dashes.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sanitize_application_id</span>(<span class="ident">application_id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sanitize_application_id</span>(<span class="ident">application_id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">String</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">last_dash</span> <span class="op">=</span> <span class="bool-val">false</span>;
     <span class="ident">application_id</span>
         .<span class="ident">chars</span>()
         .<span class="ident">filter_map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="kw">match</span> <span class="ident">x</span> {
-            <span class="string">&#39;A&#39;</span>..<span class="op">=</span><span class="string">&#39;Z&#39;</span> <span class="op">|</span> <span class="string">&#39;a&#39;</span>..<span class="op">=</span><span class="string">&#39;z&#39;</span> <span class="op">|</span> <span class="string">&#39;0&#39;</span>..<span class="op">=</span><span class="string">&#39;9&#39;</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="string">&#39;A&#39;</span>..<span class="op">=</span><span class="string">&#39;Z&#39;</span> <span class="op">|</span> <span class="string">&#39;a&#39;</span>..<span class="op">=</span><span class="string">&#39;z&#39;</span> <span class="op">|</span> <span class="string">&#39;0&#39;</span>..<span class="op">=</span><span class="string">&#39;9&#39;</span> =&gt; {
                 <span class="ident">last_dash</span> <span class="op">=</span> <span class="bool-val">false</span>;
                 <span class="prelude-val">Some</span>(<span class="ident">x</span>.<span class="ident">to_ascii_lowercase</span>())
             }
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="kw">_</span> =&gt; {
                 <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">last_dash</span> { <span class="prelude-val">None</span> } <span class="kw">else</span> { <span class="prelude-val">Some</span>(<span class="string">&#39;-&#39;</span>) };
                 <span class="ident">last_dash</span> <span class="op">=</span> <span class="bool-val">true</span>;
                 <span class="ident">result</span>
@@ -374,7 +374,7 @@
 <span class="doccomment">/// # Returns</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// A string representing the provided date/time truncated to the requested time unit.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_iso_time_string</span>(<span class="ident">datetime</span>: <span class="ident">DateTime</span><span class="op">&lt;</span><span class="ident">FixedOffset</span><span class="op">&gt;</span>, <span class="ident">truncate_to</span>: <span class="ident">TimeUnit</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_iso_time_string</span>(<span class="ident">datetime</span>: <span class="ident">DateTime</span><span class="op">&lt;</span><span class="ident">FixedOffset</span><span class="op">&gt;</span>, <span class="ident">truncate_to</span>: <span class="ident">TimeUnit</span>) -&gt; <span class="ident">String</span> {
     <span class="ident">datetime</span>.<span class="ident">format</span>(<span class="ident">truncate_to</span>.<span class="ident">format_pattern</span>()).<span class="ident">to_string</span>()
 }
 
@@ -383,7 +383,7 @@
 <span class="doccomment">/// This converts from the `Local` timezone into its fixed-offset equivalent.</span>
 <span class="doccomment">/// If a timezone outside of [-24h, +24h] is detected it corrects the timezone offset to UTC (+0).</span>
 <span class="doccomment">/// The return value will signal if the timezone offset was corrected.</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">local_now_with_offset</span>() <span class="op">-</span><span class="op">&gt;</span> (<span class="ident">DateTime</span><span class="op">&lt;</span><span class="ident">FixedOffset</span><span class="op">&gt;</span>, <span class="ident">bool</span>) {
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">local_now_with_offset</span>() -&gt; (<span class="ident">DateTime</span><span class="op">&lt;</span><span class="ident">FixedOffset</span><span class="op">&gt;</span>, <span class="ident">bool</span>) {
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;windows&quot;</span>)]</span>
     {
         <span class="comment">// `Local::now` takes the user&#39;s timezone offset</span>
@@ -431,7 +431,7 @@
 <span class="doccomment">/// This converts from the `Local` timezone into its fixed-offset equivalent.</span>
 <span class="doccomment">/// If a timezone outside of [-24h, +24h] is detected it corrects the timezone offset to UTC (+0).</span>
 <span class="doccomment">/// The corresponding error counter is incremented in this case.</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">local_now_with_offset_and_record</span>(<span class="ident">glean</span>: <span class="kw-2">&amp;</span><span class="ident">Glean</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DateTime</span><span class="op">&lt;</span><span class="ident">FixedOffset</span><span class="op">&gt;</span> {
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">local_now_with_offset_and_record</span>(<span class="ident">glean</span>: <span class="kw-2">&amp;</span><span class="ident">Glean</span>) -&gt; <span class="ident">DateTime</span><span class="op">&lt;</span><span class="ident">FixedOffset</span><span class="op">&gt;</span> {
     <span class="kw">let</span> (<span class="ident">now</span>, <span class="ident">is_corrected</span>) <span class="op">=</span> <span class="ident">local_now_with_offset</span>();
     <span class="kw">if</span> <span class="ident">is_corrected</span> {
         <span class="ident">glean</span>
@@ -455,7 +455,7 @@
 <span class="doccomment">/// # Returns</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// A string, with at most `length` bytes.</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">truncate_string_at_boundary</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">value</span>: <span class="ident">S</span>, <span class="ident">length</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">truncate_string_at_boundary</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">value</span>: <span class="ident">S</span>, <span class="ident">length</span>: <span class="ident">usize</span>) -&gt; <span class="ident">String</span> {
     <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">value</span>.<span class="ident">into</span>();
     <span class="kw">if</span> <span class="ident">s</span>.<span class="ident">len</span>() <span class="op">&gt;</span> <span class="ident">length</span> {
         <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> (<span class="number">0</span>..<span class="op">=</span><span class="ident">length</span>).<span class="ident">rev</span>() {
@@ -491,7 +491,7 @@
     <span class="ident">meta</span>: <span class="kw-2">&amp;</span><span class="ident">CommonMetricData</span>,
     <span class="ident">value</span>: <span class="ident">S</span>,
     <span class="ident">length</span>: <span class="ident">usize</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+) -&gt; <span class="ident">String</span> {
     <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">value</span>.<span class="ident">into</span>();
     <span class="kw">if</span> <span class="ident">s</span>.<span class="ident">len</span>() <span class="op">&gt;</span> <span class="ident">length</span> {
         <span class="kw">let</span> <span class="ident">msg</span> <span class="op">=</span> <span class="macro">format!</span>(<span class="string">&quot;Value length {} exceeds maximum of {}&quot;</span>, <span class="ident">s</span>.<span class="ident">len</span>(), <span class="ident">length</span>);
@@ -524,7 +524,7 @@
         <span class="comment">// Gets and sets the floating point control word.</span>
         <span class="comment">// See documentation here:</span>
         <span class="comment">// https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/controlfp-s</span>
-        <span class="kw">fn</span> <span class="ident">_controlfp_s</span>(<span class="ident">current</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">size_t</span>, <span class="ident">new</span>: <span class="ident">size_t</span>, <span class="ident">mask</span>: <span class="ident">size_t</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">size_t</span>;
+        <span class="kw">fn</span> <span class="ident">_controlfp_s</span>(<span class="ident">current</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">size_t</span>, <span class="ident">new</span>: <span class="ident">size_t</span>, <span class="ident">mask</span>: <span class="ident">size_t</span>) -&gt; <span class="ident">size_t</span>;
     }
 
     <span class="comment">// Rounding control mask</span>
@@ -541,7 +541,7 @@
     }
 
     <span class="kw">impl</span> <span class="ident">FloatingPointContext</span> {
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="self">Self</span> {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">current</span>: <span class="ident">size_t</span> <span class="op">=</span> <span class="number">0</span>;
             <span class="kw">let</span> <span class="ident">_err</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">_controlfp_s</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">current</span>, <span class="ident">PC_64</span> <span class="op">|</span> <span class="ident">RC_CHOP</span>, <span class="ident">MCW_PC</span> <span class="op">|</span> <span class="ident">MCW_RC</span>) };
 
@@ -564,7 +564,7 @@
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">FloatingPointContext</span> {}
 
     <span class="kw">impl</span> <span class="ident">FloatingPointContext</span> {
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="self">Self</span> {
             <span class="ident">FloatingPointContext</span> {}
         }
     }

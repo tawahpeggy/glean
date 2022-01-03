@@ -302,9 +302,9 @@
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">PingUploadTask</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">FfiPingUploadTask</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">task</span>: <span class="ident">PingUploadTask</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">task</span>: <span class="ident">PingUploadTask</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">match</span> <span class="ident">task</span> {
-            <span class="ident">PingUploadTask::Upload</span>(<span class="ident">request</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">PingUploadTask::Upload</span>(<span class="ident">request</span>) =&gt; {
                 <span class="comment">// Safe unwraps:</span>
                 <span class="comment">// 1. CString::new(..) should not fail as we are the ones that created the strings being transformed;</span>
                 <span class="comment">// 2. serde_json::to_string(&amp;request.headers) should not fail as request.headers is a HashMap of Strings.</span>
@@ -319,8 +319,8 @@
                     <span class="ident">headers</span>: <span class="ident">headers</span>.<span class="ident">into_raw</span>(),
                 }
             }
-            <span class="ident">PingUploadTask::Wait</span>(<span class="ident">time</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">FfiPingUploadTask::Wait</span>(<span class="ident">time</span>),
-            <span class="ident">PingUploadTask::Done</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">FfiPingUploadTask::Done</span>,
+            <span class="ident">PingUploadTask::Wait</span>(<span class="ident">time</span>) =&gt; <span class="ident">FfiPingUploadTask::Wait</span>(<span class="ident">time</span>),
+            <span class="ident">PingUploadTask::Done</span> =&gt; <span class="ident">FfiPingUploadTask::Done</span>,
         }
     }
 }
@@ -354,12 +354,12 @@
     <span class="kw">type</span> <span class="ident">Value</span> <span class="op">=</span> <span class="ident">FfiPingUploadTask</span>;
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">ffi_default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">FfiPingUploadTask</span> {
+    <span class="kw">fn</span> <span class="ident">ffi_default</span>() -&gt; <span class="ident">FfiPingUploadTask</span> {
         <span class="ident">FfiPingUploadTask::Done</span>
     }
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">into_ffi_value</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">FfiPingUploadTask</span> {
+    <span class="kw">fn</span> <span class="ident">into_ffi_value</span>(<span class="self">self</span>) -&gt; <span class="ident">FfiPingUploadTask</span> {
         <span class="self">self</span>
     }
 }

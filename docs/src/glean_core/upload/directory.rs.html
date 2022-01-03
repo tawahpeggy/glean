@@ -453,7 +453,7 @@
     }
 
     <span class="comment">// Get the sum of the number of deletion request and regular pending pings.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">len</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">len</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">usize</span> {
         <span class="self">self</span>.<span class="ident">pending_pings</span>.<span class="ident">len</span>() <span class="op">+</span> <span class="self">self</span>.<span class="ident">deletion_request_pings</span>.<span class="ident">len</span>()
     }
 }
@@ -463,13 +463,13 @@
 <span class="doccomment">/// # Panics</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// Won&#39;t panic if not able to get file name.</span>
-<span class="kw">fn</span> <span class="ident">get_file_name_as_str</span>(<span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">get_file_name_as_str</span>(<span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> {
     <span class="kw">match</span> <span class="ident">path</span>.<span class="ident">file_name</span>() {
-        <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="prelude-val">None</span> =&gt; {
             <span class="macro">log::warn!</span>(<span class="string">&quot;Error getting file name from path: {}&quot;</span>, <span class="ident">path</span>.<span class="ident">display</span>());
             <span class="prelude-val">None</span>
         }
-        <span class="prelude-val">Some</span>(<span class="ident">file_name</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="prelude-val">Some</span>(<span class="ident">file_name</span>) =&gt; {
             <span class="kw">let</span> <span class="ident">file_name</span> <span class="op">=</span> <span class="ident">file_name</span>.<span class="ident">to_str</span>();
             <span class="kw">if</span> <span class="ident">file_name</span>.<span class="ident">is_none</span>() {
                 <span class="macro">log::warn!</span>(<span class="string">&quot;File name is not valid unicode: {}&quot;</span>, <span class="ident">path</span>.<span class="ident">display</span>());
@@ -485,7 +485,7 @@
 <span class="doccomment">/// currently it contains only additonal headers to be added to each ping request.</span>
 <span class="doccomment">/// Therefore, we will process the contents of this line</span>
 <span class="doccomment">/// and return a HeaderMap of the persisted headers.</span>
-<span class="kw">fn</span> <span class="ident">process_metadata</span>(<span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">metadata</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">HeaderMap</span><span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">process_metadata</span>(<span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">metadata</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">HeaderMap</span><span class="op">&gt;</span> {
     <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Deserialize</span>)]</span>
     <span class="kw">struct</span> <span class="ident">PingMetadata</span> {
         <span class="kw">pub</span> <span class="ident">headers</span>: <span class="ident">HeaderMap</span>,
@@ -514,7 +514,7 @@
     <span class="doccomment">/// # Arguments</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// * `data_path` - Path to the pending pings directory.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">PathBuf</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">data_path</span>: <span class="ident">P</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">PathBuf</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">data_path</span>: <span class="ident">P</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">data_path</span> <span class="op">=</span> <span class="ident">data_path</span>.<span class="ident">into</span>();
         <span class="self">Self</span> {
             <span class="ident">pending_pings_dir</span>: <span class="ident">data_path</span>.<span class="ident">join</span>(<span class="ident">PENDING_PINGS_DIRECTORY</span>),
@@ -535,21 +535,21 @@
     <span class="doccomment">/// # Panics</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Won&#39;t panic if unable to delete the file.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">delete_file</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">uuid</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">delete_file</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">uuid</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">bool</span> {
         <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">get_file_path</span>(<span class="ident">uuid</span>) {
-            <span class="prelude-val">Some</span>(<span class="ident">path</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">path</span>,
-            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Some</span>(<span class="ident">path</span>) =&gt; <span class="ident">path</span>,
+            <span class="prelude-val">None</span> =&gt; {
                 <span class="macro">log::warn!</span>(<span class="string">&quot;Cannot find ping file to delete {}&quot;</span>, <span class="ident">uuid</span>);
                 <span class="kw">return</span> <span class="bool-val">false</span>;
             }
         };
 
         <span class="kw">match</span> <span class="ident">fs::remove_file</span>(<span class="kw-2">&amp;</span><span class="ident">path</span>) {
-            <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Err</span>(<span class="ident">e</span>) =&gt; {
                 <span class="macro">log::warn!</span>(<span class="string">&quot;Error deleting file {}. {}&quot;</span>, <span class="ident">path</span>.<span class="ident">display</span>(), <span class="ident">e</span>);
                 <span class="kw">return</span> <span class="bool-val">false</span>;
             }
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">log::info!</span>(<span class="string">&quot;File was deleted {}&quot;</span>, <span class="ident">path</span>.<span class="ident">display</span>()),
+            <span class="kw">_</span> =&gt; <span class="macro">log::info!</span>(<span class="string">&quot;File was deleted {}&quot;</span>, <span class="ident">path</span>.<span class="ident">display</span>()),
         };
 
         <span class="bool-val">true</span>
@@ -562,17 +562,17 @@
     <span class="doccomment">/// # Arguments</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// * `document_id` - The UUID of the ping file to be processed</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">process_file</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">document_id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PingPayload</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">process_file</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">document_id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PingPayload</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">get_file_path</span>(<span class="ident">document_id</span>) {
-            <span class="prelude-val">Some</span>(<span class="ident">path</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">path</span>,
-            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Some</span>(<span class="ident">path</span>) =&gt; <span class="ident">path</span>,
+            <span class="prelude-val">None</span> =&gt; {
                 <span class="macro">log::warn!</span>(<span class="string">&quot;Cannot find ping file to process {}&quot;</span>, <span class="ident">document_id</span>);
                 <span class="kw">return</span> <span class="prelude-val">None</span>;
             }
         };
         <span class="kw">let</span> <span class="ident">file</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">File::open</span>(<span class="kw-2">&amp;</span><span class="ident">path</span>) {
-            <span class="prelude-val">Ok</span>(<span class="ident">file</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">file</span>,
-            <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Ok</span>(<span class="ident">file</span>) =&gt; <span class="ident">file</span>,
+            <span class="prelude-val">Err</span>(<span class="ident">e</span>) =&gt; {
                 <span class="macro">log::warn!</span>(<span class="string">&quot;Error reading ping file {}. {}&quot;</span>, <span class="ident">path</span>.<span class="ident">display</span>(), <span class="ident">e</span>);
                 <span class="kw">return</span> <span class="prelude-val">None</span>;
             }
@@ -601,7 +601,7 @@
     }
 
     <span class="doccomment">/// Processes both ping directories.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">process_dirs</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PingPayloadsByDirectory</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">process_dirs</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">PingPayloadsByDirectory</span> {
         <span class="ident">PingPayloadsByDirectory</span> {
             <span class="ident">pending_pings</span>: <span class="self">self</span>.<span class="ident">process_dir</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">pending_pings_dir</span>),
             <span class="ident">deletion_request_pings</span>: <span class="self">self</span>.<span class="ident">process_dir</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">deletion_request_pings_dir</span>),
@@ -618,12 +618,12 @@
     <span class="doccomment">/// # Returns</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// A vector of tuples with the file size and payload of each ping file in the directory.</span>
-    <span class="kw">fn</span> <span class="ident">process_dir</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">dir</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">u64</span>, <span class="ident">PingPayload</span>)<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">process_dir</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">dir</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">u64</span>, <span class="ident">PingPayload</span>)<span class="op">&gt;</span> {
         <span class="macro">log::trace!</span>(<span class="string">&quot;Processing persisted pings.&quot;</span>);
 
         <span class="kw">let</span> <span class="ident">entries</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">dir</span>.<span class="ident">read_dir</span>() {
-            <span class="prelude-val">Ok</span>(<span class="ident">entries</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">entries</span>,
-            <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Ok</span>(<span class="ident">entries</span>) =&gt; <span class="ident">entries</span>,
+            <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; {
                 <span class="comment">// This may error simply because the directory doesn&#39;t exist,</span>
                 <span class="comment">// which is expected if no pings were stored yet.</span>
                 <span class="kw">return</span> <span class="ident">Vec::new</span>();
@@ -643,8 +643,8 @@
                     }
                     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">data</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">process_file</span>(<span class="ident">file_name</span>) {
                         <span class="kw">let</span> <span class="ident">metadata</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">fs::metadata</span>(<span class="kw-2">&amp;</span><span class="ident">path</span>) {
-                            <span class="prelude-val">Ok</span>(<span class="ident">metadata</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">metadata</span>,
-                            <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                            <span class="prelude-val">Ok</span>(<span class="ident">metadata</span>) =&gt; <span class="ident">metadata</span>,
+                            <span class="prelude-val">Err</span>(<span class="ident">e</span>) =&gt; {
                                 <span class="comment">// There&#39;s a rare case where this races against a parallel deletion</span>
                                 <span class="comment">// of all pending ping files.</span>
                                 <span class="comment">// This could therefore fail, in which case we don&#39;t care about the</span>
@@ -685,7 +685,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// Will look for files in each ping directory until something is found.</span>
     <span class="doccomment">/// If nothing is found, returns `None`.</span>
-    <span class="kw">fn</span> <span class="ident">get_file_path</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">document_id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PathBuf</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">get_file_path</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">document_id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PathBuf</span><span class="op">&gt;</span> {
         <span class="kw">for</span> <span class="ident">dir</span> <span class="kw">in</span> [<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">pending_pings_dir</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">deletion_request_pings_dir</span>].<span class="ident">iter</span>() {
             <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">dir</span>.<span class="ident">join</span>(<span class="ident">document_id</span>);
             <span class="kw">if</span> <span class="ident">path</span>.<span class="ident">exists</span>() {

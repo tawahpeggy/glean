@@ -270,21 +270,21 @@
     <span class="doccomment">/// Returns a new UTF-8 error</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This is exposed in order to expose conversion errors on the FFI layer.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">utf8_error</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">utf8_error</span>() -&gt; <span class="ident">Error</span> {
         <span class="ident">Error</span> {
             <span class="ident">kind</span>: <span class="ident">ErrorKind::Utf8Error</span>,
         }
     }
 
     <span class="doccomment">/// Indicates an error that no requested global object is initialized</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">not_initialized</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">not_initialized</span>() -&gt; <span class="ident">Error</span> {
         <span class="ident">Error</span> {
             <span class="ident">kind</span>: <span class="ident">ErrorKind::NotInitialized</span>,
         }
     }
 
     <span class="doccomment">/// Returns the kind of the current error instance.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">kind</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">ErrorKind</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">kind</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">ErrorKind</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">kind</span>
     }
 }
@@ -292,22 +292,22 @@
 <span class="kw">impl</span> <span class="ident">std::error::Error</span> <span class="kw">for</span> <span class="ident">Error</span> {}
 
 <span class="kw">impl</span> <span class="ident">Display</span> <span class="kw">for</span> <span class="ident">Error</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt::Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">fmt::Result</span> {
         <span class="kw">use</span> <span class="ident">ErrorKind</span>::<span class="kw-2">*</span>;
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">kind</span>() {
-            <span class="ident">Lifetime</span>(<span class="ident">l</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;Lifetime conversion from {} failed&quot;</span>, <span class="ident">l</span>),
-            <span class="ident">Handle</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;Invalid handle: {}&quot;</span>, <span class="ident">e</span>),
-            <span class="ident">IoError</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;An I/O error occurred: {}&quot;</span>, <span class="ident">e</span>),
-            <span class="ident">Rkv</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;An Rkv error occurred: {}&quot;</span>, <span class="ident">e</span>),
-            <span class="ident">Json</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;A JSON error occurred: {}&quot;</span>, <span class="ident">e</span>),
-            <span class="ident">TimeUnit</span>(<span class="ident">t</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;TimeUnit conversion from {} failed&quot;</span>, <span class="ident">t</span>),
-            <span class="ident">MemoryUnit</span>(<span class="ident">m</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;MemoryUnit conversion from {} failed&quot;</span>, <span class="ident">m</span>),
-            <span class="ident">HistogramType</span>(<span class="ident">h</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;HistogramType conversion from {} failed&quot;</span>, <span class="ident">h</span>),
-            <span class="ident">OsString</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;OsString conversion from {:?} failed&quot;</span>, <span class="ident">s</span>),
-            <span class="ident">Utf8Error</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;Invalid UTF-8 byte sequence in string&quot;</span>),
-            <span class="ident">InvalidConfig</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;Invalid Glean configuration provided&quot;</span>),
-            <span class="ident">NotInitialized</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;Global Glean object missing&quot;</span>),
-            <span class="ident">PingBodyOverflow</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(
+            <span class="ident">Lifetime</span>(<span class="ident">l</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;Lifetime conversion from {} failed&quot;</span>, <span class="ident">l</span>),
+            <span class="ident">Handle</span>(<span class="ident">e</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;Invalid handle: {}&quot;</span>, <span class="ident">e</span>),
+            <span class="ident">IoError</span>(<span class="ident">e</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;An I/O error occurred: {}&quot;</span>, <span class="ident">e</span>),
+            <span class="ident">Rkv</span>(<span class="ident">e</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;An Rkv error occurred: {}&quot;</span>, <span class="ident">e</span>),
+            <span class="ident">Json</span>(<span class="ident">e</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;A JSON error occurred: {}&quot;</span>, <span class="ident">e</span>),
+            <span class="ident">TimeUnit</span>(<span class="ident">t</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;TimeUnit conversion from {} failed&quot;</span>, <span class="ident">t</span>),
+            <span class="ident">MemoryUnit</span>(<span class="ident">m</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;MemoryUnit conversion from {} failed&quot;</span>, <span class="ident">m</span>),
+            <span class="ident">HistogramType</span>(<span class="ident">h</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;HistogramType conversion from {} failed&quot;</span>, <span class="ident">h</span>),
+            <span class="ident">OsString</span>(<span class="ident">s</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;OsString conversion from {:?} failed&quot;</span>, <span class="ident">s</span>),
+            <span class="ident">Utf8Error</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;Invalid UTF-8 byte sequence in string&quot;</span>),
+            <span class="ident">InvalidConfig</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;Invalid Glean configuration provided&quot;</span>),
+            <span class="ident">NotInitialized</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;Global Glean object missing&quot;</span>),
+            <span class="ident">PingBodyOverflow</span>(<span class="ident">s</span>) =&gt; <span class="macro">write!</span>(
                 <span class="ident">f</span>,
                 <span class="string">&quot;Ping request body size exceeded maximum size allowed: {}kB.&quot;</span>,
                 <span class="ident">s</span> <span class="op">/</span> <span class="number">1024</span>
@@ -317,13 +317,13 @@
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">ErrorKind</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">kind</span>: <span class="ident">ErrorKind</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">kind</span>: <span class="ident">ErrorKind</span>) -&gt; <span class="ident">Error</span> {
         <span class="ident">Error</span> { <span class="ident">kind</span> }
     }
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">HandleError</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">error</span>: <span class="ident">HandleError</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">error</span>: <span class="ident">HandleError</span>) -&gt; <span class="ident">Error</span> {
         <span class="ident">Error</span> {
             <span class="ident">kind</span>: <span class="ident">ErrorKind::Handle</span>(<span class="ident">error</span>),
         }
@@ -331,7 +331,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">io::Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">error</span>: <span class="ident">io::Error</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">error</span>: <span class="ident">io::Error</span>) -&gt; <span class="ident">Error</span> {
         <span class="ident">Error</span> {
             <span class="ident">kind</span>: <span class="ident">ErrorKind::IoError</span>(<span class="ident">error</span>),
         }
@@ -339,7 +339,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">StoreError</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">error</span>: <span class="ident">StoreError</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">error</span>: <span class="ident">StoreError</span>) -&gt; <span class="ident">Error</span> {
         <span class="ident">Error</span> {
             <span class="ident">kind</span>: <span class="ident">ErrorKind::Rkv</span>(<span class="ident">error</span>),
         }
@@ -347,13 +347,13 @@
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ExternError</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">error</span>: <span class="ident">Error</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ExternError</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">error</span>: <span class="ident">Error</span>) -&gt; <span class="ident">ExternError</span> {
         <span class="ident">ffi_support::ExternError::new_error</span>(<span class="ident">ffi_support::ErrorCode::new</span>(<span class="number">42</span>), <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">error</span>))
     }
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">serde_json::error::Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">error</span>: <span class="ident">serde_json::error::Error</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">error</span>: <span class="ident">serde_json::error::Error</span>) -&gt; <span class="ident">Error</span> {
         <span class="ident">Error</span> {
             <span class="ident">kind</span>: <span class="ident">ErrorKind::Json</span>(<span class="ident">error</span>),
         }
@@ -361,7 +361,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">OsString</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">error</span>: <span class="ident">OsString</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">error</span>: <span class="ident">OsString</span>) -&gt; <span class="ident">Error</span> {
         <span class="ident">Error</span> {
             <span class="ident">kind</span>: <span class="ident">ErrorKind::OsString</span>(<span class="ident">error</span>),
         }
@@ -372,7 +372,7 @@
 <span class="doccomment">/// something infallible into an error.</span>
 <span class="doccomment">/// This will never actually be reached, as an integer-to-integer conversion is infallible.</span>
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">std::convert::Infallible</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="kw">_</span>: <span class="ident">std::convert::Infallible</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="kw">_</span>: <span class="ident">std::convert::Infallible</span>) -&gt; <span class="ident">Error</span> {
         <span class="macro">unreachable!</span>()
     }
 }

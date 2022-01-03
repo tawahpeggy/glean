@@ -426,33 +426,33 @@
 
 <span class="kw">fn</span> <span class="ident">merge</span>(<span class="ident">a</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">JsonValue</span>, <span class="ident">b</span>: <span class="kw-2">&amp;</span><span class="ident">JsonValue</span>) {
     <span class="kw">match</span> (<span class="ident">a</span>, <span class="ident">b</span>) {
-        (<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">JsonValue::Object</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">a</span>), <span class="kw-2">&amp;</span><span class="ident">JsonValue::Object</span>(<span class="kw-2">ref</span> <span class="ident">b</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+        (<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">JsonValue::Object</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">a</span>), <span class="kw-2">&amp;</span><span class="ident">JsonValue::Object</span>(<span class="kw-2">ref</span> <span class="ident">b</span>)) =&gt; {
             <span class="kw">for</span> (<span class="ident">k</span>, <span class="ident">v</span>) <span class="kw">in</span> <span class="ident">b</span> {
                 <span class="ident">merge</span>(<span class="ident">a</span>.<span class="ident">entry</span>(<span class="ident">k</span>.<span class="ident">clone</span>()).<span class="ident">or_insert</span>(<span class="ident">JsonValue::Null</span>), <span class="ident">v</span>);
             }
         }
-        (<span class="ident">a</span>, <span class="ident">b</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        (<span class="ident">a</span>, <span class="ident">b</span>) =&gt; {
             <span class="kw-2">*</span><span class="ident">a</span> <span class="op">=</span> <span class="ident">b</span>.<span class="ident">clone</span>();
         }
     }
 }
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">PingMaker</span> {
-    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="self">Self</span> {
         <span class="ident"><span class="self">Self</span>::new</span>()
     }
 }
 
 <span class="kw">impl</span> <span class="ident">PingMaker</span> {
     <span class="doccomment">/// Creates a new [`PingMaker`].</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="self">Self</span> {
         <span class="self">Self</span>
     }
 
     <span class="doccomment">/// Gets, and then increments, the sequence number for a given ping.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This is crate-internal exclusively for enabling the migration tests.</span>
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">get_ping_seq</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">glean</span>: <span class="kw-2">&amp;</span><span class="ident">Glean</span>, <span class="ident">storage_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span> {
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">get_ping_seq</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">glean</span>: <span class="kw-2">&amp;</span><span class="ident">Glean</span>, <span class="ident">storage_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">usize</span> {
         <span class="comment">// Sequence numbers are stored as a counter under a name that includes the storage name</span>
         <span class="kw">let</span> <span class="ident">seq</span> <span class="op">=</span> <span class="ident">CounterMetric::new</span>(<span class="ident">CommonMetricData</span> {
             <span class="ident">name</span>: <span class="macro">format!</span>(<span class="string">&quot;{}#sequence&quot;</span>, <span class="ident">storage_name</span>),
@@ -469,8 +469,8 @@
             <span class="kw-2">&amp;</span><span class="ident">seq</span>.<span class="ident">meta</span>().<span class="ident">identifier</span>(<span class="ident">glean</span>),
             <span class="ident">seq</span>.<span class="ident">meta</span>().<span class="ident">lifetime</span>,
         ) {
-            <span class="prelude-val">Some</span>(<span class="ident">Metric::Counter</span>(<span class="ident">i</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">i</span>,
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">0</span>,
+            <span class="prelude-val">Some</span>(<span class="ident">Metric::Counter</span>(<span class="ident">i</span>)) =&gt; <span class="ident">i</span>,
+            <span class="kw">_</span> =&gt; <span class="number">0</span>,
         };
 
         <span class="comment">// Increase to next sequence id</span>
@@ -480,7 +480,7 @@
     }
 
     <span class="doccomment">/// Gets the formatted start and end times for this ping and update for the next ping.</span>
-    <span class="kw">fn</span> <span class="ident">get_start_end_times</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">glean</span>: <span class="kw-2">&amp;</span><span class="ident">Glean</span>, <span class="ident">storage_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> (<span class="ident">String</span>, <span class="ident">String</span>) {
+    <span class="kw">fn</span> <span class="ident">get_start_end_times</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">glean</span>: <span class="kw-2">&amp;</span><span class="ident">Glean</span>, <span class="ident">storage_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; (<span class="ident">String</span>, <span class="ident">String</span>) {
         <span class="kw">let</span> <span class="ident">time_unit</span> <span class="op">=</span> <span class="ident">TimeUnit::Minute</span>;
 
         <span class="kw">let</span> <span class="ident">start_time</span> <span class="op">=</span> <span class="ident">DatetimeMetric::new</span>(
@@ -510,7 +510,7 @@
         (<span class="ident">start_time_data</span>, <span class="ident">end_time_data</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">get_ping_info</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">glean</span>: <span class="kw-2">&amp;</span><span class="ident">Glean</span>, <span class="ident">storage_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">reason</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">JsonValue</span> {
+    <span class="kw">fn</span> <span class="ident">get_ping_info</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">glean</span>: <span class="kw-2">&amp;</span><span class="ident">Glean</span>, <span class="ident">storage_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">reason</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>) -&gt; <span class="ident">JsonValue</span> {
         <span class="kw">let</span> (<span class="ident">start_time</span>, <span class="ident">end_time</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_start_end_times</span>(<span class="ident">glean</span>, <span class="ident">storage_name</span>);
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">map</span> <span class="op">=</span> <span class="macro">json!</span>({
             <span class="string">&quot;seq&quot;</span>: <span class="self">self</span>.<span class="ident">get_ping_seq</span>(<span class="ident">glean</span>, <span class="ident">storage_name</span>),
@@ -536,7 +536,7 @@
         <span class="ident">map</span>
     }
 
-    <span class="kw">fn</span> <span class="ident">get_client_info</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">glean</span>: <span class="kw-2">&amp;</span><span class="ident">Glean</span>, <span class="ident">include_client_id</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">JsonValue</span> {
+    <span class="kw">fn</span> <span class="ident">get_client_info</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">glean</span>: <span class="kw-2">&amp;</span><span class="ident">Glean</span>, <span class="ident">include_client_id</span>: <span class="ident">bool</span>) -&gt; <span class="ident">JsonValue</span> {
         <span class="comment">// Add the &quot;telemetry_sdk_build&quot;, which is the glean-core version.</span>
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">map</span> <span class="op">=</span> <span class="macro">json!</span>({
             <span class="string">&quot;telemetry_sdk_build&quot;</span>: <span class="ident"><span class="kw">crate</span>::GLEAN_VERSION</span>,
@@ -575,7 +575,7 @@
     <span class="doccomment">/// A map of header names to header values.</span>
     <span class="doccomment">/// Might be empty if there are no extra headers to send.</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">fn</span> <span class="ident">get_headers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">glean</span>: <span class="kw-2">&amp;</span><span class="ident">Glean</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">HeaderMap</span> {
+    <span class="kw">fn</span> <span class="ident">get_headers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">glean</span>: <span class="kw-2">&amp;</span><span class="ident">Glean</span>) -&gt; <span class="ident">HeaderMap</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">headers_map</span> <span class="op">=</span> <span class="ident">HeaderMap::new</span>();
 
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">debug_view_tag</span>) <span class="op">=</span> <span class="ident">glean</span>.<span class="ident">debug_view_tag</span>() {
@@ -610,7 +610,7 @@
         <span class="ident">reason</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>,
         <span class="ident">doc_id</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>,
         <span class="ident">url_path</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Ping</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    ) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Ping</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="macro">info!</span>(<span class="string">&quot;Collecting {}&quot;</span>, <span class="ident">ping</span>.<span class="ident">name</span>);
 
         <span class="kw">let</span> <span class="ident">metrics_data</span> <span class="op">=</span> <span class="ident">StorageManager</span>.<span class="ident">snapshot_as_json</span>(<span class="ident">glean</span>.<span class="ident">storage</span>(), <span class="kw-2">&amp;</span><span class="ident">ping</span>.<span class="ident">name</span>, <span class="bool-val">true</span>);
@@ -665,7 +665,7 @@
         <span class="ident">glean</span>: <span class="kw-2">&amp;</span><span class="ident">Glean</span>,
         <span class="ident">ping</span>: <span class="kw-2">&amp;</span><span class="ident">PingType</span>,
         <span class="ident">reason</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+    ) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">collect</span>(<span class="ident">glean</span>, <span class="ident">ping</span>, <span class="ident">reason</span>, <span class="string">&quot;&quot;</span>, <span class="string">&quot;&quot;</span>)
             .<span class="ident">map</span>(<span class="op">|</span><span class="ident">ping</span><span class="op">|</span> <span class="ident">::serde_json::to_string_pretty</span>(<span class="kw-2">&amp;</span><span class="ident">ping</span>.<span class="ident">content</span>).<span class="ident">unwrap</span>())
     }
@@ -674,13 +674,13 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// The directory will be created inside the `data_path`.</span>
     <span class="doccomment">/// The `pings` directory (and its parents) is created if it does not exist.</span>
-    <span class="kw">fn</span> <span class="ident">get_pings_dir</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">data_path</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>, <span class="ident">ping_type</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std::io::Result</span><span class="op">&lt;</span><span class="ident">PathBuf</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">get_pings_dir</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">data_path</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>, <span class="ident">ping_type</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>) -&gt; <span class="ident">std::io::Result</span><span class="op">&lt;</span><span class="ident">PathBuf</span><span class="op">&gt;</span> {
         <span class="comment">// Use a special directory for deletion-request pings</span>
         <span class="kw">let</span> <span class="ident">pings_dir</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">ping_type</span> {
-            <span class="prelude-val">Some</span>(<span class="ident">ping_type</span>) <span class="kw">if</span> <span class="ident">ping_type</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;deletion-request&quot;</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Some</span>(<span class="ident">ping_type</span>) <span class="kw">if</span> <span class="ident">ping_type</span> <span class="op">==</span> <span class="string">&quot;deletion-request&quot;</span> =&gt; {
                 <span class="ident">data_path</span>.<span class="ident">join</span>(<span class="ident">DELETION_REQUEST_PINGS_DIRECTORY</span>)
             }
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">data_path</span>.<span class="ident">join</span>(<span class="ident">PENDING_PINGS_DIRECTORY</span>),
+            <span class="kw">_</span> =&gt; <span class="ident">data_path</span>.<span class="ident">join</span>(<span class="ident">PENDING_PINGS_DIRECTORY</span>),
         };
 
         <span class="ident">create_dir_all</span>(<span class="kw-2">&amp;</span><span class="ident">pings_dir</span>)<span class="question-mark">?</span>;
@@ -691,14 +691,14 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// The directory will be created inside the `data_path`.</span>
     <span class="doccomment">/// The `tmp` directory (and its parents) is created if it does not exist.</span>
-    <span class="kw">fn</span> <span class="ident">get_tmp_dir</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">data_path</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std::io::Result</span><span class="op">&lt;</span><span class="ident">PathBuf</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">get_tmp_dir</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">data_path</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>) -&gt; <span class="ident">std::io::Result</span><span class="op">&lt;</span><span class="ident">PathBuf</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">pings_dir</span> <span class="op">=</span> <span class="ident">data_path</span>.<span class="ident">join</span>(<span class="string">&quot;tmp&quot;</span>);
         <span class="ident">create_dir_all</span>(<span class="kw-2">&amp;</span><span class="ident">pings_dir</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="ident">pings_dir</span>)
     }
 
     <span class="doccomment">/// Stores a ping to disk in the pings directory.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">store_ping</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">data_path</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>, <span class="ident">ping</span>: <span class="kw-2">&amp;</span><span class="ident">Ping</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std::io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">store_ping</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">data_path</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>, <span class="ident">ping</span>: <span class="kw-2">&amp;</span><span class="ident">Ping</span>) -&gt; <span class="ident">std::io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">pings_dir</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_pings_dir</span>(<span class="ident">data_path</span>, <span class="prelude-val">Some</span>(<span class="ident">ping</span>.<span class="ident">name</span>))<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">temp_dir</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_tmp_dir</span>(<span class="ident">data_path</span>)<span class="question-mark">?</span>;
 
@@ -738,7 +738,7 @@
     }
 
     <span class="doccomment">/// Clears any pending pings in the queue.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">clear_pending_pings</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">data_path</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">clear_pending_pings</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">data_path</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">pings_dir</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_pings_dir</span>(<span class="ident">data_path</span>, <span class="prelude-val">None</span>)<span class="question-mark">?</span>;
 
         <span class="ident">std::fs::remove_dir_all</span>(<span class="kw-2">&amp;</span><span class="ident">pings_dir</span>)<span class="question-mark">?</span>;

@@ -332,7 +332,7 @@
     <span class="doccomment">/// `extra` entirely. Unfortunately, we can&#39;t use a serde field annotation for this,</span>
     <span class="doccomment">/// since that would break bincode serialization, which doesn&#39;t support skipping</span>
     <span class="doccomment">/// fields. Therefore, we use a custom serialization function just for JSON here.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_json</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">JsonValue</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_json</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">JsonValue</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">JsonMap::new</span>();
         <span class="ident">value</span>.<span class="ident">insert</span>(<span class="string">&quot;branch&quot;</span>.<span class="ident">to_string</span>(), <span class="macro">json!</span>(<span class="self">self</span>.<span class="ident">branch</span>));
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">extra</span>.<span class="ident">is_some</span>() {
@@ -352,11 +352,11 @@
 }
 
 <span class="kw">impl</span> <span class="ident">MetricType</span> <span class="kw">for</span> <span class="ident">ExperimentMetric</span> {
-    <span class="kw">fn</span> <span class="ident">meta</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">CommonMetricData</span> {
+    <span class="kw">fn</span> <span class="ident">meta</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">CommonMetricData</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">meta</span>
     }
 
-    <span class="kw">fn</span> <span class="ident">meta_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">CommonMetricData</span> {
+    <span class="kw">fn</span> <span class="ident">meta_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">CommonMetricData</span> {
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">meta</span>
     }
 }
@@ -368,7 +368,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// * `id` - the id of the experiment. Please note that this will be</span>
     <span class="doccomment">///          truncated to `MAX_EXPERIMENTS_IDS_LEN`, if needed.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">glean</span>: <span class="kw-2">&amp;</span><span class="ident">Glean</span>, <span class="ident">id</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">glean</span>: <span class="kw-2">&amp;</span><span class="ident">Glean</span>, <span class="ident">id</span>: <span class="ident">String</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">error</span> <span class="op">=</span> <span class="prelude-val">None</span>;
 
         <span class="comment">// Make sure that experiment id is within the expected limit.</span>
@@ -511,15 +511,15 @@
     <span class="doccomment">/// the RecordedExperimentData.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This doesn&#39;t clear the stored value.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_get_value_as_json_string</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">glean</span>: <span class="kw-2">&amp;</span><span class="ident">Glean</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_get_value_as_json_string</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">glean</span>: <span class="kw-2">&amp;</span><span class="ident">Glean</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="ident">StorageManager</span>.<span class="ident">snapshot_metric_for_test</span>(
             <span class="ident">glean</span>.<span class="ident">storage</span>(),
             <span class="ident">INTERNAL_STORAGE</span>,
             <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">meta</span>.<span class="ident">identifier</span>(<span class="ident">glean</span>),
             <span class="self">self</span>.<span class="ident">meta</span>.<span class="ident">lifetime</span>,
         ) {
-            <span class="prelude-val">Some</span>(<span class="ident">Metric::Experiment</span>(<span class="ident">e</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="macro">json!</span>(<span class="ident">e</span>).<span class="ident">to_string</span>()),
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="prelude-val">Some</span>(<span class="ident">Metric::Experiment</span>(<span class="ident">e</span>)) =&gt; <span class="prelude-val">Some</span>(<span class="macro">json!</span>(<span class="ident">e</span>).<span class="ident">to_string</span>()),
+            <span class="kw">_</span> =&gt; <span class="prelude-val">None</span>,
         }
     }
 }
