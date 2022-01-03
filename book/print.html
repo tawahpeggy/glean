@@ -1908,8 +1908,8 @@ that are assembled out of the box without any developer intervention.</p>
 <li><a href="user/pings/index.html#date"><code>Date</code></a></li>
 <li><a href="user/pings/index.html#user-agent"><code>User-Agent</code></a></li>
 <li><a href="user/pings/index.html#x-telemetry-agent"><code>X-Telemetry-Agent</code></a></li>
-<li><a href="user/pings/index.html#x-client-type-deprecated"><code>X-Client-Type</code> (deprecated)</a></li>
-<li><a href="user/pings/index.html#x-client-version-deprecated"><code>X-Client-Version</code> (deprecated)</a></li>
+<li><a href="user/pings/index.html#x-client-type"><code>X-Client-Type</code></a></li>
+<li><a href="user/pings/index.html#x-client-version"><code>X-Client-Version</code></a></li>
 <li><a href="user/pings/index.html#x-debug-id-optional"><code>X-Debug-Id</code> (optional)</a></li>
 <li><a href="user/pings/index.html#x-source-tags-optional"><code>X-Source-Tags</code> (optional)</a></li>
 </ul>
@@ -2101,12 +2101,10 @@ as it describes the application and the Glean SDK used for sending the ping.</p>
 and <code>Kotlin on Android</code> is the name of the language used by the SDK that sent the request
 plus the name of the platform it is running on.</p>
 <p><em>This header is currently only sent by the Glean JavaScript SDK. See <a href="user/pings/index.html#1">note</a>.</em></p>
-<h4 id="x-client-type-deprecated"><a class="header" href="#x-client-type-deprecated"><code>X-Client-Type</code> (deprecated)</a></h4>
+<h4 id="x-client-type"><a class="header" href="#x-client-type"><code>X-Client-Type</code></a></h4>
 <p>Custom header to support handling of Glean pings in the legacy pipeline. Values is always <code>Glean</code>.</p>
-<p>This header is deprecated and will soon be removed from all Glean SDKs.</p>
-<h4 id="x-client-version-deprecated"><a class="header" href="#x-client-version-deprecated"><code>X-Client-Version</code> (deprecated)</a></h4>
+<h4 id="x-client-version"><a class="header" href="#x-client-version"><code>X-Client-Version</code></a></h4>
 <p>The Glean SDK version e.g. <code>0.40.0</code>, sent as a custom header to support handling of Glean pings in the legacy pipeline.</p>
-<p>This header is deprecated and will soon be removed from all Glean SDKs.</p>
 <h4 id="x-debug-id-optional"><a class="header" href="#x-debug-id-optional"><code>X-Debug-Id</code> <em>(optional)</em></a></h4>
 <p>Debug header attached to Glean pings by using the <a href="user/pings/../../reference/debug/debugViewTag.html">debug APIs</a>,
 e.g. <code>test-tag</code>.</p>
