@@ -1841,7 +1841,6 @@ upgraded.</p>
 <tr><td>glean.database.size</td><td><a href="https://mozilla.github.io/glean/book/user/metrics/memory_distribution.html">memory_distribution</a></td><td>The size of the database file at startup.</td><td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1656589#c7">Bug 1656589</a></td><td></td><td>never</td><td>1</td></tr>
 <tr><td>glean.error.io</td><td><a href="https://mozilla.github.io/glean/book/user/metrics/counter.html">counter</a></td><td>The number of times we encountered an IO error when writing a pending ping to disk.</td><td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1686233#c2">Bug 1686233</a></td><td></td><td>never</td><td>1</td></tr>
 <tr><td>glean.error.preinit_tasks_overflow</td><td><a href="https://mozilla.github.io/glean/book/user/metrics/counter.html">counter</a></td><td>The number of tasks queued in the pre-initialization buffer. Only sent if the buffer overflows.</td><td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1609482#c3">Bug 1609482</a></td><td></td><td>never</td><td>1</td></tr>
-<tr><td>glean.time.invalid_timezone_offset</td><td><a href="https://mozilla.github.io/glean/book/user/metrics/counter.html">counter</a></td><td>Counts the number of times we encountered an invalid timezone offset when trying to get the current time. A timezone offset is invalid if it is outside [-24h, +24h]. If invalid a UTC offset is used (+0h).</td><td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1611770#c9">Bug 1611770</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1717402#c4">Bug 1717402</a></td><td></td><td>2021-12-31</td><td>1</td></tr>
 <tr><td>glean.upload.deleted_pings_after_quota_hit</td><td><a href="https://mozilla.github.io/glean/book/user/metrics/counter.html">counter</a></td><td>The number of pings deleted after the quota for the size of the pending pings directory or number of files is hit. Since quota is only calculated for the pending pings directory, and deletion request ping live in a different directory, deletion request pings are never deleted.</td><td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1601550#c3">Bug 1601550</a></td><td></td><td>never</td><td>1</td></tr>
 <tr><td>glean.upload.discarded_exceeding_pings_size</td><td><a href="https://mozilla.github.io/glean/book/user/metrics/memory_distribution.html">memory_distribution</a></td><td>The size of pings that exceeded the maximum ping size allowed for upload.</td><td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1597761#c10">Bug 1597761</a></td><td></td><td>never</td><td>1</td></tr>
 <tr><td>glean.upload.pending_pings</td><td><a href="https://mozilla.github.io/glean/book/user/metrics/counter.html">counter</a></td><td>The total number of pending pings at startup. This does not include deletion-request pings.</td><td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1665041#c23">Bug 1665041</a></td><td></td><td>never</td><td>1</td></tr>
@@ -10954,6 +10953,13 @@ Each ping has its own schedule to gather all its locally saved metrics and creat
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/appendix/changelog/index.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="unreleased-changes"><a class="header" href="#unreleased-changes">Unreleased changes</a></h1>
 <p><a href="https://github.com/mozilla/glean/compare/v42.3.2...main">Full changelog</a></p>
+<ul>
+<li>General
+<ul>
+<li>Removed <code>invalid_timezone_offset</code> metric (<a href="https://github.com/mozilla/glean/pull/1923">#1923</a>)</li>
+</ul>
+</li>
+</ul>
 <h1 id="v4232-2021-12-15"><a class="header" href="#v4232-2021-12-15">v42.3.2 (2021-12-15)</a></h1>
 <p><a href="https://github.com/mozilla/glean/compare/v42.3.1...v42.3.2">Full changelog</a></p>
 <ul>
@@ -12767,9 +12773,29 @@ This is a major milestone in using a cross-platform implementation of Glean on t
 <h3 id="general"><a class="header" href="#general">General</a></h3>
 <p>First testing release.</p>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/appendix/changelog/sdk.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="unreleased-changes-1"><a class="header" href="#unreleased-changes-1">Unreleased changes</a></h1>
-<p><a href="https://github.com/mozilla/glean.js/compare/v0.29.0...main">Full changelog</a></p>
+<p><a href="https://github.com/mozilla/glean.js/compare/v0.30.0...main">Full changelog</a></p>
+<ul>
+<li><a href="https://github.com/mozilla/glean.js/pull/1065">#1065</a>: Delete minimal amount of data when invalid data is found while collecting ping.
+<ul>
+<li>Previous behaviour was to delete the whole ping when invalid data was found on the database,
+new behaviour only deletes the actually invalid data and leave the rest of the ping intact.</li>
+</ul>
+</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/1065">#1065</a>: Only import metric types into the library when they are used either by the user or Glean itself.
+<ul>
+<li>Previously the code required to deserialize metric data from the database was always imported by the library even if the metric type was never used by the client. This effort will decrease the size of the Glean.js bundles that don't import all the metric types.</li>
+</ul>
+</li>
+</ul>
+<h1 id="v0300-2022-01-10"><a class="header" href="#v0300-2022-01-10">v0.30.0 (2022-01-10)</a></h1>
+<p><a href="https://github.com/mozilla/glean.js/compare/v0.29.0...v0.30.0">Full changelog</a></p>
 <ul>
 <li><a href="https://github.com/mozilla/glean.js/pull/1045">#1045</a>: BUGFIX: Provide informative error message when unable to access database in QML.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/1077">#1077</a>: BUGFIX: Do not clear lifetime metrics before submitting <code>deletion-request</code> ping on initialize.
+<ul>
+<li>This bug causes malformed <code>deletion-request</code> pings in Glean is initialized with <code>uploadEnabled=false</code>.</li>
+</ul>
+</li>
 </ul>
 <h1 id="v0290-2022-01-04"><a class="header" href="#v0290-2022-01-04">v0.29.0 (2022-01-04)</a></h1>
 <p><a href="https://github.com/mozilla/glean.js/compare/v0.28.0...v0.29.0">Full changelog</a></p>

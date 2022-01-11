@@ -402,7 +402,7 @@
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::metrics</span>::{<span class="ident">CounterMetric</span>, <span class="ident">DatetimeMetric</span>, <span class="ident">Metric</span>, <span class="ident">MetricType</span>, <span class="ident">PingType</span>, <span class="ident">TimeUnit</span>};
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::storage::StorageManager</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::upload::HeaderMap</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::util</span>::{<span class="ident">get_iso_time_string</span>, <span class="ident">local_now_with_offset_and_record</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::util</span>::{<span class="ident">get_iso_time_string</span>, <span class="ident">local_now_with_offset</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">Glean</span>, <span class="prelude-ty">Result</span>, <span class="ident">DELETION_REQUEST_PINGS_DIRECTORY</span>, <span class="ident">INTERNAL_STORAGE</span>, <span class="ident">PENDING_PINGS_DIRECTORY</span>,
 };
@@ -499,7 +499,7 @@
         <span class="kw">let</span> <span class="ident">start_time_data</span> <span class="op">=</span> <span class="ident">start_time</span>
             .<span class="ident">get_value</span>(<span class="ident">glean</span>, <span class="ident">INTERNAL_STORAGE</span>)
             .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">glean</span>.<span class="ident">start_time</span>());
-        <span class="kw">let</span> <span class="ident">end_time_data</span> <span class="op">=</span> <span class="ident">local_now_with_offset_and_record</span>(<span class="ident">glean</span>);
+        <span class="kw">let</span> <span class="ident">end_time_data</span> <span class="op">=</span> <span class="ident">local_now_with_offset</span>();
 
         <span class="comment">// Update the start time with the current time.</span>
         <span class="ident">start_time</span>.<span class="ident">set</span>(<span class="ident">glean</span>, <span class="prelude-val">Some</span>(<span class="ident">end_time_data</span>));

@@ -599,7 +599,7 @@
 <span class="doccomment">/// **Must** be called before draining the preinit queue.</span>
 <span class="doccomment">/// (We&#39;re at the Language Bindings&#39; mercy for that)</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">schedule</span>(<span class="ident">glean</span>: <span class="kw-2">&amp;</span><span class="ident">Glean</span>) {
-    <span class="kw">let</span> <span class="ident">now</span> <span class="op">=</span> <span class="ident">local_now_with_offset</span>().<span class="number">0</span>;
+    <span class="kw">let</span> <span class="ident">now</span> <span class="op">=</span> <span class="ident">local_now_with_offset</span>();
 
     <span class="kw">let</span> (<span class="ident">cancelled_lock</span>, <span class="ident">_condvar</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="kw-2">*</span><span class="ident">TASK_CONDVAR</span>;
     <span class="kw">if</span> <span class="kw-2">*</span><span class="ident">cancelled_lock</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>() {
@@ -759,7 +759,7 @@
                     <span class="ident">submitter</span>.<span class="ident">submit_metrics_ping</span>(<span class="kw-2">&amp;</span><span class="ident">glean</span>, <span class="prelude-val">Some</span>(<span class="ident">when</span>.<span class="ident">reason</span>()), <span class="ident">now</span>);
                     <span class="ident">when</span> <span class="op">=</span> <span class="ident">When::Reschedule</span>;
                 }
-                <span class="ident">now</span> <span class="op">=</span> <span class="ident">local_now_with_offset</span>().<span class="number">0</span>;
+                <span class="ident">now</span> <span class="op">=</span> <span class="ident">local_now_with_offset</span>();
             }
         }).<span class="ident">expect</span>(<span class="string">&quot;Unable to spawn Metrics Ping Scheduler thread.&quot;</span>)
 }
@@ -863,7 +863,7 @@
             <span class="op">|</span><span class="kw">_</span>, <span class="ident">when</span><span class="op">|</span> <span class="macro">assert_eq!</span>(<span class="ident">when</span>, <span class="ident">When::Reschedule</span>),
         );
 
-        <span class="ident">schedule_internal</span>(<span class="kw-2">&amp;</span><span class="ident">glean</span>, <span class="ident">submitter</span>, <span class="ident">scheduler</span>, <span class="ident">local_now_with_offset</span>().<span class="number">0</span>);
+        <span class="ident">schedule_internal</span>(<span class="kw-2">&amp;</span><span class="ident">glean</span>, <span class="ident">submitter</span>, <span class="ident">scheduler</span>, <span class="ident">local_now_with_offset</span>());
         <span class="macro">assert_eq!</span>(<span class="number">1</span>, <span class="ident">submitter_count</span>.<span class="ident">swap</span>(<span class="number">0</span>, <span class="ident">Ordering::Relaxed</span>));
         <span class="macro">assert_eq!</span>(<span class="number">1</span>, <span class="ident">scheduler_count</span>.<span class="ident">swap</span>(<span class="number">0</span>, <span class="ident">Ordering::Relaxed</span>));
     }

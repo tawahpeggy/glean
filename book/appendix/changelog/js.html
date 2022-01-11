@@ -151,9 +151,29 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="unreleased-changes"><a class="header" href="#unreleased-changes">Unreleased changes</a></h1>
-<p><a href="https://github.com/mozilla/glean.js/compare/v0.29.0...main">Full changelog</a></p>
+<p><a href="https://github.com/mozilla/glean.js/compare/v0.30.0...main">Full changelog</a></p>
+<ul>
+<li><a href="https://github.com/mozilla/glean.js/pull/1065">#1065</a>: Delete minimal amount of data when invalid data is found while collecting ping.
+<ul>
+<li>Previous behaviour was to delete the whole ping when invalid data was found on the database,
+new behaviour only deletes the actually invalid data and leave the rest of the ping intact.</li>
+</ul>
+</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/1065">#1065</a>: Only import metric types into the library when they are used either by the user or Glean itself.
+<ul>
+<li>Previously the code required to deserialize metric data from the database was always imported by the library even if the metric type was never used by the client. This effort will decrease the size of the Glean.js bundles that don't import all the metric types.</li>
+</ul>
+</li>
+</ul>
+<h1 id="v0300-2022-01-10"><a class="header" href="#v0300-2022-01-10">v0.30.0 (2022-01-10)</a></h1>
+<p><a href="https://github.com/mozilla/glean.js/compare/v0.29.0...v0.30.0">Full changelog</a></p>
 <ul>
 <li><a href="https://github.com/mozilla/glean.js/pull/1045">#1045</a>: BUGFIX: Provide informative error message when unable to access database in QML.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/1077">#1077</a>: BUGFIX: Do not clear lifetime metrics before submitting <code>deletion-request</code> ping on initialize.
+<ul>
+<li>This bug causes malformed <code>deletion-request</code> pings in Glean is initialized with <code>uploadEnabled=false</code>.</li>
+</ul>
+</li>
 </ul>
 <h1 id="v0290-2022-01-04"><a class="header" href="#v0290-2022-01-04">v0.29.0 (2022-01-04)</a></h1>
 <p><a href="https://github.com/mozilla/glean.js/compare/v0.28.0...v0.29.0">Full changelog</a></p>

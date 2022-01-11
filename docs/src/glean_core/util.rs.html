@@ -310,28 +310,6 @@
 <span id="310">310</span>
 <span id="311">311</span>
 <span id="312">312</span>
-<span id="313">313</span>
-<span id="314">314</span>
-<span id="315">315</span>
-<span id="316">316</span>
-<span id="317">317</span>
-<span id="318">318</span>
-<span id="319">319</span>
-<span id="320">320</span>
-<span id="321">321</span>
-<span id="322">322</span>
-<span id="323">323</span>
-<span id="324">324</span>
-<span id="325">325</span>
-<span id="326">326</span>
-<span id="327">327</span>
-<span id="328">328</span>
-<span id="329">329</span>
-<span id="330">330</span>
-<span id="331">331</span>
-<span id="332">332</span>
-<span id="333">333</span>
-<span id="334">334</span>
 </pre><pre class="rust"><code><span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
 <span class="comment">// file, You can obtain one at https://mozilla.org/MPL/2.0/.</span>
@@ -382,8 +360,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// This converts from the `Local` timezone into its fixed-offset equivalent.</span>
 <span class="doccomment">/// If a timezone outside of [-24h, +24h] is detected it corrects the timezone offset to UTC (+0).</span>
-<span class="doccomment">/// The return value will signal if the timezone offset was corrected.</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">local_now_with_offset</span>() -&gt; (<span class="ident">DateTime</span><span class="op">&lt;</span><span class="ident">FixedOffset</span><span class="op">&gt;</span>, <span class="ident">bool</span>) {
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">local_now_with_offset</span>() -&gt; <span class="ident">DateTime</span><span class="op">&lt;</span><span class="ident">FixedOffset</span><span class="op">&gt;</span> {
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;windows&quot;</span>)]</span>
     {
         <span class="comment">// `Local::now` takes the user&#39;s timezone offset</span>
@@ -418,29 +395,12 @@
             );
             <span class="kw">let</span> <span class="ident">now</span>: <span class="ident">DateTime</span><span class="op">&lt;</span><span class="ident">Utc</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Utc::now</span>();
             <span class="kw">let</span> <span class="ident">utc_offset</span> <span class="op">=</span> <span class="ident">FixedOffset::east</span>(<span class="number">0</span>);
-            <span class="kw">return</span> (<span class="ident">now</span>.<span class="ident">with_timezone</span>(<span class="kw-2">&amp;</span><span class="ident">utc_offset</span>), <span class="bool-val">true</span>);
+            <span class="kw">return</span> <span class="ident">now</span>.<span class="ident">with_timezone</span>(<span class="kw-2">&amp;</span><span class="ident">utc_offset</span>);
         }
     }
 
     <span class="kw">let</span> <span class="ident">now</span>: <span class="ident">DateTime</span><span class="op">&lt;</span><span class="ident">Local</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Local::now</span>();
-    (<span class="ident">now</span>.<span class="ident">with_timezone</span>(<span class="ident">now</span>.<span class="ident">offset</span>()), <span class="bool-val">false</span>)
-}
-
-<span class="doccomment">/// Get the current date &amp; time with a fixed-offset timezone.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// This converts from the `Local` timezone into its fixed-offset equivalent.</span>
-<span class="doccomment">/// If a timezone outside of [-24h, +24h] is detected it corrects the timezone offset to UTC (+0).</span>
-<span class="doccomment">/// The corresponding error counter is incremented in this case.</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">local_now_with_offset_and_record</span>(<span class="ident">glean</span>: <span class="kw-2">&amp;</span><span class="ident">Glean</span>) -&gt; <span class="ident">DateTime</span><span class="op">&lt;</span><span class="ident">FixedOffset</span><span class="op">&gt;</span> {
-    <span class="kw">let</span> (<span class="ident">now</span>, <span class="ident">is_corrected</span>) <span class="op">=</span> <span class="ident">local_now_with_offset</span>();
-    <span class="kw">if</span> <span class="ident">is_corrected</span> {
-        <span class="ident">glean</span>
-            .<span class="ident">additional_metrics</span>
-            .<span class="ident">invalid_timezone_offset</span>
-            .<span class="ident">add</span>(<span class="ident">glean</span>, <span class="number">1</span>);
-    }
-
-    <span class="ident">now</span>
+    <span class="ident">now</span>.<span class="ident">with_timezone</span>(<span class="ident">now</span>.<span class="ident">offset</span>())
 }
 
 <span class="doccomment">/// Truncates a string, ensuring that it doesn&#39;t end in the middle of a codepoint.</span>
@@ -631,11 +591,7 @@
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">local_now_gets_the_time</span>() {
         <span class="kw">let</span> <span class="ident">now</span> <span class="op">=</span> <span class="ident">Local::now</span>();
-        <span class="kw">let</span> (<span class="ident">fixed_now</span>, <span class="ident">is_corrected</span>) <span class="op">=</span> <span class="ident">local_now_with_offset</span>();
-
-        <span class="comment">// We explicitly test that NO invalid timezone offset was recorded.</span>
-        <span class="comment">// If it _does_ happen and fails on a developer machine or CI, we better know about it.</span>
-        <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">is_corrected</span>, <span class="string">&quot;Timezone offset should be valid.&quot;</span>);
+        <span class="kw">let</span> <span class="ident">fixed_now</span> <span class="op">=</span> <span class="ident">local_now_with_offset</span>();
 
         <span class="comment">// We can&#39;t compare across differing timezones, so we just compare the UTC timestamps.</span>
         <span class="comment">// The second timestamp should be just a few nanoseconds later.</span>

@@ -194,23 +194,6 @@
 <span id="194">194</span>
 <span id="195">195</span>
 <span id="196">196</span>
-<span id="197">197</span>
-<span id="198">198</span>
-<span id="199">199</span>
-<span id="200">200</span>
-<span id="201">201</span>
-<span id="202">202</span>
-<span id="203">203</span>
-<span id="204">204</span>
-<span id="205">205</span>
-<span id="206">206</span>
-<span id="207">207</span>
-<span id="208">208</span>
-<span id="209">209</span>
-<span id="210">210</span>
-<span id="211">211</span>
-<span id="212">212</span>
-<span id="213">213</span>
 </pre><pre class="rust"><code><span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
 <span class="comment">// file, You can obtain one at https://mozilla.org/MPL/2.0/.</span>
@@ -233,14 +216,6 @@
 
     <span class="doccomment">/// A count of the pings submitted, by ping type.</span>
     <span class="kw">pub</span> <span class="ident">pings_submitted</span>: <span class="ident">LabeledMetric</span><span class="op">&lt;</span><span class="ident">CounterMetric</span><span class="op">&gt;</span>,
-
-    <span class="doccomment">/// The number of times we encountered an invalid timezone offset</span>
-    <span class="doccomment">/// (outside of [-24, +24] hours).</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// **Note**: This metric has an expiration date set.</span>
-    <span class="doccomment">/// However because it&#39;s statically defined here we can&#39;t specify that.</span>
-    <span class="doccomment">/// Needs to be removed after 2021-06-30.</span>
-    <span class="kw">pub</span> <span class="ident">invalid_timezone_offset</span>: <span class="ident">CounterMetric</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">CoreMetrics</span> {
@@ -314,15 +289,6 @@
                 }),
                 <span class="prelude-val">None</span>,
             ),
-
-            <span class="ident">invalid_timezone_offset</span>: <span class="ident">CounterMetric::new</span>(<span class="ident">CommonMetricData</span> {
-                <span class="ident">name</span>: <span class="string">&quot;invalid_timezone_offset&quot;</span>.<span class="ident">into</span>(),
-                <span class="ident">category</span>: <span class="string">&quot;glean.time&quot;</span>.<span class="ident">into</span>(),
-                <span class="ident">send_in_pings</span>: <span class="macro">vec!</span>[<span class="string">&quot;metrics&quot;</span>.<span class="ident">into</span>()],
-                <span class="ident">lifetime</span>: <span class="ident">Lifetime::Ping</span>,
-                <span class="ident">disabled</span>: <span class="bool-val">false</span>,
-                <span class="ident">dynamic_label</span>: <span class="prelude-val">None</span>,
-            }),
         }
     }
 }
