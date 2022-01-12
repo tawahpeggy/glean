@@ -85,7 +85,7 @@ class Glean:
     ...     application_id=&#34;my-app&#34;,
     ...     application_version=&#34;0.0.0&#34;,
     ...     upload_enabled=True,
-    ...     data_dir: Path.home() / &#34;.glean&#34;
+    ...     data_dir=Path.home() / &#34;.glean&#34;,
     ... )
     &#34;&#34;&#34;
 
@@ -124,6 +124,9 @@ class Glean:
     # A thread lock for Glean operations that need to be synchronized
     _thread_lock = threading.RLock()
 
+    # Simple logging API log level
+    _simple_log_level: Optional[int] = None
+
     @classmethod
     def initialize(
         cls,
@@ -133,6 +136,7 @@ class Glean:
         configuration: Optional[Configuration] = None,
         data_dir: Path = None,
         application_build_id: Optional[str] = None,
+        log_level: Optional[int] = None,
     ) -&gt; None:
         &#34;&#34;&#34;
         Initialize the Glean SDK.
@@ -156,7 +160,20 @@ class Glean:
             data_dir (pathlib.Path): The path to the Glean data directory.
             application_build_id (str): (optional) The build identifier generated
                 by the CI system (e.g. &#34;1234/A&#34;).
+            log_level (int): (optional) The level of log messages that Glean
+                will emit. One of the constants in the Python `logging` module:
+                `DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL`. If you need a
+                specialized logging configuration, such as to redirecting,
+                filtering or reformatting, you should use the Python `logging`
+                module&#39;s API directly, but that will not affect logging any of
+                Glean&#39;s networking operations which happen in a subprocess.
+                Details in the &#34;Debugging Python applications with the Glean
+                SDK&#34; chapter in the docs.
         &#34;&#34;&#34;
+        if log_level is not None:
+            cls._simple_log_level = log_level
+            logging.basicConfig(level=log_level)
+
         with cls._thread_lock:
             if cls.is_initialized():
                 return
@@ -665,7 +682,7 @@ initialized from the application.</p>
 ...     application_id=&quot;my-app&quot;,
 ...     application_version=&quot;0.0.0&quot;,
 ...     upload_enabled=True,
-...     data_dir: Path.home() / &quot;.glean&quot;
+...     data_dir=Path.home() / &quot;.glean&quot;,
 ... )
 </code></pre></div>
 <details class="source">
@@ -683,7 +700,7 @@ initialized from the application.</p>
     ...     application_id=&#34;my-app&#34;,
     ...     application_version=&#34;0.0.0&#34;,
     ...     upload_enabled=True,
-    ...     data_dir: Path.home() / &#34;.glean&#34;
+    ...     data_dir=Path.home() / &#34;.glean&#34;,
     ... )
     &#34;&#34;&#34;
 
@@ -722,6 +739,9 @@ initialized from the application.</p>
     # A thread lock for Glean operations that need to be synchronized
     _thread_lock = threading.RLock()
 
+    # Simple logging API log level
+    _simple_log_level: Optional[int] = None
+
     @classmethod
     def initialize(
         cls,
@@ -731,6 +751,7 @@ initialized from the application.</p>
         configuration: Optional[Configuration] = None,
         data_dir: Path = None,
         application_build_id: Optional[str] = None,
+        log_level: Optional[int] = None,
     ) -&gt; None:
         &#34;&#34;&#34;
         Initialize the Glean SDK.
@@ -754,7 +775,20 @@ initialized from the application.</p>
             data_dir (pathlib.Path): The path to the Glean data directory.
             application_build_id (str): (optional) The build identifier generated
                 by the CI system (e.g. &#34;1234/A&#34;).
+            log_level (int): (optional) The level of log messages that Glean
+                will emit. One of the constants in the Python `logging` module:
+                `DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL`. If you need a
+                specialized logging configuration, such as to redirecting,
+                filtering or reformatting, you should use the Python `logging`
+                module&#39;s API directly, but that will not affect logging any of
+                Glean&#39;s networking operations which happen in a subprocess.
+                Details in the &#34;Debugging Python applications with the Glean
+                SDK&#34; chapter in the docs.
         &#34;&#34;&#34;
+        if log_level is not None:
+            cls._simple_log_level = log_level
+            logging.basicConfig(level=log_level)
+
         with cls._thread_lock:
             if cls.is_initialized():
                 return
@@ -1336,7 +1370,7 @@ def handle_client_inactive(cls):
 </details>
 </dd>
 <dt id="glean.glean.Glean.initialize"><code class="name flex">
-<span>def <span class="ident">initialize</span></span>(<span>application_id: str, application_version: str, upload_enabled: bool, configuration: Optional[<a title="glean.config.Configuration" href="config.html#glean.config.Configuration">Configuration</a>] = None, data_dir: pathlib.Path = None, application_build_id: Optional[str] = None) ‑> None</span>
+<span>def <span class="ident">initialize</span></span>(<span>application_id: str, application_version: str, upload_enabled: bool, configuration: Optional[<a title="glean.config.Configuration" href="config.html#glean.config.Configuration">Configuration</a>] = None, data_dir: pathlib.Path = None, application_build_id: Optional[str] = None, log_level: Optional[int] = None) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Initialize the Glean SDK.</p>
@@ -1365,6 +1399,16 @@ global settings.</dd>
 <dt><strong><code>application_build_id</code></strong> :&ensp;<code>str</code></dt>
 <dd>(optional) The build identifier generated
 by the CI system (e.g. "1234/A").</dd>
+<dt><strong><code>log_level</code></strong> :&ensp;<code>int</code></dt>
+<dd>(optional) The level of log messages that Glean
+will emit. One of the constants in the Python <code>logging</code> module:
+<code>DEBUG</code>, <code>INFO</code>, <code>WARNING</code>, <code>ERROR</code>, <code>CRITICAL</code>. If you need a
+specialized logging configuration, such as to redirecting,
+filtering or reformatting, you should use the Python <code>logging</code>
+module's API directly, but that will not affect logging any of
+Glean's networking operations which happen in a subprocess.
+Details in the "Debugging Python applications with the Glean
+SDK" chapter in the docs.</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -1379,6 +1423,7 @@ def initialize(
     configuration: Optional[Configuration] = None,
     data_dir: Path = None,
     application_build_id: Optional[str] = None,
+    log_level: Optional[int] = None,
 ) -&gt; None:
     &#34;&#34;&#34;
     Initialize the Glean SDK.
@@ -1402,7 +1447,20 @@ def initialize(
         data_dir (pathlib.Path): The path to the Glean data directory.
         application_build_id (str): (optional) The build identifier generated
             by the CI system (e.g. &#34;1234/A&#34;).
+        log_level (int): (optional) The level of log messages that Glean
+            will emit. One of the constants in the Python `logging` module:
+            `DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL`. If you need a
+            specialized logging configuration, such as to redirecting,
+            filtering or reformatting, you should use the Python `logging`
+            module&#39;s API directly, but that will not affect logging any of
+            Glean&#39;s networking operations which happen in a subprocess.
+            Details in the &#34;Debugging Python applications with the Glean
+            SDK&#34; chapter in the docs.
     &#34;&#34;&#34;
+    if log_level is not None:
+        cls._simple_log_level = log_level
+        logging.basicConfig(level=log_level)
+
     with cls._thread_lock:
         if cls.is_initialized():
             return
