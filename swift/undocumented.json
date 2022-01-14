@@ -2,7 +2,21 @@
   "warnings": [
     {
       "file": "/Users/distiller/project/glean-core/ios/Glean/Glean.swift",
-      "line": 19,
+      "line": 15,
+      "symbol": "BuildInfo",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/distiller/project/glean-core/ios/Glean/Glean.swift",
+      "line": 18,
+      "symbol": "BuildInfo.init(buildDate:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/distiller/project/glean-core/ios/Glean/Glean.swift",
+      "line": 27,
       "symbol": "Glean",
       "symbol_kind": "source.lang.swift.decl.class",
       "warning": "undocumented"
