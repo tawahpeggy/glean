@@ -469,9 +469,10 @@ Create a Run Script in which you specify your shell (ex: <code>/bin/sh</code>), 
 </blockquote>
 <ol start="3">
 <li>
-<p>Add the path to your <code>metrics.yaml</code> and (optionally) <code>pings.yaml</code> under &quot;Input files&quot;:</p>
+<p>Add the path to your <code>metrics.yaml</code> and (optionally) <code>pings.yaml</code> and <code>tags.yaml</code> under &quot;Input files&quot;:</p>
 <pre><code>$(SRCROOT)/{project-name}/metrics.yaml
 $(SRCROOT)/{project-name}/pings.yaml
+$(SRCROOT)/{project-name}/tags.yaml
 </code></pre>
 </li>
 <li>
@@ -3034,6 +3035,9 @@ of the <code>translate</code> command, by running in your terminal:</p>
 <h2 id="pingsyaml-file"><a class="header" href="#pingsyaml-file"><code>pings.yaml</code> file</a></h2>
 <p>For a full reference on the <code>pings.yaml</code> format, refer to the
 <a href="reference/yaml/pings.html">Pings YAML Registry Format</a> page.</p>
+<h2 id="tagsyaml-file"><a class="header" href="#tagsyaml-file"><code>tags.yaml</code> file</a></h2>
+<p>For a full reference on the <code>tags.yaml</code> format, refer to the
+<a href="reference/yaml/tags.html">Tags YAML Registry Format</a> page.</p>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/yaml/index.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="metrics-yaml-registry-format"><a class="header" href="#metrics-yaml-registry-format">Metrics YAML Registry Format</a></h1>
 <p>Metrics sent by an application or library are defined in YAML files which follow
 the <a href="https://mozilla.github.io/glean_parser/metrics-yaml.html"><code>metrics.yaml</code> JSON schema</a>.</p>
