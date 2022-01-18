@@ -164,6 +164,14 @@ new behaviour only deletes the actually invalid data and leave the rest of the p
 <li>Previously the code required to deserialize metric data from the database was always imported by the library even if the metric type was never used by the client. This effort will decrease the size of the Glean.js bundles that don't import all the metric types.</li>
 </ul>
 </li>
+<li><a href="https://github.com/mozilla/glean.js/pull/1046">#1046</a>: Remove legacy X-Client-Type X-Client-Version from Glean pings.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/1071">#1071</a>: <strong>BREAKING CHANGE</strong>: Move the <code>testResetGlean</code> API from the Glean singletion and into it's own entry point <code>@mozilla/glean/testing</code>.
+<ul>
+<li>In order to use this API one must import it through <code>import { testResetGlean } from &quot;@mozilla/glean/testing&quot;</code> instead of using it from the Glean singleton directly.</li>
+<li>This lower the size of the Glean library, because testing functionality is not imported unless in a testing environment.</li>
+<li>This change does not apply to QML. In this environment the API remains the same.</li>
+</ul>
+</li>
 </ul>
 <h1 id="v0300-2022-01-10"><a class="header" href="#v0300-2022-01-10">v0.30.0 (2022-01-10)</a></h1>
 <p><a href="https://github.com/mozilla/glean.js/compare/v0.29.0...v0.30.0">Full changelog</a></p>
