@@ -796,6 +796,18 @@
 <span id="796">796</span>
 <span id="797">797</span>
 <span id="798">798</span>
+<span id="799">799</span>
+<span id="800">800</span>
+<span id="801">801</span>
+<span id="802">802</span>
+<span id="803">803</span>
+<span id="804">804</span>
+<span id="805">805</span>
+<span id="806">806</span>
+<span id="807">807</span>
+<span id="808">808</span>
+<span id="809">809</span>
+<span id="810">810</span>
 </pre><pre class="rust"><code><span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class="comment">// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
 <span class="comment">// file, You can obtain one at https://mozilla.org/MPL/2.0/.</span>
@@ -837,10 +849,10 @@
 <span class="doccomment">//! prototype_ping.submit(None);</span>
 <span class="doccomment">//! ```</span>
 
-<span class="kw">use</span> <span class="ident">once_cell::sync::OnceCell</span>;
+<span class="kw">use</span> <span class="ident">once_cell::sync</span>::{<span class="ident">Lazy</span>, <span class="ident">OnceCell</span>};
 <span class="kw">use</span> <span class="ident">std::collections::HashMap</span>;
 <span class="kw">use</span> <span class="ident">std::sync::atomic</span>::{<span class="ident">AtomicBool</span>, <span class="ident">Ordering</span>};
-<span class="kw">use</span> <span class="ident">std::sync::Mutex</span>;
+<span class="kw">use</span> <span class="ident">std::sync</span>::{<span class="ident">Arc</span>, <span class="ident">Mutex</span>};
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">configuration::Configuration</span>;
 <span class="kw">use</span> <span class="ident">configuration::DEFAULT_GLEAN_ENDPOINT</span>;
@@ -898,6 +910,12 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// Requires a Mutex, because in tests we can actual reset this.</span>
 <span class="kw">static</span> <span class="ident">STATE</span>: <span class="ident">OnceCell</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">RustBindingsState</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">OnceCell::new</span>();
+
+<span class="doccomment">/// Global singleton of the handles of the glean.init threads.</span>
+<span class="doccomment">/// For joining. For tests.</span>
+<span class="doccomment">/// (Why a Vec? There might be more than one concurrent call to initialize.)</span>
+<span class="kw">static</span> <span class="ident">INIT_HANDLES</span>: <span class="ident">Lazy</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">std::thread::JoinHandle</span><span class="op">&lt;</span>()<span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">=</span>
+    <span class="ident">Lazy::new</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">Arc::new</span>(<span class="ident">Mutex::new</span>(<span class="ident">Vec::new</span>())));
 
 <span class="doccomment">/// Get a reference to the global state object.</span>
 <span class="doccomment">///</span>
@@ -971,16 +989,9 @@
 <span class="doccomment">/// * `client_info` - the [`ClientInfoMetrics`] values used to set Glean</span>
 <span class="doccomment">///   core metrics.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">initialize</span>(<span class="ident">cfg</span>: <span class="ident">Configuration</span>, <span class="ident">client_info</span>: <span class="ident">ClientInfoMetrics</span>) {
-    <span class="ident">initialize_internal</span>(<span class="ident">cfg</span>, <span class="ident">client_info</span>);
-}
-
-<span class="kw">fn</span> <span class="ident">initialize_internal</span>(
-    <span class="ident">cfg</span>: <span class="ident">Configuration</span>,
-    <span class="ident">client_info</span>: <span class="ident">ClientInfoMetrics</span>,
-) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">std::thread::JoinHandle</span><span class="op">&lt;</span>()<span class="op">&gt;</span><span class="op">&gt;</span> {
     <span class="kw">if</span> <span class="ident">was_initialize_called</span>() {
         <span class="macro">log::error!</span>(<span class="string">&quot;Glean should not be initialized multiple times&quot;</span>);
-        <span class="kw">return</span> <span class="prelude-val">None</span>;
+        <span class="kw">return</span>;
     }
 
     <span class="kw">let</span> <span class="ident">init_handle</span> <span class="op">=</span> <span class="ident">std::thread::Builder::new</span>()
@@ -1149,10 +1160,21 @@
         })
         .<span class="ident">expect</span>(<span class="string">&quot;Failed to spawn Glean&#39;s init thread&quot;</span>);
 
+    <span class="comment">// For test purposes, store the glean init thread&#39;s JoinHandle.</span>
+    <span class="ident">INIT_HANDLES</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">push</span>(<span class="ident">init_handle</span>);
+
     <span class="comment">// Mark the initialization as called: this needs to happen outside of the</span>
     <span class="comment">// dispatched block!</span>
     <span class="ident">INITIALIZE_CALLED</span>.<span class="ident">store</span>(<span class="bool-val">true</span>, <span class="ident">Ordering::SeqCst</span>);
-    <span class="prelude-val">Some</span>(<span class="ident">init_handle</span>)
+}
+
+<span class="doccomment">/// TEST ONLY FUNCTION</span>
+<span class="doccomment">/// Waits on all the glean.init threads&#39; join handles.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">join_init</span>() {
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">handles</span> <span class="op">=</span> <span class="ident">INIT_HANDLES</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>();
+    <span class="kw">for</span> <span class="ident">handle</span> <span class="kw">in</span> <span class="ident">handles</span>.<span class="ident">drain</span>(..) {
+        <span class="ident">handle</span>.<span class="ident">join</span>().<span class="ident">unwrap</span>();
+    }
 }
 
 <span class="doccomment">/// Shuts down Glean in an orderly fashion.</span>
@@ -1466,6 +1488,9 @@
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">destroy_glean</span>(<span class="ident">clear_stores</span>: <span class="ident">bool</span>) {
     <span class="comment">// Destroy the existing glean instance from glean-core.</span>
     <span class="kw">if</span> <span class="ident">was_initialize_called</span>() {
+        <span class="comment">// Just because initialize was called doesn&#39;t mean it&#39;s done.</span>
+        <span class="ident">join_init</span>();
+
         <span class="comment">// Reset the dispatcher first (it might still run tasks against the database)</span>
         <span class="ident">dispatcher::reset_dispatcher</span>();
 
@@ -1507,9 +1532,8 @@
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test_reset_glean</span>(<span class="ident">cfg</span>: <span class="ident">Configuration</span>, <span class="ident">client_info</span>: <span class="ident">ClientInfoMetrics</span>, <span class="ident">clear_stores</span>: <span class="ident">bool</span>) {
     <span class="ident">destroy_glean</span>(<span class="ident">clear_stores</span>);
 
-    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">handle</span>) <span class="op">=</span> <span class="ident">initialize_internal</span>(<span class="ident">cfg</span>, <span class="ident">client_info</span>) {
-        <span class="ident">handle</span>.<span class="ident">join</span>().<span class="ident">unwrap</span>();
-    }
+    <span class="ident">initialize</span>(<span class="ident">cfg</span>, <span class="ident">client_info</span>);
+    <span class="ident">join_init</span>();
 }
 
 <span class="doccomment">/// Sets a debug view tag.</span>
