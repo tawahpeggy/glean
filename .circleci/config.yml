@@ -59,8 +59,28 @@ commands:
       - setup-rust-toolchain:
           rust-version: <<parameters.rust-version>>
       - run:
+          name: Install cargo-nextest
+          command: |
+            cargo install cargo-nextest
+      - run:
+          name: Build tests
+          command: |
+            cargo test --no-run --all
+      - run:
           name: Test
-          command: GLEAN_TEST_COVERAGE=$(realpath glean_coverage.txt) cargo test --all --verbose -- --nocapture
+          command: |
+            export GLEAN_TEST_COVERAGE=$(realpath glean_coverage.txt)
+            cargo nextest run --profile ci
+      - store_test_results:
+          path: target/nextest/ci
+      - run:
+          name: Doc test
+          command: |
+            cargo test --doc
+      - run:
+          name: Test with cargo-test
+          command: |
+            cargo test --all --verbose -- --nocapture
       - run:
           name: Test Glean with rkv safe-mode
           command: |
