@@ -163,11 +163,13 @@
 <table><thead><tr><th style="text-align: right">SDK</th><th style="text-align: center"><a href="baseline.html"><code>baseline</code></a></th><th style="text-align: center"><a href="deletion-request.html"><code>deletion-request</code></a></th><th style="text-align: center"><a href="events.html"><code>events</code></a></th><th style="text-align: center"><a href="metrics.html"><code>metrics</code></a></th></tr></thead><tbody>
 <tr><td style="text-align: right">Kotlin</td><td style="text-align: center">✅</td><td style="text-align: center">✅</td><td style="text-align: center">✅</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: right">Swift</td><td style="text-align: center">✅</td><td style="text-align: center">✅</td><td style="text-align: center">✅</td><td style="text-align: center">✅</td></tr>
-<tr><td style="text-align: right">Python</td><td style="text-align: center"></td><td style="text-align: center">✅</td><td style="text-align: center"></td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: right">Python</td><td style="text-align: center">✅<sup>1</sup></td><td style="text-align: center">✅</td><td style="text-align: center">✅<sup>2</sup></td><td style="text-align: center">❌</td></tr>
 <tr><td style="text-align: right">Rust</td><td style="text-align: center">✅</td><td style="text-align: center">✅</td><td style="text-align: center">✅</td><td style="text-align: center">✅</td></tr>
-<tr><td style="text-align: right">JavaScript</td><td style="text-align: center"></td><td style="text-align: center">✅</td><td style="text-align: center"></td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: right">JavaScript</td><td style="text-align: center">❌</td><td style="text-align: center">✅</td><td style="text-align: center">❌</td><td style="text-align: center">❌</td></tr>
 <tr><td style="text-align: right">Firefox Desktop</td><td style="text-align: center">✅</td><td style="text-align: center">✅</td><td style="text-align: center">✅</td><td style="text-align: center">✅</td></tr>
 </tbody></table>
+<p><sup>1</sup>: Not sent automatically. Use the <a href="../../../python/glean/#glean.Glean.handle_client_active"><code>handle_client_active</code></a> and <a href="../../../python/glean/#glean.Glean.handle_client_inactive"><code>handle_client_inactive</code></a> API.<br />
+<sup>2</sup>: Sent on startup when pending events are stored. Additionally sent when <a href="../../../python/glean/#glean.Glean.handle_client_inactive"><code>handle_client_inactive</code></a> is called.</p>
 <h2 id="defining-foreground-and-background-state"><a class="header" href="#defining-foreground-and-background-state">Defining foreground and background state</a></h2>
 <p>These docs refer to application 'foreground' and 'background' state in several places.</p>
 <div class="tabs">
