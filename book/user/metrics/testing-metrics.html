@@ -150,137 +150,22 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="unit-testing-glean-metrics"><a class="header" href="#unit-testing-glean-metrics">Unit testing Glean metrics</a></h1>
-<p>In order to support unit testing inside of client applications using the Glean SDK, a set of testing API functions have been included.
-The intent is to make the Glean SDKs easier to test 'out of the box' in any client application it may be used in.
-These functions expose a way to inspect and validate recorded metric values within the client application but are restricted to test code only through visibility annotations
-(<code>@VisibleForTesting(otherwise = VisibleForTesting.NONE)</code> for Kotlin, <code>internal</code> methods for Swift).
+<p>In order to support unit testing inside of client applications using the Glean SDK,
+a set of testing API functions have been included.
+The intent is to make the Glean SDKs easier to test 'out of the box'
+in any client application it may be used in.
+These functions expose a way to inspect and validate recorded metric values within the client application. but are restricted to test code only.
 (Outside of a testing context, Glean APIs are otherwise write-only so that it can enforce semantics and constraints about data).</p>
-<p>To encourage using the testing API, it is also possible to <a href="#generating-testing-coverage-reports">generate testing coverage reports</a> to show which metrics in your project are tested.</p>
-<h2 id="general-test-api-method-semantics"><a class="header" href="#general-test-api-method-semantics">General test API method semantics</a></h2>
-<div class="tabs">
-<div class="tabbar"></div>
-<div class="tabcontents">
-<div data-lang="Kotlin" class="tab">
-<p>Using the Glean Kotlin SDK's unit testing API requires adding <a href="http://robolectric.org/">Robolectric 4.0 or later</a> as a testing dependency. In Gradle, this can be done by declaring a <code>testImplementation</code> dependency:</p>
-<pre><code class="language-groovy">dependencies {
-    testImplementation &quot;org.robolectric:robolectric:4.3.1&quot;
-}
-</code></pre>
-<p>In order to prevent issues with async calls when unit testing the Glean SDK,
-it is important to put the Glean Kotlin SDK into testing mode by applying the JUnit <code>GleanTestRule</code> to your test class.
-When the Glean Kotlin SDK is in testing mode, it enables uploading and clears the recorded metrics at the beginning of each test run.
-The rule can be used as shown below:</p>
-<pre><code class="language-kotlin">@RunWith(AndroidJUnit4::class)
-class ActivityCollectingDataTest {
-    // Apply the GleanTestRule to set up a disposable Glean instance.
-    // Please note that this clears the Glean data across tests.
-    @get:Rule
-    val gleanRule = GleanTestRule(ApplicationProvider.getApplicationContext())
-
-    @Test
-    fun checkCollectedData() {
-      // The Glean Kotlin SDK testing API can be called here.
-    }
-}
-</code></pre>
-<p>This will ensure that metrics are done recording when the other test functions are used.</p>
-<p>To check if a value exists (i.e. it has been recorded), there is a <code>testHasValue()</code> function on each of the metric instances:</p>
-<pre><code class="language-kotlin">assertTrue(GleanMetrics.Search.defaultSearchEngineUrl.testHasValue())
-</code></pre>
-<p>To check the actual values, there is a <code>testGetValue()</code> function on each of the metric instances.
-It is important to check that the values are recorded as expected, since many of the metric types may truncate or error-correct the value.
-This function will return a datatype appropriate to the specific type of the metric it is being used with:</p>
-<pre><code class="language-kotlin">assertEquals(&quot;https://example.com/search?&quot;, GleanMetrics.Search.defaultSearchEngineUrl.testGetValue())
-</code></pre>
-<p>Note that each of these functions has its visibility limited to the scope of unit tests by making use of the <code>@VisibleForTesting</code> annotation,
-so the IDE should complain if you attempt to use them inside of client code.</p>
-</div>
-<div data-lang="Swift" class="tab">
-<blockquote>
-<p><strong>NOTE</strong>: There's no automatic test rule for Glean tests implemented.</p>
-</blockquote>
-<p>In order to prevent issues with async calls when unit testing the Glean SDK, it is important to put the Glean Swift SDK into testing mode.
-When the Glean Swift SDK is in testing mode, it enables uploading and clears the recorded metrics at the beginning of each test run.</p>
-<p>Activate it by resetting Glean in your test's setup:</p>
-<pre><code class="language-swift">@testable import Glean
-import XCTest
-
-class GleanUsageTests: XCTestCase {
-    override func setUp() {
-        Glean.shared.resetGlean(clearStores: true)
-    }
-
-    // ...
-}
-</code></pre>
-<p>This will ensure that metrics are done recording when the other test functions are used.</p>
-<p>To check if a value exists (i.e. it has been recorded), there is a <code>testHasValue()</code> function on each of the metric instances:</p>
-<pre><code class="language-Swift">XCTAssertTrue(GleanMetrics.Search.defaultSearchEngineUrl.testHasValue())
-</code></pre>
-<p>To check the actual values, there is a <code>testGetValue()</code> function on each of the metric instances.
-It is important to check that the values are recorded as expected, since many of the metric types may truncate or error-correct the value.
-This function will return a datatype appropriate to the specific type of the metric it is being used with:</p>
-<pre><code class="language-Swift">XCTAssertEqual(&quot;https://example.com/search?&quot;, try GleanMetrics.Search.defaultSearchEngineUrl.testGetValue())
-</code></pre>
-<p>Note that each of these functions is marked as <code>internal</code>, you need to import <code>Glean</code> explicitly in test mode:</p>
-<pre><code class="language-Swift">@testable import Glean
-</code></pre>
-</div>
-<div data-lang="Python" class="tab">
-<p>It is generally a good practice to &quot;reset&quot; the Glean Python SDK prior to every unit test that uses the Glean Python SDK, to prevent side effects of one unit test impacting others.
-The Glean Python SDK contains a helper function <code>glean.testing.reset_glean()</code> for this purpose.
-It has two required arguments: the application ID, and the application version.
-Each reset of the Glean Python SDK will create a new temporary directory for Glean to store its data in.
-This temporary directory is automatically cleaned up the next time the Glean Python SDK is reset or when the testing framework finishes.</p>
-<p>The instructions below assume you are using <a href="https://pypi.org/project/pytest/">pytest</a> as the test runner.
-Other test-running libraries have similar features, but are different in the details.</p>
-<p>Create a file <code>conftest.py</code> at the root of your test directory, and add the following to reset Glean at the start of every test in your suite:</p>
-<pre><code class="language-python">import pytest
-from glean import testing
-
-@pytest.fixture(name=&quot;reset_glean&quot;, scope=&quot;function&quot;, autouse=True)
-def fixture_reset_glean():
-    testing.reset_glean(application_id=&quot;my-app-id&quot;, application_version=&quot;0.1.0&quot;)
-</code></pre>
-<p>To check if a value exists (i.e. it has been recorded), there is a <code>test_has_value()</code> function on each of the metric instances:</p>
-<pre><code class="language-python">from glean import load_metrics
-metrics = load_metrics(&quot;metrics.yaml&quot;)
-
-# ...
-
-assert metrics.search.search_engine_url.test_has_value()
-</code></pre>
-<p>To check the actual values, there is a <code>test_get_value()</code> function on each of the metric instances.
-It is important to check that the values are recorded as expected, since many of the metric types may truncate or error-correct the value.
-This function will return a datatype appropriate to the specific type of the metric it is being used with:</p>
-<pre><code class="language-python">assert (
-    &quot;https://example.com/search?&quot; ==
-    metrics.search.default_search_engine_url.test_get_value()
-)
-</code></pre>
-</div>
-<div data-lang="C#" class="tab">
-<p>TODO. To be implemented in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1648448">bug 1648448</a>.</p>
-</div>
-</div>
-</div>
-<h2 id="testing-metrics-for-custom-pings"><a class="header" href="#testing-metrics-for-custom-pings">Testing metrics for custom pings</a></h2>
-<p>In order to test metrics where the metric is included in more than one ping, the test functions take an optional <code>pingName</code> argument (<code>ping_name</code> in Python).
-This is the name of the ping that the metric is being sent in, such as <code>&quot;events&quot;</code> for the <a href="../pings/events.html"><code>events</code> ping</a>,
-or <code>&quot;metrics&quot;</code> for the <a href="../pings/metrics.html"><code>metrics</code> ping</a>.
-This could also be a custom ping name that the metric is being sent in.
-In most cases you should not have to supply the ping name to the test function and can just use the default which is the &quot;default&quot; ping that this metric is sent in.
-You should only need to provide a <code>pingName</code> if the metric is being sent in more than one ping in order to identify the correct metric store.</p>
-<p>You can call the <code>testHasValue()</code> and <code>testGetValue()</code> functions with <code>pingName</code> like this:</p>
-<pre><code class="language-kotlin">GleanMetrics.Foo.uriCount.testHasValue(&quot;customPing&quot;)
-GleanMetrics.Foo.uriCount.testGetValue(&quot;customPing&quot;)
-</code></pre>
+<p>To encourage using the testing APIs, it is also possible to <a href="#generating-testing-coverage-reports">generate testing coverage reports</a> to show which metrics in your project are tested.</p>
 <h2 id="example-of-using-the-test-api"><a class="header" href="#example-of-using-the-test-api">Example of using the test API</a></h2>
+<p>In order to enable metrics testing APIs in each SDK, Glean must be reset and put in testing mode.
+For documentation on how to do that, refer to <a href="../../reference/general/initializing.html#testing-api">Initializing - Testing API</a>.</p>
+<p>Check out full examples of using the metric testing API on each Glean SDK.
+All examples omit the step of resetting Glean for tests to focus solely on metrics unit testing.</p>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
 <div data-lang="Kotlin" class="tab">
-<p>Here is a longer example to better illustrate the intended use of the test API:</p>
 <pre><code class="language-kotlin">// Record a metric value with extra to validate against
 GleanMetrics.BrowserEngagement.click.record(
     mapOf(
@@ -306,7 +191,6 @@ assertEquals(&quot;Courier&quot;, events.elementAt(0).extra[&quot;font&quot;])
 </code></pre>
 </div>
 <div data-lang="Swift" class="tab">
-<p>Here is a longer example to better illustrate the intended use of the test API:</p>
 <pre><code class="language-Swift">// Record a metric value with extra to validate against
 GleanMetrics.BrowserEngagement.click.record([.font: &quot;Courier&quot;])
 
@@ -328,7 +212,6 @@ XCTAssertEqual(&quot;Courier&quot;, events[0].extra?[&quot;font&quot;])
 </code></pre>
 </div>
 <div data-lang="Python" class="tab">
-<p>Here is a longer example to better illustrate the intended use of the test API:</p>
 <pre><code class="language-python">from glean import load_metrics
 metrics = load_metrics(&quot;metrics.yaml&quot;)
 
@@ -341,9 +224,6 @@ assert metrics.url.visit.test_has_value()
 # Retrieve a snapshot of the recorded events
 assert 1 == metrics.url.visit.test_get_value()
 </code></pre>
-</div>
-<div data-lang="C#" class="tab">
-<p>TODO. To be implemented in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1648448">bug 1648448</a>.</p>
 </div>
 </div>
 </div>

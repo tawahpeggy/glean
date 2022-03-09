@@ -1384,137 +1384,22 @@ mozilla::glean::compound_category::metric_name...
 </div>
 </div>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/user/metrics/adding-new-metrics.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="unit-testing-glean-metrics"><a class="header" href="#unit-testing-glean-metrics">Unit testing Glean metrics</a></h1>
-<p>In order to support unit testing inside of client applications using the Glean SDK, a set of testing API functions have been included.
-The intent is to make the Glean SDKs easier to test 'out of the box' in any client application it may be used in.
-These functions expose a way to inspect and validate recorded metric values within the client application but are restricted to test code only through visibility annotations
-(<code>@VisibleForTesting(otherwise = VisibleForTesting.NONE)</code> for Kotlin, <code>internal</code> methods for Swift).
+<p>In order to support unit testing inside of client applications using the Glean SDK,
+a set of testing API functions have been included.
+The intent is to make the Glean SDKs easier to test 'out of the box'
+in any client application it may be used in.
+These functions expose a way to inspect and validate recorded metric values within the client application. but are restricted to test code only.
 (Outside of a testing context, Glean APIs are otherwise write-only so that it can enforce semantics and constraints about data).</p>
-<p>To encourage using the testing API, it is also possible to <a href="user/metrics/testing-metrics.html#generating-testing-coverage-reports">generate testing coverage reports</a> to show which metrics in your project are tested.</p>
-<h2 id="general-test-api-method-semantics"><a class="header" href="#general-test-api-method-semantics">General test API method semantics</a></h2>
-<div class="tabs">
-<div class="tabbar"></div>
-<div class="tabcontents">
-<div data-lang="Kotlin" class="tab">
-<p>Using the Glean Kotlin SDK's unit testing API requires adding <a href="http://robolectric.org/">Robolectric 4.0 or later</a> as a testing dependency. In Gradle, this can be done by declaring a <code>testImplementation</code> dependency:</p>
-<pre><code class="language-groovy">dependencies {
-    testImplementation &quot;org.robolectric:robolectric:4.3.1&quot;
-}
-</code></pre>
-<p>In order to prevent issues with async calls when unit testing the Glean SDK,
-it is important to put the Glean Kotlin SDK into testing mode by applying the JUnit <code>GleanTestRule</code> to your test class.
-When the Glean Kotlin SDK is in testing mode, it enables uploading and clears the recorded metrics at the beginning of each test run.
-The rule can be used as shown below:</p>
-<pre><code class="language-kotlin">@RunWith(AndroidJUnit4::class)
-class ActivityCollectingDataTest {
-    // Apply the GleanTestRule to set up a disposable Glean instance.
-    // Please note that this clears the Glean data across tests.
-    @get:Rule
-    val gleanRule = GleanTestRule(ApplicationProvider.getApplicationContext())
-
-    @Test
-    fun checkCollectedData() {
-      // The Glean Kotlin SDK testing API can be called here.
-    }
-}
-</code></pre>
-<p>This will ensure that metrics are done recording when the other test functions are used.</p>
-<p>To check if a value exists (i.e. it has been recorded), there is a <code>testHasValue()</code> function on each of the metric instances:</p>
-<pre><code class="language-kotlin">assertTrue(GleanMetrics.Search.defaultSearchEngineUrl.testHasValue())
-</code></pre>
-<p>To check the actual values, there is a <code>testGetValue()</code> function on each of the metric instances.
-It is important to check that the values are recorded as expected, since many of the metric types may truncate or error-correct the value.
-This function will return a datatype appropriate to the specific type of the metric it is being used with:</p>
-<pre><code class="language-kotlin">assertEquals(&quot;https://example.com/search?&quot;, GleanMetrics.Search.defaultSearchEngineUrl.testGetValue())
-</code></pre>
-<p>Note that each of these functions has its visibility limited to the scope of unit tests by making use of the <code>@VisibleForTesting</code> annotation,
-so the IDE should complain if you attempt to use them inside of client code.</p>
-</div>
-<div data-lang="Swift" class="tab">
-<blockquote>
-<p><strong>NOTE</strong>: There's no automatic test rule for Glean tests implemented.</p>
-</blockquote>
-<p>In order to prevent issues with async calls when unit testing the Glean SDK, it is important to put the Glean Swift SDK into testing mode.
-When the Glean Swift SDK is in testing mode, it enables uploading and clears the recorded metrics at the beginning of each test run.</p>
-<p>Activate it by resetting Glean in your test's setup:</p>
-<pre><code class="language-swift">@testable import Glean
-import XCTest
-
-class GleanUsageTests: XCTestCase {
-    override func setUp() {
-        Glean.shared.resetGlean(clearStores: true)
-    }
-
-    // ...
-}
-</code></pre>
-<p>This will ensure that metrics are done recording when the other test functions are used.</p>
-<p>To check if a value exists (i.e. it has been recorded), there is a <code>testHasValue()</code> function on each of the metric instances:</p>
-<pre><code class="language-Swift">XCTAssertTrue(GleanMetrics.Search.defaultSearchEngineUrl.testHasValue())
-</code></pre>
-<p>To check the actual values, there is a <code>testGetValue()</code> function on each of the metric instances.
-It is important to check that the values are recorded as expected, since many of the metric types may truncate or error-correct the value.
-This function will return a datatype appropriate to the specific type of the metric it is being used with:</p>
-<pre><code class="language-Swift">XCTAssertEqual(&quot;https://example.com/search?&quot;, try GleanMetrics.Search.defaultSearchEngineUrl.testGetValue())
-</code></pre>
-<p>Note that each of these functions is marked as <code>internal</code>, you need to import <code>Glean</code> explicitly in test mode:</p>
-<pre><code class="language-Swift">@testable import Glean
-</code></pre>
-</div>
-<div data-lang="Python" class="tab">
-<p>It is generally a good practice to &quot;reset&quot; the Glean Python SDK prior to every unit test that uses the Glean Python SDK, to prevent side effects of one unit test impacting others.
-The Glean Python SDK contains a helper function <code>glean.testing.reset_glean()</code> for this purpose.
-It has two required arguments: the application ID, and the application version.
-Each reset of the Glean Python SDK will create a new temporary directory for Glean to store its data in.
-This temporary directory is automatically cleaned up the next time the Glean Python SDK is reset or when the testing framework finishes.</p>
-<p>The instructions below assume you are using <a href="https://pypi.org/project/pytest/">pytest</a> as the test runner.
-Other test-running libraries have similar features, but are different in the details.</p>
-<p>Create a file <code>conftest.py</code> at the root of your test directory, and add the following to reset Glean at the start of every test in your suite:</p>
-<pre><code class="language-python">import pytest
-from glean import testing
-
-@pytest.fixture(name=&quot;reset_glean&quot;, scope=&quot;function&quot;, autouse=True)
-def fixture_reset_glean():
-    testing.reset_glean(application_id=&quot;my-app-id&quot;, application_version=&quot;0.1.0&quot;)
-</code></pre>
-<p>To check if a value exists (i.e. it has been recorded), there is a <code>test_has_value()</code> function on each of the metric instances:</p>
-<pre><code class="language-python">from glean import load_metrics
-metrics = load_metrics(&quot;metrics.yaml&quot;)
-
-# ...
-
-assert metrics.search.search_engine_url.test_has_value()
-</code></pre>
-<p>To check the actual values, there is a <code>test_get_value()</code> function on each of the metric instances.
-It is important to check that the values are recorded as expected, since many of the metric types may truncate or error-correct the value.
-This function will return a datatype appropriate to the specific type of the metric it is being used with:</p>
-<pre><code class="language-python">assert (
-    &quot;https://example.com/search?&quot; ==
-    metrics.search.default_search_engine_url.test_get_value()
-)
-</code></pre>
-</div>
-<div data-lang="C#" class="tab">
-<p>TODO. To be implemented in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1648448">bug 1648448</a>.</p>
-</div>
-</div>
-</div>
-<h2 id="testing-metrics-for-custom-pings"><a class="header" href="#testing-metrics-for-custom-pings">Testing metrics for custom pings</a></h2>
-<p>In order to test metrics where the metric is included in more than one ping, the test functions take an optional <code>pingName</code> argument (<code>ping_name</code> in Python).
-This is the name of the ping that the metric is being sent in, such as <code>&quot;events&quot;</code> for the <a href="user/metrics/../pings/events.html"><code>events</code> ping</a>,
-or <code>&quot;metrics&quot;</code> for the <a href="user/metrics/../pings/metrics.html"><code>metrics</code> ping</a>.
-This could also be a custom ping name that the metric is being sent in.
-In most cases you should not have to supply the ping name to the test function and can just use the default which is the &quot;default&quot; ping that this metric is sent in.
-You should only need to provide a <code>pingName</code> if the metric is being sent in more than one ping in order to identify the correct metric store.</p>
-<p>You can call the <code>testHasValue()</code> and <code>testGetValue()</code> functions with <code>pingName</code> like this:</p>
-<pre><code class="language-kotlin">GleanMetrics.Foo.uriCount.testHasValue(&quot;customPing&quot;)
-GleanMetrics.Foo.uriCount.testGetValue(&quot;customPing&quot;)
-</code></pre>
+<p>To encourage using the testing APIs, it is also possible to <a href="user/metrics/testing-metrics.html#generating-testing-coverage-reports">generate testing coverage reports</a> to show which metrics in your project are tested.</p>
 <h2 id="example-of-using-the-test-api"><a class="header" href="#example-of-using-the-test-api">Example of using the test API</a></h2>
+<p>In order to enable metrics testing APIs in each SDK, Glean must be reset and put in testing mode.
+For documentation on how to do that, refer to <a href="user/metrics/../../reference/general/initializing.html#testing-api">Initializing - Testing API</a>.</p>
+<p>Check out full examples of using the metric testing API on each Glean SDK.
+All examples omit the step of resetting Glean for tests to focus solely on metrics unit testing.</p>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
 <div data-lang="Kotlin" class="tab">
-<p>Here is a longer example to better illustrate the intended use of the test API:</p>
 <pre><code class="language-kotlin">// Record a metric value with extra to validate against
 GleanMetrics.BrowserEngagement.click.record(
     mapOf(
@@ -1540,7 +1425,6 @@ assertEquals(&quot;Courier&quot;, events.elementAt(0).extra[&quot;font&quot;])
 </code></pre>
 </div>
 <div data-lang="Swift" class="tab">
-<p>Here is a longer example to better illustrate the intended use of the test API:</p>
 <pre><code class="language-Swift">// Record a metric value with extra to validate against
 GleanMetrics.BrowserEngagement.click.record([.font: &quot;Courier&quot;])
 
@@ -1562,7 +1446,6 @@ XCTAssertEqual(&quot;Courier&quot;, events[0].extra?[&quot;font&quot;])
 </code></pre>
 </div>
 <div data-lang="Python" class="tab">
-<p>Here is a longer example to better illustrate the intended use of the test API:</p>
 <pre><code class="language-python">from glean import load_metrics
 metrics = load_metrics(&quot;metrics.yaml&quot;)
 
@@ -1575,9 +1458,6 @@ assert metrics.url.visit.test_has_value()
 # Retrieve a snapshot of the recorded events
 assert 1 == metrics.url.visit.test_get_value()
 </code></pre>
-</div>
-<div data-lang="C#" class="tab">
-<p>TODO. To be implemented in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1648448">bug 1648448</a>.</p>
 </div>
 </div>
 </div>
@@ -3329,35 +3209,65 @@ If you are adding Glean support to a library, you can safely skip this section.<
 <tr><td><code>setExperimentInactive</code></td><td>Indicate that an experiment is no longer running..</td><td><a href="reference/general/./experiments-api.html">Using the Experiments API</a></td></tr>
 </tbody></table>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/general/index.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="initializing"><a class="header" href="#initializing">Initializing</a></h1>
-<p>The following steps are required for applications using the Glean SDK, but not libraries.</p>
+<p>Glean needs to be initialized in order to be able to send pings,
+record metrics and perform maintenance tasks. Thus it is advised that Glean be initialized as
+soon as possible in an application's lifetime and importantly, before any other libraries in the
+application start using Glean.</p>
 <div class="special-quote special-quote-info fa fa-info-circle"></div>
-<h5 id="note"><a class="header" href="#note">Note</a></h5>
+<h2 id="libraries-are-not-required-to-initialize-glean"><a class="header" href="#libraries-are-not-required-to-initialize-glean">Libraries are not required to initialize Glean</a></h2>
 <blockquote>
-<p>The <code>initialize</code> function <em>must</em> be called, even if telemetry upload is disabled.
-Glean needs to perform maintenance tasks even when telemetry is disabled, and because Glean
-does this as part of its initialization, it is <em>required</em> to always call the <code>initialize</code>
-function. Otherwise, Glean won't be able to clean up collected data, disable queuing of pre-init
-tasks, or perform other required operations.</p>
-<p>This does not apply to special builds where telemetry is disabled at build time. In that case, it is acceptable to not call <code>initialize</code> at all.</p>
+<p>Libraries rely on the same Glean singleton as the application in which they are
+embedded. Hence, they are not expected to initialize Glean
+as the application should already do that.</p>
 </blockquote>
+<h2 id="behavior-when-uninitialized"><a class="header" href="#behavior-when-uninitialized">Behavior when uninitialized</a></h2>
+<p>Any API called before Glean is initialized is queued and applied at initialization.
+To avoid unbounded memory growth the queue is bounded (currently to a maximum of 100 tasks),
+and further calls are dropped.</p>
+<p>The number of calls dropped, if any,
+is recorded in the <code>glean.error.preinit_tasks_overflow</code> metric.</p>
+<h2 id="behavior-once-initialized"><a class="header" href="#behavior-once-initialized">Behavior once initialized</a></h2>
+<h3 id="when-upload-is-enabled"><a class="header" href="#when-upload-is-enabled">When upload is enabled</a></h3>
+<p>Once initialized, if upload is enabled,
+Glean applies all metric recordings and ping submissions,
+for both user-defined and builtin metrics and pings.</p>
+<p>This always happens asynchronously.</p>
+<h3 id="when-upload-is-disabled"><a class="header" href="#when-upload-is-disabled">When upload is disabled</a></h3>
+<p>If upload is disabled, any persisted metrics, events and pings (other than <code>first_run_date</code> and <code>first_run_hour</code>) are cleared.
+Pending <code>deletion-request</code> pings are sent.
+Subsequent calls to record metrics and submit pings will be no-ops.
+Because Glean does that as part of its initialization, users are <em>required</em> to always initialize Glean.</p>
+<p><strong>Glean must be initialized even if upload is disabled.</strong></p>
+<p>This does not apply to special builds where telemetry is disabled at build time.
+In that case, it is acceptable to not call initialize at all.</p>
+<h2 id="api"><a class="header" href="#api">API</a></h2>
+<h3 id="gleaninitializeconfiguration"><a class="header" href="#gleaninitializeconfiguration"><code>Glean.initialize(configuration)</code></a></h3>
+<p>Initializes Glean.</p>
+<p>May only be called once. Subsequent calls to <code>initialize</code> are no-op.</p>
+<h4 id="configuration"><a class="header" href="#configuration">Configuration</a></h4>
+<p>The available <code>initialize</code> configuration options may vary depending on the SDK.
+Below are listed the configuration options available on most SDKs.</p>
+<ul>
+<li><code>applicationId</code>: Application identifier. For Android and iOS applications, this is the id used on the platform's respective app store and is extracted automatically from the application context.</li>
+<li><code>uploadEnabled</code>: The user preference on whether or not data upload is enabled.</li>
+<li><code>appChannel</code>: The application's release channel. When present, the <code>app_channel</code> will be reported in all ping's <a href="reference/general/../../user/pings/index.html#the-client_info-section"><code>client_info</code> section</a>.</li>
+<li><code>appBuild</code>: A build identifier e.g. the build identifier generated by a CI system (e.g. &quot;1234/A&quot;). If not present, <code>app_build</code> will be reported as &quot;Unknown&quot; on all pings <a href="reference/general/../../user/pings/index.html#the-client_info-section"><code>client_info</code></a> section.</li>
+<li><code>appDisplayVersion</code>: The user visible version string for the application running Glean. If not present, <code>app_display_version</code> will be reported as &quot;Unknown&quot; on all pings <a href="reference/general/../../user/pings/index.html#the-client_info-section"><code>client_info</code></a> section.</li>
+<li><code>serverEndpoint</code>: The server pings are sent to. Defaults to <code>https://incoming.telemetry.mozilla.org</code>.</li>
+</ul>
+<p>To learn about SDK specific configuration options available, refer to the <a href="reference/general/initializing.html#reference">Reference</a> section.</p>
 <div class="special-quote special-quote-stop fa fa-ban"></div>
-<h5 id="initialize-glean-with-the-correct-value-for-uploadenabled"><a class="header" href="#initialize-glean-with-the-correct-value-for-uploadenabled">Initialize Glean with the correct value for <code>uploadEnabled</code>!</a></h5>
+<h5 id="always-initialize-glean-with-the-correct-upload-preference"><a class="header" href="#always-initialize-glean-with-the-correct-upload-preference">Always initialize Glean with the correct upload preference</a></h5>
 <blockquote>
-<p><code>Glean.initialize</code> must <strong>always</strong> be called with real values.
-Always pass the user preference, e.g. <code>Glean.initialize(upload=userSettings.telemetry_enabled)</code> or the equivalent for your application.
-Never call <code>Glean.initialize(upload=true)</code> if <code>true</code> is a placeholder value that later gets reset by <code>Glean.setUploadEnabled(false)</code>.
-Depending on the provided placeholder value, this might trigger the generation of new client ids or the submission of bogus <a href="reference/general/../../user/pings/deletion-request.html"><code>deletion-request</code> pings</a>.</p>
+<p>Glean must <strong>always</strong> be initialized with real values.</p>
+<p>Always pass the user preference, e.g. <code>Glean.initialize(upload=userSettings.telemetry_enabled)</code> or the equivalent for your application.
+Never call <code>Glean.initialize(upload=true)</code> if <code>true</code> is a placeholder value that later gets reset by <code>Glean.setUploadEnabled(false)</code> and vice-versa.</p>
+<p>Depending on the provided placeholder value, this might trigger the generation of new client ids or the submission of bogus <a href="reference/general/../../user/pings/deletion-request.html"><code>deletion-request</code> pings</a>.</p>
 </blockquote>
 <div class="tabs">
 <div class="tabbar"></div>
 <div class="tabcontents">
 <div data-lang="Kotlin" class="tab">
-<div class="special-quote special-quote-info fa fa-info-circle"></div>
-<h5 id="multiple-processes-support"><a class="header" href="#multiple-processes-support">Multiple processes support</a></h5>
-<blockquote>
-<p>The Glean Kotlin SDK does not support use across multiple processes, and must only be initialized on the application's main process. Initializing in other processes is a no-op.
-Additionally, Glean must be initialized on the main (UI) thread of the applications main process. Failure to do so will throw an <code>IllegalThreadStateException</code>.</p>
-</blockquote>
 <p>An excellent place to initialize Glean is within the <code>onCreate</code> method of the class that extends Android's <code>Application</code> class.</p>
 <pre><code class="language-Kotlin">import org.mozilla.yourApplication.GleanMetrics.GleanBuildInfo
 import org.mozilla.yourApplication.GleanMetrics.Pings
@@ -3383,20 +3293,19 @@ class SampleApplication : Application() {
     }
 }
 </code></pre>
-<p>The Glean Kotlin SDK should be initialized as soon as possible, and importantly, before any other libraries in the application start using Glean.
-Library code should never call <code>Glean.initialize</code>, since it should be called exactly once per application.</p>
-<div class="special-quote special-quote-warning fa fa-exclamation-triangle"></div>
-<h5 id="uploads-when-using-android-components"><a class="header" href="#uploads-when-using-android-components">Uploads when using Android Components</a></h5>
-<blockquote>
-<p>When the Glean Kotlin SDK is consumed through Android Components, it is required to configure an HTTP client to be used for upload.
-For example:</p>
+<p>The Glean Kotlin SDK does not support use across multiple processes, and must only be initialized on the application's main process. Initializing in other processes is a no-op.</p>
+<p>Additionally, Glean must be initialized on the main (UI) thread of the applications main process. Failure to do so will throw an <code>IllegalThreadStateException</code>.</p>
+<h3 id="consuming-glean-through-android-components"><a class="header" href="#consuming-glean-through-android-components">Consuming Glean through Android Components</a></h3>
+<p>When the Glean Kotlin SDK is consumed through Android Components,
+it is required to configure an HTTP client to be used for upload.</p>
+<p>For example:</p>
 <pre><code class="language-Kotlin">// Requires `org.mozilla.components:concept-fetch`
 import mozilla.components.concept.fetch.Client
+
 // Requires `org.mozilla.components:lib-fetch-httpurlconnection`.
 // This can be replaced by other implementations, e.g. `lib-fetch-okhttp`
 // or an implementation from `browser-engine-gecko`.
 import mozilla.components.lib.fetch.httpurlconnection.HttpURLConnectionClient
-
 import mozilla.components.service.glean.config.Configuration
 import mozilla.components.service.glean.net.ConceptFetchHttpUploader
 
@@ -3409,14 +3318,8 @@ Glean.initialize(
    buildInfo = GleanBuildInfo.buildInfo
 )
 </code></pre>
-</blockquote>
 </div>
 <div data-lang="Swift" class="tab">
-<div class="special-quote special-quote-info fa fa-info-circle"></div>
-<h5 id="multiple-processes-support-1"><a class="header" href="#multiple-processes-support-1">Multiple processes support</a></h5>
-<blockquote>
-<p>The Glean Swift SDK does not support use across multiple processes, and must only be initialized on the application's main process.</p>
-</blockquote>
 <p>An excellent place to initialize Glean is within the <code>application(_:)</code> method of the class that extends the <code>UIApplicationDelegate</code> class.</p>
 <pre><code class="language-Swift">import Glean
 import UIKit
@@ -3439,40 +3342,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 </code></pre>
-<p>The Glean Swift SDK should be initialized as soon as possible, and importantly, before any other libraries in the application start using Glean.
-Library code should never call <code>Glean.shared.initialize</code>, since it should be called exactly once per application.</p>
+<p>The Glean Swift SDK does not support use across multiple processes,
+and must only be initialized on the application's main process.</p>
 </div>
 <div data-lang="Python" class="tab">
 <p>The main control for the Glean Python SDK is on the <code>glean.Glean</code> singleton.</p>
-<p>The Glean Python SDK should be initialized as soon as possible, and importantly, before any other libraries in the application start using Glean.
-Library code should never call <code>Glean.initialize</code>, since it should be called exactly once per application.</p>
 <pre><code class="language-python">from glean import Glean
 
 Glean.initialize(
     application_id=&quot;my-app-id&quot;,
     application_version=&quot;0.1.0&quot;,
-    upload_enabled=True,
+    # Here, `is_telemetry_enabled` is a method to get user preferences specific to
+    # your application, and not part of the Glean API.
+    upload_enabled=is_telemetry_enabled(),
 )
 </code></pre>
-<p>Additional configuration is available on the <code>glean.Configuration</code> object, which can be passed into <code>Glean.initialize()</code>.</p>
-<p>Unlike Android and Swift, the Python SDK does not automatically send any pings.
+<p>Unlike in other implementations, the Python SDK does not automatically send any pings.
 See the <a href="reference/general/../../user/pings/custom.html">custom pings documentation</a> about adding custom pings and sending them.</p>
 </div>
 <div data-lang="Rust" class="tab">
-<div class="special-quote special-quote-info fa fa-info-circle"></div>
-<h5 id="multiple-processes-support-2"><a class="header" href="#multiple-processes-support-2">Multiple processes support</a></h5>
-<blockquote>
-<p>The Glean Rust SDK does not support use across multiple processes, and must only be initialized on the application's main process.</p>
-</blockquote>
-<p>The Glean Rust SDK should be initialized as soon as possible,
-and importantly, before any other libraries in the application start using Glean.
-Library code should never call Glean.initialize,
-since it should be called exactly once per application.</p>
+<p>The Glean Rust SDK should be initialized as soon as possible.</p>
 <pre><code class="language-Rust">use glean::{ClientInfoMetrics, Configuration};
 let cfg = Configuration {
     data_path,
     application_id: &quot;my-app-id&quot;.into(),
-    upload_enabled: true,
+    // Here, `is_telemetry_enabled` is a method to get user preferences specific to
+    // your application, and not part of the Glean API.
+    upload_enabled: is_telemetry_enabled(),
     max_events: None,
     delay_ping_lifetime_io: false,
     channel: None,
@@ -3488,19 +3384,18 @@ let client_info = ClientInfoMetrics {
 
 glean::initialize(cfg, client_info);
 </code></pre>
+<p>The Glean Rust SDK does not support use across multiple processes, and must only be initialized on the application's main process.</p>
 <p>Unlike in other implementations, the Rust SDK does not provide a default uploader.
 See <a href="reference/general/../../../docs/glean/net/trait.PingUploader.html"><code>PingUploader</code></a> for details.</p>
 </div>
 <div data-lang="JavaScript" class="tab">
-<p>The main control for Glean is on the <code>Glean</code> singleton.</p>
-<p>The Glean JavaScript SDK should be initialized as soon as possible when the product using it is started.</p>
-<pre><code class="language-js">// Glean.js for webextensions: the following code
-// runs in the background script.
-import Glean from &quot;@mozilla/glean/webext&quot;;
+<pre><code class="language-js">import Glean from &quot;@mozilla/glean/&lt;platform&gt;&quot;;
 
 Glean.initialize(
     &quot;my-app-id&quot;,
-    true, // uploadEnabled
+    // Here, `isTelemetryEnabled` is a method to get user preferences specific to
+    // your application, and not part of the Glean API.
+    isTelemetryEnabled(),
     {
       appDisplayVersion: &quot;0.1.0&quot;
     }
@@ -3510,19 +3405,106 @@ Glean.initialize(
 <div data-lang="Firefox Desktop" class="tab" data-info="On Firefox Desktop Glean initialization is handled internally."></div>
 </div>
 </div>
-<h2 id="what-happens-after-glean-is-initialized"><a class="header" href="#what-happens-after-glean-is-initialized">What happens after Glean is initialized?</a></h2>
-<p>Once initialized, if upload is enabled, Glean will automatically start collecting <a href="reference/general/../../user/pings/metrics.html">baseline metrics</a>.
-If upload is disabled, any persisted metrics, events and pings (other than <code>first_run_date</code> and <code>first_run_hour</code>) are cleared, and subsequent calls to record metrics will be no-ops.</p>
-<h2 id="release-channels"><a class="header" href="#release-channels">Release channels</a></h2>
-<p>If the application has the concept of release channels and knows which channel it is on at run-time,
-then it can provide the Glean SDKs with this information by setting it as part of the <code>Configuration</code> object parameter of the <code>initialize</code> method.</p>
-<h2 id="behavior-when-uninitialized"><a class="header" href="#behavior-when-uninitialized">Behavior when uninitialized</a></h2>
-<p>Metric recording that happens before Glean is initialized is queued and applied at initialization.
-To avoid unbounded memory growth the queue is bounded (currently to a maximum of 100 tasks), and further recordings are dropped.
-The number of recordings dropped, if any, is recorded in the <code>glean.error.preinit_tasks_overflow</code> metric.</p>
-<p>Custom ping submission will not fail before initialization.
-Collection and upload of the custom ping is delayed until Glean is initialized.
-Built-in pings are only available after initialization.</p>
+<h2 id="testing-api"><a class="header" href="#testing-api">Testing API</a></h2>
+<p>When unit testing metrics and pings, Glean needs to be put in testing mode. Initializing
+Glean for tests is referred to as &quot;resetting&quot;. It is advised that Glean is reset before each unit test
+to prevent side effects of one unit test impacting others.</p>
+<p>How to do that and the definition of &quot;testing mode&quot; varies per Glean SDK. Refer to the information
+below for SDK specific information.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab">
+<p>Using the Glean Kotlin SDK's unit testing API requires adding
+<a href="http://robolectric.org/">Robolectric 4.0 or later</a> as a testing dependency.
+In Gradle, this can be done by declaring a <code>testImplementation</code> dependency:</p>
+<pre><code class="language-groovy">dependencies {
+    testImplementation &quot;org.robolectric:robolectric:4.3.1&quot;
+}
+</code></pre>
+<p>In order to put the Glean Kotlin SDK into testing mode apply the JUnit <code>GleanTestRule</code> to your test class.
+Testing mode will prevent issues with async calls when unit testing the Glean SDK on Kotlin. It also
+enables uploading and clears the recorded metrics at the beginning of each test run.</p>
+<p>The rule can be used as shown:</p>
+<pre><code class="language-kotlin">@RunWith(AndroidJUnit4::class)
+class ActivityCollectingDataTest {
+    // Apply the GleanTestRule to set up a disposable Glean instance.
+    // Please note that this clears the Glean data across tests.
+    @get:Rule
+    val gleanRule = GleanTestRule(ApplicationProvider.getApplicationContext())
+
+    @Test
+    fun checkCollectedData() {
+      // The Glean Kotlin SDK testing APIs can be called here.
+    }
+}
+</code></pre>
+<p>This will ensure that metrics are done recording when the other test functions are used.</p>
+</div>
+<div data-lang="Swift" class="tab">
+<p><strong>Note</strong>: There's no automatic test rule for Glean tests implemented in Swift.</p>
+<p>In order to prevent issues with async calls when unit testing the Glean SDK, it is important to put
+the Glean Swift SDK into testing mode. When the Glean Swift SDK is in testing mode,
+it enables uploading and clears the recorded metrics at the beginning of each test run.</p>
+<p>Activate it by resetting Glean in your test's setup:</p>
+<pre><code class="language-swift">// All pings and metrics testing APIs are marked as `internal`
+// so you need to import `Glean` explicitly in test mode.
+@testable import Glean
+import XCTest
+
+class GleanUsageTests: XCTestCase {
+    override func setUp() {
+        Glean.shared.resetGlean(clearStores: true)
+    }
+
+    // ...
+}
+</code></pre>
+<p>This will ensure that metrics are done recording when the other test functions are used.</p>
+</div>
+<div data-lang="Python" class="tab">
+<p>The Glean Python SDK contains a helper function <code>glean.testing.reset_glean()</code> for resetting Glean for tests.
+It has two required arguments: the application ID, and the application version.</p>
+<p>Each reset of the Glean Python SDK will create a new temporary directory for Glean to store its data in.
+This temporary directory is automatically cleaned up the next time the Glean Python SDK is reset or when the testing framework finishes.</p>
+<p>The instructions below assume you are using <a href="https://pypi.org/project/pytest/">pytest</a> as the test runner.
+Other test-running libraries have similar features, but are different in the details.</p>
+<p>Create a file <code>conftest.py</code> at the root of your test directory, and add the following to reset Glean at the start of every test in your suite:</p>
+<pre><code class="language-python">import pytest
+from glean import testing
+
+@pytest.fixture(name=&quot;reset_glean&quot;, scope=&quot;function&quot;, autouse=True)
+def fixture_reset_glean():
+    testing.reset_glean(application_id=&quot;my-app-id&quot;, application_version=&quot;0.1.0&quot;)
+</code></pre>
+</div>
+<div data-lang="Rust" class="tab"></div>
+<div data-lang="JavaScript" class="tab">
+<p>The Glean JavaScript SDK contains a helper function <code>testResetGlean()</code> for resetting Glean for tests.
+It expects the same list of arguments as <code>Glean.initialize</code>.</p>
+<p>Each reset of the Glean JavaScript SDK will clear stores. Calling <code>testResetGlean</code> will also make
+metrics and pings testing APIs available and replace ping uploading with a mock implementation that
+does not make real HTTP requests.</p>
+<pre><code class="language-js">import { testResetGlean } from &quot;@mozilla/glean/testing&quot;
+
+describe(&quot;myTestSuite&quot;, () =&gt; {
+    beforeEach(async () =&gt; {
+        await testResetGlean(&quot;my-test-id&quot;);
+    });
+});
+
+</code></pre>
+</div>
+<div data-lang="Firefox Desktop" class="tab" data-info='Documentation on how to reset Glean in Firefox Desktop tests can be found at <a href="https://firefox-source-docs.mozilla.org/toolkit/components/glean/user/instrumentation_tests.html" target="_blank">"Writing Instrumentation Tests"</a>'></div>
+</div>
+</div>
+<h2 id="reference"><a class="header" href="#reference">Reference</a></h2>
+<ul>
+<li><a href="reference/general/../../../swift/Classes/Glean.html#/s:5GleanAAC10initialize13uploadEnabled13configuration9buildInfoySb_AA13ConfigurationVAA05BuildG0VtF">Swift API docs</a></li>
+<li><a href="reference/general/../../../python/glean/index.html#glean.Glean.initialize">Python API docs</a></li>
+<li><a href="reference/general/../../../docs/glean/fn.initialize.html">Rust API docs</a></li>
+<li><a href="https://mozilla.github.io/glean.js/modules/core_glean.default.html#initialize">JavaScript API docs</a></li>
+</ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/general/initializing.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="toggling-upload-status"><a class="header" href="#toggling-upload-status">Toggling upload status</a></h1>
 <p>The Glean SDKs provide an API for toggling Glean's upload status after initialization.</p>
 <p>Applications instrumented with Glean
@@ -3542,7 +3524,7 @@ provide some form of user interface to allow for toggling the upload status.</p>
 The only core metrics that are not re-initialized are the <a href="reference/general/../../user/pings/index.html#the-client_info-section"><code>first_run_date</code> and <code>first_run_hour</code></a> metrics.</p>
 <p>While upload is enabled all metrics are recorded as expected
 and pings are sent to the telemetry servers.</p>
-<h2 id="api"><a class="header" href="#api">API</a></h2>
+<h2 id="api-1"><a class="header" href="#api-1">API</a></h2>
 <h3 id="gleansetuploadenabledboolean"><a class="header" href="#gleansetuploadenabledboolean"><code>Glean.setUploadEnabled(boolean)</code></a></h3>
 <p>Enables or disables upload.</p>
 <p>If called prior to initialize this function is a no-op.</p>
@@ -3617,7 +3599,7 @@ uploadSwitch.addEventListener(&quot;change&quot;, event =&gt; {
 <div data-lang="Firefox Desktop" class="tab" data-info="On Firefox Desktop data collection is toggled internally."></div>
 </div>
 </div>
-<h2 id="reference"><a class="header" href="#reference">Reference</a></h2>
+<h2 id="reference-1"><a class="header" href="#reference-1">Reference</a></h2>
 <ul>
 <li><a href="reference/general/../../../swift/Classes/Glean.html#/s:5GleanAAC16setUploadEnabledyySbF">Swift API docs</a></li>
 <li><a href="reference/general/../../../python/glean/index.html#glean.Glean.set_upload_enabled">Python API docs</a></li>
@@ -3764,7 +3746,7 @@ FOG.setExperimentInactive(&quot;blue-button-effective&quot;);
 </div>
 </div>
 </div>
-<h2 id="testing-api"><a class="header" href="#testing-api">Testing API</a></h2>
+<h2 id="testing-api-1"><a class="header" href="#testing-api-1">Testing API</a></h2>
 <h3 id="testisexperimentactive"><a class="header" href="#testisexperimentactive"><code>testIsExperimentActive</code></a></h3>
 <p>Reveals if the experiment is annotated in Glean pings.</p>
 <div class="tabs">
@@ -3846,7 +3828,7 @@ Assert.equals(
 </div>
 </div>
 </div>
-<h2 id="reference-1"><a class="header" href="#reference-1">Reference</a></h2>
+<h2 id="reference-2"><a class="header" href="#reference-2">Reference</a></h2>
 <ul>
 <li><a href="reference/general/../../../swift/Classes/QuantityMetricType.html">Swift API docs</a></li>
 <li><a href="reference/general/../../../python/glean/metrics/quantity.html">Python API docs</a></li>
@@ -3855,7 +3837,7 @@ Assert.equals(
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/reference/general/experiments-api.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="registering-custom-pings"><a class="header" href="#registering-custom-pings">Registering custom pings</a></h1>
 <p>After defining <a href="reference/general/../../user/pings/custom.html">custom pings</a> <code>glean_parser</code> is able to generate code from
 <code>pings.yaml</code> files in a <code>Pings</code> object, which must be instantiated so Glean can send pings by name.</p>
-<h2 id="api-1"><a class="header" href="#api-1">API</a></h2>
+<h2 id="api-2"><a class="header" href="#api-2">API</a></h2>
 <h3 id="registerpings"><a class="header" href="#registerpings"><code>registerPings</code></a></h3>
 <p>Loads custom ping metadata into your application or library.</p>
 <div class="tabs">
@@ -3942,7 +3924,7 @@ completion of each of these tasks.</p>
 thread for all other SDKs.</p>
 </div>
 </blockquote>
-<h2 id="api-2"><a class="header" href="#api-2">API</a></h2>
+<h2 id="api-3"><a class="header" href="#api-3">API</a></h2>
 <h3 id="shutdown"><a class="header" href="#shutdown"><code>shutdown</code></a></h3>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -3987,7 +3969,7 @@ is explicitly using the <code>webext</code> target.</p>
 <div data-lang="Firefox Desktop" class="tab" data-info="On application shutdown Glean will automatically wait for the dispatcher thread to finish."></div>
 </div>
 </div>
-<h2 id="reference-2"><a class="header" href="#reference-2">Reference</a></h2>
+<h2 id="reference-3"><a class="header" href="#reference-3">Reference</a></h2>
 <ul>
 <li><a href="reference/general/../../../docs/glean/fn.shutdown.html">Rust API docs</a></li>
 <li><a href="https://mozilla.github.io/glean.js/classes/core_glean.default.html#shutdown">JavaScript API docs</a></li>
@@ -4033,7 +4015,7 @@ on how to view the logs on the platform you are on.</p>
 <ul>
 <li>The accepted values are <code>true</code> or <code>false</code>. Any other value will be ignored.</li>
 </ul>
-<h2 id="api-3"><a class="header" href="#api-3">API</a></h2>
+<h2 id="api-4"><a class="header" href="#api-4">API</a></h2>
 <h3 id="setlogpings"><a class="header" href="#setlogpings"><code>setLogPings</code></a></h3>
 <p>Enables or disables ping logging.</p>
 <p>This API can safely be called before <code>Glean.initialize</code>.
@@ -4108,7 +4090,7 @@ will contain the <code>X-Debug-Id</code> header with the given tag.</p>
 <li>Any valid HTTP header value is a valid debug view tag (e.g. any value that matches the
 regex <code>[a-zA-Z0-9-]{1,20}</code>). Invalid values will be ignored.</li>
 </ul>
-<h2 id="api-4"><a class="header" href="#api-4">API</a></h2>
+<h2 id="api-5"><a class="header" href="#api-5">API</a></h2>
 <h3 id="setdebugviewtag"><a class="header" href="#setdebugviewtag"><code>setDebugViewTag</code></a></h3>
 <p>Sets the Debug View Tag to a given value.</p>
 <p>This API can safely be called before <code>Glean.initialize</code>.
@@ -4187,7 +4169,7 @@ the whole list will be ignored.</li>
 <li>The special value <code>automation</code> is meant for tagging pings generated on automation: such pings will
 be specially handled on the pipeline (i.e. discarded from <a href="https://docs.telemetry.mozilla.org/cookbooks/bigquery/querying.html#table-layout-and-naming">non-live views</a>).</li>
 </ul>
-<h2 id="api-5"><a class="header" href="#api-5">API</a></h2>
+<h2 id="api-6"><a class="header" href="#api-6">API</a></h2>
 <h3 id="setsourcetags"><a class="header" href="#setsourcetags"><code>setSourceTags</code></a></h3>
 <p>Sets the Source Tags to a given value.</p>
 <p>This API can safely be called before <code>Glean.initialize</code>.
@@ -4413,7 +4395,7 @@ mozilla::glean::flags::a11y_enabled.Set(false);
 </div>
 <h4 id="recorded-errors-1"><a class="header" href="#recorded-errors-1">Recorded errors</a></h4>
 <p>N/A</p>
-<h2 id="testing-api-1"><a class="header" href="#testing-api-1">Testing API</a></h2>
+<h2 id="testing-api-2"><a class="header" href="#testing-api-2">Testing API</a></h2>
 <h3 id="testgetvalue"><a class="header" href="#testgetvalue"><code>testGetValue</code></a></h3>
 <p>Gets the recorded value for a given boolean metric.</p>
 <div class="tabs">
@@ -4526,7 +4508,7 @@ refer to the <a href="reference/metrics/../yaml/metrics.html">metrics YAML regis
 <ul>
 <li>Is accessibility enabled?</li>
 </ul>
-<h2 id="reference-3"><a class="header" href="#reference-3">Reference</a></h2>
+<h2 id="reference-4"><a class="header" href="#reference-4">Reference</a></h2>
 <ul>
 <li><a href="reference/metrics/../../../swift/Classes/BooleanMetricType.html">Swift API docs</a></li>
 <li><a href="reference/metrics/../../../python/glean/metrics/boolean.html">Python API docs</a></li>
@@ -4609,7 +4591,7 @@ Glean.accessibility.features[&quot;high_contrast&quot;].set(false);
 </ul>
 </li>
 </ul>
-<h2 id="testing-api-2"><a class="header" href="#testing-api-2">Testing API</a></h2>
+<h2 id="testing-api-3"><a class="header" href="#testing-api-3">Testing API</a></h2>
 <h3 id="testgetvalue-1"><a class="header" href="#testgetvalue-1"><code>testGetValue</code></a></h3>
 <p>Gets the recorded value for a given label in a labeled boolean metric.</p>
 <div class="tabs">
@@ -4846,7 +4828,7 @@ index of the labels is used to report Gecko data through the Glean SDK.</p>
 <ul>
 <li>Which accessibility features are enabled?</li>
 </ul>
-<h2 id="reference-4"><a class="header" href="#reference-4">Reference</a></h2>
+<h2 id="reference-5"><a class="header" href="#reference-5">Reference</a></h2>
 <ul>
 <li>Swift API docs: <a href="reference/metrics/../../../swift/Classes/LabeledMetricType.html"><code>LabeledMetricType</code></a>, <a href="reference/metrics/../../../swift/Classes/BooleanMetricType.html"><code>BooleanMetricType</code></a></li>
 <li>Python API docs: <a href="reference/metrics/../../../python/glean/metrics/labeled.html"><code>LabeledMetricBase</code></a>, <a href="reference/metrics/../../../python/glean/metrics/boolean.html"><code>BooleanMetricType</code></a></li>
@@ -4939,7 +4921,7 @@ Glean.controls.refreshPressed.add(5);
 <li>Only increments;</li>
 <li>Saturates at the largest value that can be represented as a 32-bit signed integer (<code>2147483647</code>).</li>
 </ul>
-<h2 id="testing-api-3"><a class="header" href="#testing-api-3">Testing API</a></h2>
+<h2 id="testing-api-4"><a class="header" href="#testing-api-4">Testing API</a></h2>
 <h3 id="testgetvalue-2"><a class="header" href="#testgetvalue-2"><code>testGetValue</code></a></h3>
 <p>Gets the recorded value for a given counter metric.</p>
 <div class="tabs">
@@ -5124,7 +5106,7 @@ refer to the <a href="reference/metrics/../yaml/metrics.html">metrics YAML regis
 <ul>
 <li>How often was a certain button pressed?</li>
 </ul>
-<h2 id="reference-5"><a class="header" href="#reference-5">Reference</a></h2>
+<h2 id="reference-6"><a class="header" href="#reference-6">Reference</a></h2>
 <ul>
 <li><a href="reference/metrics/../../../swift/Classes/CounterMetricType.html">Swift API docs</a></li>
 <li><a href="reference/metrics/../../../python/glean/metrics/counter.html">Python API docs</a></li>
@@ -5222,7 +5204,7 @@ Glean.stability.crashCount[&quot;native_code_crash&quot;].add(3);
 <li>Only increments;</li>
 <li>Saturates at the largest value that can be represented as a 32-bit signed integer.</li>
 </ul>
-<h2 id="testing-api-4"><a class="header" href="#testing-api-4">Testing API</a></h2>
+<h2 id="testing-api-5"><a class="header" href="#testing-api-5">Testing API</a></h2>
 <h3 id="testgetvalue-3"><a class="header" href="#testgetvalue-3"><code>testGetValue</code></a></h3>
 <p>Gets the recorded value for a given label in a labeled counter metric.</p>
 <div class="tabs">
@@ -5461,7 +5443,7 @@ index of the labels is used to report Gecko data through the Glean SDK.</p>
 <ul>
 <li>How many times did different types of crashes occur?</li>
 </ul>
-<h2 id="reference-6"><a class="header" href="#reference-6">Reference</a></h2>
+<h2 id="reference-7"><a class="header" href="#reference-7">Reference</a></h2>
 <ul>
 <li>Swift API docs: <a href="reference/metrics/../../../swift/Classes/LabeledMetricType.html"><code>LabeledMetricType</code></a>, <a href="reference/metrics/../../../swift/Classes/CounterMetricType.html"><code>CounterMetricType</code></a></li>
 <li>Python API docs: <a href="reference/metrics/../../../python/glean/metrics/labeled.html"><code>LabeledMetricBase</code></a>, <a href="reference/metrics/../../../python/glean/metrics/counter.html"><code>CounterMetricType</code></a></li>
@@ -5562,7 +5544,7 @@ mozilla::glean::search_default::name.Set(&quot;wikipedia&quot;_ns);
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_overflow</code></a>: if the string is too long. (Prior to Glean 31.5.0, this recorded an <code>invalid_value</code>).</li>
 </ul>
-<h2 id="testing-api-5"><a class="header" href="#testing-api-5">Testing API</a></h2>
+<h2 id="testing-api-6"><a class="header" href="#testing-api-6">Testing API</a></h2>
 <h3 id="testgetvalue-4"><a class="header" href="#testgetvalue-4"><code>testGetValue</code></a></h3>
 <p>Get the recorded value for a given string metric.</p>
 <p>The recorded value may have been truncated. See <a href="reference/metrics/string.html#limits">&quot;Limits&quot;</a> section above.</p>
@@ -5775,7 +5757,7 @@ refer to the <a href="reference/metrics/../yaml/metrics.html">metrics YAML regis
 <p>Recording the device model with a value of <code>&quot;SAMSUNG-SGH-I997&quot;</code>.</p>
 </li>
 </ul>
-<h2 id="reference-7"><a class="header" href="#reference-7">Reference</a></h2>
+<h2 id="reference-8"><a class="header" href="#reference-8">Reference</a></h2>
 <ul>
 <li><a href="reference/metrics/../../../swift/Classes/StringMetricType.html">Swift API docs</a></li>
 <li><a href="reference/metrics/../../../python/glean/metrics/string.html">Python API docs</a></li>
@@ -5855,7 +5837,7 @@ mozilla::glean::login::errors_by_stage.Get(&quot;server_auth&quot;_ns).Set(&quot
 </ul>
 </li>
 </ul>
-<h2 id="testing-api-6"><a class="header" href="#testing-api-6">Testing API</a></h2>
+<h2 id="testing-api-7"><a class="header" href="#testing-api-7">Testing API</a></h2>
 <h3 id="testgetvalue-5"><a class="header" href="#testgetvalue-5"><code>testGetValue</code></a></h3>
 <p>Gets the recorded value for a given label in a labeled string metric.</p>
 <div class="tabs">
@@ -6079,7 +6061,7 @@ index of the labels is used to report Gecko data through the Glean SDK.</p>
 <ul>
 <li>What kinds of errors occurred at each step in the login process?</li>
 </ul>
-<h2 id="reference-8"><a class="header" href="#reference-8">Reference</a></h2>
+<h2 id="reference-9"><a class="header" href="#reference-9">Reference</a></h2>
 <ul>
 <li>Swift API docs: <a href="reference/metrics/../../../swift/Classes/LabeledMetricType.html"><code>LabeledMetricType</code></a>, <a href="reference/metrics/../../../swift/Classes/StringMetricType.html"><code>StringMetricType</code></a></li>
 <li>Python API docs: <a href="reference/metrics/../../../python/glean/metrics/labeled.html"><code>LabeledMetricBase</code></a>, <a href="reference/metrics/../../../python/glean/metrics/string.html"><code>StringMetricType</code></a></li>
@@ -6222,7 +6204,7 @@ mozilla::glean::search::engines.Set({&quot;wikipedia&quot;_ns, &quot;duck duck g
 <li>Fixed maximum string length: 50. Longer strings are truncated. This is measured in the number of bytes when the string is encoded in UTF-8.</li>
 <li>Fixed maximum list length: 20 items. Additional strings are dropped.</li>
 </ul>
-<h2 id="testing-api-7"><a class="header" href="#testing-api-7">Testing API</a></h2>
+<h2 id="testing-api-8"><a class="header" href="#testing-api-8">Testing API</a></h2>
 <h3 id="testgetvalue-6"><a class="header" href="#testgetvalue-6"><code>testGetValue</code></a></h3>
 <p>Gets the recorded value for a given string list metric.</p>
 <div class="tabs">
@@ -6397,7 +6379,7 @@ refer to the <a href="reference/metrics/../yaml/metrics.html">metrics YAML regis
 <ul>
 <li>Which search engines are enabled?</li>
 </ul>
-<h2 id="reference-9"><a class="header" href="#reference-9">Reference</a></h2>
+<h2 id="reference-10"><a class="header" href="#reference-10">Reference</a></h2>
 <ul>
 <li><a href="reference/metrics/../../../swift/Classes/StringListMetricType.html">Swift API docs</a></li>
 <li><a href="reference/metrics/../../../python/glean/metrics/string_list.html">Python API docs</a></li>
@@ -6826,7 +6808,7 @@ If you attempt to record a negative elapsed duration.</li>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_state</code></a>:
 If you call this API after calling <code>start</code> or call this API multiple times.</li>
 </ul>
-<h2 id="testing-api-8"><a class="header" href="#testing-api-8">Testing API</a></h2>
+<h2 id="testing-api-9"><a class="header" href="#testing-api-9">Testing API</a></h2>
 <h3 id="testgetvalue-7"><a class="header" href="#testgetvalue-7"><code>testGetValue</code></a></h3>
 <p>Get the currently-stored value.</p>
 <div class="tabs">
@@ -7037,7 +7019,7 @@ Therefore, a measurement of 500 nanoseconds will be truncated to 0 microseconds.
 <ul>
 <li>How long did it take for the user to log in?</li>
 </ul>
-<h2 id="reference-10"><a class="header" href="#reference-10">Reference</a></h2>
+<h2 id="reference-11"><a class="header" href="#reference-11">Reference</a></h2>
 <ul>
 <li><a href="reference/metrics/../../../swift/Classes/TimespanMetricType.html">Swift API docs</a></li>
 <li><a href="reference/metrics/../../../python/glean/metrics/timespan.html">Python API docs</a></li>
@@ -7310,7 +7292,7 @@ mozilla::glean::pages::page_load.Cancel(std::move(timerId));
 </div>
 </div>
 </div>
-<h2 id="testing-api-9"><a class="header" href="#testing-api-9">Testing API</a></h2>
+<h2 id="testing-api-10"><a class="header" href="#testing-api-10">Testing API</a></h2>
 <h3 id="testgetvalue-8"><a class="header" href="#testgetvalue-8"><code>testGetValue</code></a></h3>
 <p>Gets the recorded value for a given timing distribution metric.</p>
 <div class="tabs">
@@ -7553,7 +7535,7 @@ which is not guaranteed to have nanosecond resolution.</p>
 <ul>
 <li>How long does it take a page to load?</li>
 </ul>
-<h2 id="reference-11"><a class="header" href="#reference-11">Reference</a></h2>
+<h2 id="reference-12"><a class="header" href="#reference-12">Reference</a></h2>
 <ul>
 <li><a href="reference/metrics/../../../swift/Classes/TimingDistributionMetricType.html">Swift API docs</a></li>
 <li><a href="reference/metrics/../../../python/glean/metrics/timing_distribution.html">Python API docs</a></li>
@@ -7705,7 +7687,7 @@ mozilla::glean::memory::heap_allocated.Accumulate(bytes / 1024);
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: If recording a negative memory size.</li>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: If recording a size larger than 1 TB.</li>
 </ul>
-<h2 id="testing-api-10"><a class="header" href="#testing-api-10">Testing API</a></h2>
+<h2 id="testing-api-11"><a class="header" href="#testing-api-11">Testing API</a></h2>
 <h3 id="testgetvalue-9"><a class="header" href="#testgetvalue-9"><code>testGetValue</code></a></h3>
 <p>Gets the recorded value for a given memory distribution metric.</p>
 <div class="tabs">
@@ -7936,7 +7918,7 @@ Larger sizes will be truncated to 1 Terabyte.</li>
 <ul>
 <li>What is the distribution of the size of heap allocations?</li>
 </ul>
-<h2 id="reference-12"><a class="header" href="#reference-12">Reference</a></h2>
+<h2 id="reference-13"><a class="header" href="#reference-13">Reference</a></h2>
 <ul>
 <li><a href="reference/metrics/../../../swift/Classes/MemoryDistributionMetricType.html">Swift API docs</a></li>
 <li><a href="reference/metrics/../../../python/glean/metrics/timing_distribution.html">Python API docs</a></li>
@@ -8148,7 +8130,7 @@ Glean.user.clientId.set(uuid);
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: if the value is set to a string that is not a UUID (only applies for dynamically-typed languages, such as Python).</li>
 </ul>
-<h2 id="testing-api-11"><a class="header" href="#testing-api-11">Testing API</a></h2>
+<h2 id="testing-api-12"><a class="header" href="#testing-api-12">Testing API</a></h2>
 <h3 id="testgetvalue-10"><a class="header" href="#testgetvalue-10"><code>testGetValue</code></a></h3>
 <p>Gets the recorded value for a given UUID metric.</p>
 <div class="tabs">
@@ -8349,7 +8331,7 @@ refer to the <a href="reference/metrics/../yaml/metrics.html">metrics YAML regis
 <ul>
 <li>A unique identifier for the client.</li>
 </ul>
-<h2 id="reference-13"><a class="header" href="#reference-13">Reference</a></h2>
+<h2 id="reference-14"><a class="header" href="#reference-14">Reference</a></h2>
 <ul>
 <li><a href="reference/metrics/../../../swift/Classes/UuidMetricType.html">Swift API docs</a></li>
 <li><a href="reference/metrics/../../../python/glean/metrics/uuid.html">Python API docs</a></li>
@@ -8455,7 +8437,7 @@ search.template.setUrl(new URL(&quot;https://mysearchengine.com/&quot;));
 <ul>
 <li>Fixed maximum URL length: 2048. Longer URLs are dropped.</li>
 </ul>
-<h2 id="testing-api-12"><a class="header" href="#testing-api-12">Testing API</a></h2>
+<h2 id="testing-api-13"><a class="header" href="#testing-api-13">Testing API</a></h2>
 <h3 id="testgetvalue-11"><a class="header" href="#testgetvalue-11"><code>testGetValue</code></a></h3>
 <p>Gets the recorded value for a given URL metric as a (unencoded) string.</p>
 <div class="tabs">
@@ -8664,7 +8646,7 @@ refer to the metrics <a href="reference/metrics/../yaml/index.html">YAML format<
 <ul>
 <li>What is the base URL used to build the search query for the search engine?</li>
 </ul>
-<h2 id="reference-14"><a class="header" href="#reference-14">Reference</a></h2>
+<h2 id="reference-15"><a class="header" href="#reference-15">Reference</a></h2>
 <ul>
 <li><a href="https://mozilla.github.io/glean.js/classes/core_metrics_types_url.default.html">JavaScript API docs</a></li>
 </ul>
@@ -8748,7 +8730,7 @@ Glean.install.firstRun.set(value.getTime() * 1000);
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: Setting the date time to an invalid value.</li>
 </ul>
-<h2 id="testing-api-13"><a class="header" href="#testing-api-13">Testing API</a></h2>
+<h2 id="testing-api-14"><a class="header" href="#testing-api-14">Testing API</a></h2>
 <h3 id="testgetvalue-12"><a class="header" href="#testgetvalue-12"><code>testGetValue</code></a></h3>
 <p>Get the recorded value for a given datetime metric as a language-specific Date object.</p>
 <div class="tabs">
@@ -8996,7 +8978,7 @@ refer to the <a href="reference/metrics/../yaml/metrics.html">metrics YAML regis
 <ul>
 <li>When did the user first run the application?</li>
 </ul>
-<h2 id="reference-15"><a class="header" href="#reference-15">Reference</a></h2>
+<h2 id="reference-16"><a class="header" href="#reference-16">Reference</a></h2>
 <ul>
 <li><a href="reference/metrics/../../../swift/Classes/DatetimeMetricType.html">Swift API docs</a></li>
 <li><a href="reference/metrics/../../../python/glean/metrics/datetime.html">Python API docs</a></li>
@@ -9143,7 +9125,7 @@ views.loginOpened.record({ sourceOfLogin: &quot;toolbar&quot; });
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_overflow</code></a>: if any of the values in the <code>extras</code> object are greater than 50 bytes in length.  (Prior to Glean 31.5.0, this recorded an <code>invalid_value</code>).</li>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: if there is an attempt to record to an extra key which is not allowed i.e. an extra key that has not been listed in the YAML registry file.</li>
 </ul>
-<h2 id="testing-api-14"><a class="header" href="#testing-api-14">Testing API</a></h2>
+<h2 id="testing-api-15"><a class="header" href="#testing-api-15">Testing API</a></h2>
 <h3 id="testgetvalue-13"><a class="header" href="#testgetvalue-13"><code>testGetValue</code></a></h3>
 <p>Get the list of recorded events.</p>
 <div class="tabs">
@@ -9362,7 +9344,7 @@ A maximum of 10 extra keys is allowed.</p>
 <li>The keys in the <code>extra_keys</code> list must be in dotted snake case, with a maximum length of 40 bytes, when encoded as UTF-8.</li>
 <li>The values in the <code>extras</code> object have a maximum length of 100 bytes, when serialized and encoded as UTF-8.</li>
 </ul>
-<h2 id="reference-16"><a class="header" href="#reference-16">Reference</a></h2>
+<h2 id="reference-17"><a class="header" href="#reference-17">Reference</a></h2>
 <ul>
 <li><a href="reference/metrics/../../../swift/Classes/EventMetricType.html">Swift API docs</a></li>
 <li><a href="reference/metrics/../../../python/glean/metrics/event.html">Python API docs</a></li>
@@ -9423,7 +9405,7 @@ mozilla::glean::graphics::checkerboard_peak.AccumulateSamples({ 23 });
 <ul>
 <li><code>invalid_value</code>: If recording a negative value.</li>
 </ul>
-<h2 id="testing-api-15"><a class="header" href="#testing-api-15">Testing API</a></h2>
+<h2 id="testing-api-16"><a class="header" href="#testing-api-16">Testing API</a></h2>
 <h3 id="testgetvalue-14"><a class="header" href="#testgetvalue-14"><code>testGetValue</code></a></h3>
 <p>Gets the recorded value for a given counter metric.</p>
 <div class="tabs">
@@ -9561,7 +9543,7 @@ assert_eq!(
 It is the name of the Gecko metric to accumulate the data from,
 when using a Glean SDK in a product using GeckoView.</li>
 </ul>
-<h2 id="reference-17"><a class="header" href="#reference-17">Reference</a></h2>
+<h2 id="reference-18"><a class="header" href="#reference-18">Reference</a></h2>
 <ul>
 <li><a href="reference/metrics/../../../docs/glean/private/struct.CustomDistributionMetric.html">Rust API docs</a></li>
 </ul>
@@ -9693,7 +9675,7 @@ mozilla::glean::display::width.Set(innerHeight);
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: If a negative value is passed in.</li>
 </ul>
-<h2 id="testing-api-16"><a class="header" href="#testing-api-16">Testing API</a></h2>
+<h2 id="testing-api-17"><a class="header" href="#testing-api-17">Testing API</a></h2>
 <h3 id="testgetvalue-15"><a class="header" href="#testgetvalue-15"><code>testGetValue</code></a></h3>
 <p>Gets the recorded value for a given quantity metric.</p>
 <div class="tabs">
@@ -9895,7 +9877,7 @@ refer to the <a href="reference/metrics/../yaml/metrics.html">metrics YAML regis
 <ul>
 <li>What is the width of the display, in pixels?</li>
 </ul>
-<h2 id="reference-18"><a class="header" href="#reference-18">Reference</a></h2>
+<h2 id="reference-19"><a class="header" href="#reference-19">Reference</a></h2>
 <ul>
 <li><a href="reference/metrics/../../../swift/Classes/QuantityMetricType.html">Swift API docs</a></li>
 <li><a href="reference/metrics/../../../python/glean/metrics/quantity.html">Python API docs</a></li>
@@ -9978,7 +9960,7 @@ Glean.network.httpConnectionError.addToDenominator(1);
 <li>Numerator and Denominator only increment.</li>
 <li>Numerator and Denominator saturate at the largest value that can be represented as a 32-bit signed integer (<code>2147483647</code>).</li>
 </ul>
-<h2 id="testing-api-17"><a class="header" href="#testing-api-17">Testing API</a></h2>
+<h2 id="testing-api-18"><a class="header" href="#testing-api-18">Testing API</a></h2>
 <h3 id="testgetvalue-16"><a class="header" href="#testgetvalue-16"><code>testGetValue</code></a></h3>
 <div class="tabs">
 <div class="tabbar"></div>
@@ -10096,7 +10078,7 @@ then the denominator should be defined as a <code>counter</code> and shared betw
 <li>How often did an HTTP connection error?</li>
 <li>How many documents used a given CSS Property?</li>
 </ul>
-<h2 id="reference-19"><a class="header" href="#reference-19">Reference</a></h2>
+<h2 id="reference-20"><a class="header" href="#reference-20">Reference</a></h2>
 <ul>
 <li><a href="reference/metrics/../../../docs/glean/private/rate/struct.RateMetric.html">Rust API docs</a></li>
 </ul>
@@ -10141,7 +10123,7 @@ Longer text is truncated. This is measured in the number of bytes when the strin
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_overflow</code></a>: if the text is too long.</li>
 </ul>
-<h2 id="testing-api-18"><a class="header" href="#testing-api-18">Testing API</a></h2>
+<h2 id="testing-api-19"><a class="header" href="#testing-api-19">Testing API</a></h2>
 <h3 id="testgetvalue-17"><a class="header" href="#testgetvalue-17"><code>testGetValue</code></a></h3>
 <p>Gets the recorded value for a given text metric.</p>
 <div class="tabs">
@@ -10282,7 +10264,7 @@ pings.search.submit(pings.searchReasonCodes.Performed);
 </div>
 </div>
 </div>
-<h2 id="testing-api-19"><a class="header" href="#testing-api-19">Testing API</a></h2>
+<h2 id="testing-api-20"><a class="header" href="#testing-api-20">Testing API</a></h2>
 <h3 id="testbeforenextsubmit"><a class="header" href="#testbeforenextsubmit"><code>testBeforeNextSubmit</code></a></h3>
 <p>Runs a validation function before the ping is collected.</p>
 <div class="tabs">
@@ -12883,6 +12865,10 @@ This is a major milestone in using a cross-platform implementation of Glean on t
 <p>First testing release.</p>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/appendix/changelog/sdk.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="unreleased-changes-1"><a class="header" href="#unreleased-changes-1">Unreleased changes</a></h1>
 <p><a href="https://github.com/mozilla/glean.js/compare/v0.32.0...main">Full changelog</a></p>
+<ul>
+<li><a href="https://github.com/mozilla/glean.js/pull/1233">#1233</a>: Add optional <code>buildDate</code> argument to <code>initialize</code> configuration. The build date can be generated by glean_parser.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/1233">#1233</a>: Update glean_parser to version 5.1.0.</li>
+</ul>
 <h1 id="v0320-2022-03-01"><a class="header" href="#v0320-2022-03-01">v0.32.0 (2022-03-01)</a></h1>
 <p><a href="https://github.com/mozilla/glean.js/compare/v0.31.0...v0.32.0">Full changelog</a></p>
 <ul>
