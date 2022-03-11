@@ -288,6 +288,7 @@ views.loginOpened.record({ sourceOfLogin: &quot;toolbar&quot; });
 <ul>
 <li><a href="../../user/metrics/error-reporting.html"><code>invalid_overflow</code></a>: if any of the values in the <code>extras</code> object are greater than 50 bytes in length.  (Prior to Glean 31.5.0, this recorded an <code>invalid_value</code>).</li>
 <li><a href="../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: if there is an attempt to record to an extra key which is not allowed i.e. an extra key that has not been listed in the YAML registry file.</li>
+<li><a href="../../user/metrics/error-reporting.html"><code>invalid_type</code></a>: if the extra value given is not the expected type.</li>
 </ul>
 <h2 id="testing-api"><a class="header" href="#testing-api">Testing API</a></h2>
 <h3 id="testgetvalue"><a class="header" href="#testgetvalue"><code>testGetValue</code></a></h3>

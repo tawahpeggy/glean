@@ -567,10 +567,9 @@ void AfterLogin(uint32_t aDuration) {
 </div>
 <h4 id="recorded-errors-2"><a class="header" href="#recorded-errors-2">Recorded errors</a></h4>
 <ul>
-<li><a href="../../user/metrics/error-reporting.html"><code>invalid_value</code></a>:
-If you attempt to record a negative elapsed duration.</li>
-<li><a href="../../user/metrics/error-reporting.html"><code>invalid_state</code></a>:
-If you call this API after calling <code>start</code> or call this API multiple times.</li>
+<li><a href="../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: if attempting to record a negative elapsed duration.</li>
+<li><a href="../../user/metrics/error-reporting.html"><code>invalid_state</code></a>: if this method is called after calling <code>start</code> or this method is called multiple times.</li>
+<li><a href="../../user/metrics/error-reporting.html"><code>invalid_type</code></a>: if a negative, floating point or non-number value is given.</li>
 </ul>
 <h2 id="testing-api"><a class="header" href="#testing-api">Testing API</a></h2>
 <h3 id="testgetvalue"><a class="header" href="#testgetvalue"><code>testGetValue</code></a></h3>

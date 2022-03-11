@@ -160,6 +160,7 @@ Additionally, error metrics are always sent in the <a href="../pings/metrics.htm
 <li><code>invalid_label</code>: The label on a labeled metric was invalid.</li>
 <li><code>invalid_state</code>: The metric caught an invalid state while recording.</li>
 <li><code>invalid_overflow</code>: The metric value to be recorded overflows the metric-specific upper range.</li>
+<li><code>invalid_type</code>: The metric value is not of the expected type. This error type is only recorded by the Glean JavaScript SDK. This error may only happen in dynamically typed languages.</li>
 </ul>
 <p>For example, if you had a string metric and passed it a string that was too long:</p>
 <pre><code class="language-Kotlin">MyMetrics.stringMetric.set(&quot;this_string_is_longer_than_the_limit_for_string_metrics&quot;)

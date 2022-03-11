@@ -227,13 +227,14 @@ Glean.stability.crashCount[&quot;native_code_crash&quot;].add(3);
 </div>
 <h4 id="errors-recorded"><a class="header" href="#errors-recorded">Errors recorded</a></h4>
 <ul>
-<li><a href="../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: If the counter is incremented by <code>0</code> or a negative value.</li>
+<li><a href="../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: if the counter is incremented by <code>0</code> or a negative value.</li>
 <li><a href="../../user/metrics/error-reporting.html"><code>invalid_label</code></a>:
 <ul>
 <li>If the label contains invalid characters. Data is still recorded to the special label <code>__other__</code>.</li>
 <li>If the label exceeds the maximum number of allowed characters. Data is still recorded to the special label <code>__other__</code>.</li>
 </ul>
 </li>
+<li><a href="../../user/metrics/error-reporting.html"><code>invalid_type</code></a>: if a floating point or non-number value is given.</li>
 </ul>
 <h4 id="limits"><a class="header" href="#limits">Limits</a></h4>
 <ul>

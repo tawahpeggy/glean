@@ -217,8 +217,9 @@ Glean.search.engines.add(&quot;duck duck go&quot;);
 </div>
 <h4 id="recorded-errors"><a class="header" href="#recorded-errors">Recorded errors</a></h4>
 <ul>
-<li><code>invalid_overflow</code>: if the string is too long. (Prior to Glean 31.5.0, this recorded an <code>invalid_value</code>).</li>
-<li><code>invalid_value</code>: if the list is too long.</li>
+<li><a href="../../user/metrics/error-reporting.html"><code>invalid_overflow</code></a>: if the string is too long. (Prior to Glean 31.5.0, this recorded an <code>invalid_value</code>).</li>
+<li><a href="../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: if the list is too long.</li>
+<li><a href="../../user/metrics/error-reporting.html"><code>invalid_type</code></a>: if a non-string value is given.</li>
 </ul>
 <h4 id="limits"><a class="header" href="#limits">Limits</a></h4>
 <ul>
@@ -279,6 +280,7 @@ mozilla::glean::search::engines.Set({&quot;wikipedia&quot;_ns, &quot;duck duck g
 <ul>
 <li><code>invalid_overflow</code>: if the string is too long. (Prior to Glean 31.5.0, this recorded an <code>invalid_value</code>).</li>
 <li><code>invalid_value</code>: if the list is too long.</li>
+<li><a href="../../user/metrics/error-reporting.html"><code>invalid_type</code></a>: if a non-string array is given.</li>
 </ul>
 <h4 id="limits-1"><a class="header" href="#limits-1">Limits</a></h4>
 <ul>
