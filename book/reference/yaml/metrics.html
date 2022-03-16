@@ -313,6 +313,12 @@ which is the <code>events</code> ping for events and the <code>metrics</code> pi
 <p>Most metrics don't need to specify this unless they are sent on <a href="../../user/pings/custom.html">custom pings</a>.</p>
 <p>The special value <code>default</code> may be used, in case it's required for a metric to be sent
 on the default ping as well as in a custom ping.</p>
+<div class="special-quote special-quote-info fa fa-info-circle"></div>
+<h5 id="adding-metrics-to-every-ping"><a class="header" href="#adding-metrics-to-every-ping">Adding metrics to every ping</a></h5>
+<blockquote>
+<p>For the small number of metrics that should be in every ping the Glean SDKs will eventually provide a solution.
+See <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1695236">bug 1695236</a> for details.</p>
+</blockquote>
 <pre><code class="language-yaml">send_in_pings:
   - my-custom-ping
   - default
