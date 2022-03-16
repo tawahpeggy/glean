@@ -202,7 +202,7 @@ that are assembled out of the box without any developer intervention.</p>
 <ul>
 <li><a href="#content-type"><code>Content-Type</code></a></li>
 <li><a href="#date"><code>Date</code></a></li>
-<li><a href="#user-agent"><code>User-Agent</code></a></li>
+<li><a href="#user-agent-deprecated"><code>User-Agent</code> (deprecated)</a></li>
 <li><a href="#x-telemetry-agent"><code>X-Telemetry-Agent</code></a></li>
 <li><a href="#x-client-type-deprecated"><code>X-Client-Type</code> (deprecated)</a></li>
 <li><a href="#x-client-version-deprecated"><code>X-Client-Version</code> (deprecated)</a></li>
@@ -398,9 +398,11 @@ on the metric <a href="../collected-metrics/metrics.html#metrics-1"><code>glean.
 <p>Describes the data sent to the server. Value is always <code>application/json; charset=utf-8</code>.</p>
 <h4 id="date"><a class="header" href="#date"><code>Date</code></a></h4>
 <p>Submission date/time in GMT/UTC+0 offset, e.g. <code>Mon, 23 Jan 2019 10:10:10 GMT+00:00</code>.</p>
-<h4 id="user-agent"><a class="header" href="#user-agent"><code>User-Agent</code></a></h4>
-<p>The Glean SDKs do not set this header<sup class="footnote-reference"><a href="#1">1</a></sup>, so it will contain whatever value was set
-by the underlying uploading mechanism. For example, when sending pings from browsers
+<h4 id="user-agent-deprecated"><a class="header" href="#user-agent-deprecated"><code>User-Agent</code> (deprecated)</a></h4>
+<p>Up to Glean v44.0.0 and Glean.js v0.13.0 this contained the Glean SDK version and platform information.
+Newer Glean SDKs do not overwrite this header.
+See <a href="#x-telemetry-agent"><code>X-Telemetry-Agent</code></a> for details.</p>
+<p>Clients might still send it, for example, when sending pings from browsers
 it will contain the characteristic <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent#syntax">browser UA string</a>.</p>
 <p>This header is parsed by the Glean pipeline and can be queried at analysis time through
 the <a href="https://docs.telemetry.mozilla.org/datasets/pings.html?highlight=metadata#ping-metadata"><code>metadata.user_agent.*</code></a>
@@ -412,7 +414,6 @@ as it describes the application and the Glean SDK used for sending the ping.</p>
 <p>It's looks like <code>Glean/40.0.0 (Kotlin on Android)</code>, where <code>40.0.0</code> is the Glean Kotlin SDK version number
 and <code>Kotlin on Android</code> is the name of the language used by the SDK that sent the request
 plus the name of the platform it is running on.</p>
-<p><em>This header is currently only sent by the Glean JavaScript SDK. See <a href="#1">note</a>.</em></p>
 <h4 id="x-client-type-deprecated"><a class="header" href="#x-client-type-deprecated"><code>X-Client-Type</code> (deprecated)</a></h4>
 <p>Custom header to support handling of Glean pings in the legacy pipeline. Values is always <code>Glean</code>.</p>
 <p>This header is deprecated and will soon be removed from all Glean SDKs.</p>
@@ -428,12 +429,6 @@ e.g. <code>test-tag</code>.</p>
 <p>A list of tags to associate with the ping, useful for clustering pings at analysis time,
 for example to tell data generated from CI from other data e.g. <code>automation, perf</code>.</p>
 <p>This header is attached to Glean pings by using the <a href="../../reference/debug/sourceTags.html">debug APIs</a>.</p>
-<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
-<p>This is only true for the Glean JavaScript SDK at the moment. For the other SDKs this
-header is overwritten with the value that is described on the <code>X-Telemetry-Agent</code> header section.
-However, this feature will be implemented soon on all SDKs.
-Follow <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1711928">Bug 1711928</a> for updates.</p>
-</div>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/user/pings/index.md">Edit this file on GitHub.</a></footer>
                     </main>
 

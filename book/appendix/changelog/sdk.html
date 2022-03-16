@@ -157,6 +157,11 @@
 <li>The <code>glean-native-forUnitTests</code> now ships with separate libraries for macOS x86_64 and macOS aarch64 (<a href="https://github.com/mozilla/glean/pull/1967">#1967</a>)</li>
 </ul>
 </li>
+<li>Rust
+<ul>
+<li>Glean will no longer overwrite the <code>User-Agent</code> header, but instead send that information as <code>X-Telemetry-Agent</code> (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1711928">bug 1711928</a>)</li>
+</ul>
+</li>
 </ul>
 <h1 id="v4400-2022-02-09"><a class="header" href="#v4400-2022-02-09">v44.0.0 (2022-02-09)</a></h1>
 <ul>
