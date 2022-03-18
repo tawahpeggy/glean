@@ -203,9 +203,9 @@ network::http_connections.add(1);
 <pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
 
 if (aHadError) {
-  mozilla::glean::network::http_connection_error.add_to_numerator(1);
+  mozilla::glean::network::http_connection_error.AddToNumerator(1);
 }
-mozilla::glean::network::http_connection_error.add_to_denominator(1);
+mozilla::glean::network::http_connection_error.AddToDenominator(1);
 </code></pre>
 <p><strong>JavaScript</strong></p>
 <pre><code class="language-js">if (aHadError) {

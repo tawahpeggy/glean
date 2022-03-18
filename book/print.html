@@ -2126,13 +2126,17 @@ of the previous run, in order to keep the monotonically increasing nature of the
 <table><thead><tr><th style="text-align: right">SDK</th><th style="text-align: center"><a href="user/pings/baseline.html"><code>baseline</code></a></th><th style="text-align: center"><a href="user/pings/deletion-request.html"><code>deletion-request</code></a></th><th style="text-align: center"><a href="user/pings/events.html"><code>events</code></a></th><th style="text-align: center"><a href="user/pings/metrics.html"><code>metrics</code></a></th></tr></thead><tbody>
 <tr><td style="text-align: right">Kotlin</td><td style="text-align: center">✅</td><td style="text-align: center">✅</td><td style="text-align: center">✅</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: right">Swift</td><td style="text-align: center">✅</td><td style="text-align: center">✅</td><td style="text-align: center">✅</td><td style="text-align: center">✅</td></tr>
-<tr><td style="text-align: right">Python</td><td style="text-align: center">✅<sup>1</sup></td><td style="text-align: center">✅</td><td style="text-align: center">✅<sup>2</sup></td><td style="text-align: center">❌</td></tr>
+<tr><td style="text-align: right">Python</td><td style="text-align: center">✅ <sup class="footnote-reference"><a href="#1">1</a></sup></td><td style="text-align: center">✅</td><td style="text-align: center">✅ <sup class="footnote-reference"><a href="#2">2</a></sup></td><td style="text-align: center">❌</td></tr>
 <tr><td style="text-align: right">Rust</td><td style="text-align: center">✅</td><td style="text-align: center">✅</td><td style="text-align: center">✅</td><td style="text-align: center">✅</td></tr>
-<tr><td style="text-align: right">JavaScript</td><td style="text-align: center">❌</td><td style="text-align: center">✅</td><td style="text-align: center">❌</td><td style="text-align: center">❌</td></tr>
+<tr><td style="text-align: right">JavaScript</td><td style="text-align: center">❌</td><td style="text-align: center">✅</td><td style="text-align: center">✅</td><td style="text-align: center">❌</td></tr>
 <tr><td style="text-align: right">Firefox Desktop</td><td style="text-align: center">✅</td><td style="text-align: center">✅</td><td style="text-align: center">✅</td><td style="text-align: center">✅</td></tr>
 </tbody></table>
-<p><sup>1</sup>: Not sent automatically. Use the <a href="user/pings/../../../python/glean/#glean.Glean.handle_client_active"><code>handle_client_active</code></a> and <a href="user/pings/../../../python/glean/#glean.Glean.handle_client_inactive"><code>handle_client_inactive</code></a> API.<br />
-<sup>2</sup>: Sent on startup when pending events are stored. Additionally sent when <a href="user/pings/../../../python/glean/#glean.Glean.handle_client_inactive"><code>handle_client_inactive</code></a> is called.</p>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>Not sent automatically. Use the <a href="user/pings/../../../python/glean/#glean.Glean.handle_client_active"><code>handle_client_active</code></a> and <a href="user/pings/../../../python/glean/#glean.Glean.handle_client_inactive"><code>handle_client_inactive</code></a> API.</p>
+</div>
+<div class="footnote-definition" id="2"><sup class="footnote-definition-label">2</sup>
+<p>Sent on startup when pending events are stored. Additionally sent when <a href="user/pings/../../../python/glean/#glean.Glean.handle_client_inactive"><code>handle_client_inactive</code></a> is called.</p>
+</div>
 <h2 id="defining-foreground-and-background-state"><a class="header" href="#defining-foreground-and-background-state">Defining foreground and background state</a></h2>
 <p>These docs refer to application 'foreground' and 'background' state in several places.</p>
 <div class="tabs">
@@ -2170,7 +2174,7 @@ means.</p>
 <p>This ping is intended to provide metrics that are managed by the Glean SDKs themselves, and not explicitly set by the application or included in the application's <code>metrics.yaml</code> file.</p>
 <h3 id="platform-availability"><a class="header" href="#platform-availability">Platform availability</a></h3>
 <table><thead><tr><th style="text-align: right">SDK</th><th style="text-align: center">Kotlin</th><th style="text-align: center">Swift</th><th style="text-align: center">Python</th><th style="text-align: center">Rust</th><th style="text-align: center">JavaScript</th><th style="text-align: center">Firefox Desktop</th></tr></thead><tbody>
-<tr><td style="text-align: right"><a href="user/pings/baseline.html"><code>baseline</code> ping</a></td><td style="text-align: center">✅</td><td style="text-align: center">✅</td><td style="text-align: center"></td><td style="text-align: center">✅</td><td style="text-align: center"></td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: right"><a href="user/pings/baseline.html"><code>baseline</code> ping</a></td><td style="text-align: center">✅</td><td style="text-align: center">✅</td><td style="text-align: center">❌</td><td style="text-align: center">✅</td><td style="text-align: center">❌</td><td style="text-align: center">✅</td></tr>
 </tbody></table>
 <h2 id="scheduling"><a class="header" href="#scheduling">Scheduling</a></h2>
 <p>The <code>baseline</code> ping is automatically submitted with a <code>reason: active</code> when the application becomes active (on mobile it means getting to <a href="user/pings/sent-by-glean.html#defining-foreground-and-background-state">foreground</a>).  These baseline pings do not contain <code>duration</code>.</p>
@@ -2278,35 +2282,41 @@ If upload fails, it is retried after Glean is initialized.</p>
 </code></pre>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/user/pings/deletion-request.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="the-events-ping"><a class="header" href="#the-events-ping">The <code>events</code> ping</a></h1>
 <h2 id="description-2"><a class="header" href="#description-2">Description</a></h2>
-<p>The events ping's purpose is to transport all of the event metric information.
-If the application crashes, an <code>events</code> ping is generated next time the application starts with events that were not sent before the crash.</p>
+<p>The events ping's purpose is to transport event metric information.</p>
+<p>If the application crashes, an <code>events</code> ping is generated next time the application starts with events that were not sent before the crash.</p>
 <h3 id="platform-availability-2"><a class="header" href="#platform-availability-2">Platform availability</a></h3>
 <table><thead><tr><th style="text-align: right">SDK</th><th style="text-align: center">Kotlin</th><th style="text-align: center">Swift</th><th style="text-align: center">Python</th><th style="text-align: center">Rust</th><th style="text-align: center">JavaScript</th><th style="text-align: center">Firefox Desktop</th></tr></thead><tbody>
-<tr><td style="text-align: right"><a href="user/pings/events.html"><code>events</code> ping</a></td><td style="text-align: center">✅</td><td style="text-align: center">✅</td><td style="text-align: center">✅</td><td style="text-align: center">✅</td><td style="text-align: center"></td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: right"><a href="user/pings/events.html"><code>events</code> ping</a></td><td style="text-align: center">✅</td><td style="text-align: center">✅</td><td style="text-align: center">✅</td><td style="text-align: center">✅</td><td style="text-align: center">✅</td><td style="text-align: center">✅</td></tr>
 </tbody></table>
 <h2 id="scheduling-2"><a class="header" href="#scheduling-2">Scheduling</a></h2>
-<p>The <code>events</code> ping is collected under the following circumstances:</p>
+<p>The <code>events</code> ping is automatically submitted under the following circumstances:</p>
 <ol>
 <li>
-<p>Normally, it is collected when the application becomes inactive (on mobile, this means going to <a href="user/pings/sent-by-glean.html#defining-foreground-and-background-state">background</a>), if there are any recorded events to send.</p>
+<p>If there are any recorded events to send when the application becomes inactive (on mobile, this means going to <a href="user/pings/sent-by-glean.html#defining-foreground-and-background-state">background</a>).</p>
 </li>
 <li>
-<p>When the queue of events exceeds <code>Glean.configuration.maxEvents</code> (default 500).</p>
+<p>When the queue of events exceeds <code>Glean.configuration.maxEvents</code> (default 500). This configuration
+option can be changed at <a href="user/pings/../../reference/general/initializing.html">initialization</a>.</p>
 </li>
 <li>
 <p>If there are any unsent events found on disk when starting the application. <em>(This results in this ping never containing the <a href="user/pings/./custom.html#the-gleanrestarted-event"><code>glean.restarted</code></a> event.)</em></p>
 </li>
 </ol>
-<p>All of these cases are handled automatically, with no intervention or configuration required by the application.</p>
 <div class="special-quote special-quote-info fa fa-info-circle"></div>
-<h5 id="python-and-javascript-caveats"><a class="header" href="#python-and-javascript-caveats">Python and JavaScript caveats</a></h5>
+<h3 id="python-and-javascript-caveats"><a class="header" href="#python-and-javascript-caveats">Python and JavaScript caveats</a></h3>
 <blockquote>
-<p>Since the Glean Python and JavaScript SDKs don't have a concept of &quot;going to background&quot;,
-case (1) above does not apply.</p>
+<p>Since the Glean Python and JavaScript SDKs don't have a generic concept of &quot;inactivity&quot;,
+case (1) above cannot be handled automatically.</p>
+<p>On Python, users can call the <a href="user/pings/../../../python/glean/#glean.Glean.handle_client_inactive"><code>handle_client_inactive</code></a>
+API to let Glean know the app is inactive and that will trigger submission of the <code>events</code> ping.</p>
+<p>On JavaScript there is no such API and only cases (2) and (3) apply.</p>
 </blockquote>
 <h2 id="contents-2"><a class="header" href="#contents-2">Contents</a></h2>
 <p>At the top-level, this ping contains the following keys:</p>
 <ul>
+<li>
+<p><code>client_info</code>: The information <a href="user/pings/index.html#the-client_info-section">common to all pings</a>.</p>
+</li>
 <li>
 <p><code>ping_info</code>: The information <a href="user/pings/index.html#the-ping_info-section">common to all pings</a>.</p>
 </li>
@@ -2383,10 +2393,10 @@ If the application crashes, unsent recorded metrics are sent along with the next
 <p>Additionally, it is undesirable to mix metric recording from different versions of the application. Therefore, if a version upgrade is detected, the <code>metrics</code> ping is collected immediately before further metrics from the new version are recorded.</p>
 <h3 id="platform-availability-3"><a class="header" href="#platform-availability-3">Platform availability</a></h3>
 <table><thead><tr><th style="text-align: right">SDK</th><th style="text-align: center">Kotlin</th><th style="text-align: center">Swift</th><th style="text-align: center">Python</th><th style="text-align: center">Rust</th><th style="text-align: center">JavaScript</th><th style="text-align: center">Firefox Desktop</th></tr></thead><tbody>
-<tr><td style="text-align: right"><a href="user/pings/metrics.html"><code>metrics</code> ping</a></td><td style="text-align: center">✅</td><td style="text-align: center">✅</td><td style="text-align: center"></td><td style="text-align: center">✅</td><td style="text-align: center"></td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: right"><a href="user/pings/metrics.html"><code>metrics</code> ping</a></td><td style="text-align: center">✅</td><td style="text-align: center">✅</td><td style="text-align: center">❌</td><td style="text-align: center">✅</td><td style="text-align: center">❌</td><td style="text-align: center">✅</td></tr>
 </tbody></table>
 <h2 id="scheduling-3"><a class="header" href="#scheduling-3">Scheduling</a></h2>
-<p>The desired behavior is to collect the ping at the first available opportunity after 04:00 local time on a new calendar day, but given constraints of the platform, it can only be submitted while the application is running. 
+<p>The desired behavior is to collect the ping at the first available opportunity after 04:00 local time on a new calendar day, but given constraints of the platform, it can only be submitted while the application is running.
 This breaks down into three scenarios:</p>
 <ol>
 <li>the application was just installed;</li>
@@ -3269,10 +3279,11 @@ Below are listed the configuration options available on most SDKs.</p>
 <ul>
 <li><code>applicationId</code>: Application identifier. For Android and iOS applications, this is the id used on the platform's respective app store and is extracted automatically from the application context.</li>
 <li><code>uploadEnabled</code>: The user preference on whether or not data upload is enabled.</li>
-<li><code>appChannel</code>: The application's release channel. When present, the <code>app_channel</code> will be reported in all ping's <a href="reference/general/../../user/pings/index.html#the-client_info-section"><code>client_info</code> section</a>.</li>
+<li><code>appChannel</code>: The application's release channel. When present, the <code>app_channel</code> will be reported in all ping's <a href="reference/general/../../user/pings/index.html#the-client_info-section"><code>client_info</code></a> section.</li>
 <li><code>appBuild</code>: A build identifier e.g. the build identifier generated by a CI system (e.g. &quot;1234/A&quot;). If not present, <code>app_build</code> will be reported as &quot;Unknown&quot; on all pings <a href="reference/general/../../user/pings/index.html#the-client_info-section"><code>client_info</code></a> section.</li>
 <li><code>appDisplayVersion</code>: The user visible version string for the application running Glean. If not present, <code>app_display_version</code> will be reported as &quot;Unknown&quot; on all pings <a href="reference/general/../../user/pings/index.html#the-client_info-section"><code>client_info</code></a> section.</li>
 <li><code>serverEndpoint</code>: The server pings are sent to. Defaults to <code>https://incoming.telemetry.mozilla.org</code>.</li>
+<li><code>maxEvents</code>: The maximum number of events the Glean storage will hold on to before submitting the 'events' ping. Defaults to 500. Refer to the <a href="reference/general/../../user/pings/events.html"><code>events</code> ping documentation</a> for more information on its scheduling.</li>
 </ul>
 <p>To learn about SDK specific configuration options available, refer to the <a href="reference/general/initializing.html#reference">Reference</a> section.</p>
 <div class="special-quote special-quote-stop fa fa-ban"></div>
@@ -9970,9 +9981,9 @@ network::http_connections.add(1);
 <pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
 
 if (aHadError) {
-  mozilla::glean::network::http_connection_error.add_to_numerator(1);
+  mozilla::glean::network::http_connection_error.AddToNumerator(1);
 }
-mozilla::glean::network::http_connection_error.add_to_denominator(1);
+mozilla::glean::network::http_connection_error.AddToDenominator(1);
 </code></pre>
 <p><strong>JavaScript</strong></p>
 <pre><code class="language-js">if (aHadError) {
@@ -12904,18 +12915,16 @@ This is a major milestone in using a cross-platform implementation of Glean on t
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/mozilla/glean/edit/main/docs/user/appendix/changelog/sdk.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="unreleased-changes-1"><a class="header" href="#unreleased-changes-1">Unreleased changes</a></h1>
 <p><a href="https://github.com/mozilla/glean.js/compare/v0.32.0...main">Full changelog</a></p>
 <ul>
+<li><a href="https://github.com/mozilla/glean.js/pull/1130">#1154</a>: BUGFIX: Implemented initialize and set_upload_enabled reasons for deletion-request ping.</li>
 <li><a href="https://github.com/mozilla/glean.js/pull/1233">#1233</a>: Add optional <code>buildDate</code> argument to <code>initialize</code> configuration. The build date can be generated by glean_parser.</li>
 <li><a href="https://github.com/mozilla/glean.js/pull/1233">#1233</a>: Update glean_parser to version 5.1.0.</li>
 <li><a href="https://github.com/mozilla/glean.js/pull/1217">#1217</a>: Record <code>InvalidType</code> error when incorrectly type values are passed to metric recording functions.</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/1267">#1267</a>: Implement the 'events' ping.</li>
 </ul>
 <h1 id="v0320-2022-03-01"><a class="header" href="#v0320-2022-03-01">v0.32.0 (2022-03-01)</a></h1>
 <p><a href="https://github.com/mozilla/glean.js/compare/v0.31.0...v0.32.0">Full changelog</a></p>
 <ul>
-<li><a href="https://github.com/mozilla/glean.js/pull/1220">#1220</a>: Refactor virtual environment behavior to support virtual environments that aren't in the project root.
-<ul>
-<li>This means it's possible to run Glean with a virtual environment created by <code>virtualenv</code> or <code>pyenv-virtualenv</code> without causing a Glean-specific <code>.venv</code> directory to be created in a project that is using Glean.</li>
-</ul>
-</li>
+<li><a href="https://github.com/mozilla/glean.js/pull/1220">#1220</a>: Refactor virtual environment behavior to support virtual environments that aren't in the project root.</li>
 <li><a href="https://github.com/mozilla/glean.js/pull/1130">#1130</a>: BUGFIX: Guarantee event timestamps
 cannot be negative numbers.
 <ul>
