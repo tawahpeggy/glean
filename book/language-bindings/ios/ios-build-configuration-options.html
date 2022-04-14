@@ -165,6 +165,16 @@ Note that any timezone offset will be ignored and UTC will be used.
 For other values it will throw an error.</p>
 <pre><code class="language-sh">bash sdk_generator.sh --build-date 2022-01-03T17:30:00
 </code></pre>
+<h2 id="--expire-by-version-integer"><a class="header" href="#--expire-by-version-integer"><code>--expire-by-version &lt;INTEGER&gt;</code></a></h2>
+<p>Default: none.</p>
+<p>Expire the metrics and pings by version, using the provided major version.</p>
+<p>If enabled, expiring metrics or pings by date will produce an error.</p>
+<pre><code class="language-sh">bash sdk_generator.sh --expire-by-version 95
+</code></pre>
+<p>Different products have different ways to compute the product version at build-time.
+For this reason the <code>sdk_generator.sh</code> script cannot provide an automated way to detect the product major version at build time.
+When using the expiration by version feature in iOS,
+products must provide the major version by themselves.</p>
 <h2 id="--markdown-path---m-path"><a class="header" href="#--markdown-path---m-path"><code>--markdown &lt;PATH&gt;</code> / <code>-m &lt;PATH&gt;</code></a></h2>
 <p>Default: unset.</p>
 <p>The Glean Swift SDK can automatically generate Markdown documentation for metrics and pings defined in the registry files, in addition to the metrics API code.
