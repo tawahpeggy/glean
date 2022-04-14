@@ -204,7 +204,7 @@
 
 <span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">DispatchError</span>, <span class="ident">DispatchGuard</span>, <span class="ident">Dispatcher</span>};
 
-<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">GLOBAL_DISPATCHER_LIMIT</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">100</span>;
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">GLOBAL_DISPATCHER_LIMIT</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">1000</span>;
 <span class="kw">static</span> <span class="ident">GLOBAL_DISPATCHER</span>: <span class="ident">Lazy</span><span class="op">&lt;</span><span class="ident">RwLock</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Dispatcher</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">=</span>
     <span class="ident">Lazy::new</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">RwLock::new</span>(<span class="prelude-val">Some</span>(<span class="ident">Dispatcher::new</span>(<span class="ident">GLOBAL_DISPATCHER_LIMIT</span>))));
 
