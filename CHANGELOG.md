@@ -1,6 +1,10 @@
 # Unreleased changes
 
-[Full changelog](https://github.com/mozilla/glean/compare/v44.0.0...main)
+[Full changelog](https://github.com/mozilla/glean/compare/v50.0.0...main)
+
+# v50.0.0 (2022-04-19)
+
+[Full changelog](https://github.com/mozilla/glean/compare/v44.0.0...v50.0.0)
 
 * Android
   * The `glean-native-forUnitTests` now ships with separate libraries for macOS x86_64 and macOS aarch64 ([#1967](https://github.com/mozilla/glean/pull/1967))
